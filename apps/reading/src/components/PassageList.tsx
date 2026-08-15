@@ -25,7 +25,7 @@ export default function PassageList({ passages, progress, onSelectPassage, onTog
         cefr: catItem.cefr,
         theme: catItem.theme,
         isLoaded: !!loaded,
-        paragraphs: loaded ? loaded.paragraphs : [`Akın Dil Eğitim Workbook - Okuma Parçası #${catItem.id}`],
+        paragraphs: loaded ? loaded.paragraphs : [`Okuma Parçası #${catItem.id}`],
         vocabulary: loaded ? loaded.vocabulary : Array(10).fill({}), // Default YDS passage has 10 words
         questions: loaded ? loaded.questions : Array(5).fill({}), // Default YDS passage has 5 questions
         isGenerated: loaded ? loaded.isGenerated : false
