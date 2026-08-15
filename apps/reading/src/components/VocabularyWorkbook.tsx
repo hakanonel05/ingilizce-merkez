@@ -77,7 +77,7 @@ export default function VocabularyWorkbook({ workbookState, onWorkbookStateChang
       <div className="border-b border-editorial-border/40 pb-6">
         <div className="flex items-center gap-2 text-editorial-accent mb-2">
           <BookText className="h-4 w-4" />
-          <span className="text-[10px] font-bold tracking-[0.2em] uppercase">Akın Dil Workbook</span>
+          <span className="text-[10px] font-bold tracking-[0.2em] uppercase">Kelime Kitabı</span>
         </div>
         <h2 className="font-serif text-3xl font-bold text-editorial-text">Kelime Kitabı — Temel Kelime Tabloları</h2>
         <p className="text-editorial-text/60 mt-2 max-w-3xl text-sm leading-relaxed">
