@@ -466,7 +466,7 @@ export default function App() {
                   Lexis <span className="text-xs font-sans font-normal tracking-widest uppercase opacity-40">Trainer</span>
                 </p>
                 <span className="text-[9px] text-editorial-text/50 font-bold tracking-widest uppercase block mt-1">
-                  Akın Dil Eğitim Workbook
+                  Okuma & Kelime Çalışması
                 </span>
               </div>
             </div>
@@ -666,9 +666,6 @@ export default function App() {
             <BookOpenCheck className="h-4 w-4 text-editorial-accent opacity-60" />
             <span className="font-serif font-bold text-editorial-text tracking-wide">Lexis • English Reading Trainer</span>
           </div>
-          <p className="max-w-xl mx-auto text-editorial-text/60 leading-relaxed font-sans">
-            Orijinal kaynak materyal: <span className="italic font-serif font-bold">"100 Reading Passages for YDS, YÖKDİL, YKS-DİL"</span> — Akın Dil Eğitim Merkezi.
-          </p>
           <p className="text-[10px] text-editorial-text/40 font-mono">
             &copy; {new Date().getFullYear()} — Tüm Hakları Saklıdır. Geliştirici Sürümü.
           </p>
