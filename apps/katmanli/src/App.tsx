@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { PRESET_LESSONS } from './data/presetLessons';
-import { VideoLesson, UserProgress, VocabularyItem, GrammarRuleItem, QuizQuestion } from './types';
+import { VideoLesson, UserProgress, VocabularyItem, GrammarRuleItem, QuizQuestion, MistakeEntry } from './types';
 import { Header } from './components/Header';
 import { LessonSelector } from './components/LessonSelector';
 import { LayerNavigation, LAYER_TABS } from './components/LayerNavigation';
@@ -15,6 +15,7 @@ import { Layer3ComprehensionQuiz } from './components/layers/Layer3Comprehension
 import { Layer4WritingEvaluation } from './components/layers/Layer4WritingEvaluation';
 import { Layer5SpeakingSimulation } from './components/layers/Layer5SpeakingSimulation';
 import { ProgressDashboard } from './components/ProgressDashboard';
+import { MistakesNotebook } from './components/MistakesNotebook';
 import { MethodologyGuideModal } from './components/MethodologyGuideModal';
 import { GrammarCoachDrawer } from './components/GrammarCoachDrawer';
 import { EditLessonModal } from './components/EditLessonModal';
@@ -26,6 +27,7 @@ import AppSwitcher from './AppSwitcher';
 // kullanıcının localStorage'ı elle temizlemesine gerek kalmaz.
 const LESSONS_STORAGE_KEY = 'layered_learning_lessons_v2';
 const PROGRESS_STORAGE_KEY = 'layered_learning_progress_v1';
+const MISTAKES_STORAGE_KEY = 'layered_learning_mistakes_v1';
 
 /** Bugunun tarihi, YYYY-MM-DD (yerel saat). */
 function todayKey(date = new Date()): string {
@@ -501,6 +503,48 @@ async function buildLessonData(
     );
   };
 
+  // Yanlışlar Defteri: quiz sırasında yanlış cevaplanan sorular
+  const [mistakes, setMistakes] = useState<MistakeEntry[]>(() => {
+    try {
+      const saved = localStorage.getItem(MISTAKES_STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch (e) {
+      console.error('Failed to load mistakes:', e);
+    }
+    return [];
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(MISTAKES_STORAGE_KEY, JSON.stringify(mistakes));
+    } catch (e) {
+      console.error('Failed to save mistakes:', e);
+    }
+  }, [mistakes]);
+
+  const handleRecordMistakes = (entries: Omit<MistakeEntry, 'id' | 'timestamp'>[]) => {
+    const timestamp = new Date().toISOString();
+    setMistakes((prev) => [
+      ...entries.map((entry, idx) => ({
+        ...entry,
+        id: `${timestamp}-${idx}-${Math.random().toString(36).slice(2, 8)}`,
+        timestamp,
+      })),
+      ...prev,
+    ]);
+  };
+
+  const handleRemoveMistake = (id: string) => {
+    setMistakes((prev) => prev.filter((m) => m.id !== id));
+  };
+
+  const handleClearMistakes = () => {
+    setMistakes([]);
+  };
+
   return (
     <div className="min-h-screen bg-[var(--paper)] text-[var(--ink)] flex flex-col">
 
@@ -538,7 +582,7 @@ async function buildLessonData(
         />
 
         <div className="min-h-[500px] max-w-[1400px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {!activeLesson && activeLayer !== 9 && activeLayer !== 10 ? (
+          {!activeLesson && activeLayer !== 9 && activeLayer !== 10 && activeLayer !== 11 ? (
             <div className="max-w-md mx-auto my-16 text-center space-y-4">
               <p className="eyebrow">Başlangıç</p>
               <h3 className="font-display text-2xl text-[var(--ink)]">
@@ -588,6 +632,7 @@ async function buildLessonData(
                   lesson={activeLesson}
                   onCompleteLayer={() => handleCompleteLayer(4)}
                   onUpdateQuizData={handleUpdateQuizData}
+                  onRecordMistakes={handleRecordMistakes}
                 />
               )}
 
@@ -633,6 +678,19 @@ async function buildLessonData(
                   onSelectLesson={(lesson) => {
                     setActiveLessonId(lesson.id);
                     setActiveLayer(1);
+                  }}
+                />
+              )}
+
+              {activeLayer === 11 && (
+                <MistakesNotebook
+                  mistakes={mistakes}
+                  lessons={lessons}
+                  onRemoveMistake={handleRemoveMistake}
+                  onClearMistakes={handleClearMistakes}
+                  onSelectLesson={(lessonId) => {
+                    setActiveLessonId(lessonId);
+                    setActiveLayer(4);
                   }}
                 />
               )}

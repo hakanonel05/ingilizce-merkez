@@ -1,7 +1,15 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { Passage, VocabularyWord, UserProgress } from '../types';
 import { CORE_VOCABULARY_DATA, CORE_VOCABULARY_CATEGORIES } from '../data/coreVocabulary';
-import { Search, Volume2, CheckCircle2, Bookmark, ArrowRight, Eye, Sparkles, BookOpen } from 'lucide-react';
+import {
+  addWordToVocabBank,
+  getAllCards,
+  VOCAB_CHANGED_EVENT,
+  READING_CORE_LESSON_ID,
+  READING_CORE_LESSON_TITLE,
+  readingPassageLessonId,
+} from '../lib/vocabBank';
+import { Search, Volume2, CheckCircle2, Bookmark, ArrowRight, Eye, Sparkles, BookOpen, BrainCircuit, Check } from 'lucide-react';
 
 interface VocabularyListProps {
   passages: Passage[];
@@ -16,6 +24,36 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('All');
   const [posFilter, setPartOfSpeechFilter] = useState<string>('All');
+
+  // Paylaşılan FSRS kelime bankasına eklenmiş terimler (küçük harfli set)
+  const [bankedTerms, setBankedTerms] = useState<Set<string>>(new Set());
+  const [addingTerm, setAddingTerm] = useState<string | null>(null);
+
+  const refreshBankedTerms = useCallback(() => {
+    getAllCards()
+      .then(cards => setBankedTerms(new Set(cards.map(c => c.front.toLowerCase()))))
+      .catch(err => console.warn('Kelime bankası okunamadı', err));
+  }, []);
+
+  useEffect(() => {
+    refreshBankedTerms();
+    window.addEventListener(VOCAB_CHANGED_EVENT, refreshBankedTerms);
+    return () => window.removeEventListener(VOCAB_CHANGED_EVENT, refreshBankedTerms);
+  }, [refreshBankedTerms]);
+
+  const handleAddToBank = async (item: VocabularyWord & { passageId?: number; passageTitle?: string; isCore: boolean }) => {
+    setAddingTerm(item.term);
+    try {
+      const source = item.isCore
+        ? { lessonId: READING_CORE_LESSON_ID, lessonTitle: READING_CORE_LESSON_TITLE }
+        : { lessonId: readingPassageLessonId(item.passageId!), lessonTitle: item.passageTitle || 'Okuma Parçası' };
+      await addWordToVocabBank(item, source, passages.find(p => p.id === item.passageId)?.cefr || 'B1');
+    } catch (err) {
+      console.error('Kelime bankaya eklenemedi', err);
+    } finally {
+      setAddingTerm(null);
+    }
+  };
 
   // Unified vocabulary loader based on sourceType
   const flatVocabulary = useMemo(() => {
@@ -320,6 +358,29 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
                     })}
                   </div>
                 </div>
+
+                {/* Paylaşılan FSRS kelime bankasına ekle (Katmanlı'nın Kelime Kartları ekranıyla ortak) */}
+                <button
+                  onClick={() => handleAddToBank(item)}
+                  disabled={bankedTerms.has(item.term.toLowerCase()) || addingTerm === item.term}
+                  className={`mt-3 w-full flex items-center justify-center gap-1.5 py-2 border text-[9px] font-bold uppercase tracking-wider transition-all cursor-pointer disabled:cursor-default ${
+                    bankedTerms.has(item.term.toLowerCase())
+                      ? 'bg-editorial-bg text-emerald-700 border-emerald-200'
+                      : 'bg-white text-editorial-text/60 border-editorial-border/30 hover:border-editorial-accent hover:text-editorial-accent'
+                  }`}
+                  title="Bu kelimeyi katmanlı'daki FSRS tekrar destesine ekle"
+                >
+                  {bankedTerms.has(item.term.toLowerCase()) ? (
+                    <>
+                      <Check className="h-3.5 w-3.5" /> Tekrar Bankasında
+                    </>
+                  ) : (
+                    <>
+                      <BrainCircuit className="h-3.5 w-3.5" />
+                      {addingTerm === item.term ? 'Ekleniyor...' : 'Tekrar Bankasına Ekle'}
+                    </>
+                  )}
+                </button>
 
               </div>
             );

@@ -8,24 +8,28 @@ import PassageCard from './components/PassageCard';
 import VocabularyTrainer from './components/VocabularyTrainer';
 import VocabularyList from './components/VocabularyList';
 import VocabularyWorkbook from './components/VocabularyWorkbook';
+import MistakesNotebook from './components/MistakesNotebook';
+import ExamSimulator from './components/ExamSimulator';
 import AppSwitcher from './AppSwitcher';
 import AuthScreen from './components/AuthScreen';
 import { supabase } from './lib/supabase';
 import { getLocalFallbackPassage } from '../serverLocalPassage';
-import { 
-  LayoutDashboard, 
-  BookOpen, 
-  Sparkles, 
-  BookMarked, 
-  Zap, 
-  Clock, 
+import {
+  LayoutDashboard,
+  BookOpen,
+  Sparkles,
+  BookMarked,
+  Zap,
+  Clock,
   BookOpenCheck,
   BookText,
   Download,
   Upload,
   Smartphone,
   LogOut,
-  CloudCog
+  CloudCog,
+  BookX,
+  Timer
 } from 'lucide-react';
 
 const LOCAL_STORAGE_KEY = 'english_reading_trainer_progress_v1';
@@ -38,14 +42,16 @@ const INITIAL_PROGRESS: UserProgress = {
   dailyStreak: 0,
   lastActiveDate: null,
   totalTimeSpent: 0,
-  workbookState: {}
+  workbookState: {},
+  mistakes: [],
+  examHistory: []
 };
 
 export default function App() {
   const [session, setSession] = useState<any>(null);
   const [isOfflineMode, setIsOfflineMode] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
-  
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -56,7 +62,7 @@ export default function App() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'passages' | 'trainer' | 'list' | 'workbook'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'passages' | 'trainer' | 'list' | 'workbook' | 'mistakes' | 'exam'>('dashboard');
 
   // PWA kurulum prompt'u
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
@@ -150,13 +156,13 @@ export default function App() {
   useEffect(() => {
     const customPassages = passages.filter(p => p && p.id && !PASSAGES_DATA.some(original => original.id === p.id));
     localStorage.setItem('english_reading_trainer_generated_passages_v1', JSON.stringify(customPassages));
-    
+
     if (session && customPassages.length > 0) {
       supabase.from('custom_passages').upsert({
         id: session.user.id,
         passages: customPassages,
         updated_at: new Date().toISOString()
-      }).catch(console.error);
+      }).then(undefined, console.error);
     }
   }, [passages, session]);
 
@@ -184,7 +190,7 @@ export default function App() {
             });
           }
         }
-        
+
         if (progressRes.data) {
           const cp = progressRes.data;
           setProgress(prev => {
@@ -241,7 +247,7 @@ export default function App() {
           total_time_spent: progress.totalTimeSpent,
           workbook_state: progress.workbookState,
           updated_at: new Date().toISOString()
-        }).catch(console.error);
+        }).then(undefined, console.error);
       }, 5000); // 5 second debounce
       return () => clearTimeout(timeoutId);
     }
@@ -353,6 +359,92 @@ export default function App() {
     });
   }, []);
 
+  // Grade a batch of questions (from a quiz, exercise, or exam) and update
+  // the mistakes notebook: wrong answers are added/refreshed, questions the
+  // user now gets right are removed (they've caught up).
+  const handleGradeQuestions = useCallback((
+    passage: { id: number; title: string; cefr: import('./types').CEFRLevel },
+    source: 'quiz' | 'exercise' | 'exam',
+    results: import('./types').GradedQuestionResult[]
+  ) => {
+    setProgress(prev => {
+      const now = new Date().toISOString();
+      let mistakes = [...prev.mistakes];
+
+      results.forEach(r => {
+        const key = `${source}-${passage.id}-${r.questionId}`;
+        const existingIndex = mistakes.findIndex(m => m.key === key);
+
+        if (r.isCorrect) {
+          // No longer a mistake — remove it if it was tracked before.
+          if (existingIndex !== -1) {
+            mistakes = mistakes.filter(m => m.key !== key);
+          }
+          return;
+        }
+
+        if (existingIndex !== -1) {
+          const existing = mistakes[existingIndex];
+          mistakes[existingIndex] = {
+            ...existing,
+            yourAnswer: r.yourAnswer,
+            lastMissedAt: now
+          };
+        } else {
+          mistakes.push({
+            key,
+            passageId: passage.id,
+            passageTitle: passage.title,
+            cefr: passage.cefr,
+            source,
+            questionId: r.questionId,
+            question: r.question,
+            options: r.options,
+            correctAnswer: r.correctAnswer,
+            yourAnswer: r.yourAnswer,
+            firstMissedAt: now,
+            lastMissedAt: now,
+            reviewCount: 0,
+            lastReviewedAt: null
+          });
+        }
+      });
+
+      return { ...prev, mistakes };
+    });
+  }, []);
+
+  // Mark a mistake as reviewed (called from the practice mode in the notebook)
+  const handleReviewMistake = useCallback((key: string, gotItRight: boolean) => {
+    setProgress(prev => {
+      if (!gotItRight) {
+        return {
+          ...prev,
+          mistakes: prev.mistakes.map(m =>
+            m.key === key
+              ? { ...m, reviewCount: m.reviewCount + 1, lastReviewedAt: new Date().toISOString() }
+              : m
+          )
+        };
+      }
+      // Got it right in practice — remove it from the notebook entirely.
+      return { ...prev, mistakes: prev.mistakes.filter(m => m.key !== key) };
+    });
+  }, []);
+
+  // Manually remove a mistake from the notebook ("Artık biliyorum")
+  const handleRemoveMistake = useCallback((key: string) => {
+    setProgress(prev => ({ ...prev, mistakes: prev.mistakes.filter(m => m.key !== key) }));
+  }, []);
+
+  // Save a completed exam simulation attempt
+  const handleSaveExamAttempt = useCallback((attempt: import('./types').ExamAttempt) => {
+    setProgress(prev => ({
+      ...prev,
+      examHistory: [attempt, ...prev.examHistory].slice(0, 50)
+    }));
+  }, []);
+
   // Dynamic Generation States
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatingMetadata, setGeneratingMetadata] = useState<{ id: number; title: string; cefr: string } | null>(null);
@@ -381,14 +473,14 @@ export default function App() {
       // Use local fallback generator directly in frontend instead of missing backend API
       // Add a slight delay for better UI feedback
       await new Promise(resolve => setTimeout(resolve, 600));
-      
+
       const generatedData = getLocalFallbackPassage(
         catalogItem.id,
         catalogItem.title,
         catalogItem.cefr,
         catalogItem.theme
       );
-      
+
       (generatedData as any).isGenerated = true;
 
       setPassages(prev => [...prev, generatedData as Passage]);
@@ -455,7 +547,7 @@ export default function App() {
       <header className="sticky top-0 z-40 bg-white border-b border-editorial-border/40 backdrop-blur-md">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-20 items-center justify-between">
-            
+
             {/* Brand Logo & Slogan */}
             <div className="flex items-center gap-4">
               <div className="flex h-11 w-11 items-center justify-center bg-editorial-accent text-white font-serif text-xl italic font-bold">
@@ -473,7 +565,7 @@ export default function App() {
 
             {/* Streak, Timer & Backup Widgets */}
             <div className="flex items-center gap-2">
-              
+
               {/* Cloud Sync Status */}
               {session && (
                 <div className="flex items-center gap-1.5 border border-editorial-border/40 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-slate-50 text-slate-500">
@@ -554,16 +646,18 @@ export default function App() {
 
       {/* Main Body Layout */}
       <main className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-10 flex-1">
-        
+
         {/* Navigation Tab Menu Grid (Only when not viewing specific Passage card) */}
         {selectedPassageId === null && (
-          <nav className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-10">
+          <nav className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3 mb-10">
             {[
               { id: 'dashboard', label: 'Gösterge Paneli', subtitle: 'İSTATİSTİK & İLERLEME', icon: LayoutDashboard },
               { id: 'passages', label: 'Okuma Parçaları', subtitle: 'KÜTÜPHANE METİNLERİ', icon: BookOpen },
               { id: 'trainer', label: 'Kelime Çalışma', subtitle: 'HAFIZA KARTLARI & TEST', icon: Sparkles },
               { id: 'list', label: 'Kelime Haznesi', subtitle: 'KÜLLİYAT SÖZLÜĞÜ', icon: BookMarked },
-              { id: 'workbook', label: 'Kelime Kitabı', subtitle: 'TABLOLAR & TESTLER', icon: BookText }
+              { id: 'workbook', label: 'Kelime Kitabı', subtitle: 'TABLOLAR & TESTLER', icon: BookText },
+              { id: 'mistakes', label: 'Yanlışlar Defteri', subtitle: `${progress.mistakes.length} SORU`, icon: BookX },
+              { id: 'exam', label: 'Sınav Simülasyonu', subtitle: 'DENEME SINAVI', icon: Timer }
             ].map(tab => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -574,22 +668,22 @@ export default function App() {
                     setActiveTab(tab.id as any);
                     setSelectedPassageId(null);
                   }}
-                  className={`flex items-start gap-4 p-5 border text-left transition-all duration-300 cursor-pointer ${
+                  className={`flex items-start gap-2.5 p-3 sm:p-4 border text-left transition-all duration-300 cursor-pointer ${
                     isActive
                       ? 'bg-editorial-accent text-white border-editorial-accent shadow-md'
                       : 'bg-white border-editorial-border/40 hover:border-editorial-accent/40'
                   }`}
                 >
-                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center border ${
-                    isActive 
-                      ? 'bg-white/10 text-white border-white/20' 
+                  <div className={`flex h-8 w-8 shrink-0 items-center justify-center border ${
+                    isActive
+                      ? 'bg-white/10 text-white border-white/20'
                       : 'bg-editorial-bg text-editorial-text/70 border-editorial-border/40'
                   }`}>
-                    <Icon className="h-5 w-5" />
+                    <Icon className="h-4 w-4" />
                   </div>
-                  <div>
-                    <p className={`text-base font-serif font-bold leading-tight ${isActive ? 'text-white' : 'text-editorial-text'}`}>{tab.label}</p>
-                    <span className={`text-[9px] font-bold tracking-widest block mt-1.5 ${isActive ? 'text-white/60' : 'text-editorial-text/40'}`}>{tab.subtitle}</span>
+                  <div className="min-w-0">
+                    <p className={`text-sm font-serif font-bold leading-tight break-words ${isActive ? 'text-white' : 'text-editorial-text'}`}>{tab.label}</p>
+                    <span className={`text-[9px] font-bold tracking-widest block mt-1.5 truncate ${isActive ? 'text-white/60' : 'text-editorial-text/40'}`}>{tab.subtitle}</span>
                   </div>
                 </button>
               );
@@ -608,6 +702,7 @@ export default function App() {
               onToggleFavorite={handleToggleFavorite}
               onWordStatusChange={handleWordStatusChange}
               onSaveTestResult={handleSaveTestResult}
+              onGradeQuestions={handleGradeQuestions}
             />
           ) : (
             // Tab Selection Panels
@@ -648,9 +743,31 @@ export default function App() {
               )}
 
               {activeTab === 'workbook' && (
-                <VocabularyWorkbook 
+                <VocabularyWorkbook
                   workbookState={progress.workbookState || {}}
                   onWorkbookStateChange={handleWorkbookStateChange}
+                />
+              )}
+
+              {activeTab === 'mistakes' && (
+                <MistakesNotebook
+                  mistakes={progress.mistakes}
+                  onReviewMistake={handleReviewMistake}
+                  onRemoveMistake={handleRemoveMistake}
+                  onSelectPassage={handleSelectPassageDirectly}
+                />
+              )}
+
+              {activeTab === 'exam' && (
+                <ExamSimulator
+                  passages={passages}
+                  onFinishExam={(attempt, perPassageResults) => {
+                    handleSaveExamAttempt(attempt);
+                    perPassageResults.forEach(({ passage, results }) => {
+                      handleGradeQuestions(passage, 'exam', results);
+                    });
+                  }}
+                  onSelectPassage={handleSelectPassageDirectly}
                 />
               )}
             </>
@@ -679,7 +796,7 @@ export default function App() {
             <div className="flex justify-center">
               <div className="animate-spin rounded-none h-10 w-10 border-2 border-editorial-accent border-t-transparent"></div>
             </div>
-            
+
             <div className="space-y-2">
               <span className="text-[10px] font-bold text-editorial-accent font-mono uppercase tracking-widest block">AI Yapay Zeka Motoru Aktif</span>
               <h3 className="text-xl font-serif font-extrabold text-editorial-text leading-tight">
@@ -713,7 +830,7 @@ export default function App() {
                 !
               </div>
             </div>
-            
+
             <div className="space-y-2">
               <span className="text-[10px] font-bold text-rose-600 font-mono uppercase tracking-widest block">Yükleme Başarısız Oldu</span>
               <h3 className="text-lg font-serif font-extrabold text-editorial-text">

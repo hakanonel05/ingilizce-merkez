@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Sparkles, HelpCircle, Edit3, Mic, CheckCircle2, Award, Ear, Volume2, EyeOff, Headphones, Layers } from 'lucide-react';
+import { BookOpen, Sparkles, HelpCircle, Edit3, Mic, CheckCircle2, Award, Ear, Volume2, EyeOff, Headphones, Layers, ListX } from 'lucide-react';
 
 export interface LayerTab {
   id: number;
@@ -74,6 +74,12 @@ export const LAYER_TABS: LayerTab[] = [
     label: 'Süreç & Hedefler',
     subLabel: 'İlerleme Panosu',
     icon: <Award className="w-4 h-4" />
+  },
+  {
+    id: 11,
+    label: 'Yanlışlar Defteri',
+    subLabel: 'Hatalı Sorular',
+    icon: <ListX className="w-4 h-4" />
   }
 ];
 
@@ -87,7 +93,9 @@ export const LayerNavigation: React.FC<LayerNavigationProps> = ({
 }) => {
   return (
     <nav aria-label="Katmanlar" className="border-y border-[var(--hairline)] bg-[var(--paper)]">
-      <div className="flex overflow-x-auto snap-x scrollbar-hide">
+      {/* Kaydırma yok: her sekme min-w-0 flex-1 ile eşit pay alır, taşan metin
+          tek satırda üç nokta ile kısaltılır (truncate) — hep viewport'a sığar. */}
+      <div className="flex">
         {LAYER_TABS.map((tab) => {
           const isActive = activeLayer === tab.id;
           const isCompleted = completedLayers.includes(tab.id);
@@ -98,7 +106,8 @@ export const LayerNavigation: React.FC<LayerNavigationProps> = ({
               key={tab.id}
               onClick={() => onSelectLayer(tab.id)}
               aria-current={isActive ? 'step' : undefined}
-              className={`group relative shrink-0 snap-start text-left px-4 sm:px-5 py-3.5 border-r border-[var(--hairline)] last:border-r-0 transition-colors cursor-pointer min-w-[132px] ${
+              title={`${tab.label.replace(/^\d+\.\s*/, '')} — ${tab.subLabel}`}
+              className={`group relative min-w-0 flex-1 text-left px-1.5 sm:px-2.5 py-2.5 border-r border-[var(--hairline)] last:border-r-0 transition-colors cursor-pointer ${
                 isActive
                   ? 'bg-[var(--paper-2)]'
                   : 'bg-transparent hover:bg-[var(--paper-3)]'
@@ -111,10 +120,10 @@ export const LayerNavigation: React.FC<LayerNavigationProps> = ({
                 }`}
               />
 
-              <span className="flex items-center gap-2 mb-1.5">
+              <span className="flex items-center gap-1 mb-1">
                 {/* Numara: gerçek bir sıra bildirdiği için var */}
                 <span
-                  className={`timecode font-medium ${
+                  className={`timecode font-medium shrink-0 ${
                     isActive ? 'text-[var(--ink)]' : 'text-[var(--ink-3)]'
                   }`}
                 >
@@ -131,7 +140,7 @@ export const LayerNavigation: React.FC<LayerNavigationProps> = ({
               </span>
 
               <span
-                className={`block text-[13px] leading-snug ${
+                className={`block text-[12px] leading-snug truncate ${
                   isActive
                     ? 'text-[var(--ink)] font-medium'
                     : 'text-[var(--ink-2)] group-hover:text-[var(--ink)]'
@@ -140,7 +149,7 @@ export const LayerNavigation: React.FC<LayerNavigationProps> = ({
                 {tab.label.replace(/^\d+\.\s*/, '')}
               </span>
 
-              <span className="block text-[11px] mt-0.5 text-[var(--ink-3)] leading-snug">
+              <span className="hidden sm:block text-[10px] mt-0.5 text-[var(--ink-3)] leading-snug truncate">
                 {tab.subLabel}
               </span>
             </button>

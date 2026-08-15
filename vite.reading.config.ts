@@ -12,7 +12,10 @@ export default defineConfig({
   publicDir: path.resolve(__dirname, 'apps/reading/public'),
   build: {
     outDir: path.resolve(__dirname, 'dist'),
-    emptyOutDir: true,
+    // ÖNEMLİ: dist/katmanli/ alt klasörünü silmesin — reading ve katmanlı
+    // aynı dist/ kökünü paylaşıyor, reading'i tek başına derlemek
+    // katmanlı'nın çıktısını yok etmemeli (bkz. vite.katmanli.config.ts).
+    emptyOutDir: false,
   },
   server: { port: 5173 },
 });

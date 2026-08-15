@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { VideoLesson, QuizQuestion } from '../../types';
+import { VideoLesson, QuizQuestion, MistakeEntry } from '../../types';
 import { HelpCircle, CheckCircle2, XCircle, Sparkles, CheckCircle, Loader2, Award, AlertCircle } from 'lucide-react';
 
 interface Layer3ComprehensionQuizProps {
   lesson: VideoLesson;
   onCompleteLayer: () => void;
   onUpdateQuizData: (questions: QuizQuestion[]) => void;
+  onRecordMistakes: (entries: Omit<MistakeEntry, 'id' | 'timestamp'>[]) => void;
 }
 
 export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = ({
   lesson,
   onCompleteLayer,
   onUpdateQuizData,
+  onRecordMistakes,
 }) => {
   const [userAnswers, setUserAnswers] = useState<{ [questionId: number]: any }>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -73,6 +75,32 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
       }
     });
     return score;
+  };
+
+  const handleSubmit = () => {
+    setIsSubmitted(true);
+
+    const mistakes: Omit<MistakeEntry, 'id' | 'timestamp'>[] = [];
+    quizQuestions.forEach((q) => {
+      if (q.type !== 'multiple_choice' || !q.options) return;
+      const selectedIdx = userAnswers[q.id];
+      const isCorrect = selectedIdx === q.correctOptionIndex;
+      if (!isCorrect) {
+        mistakes.push({
+          lessonId: lesson.id,
+          lessonTitle: lesson.title,
+          question: q.question,
+          options: q.options,
+          userAnswer: typeof selectedIdx === 'number' ? q.options[selectedIdx] : 'Boş bırakıldı',
+          correctAnswer: typeof q.correctOptionIndex === 'number' ? q.options[q.correctOptionIndex] : '',
+          explanationTr: q.explanationTr,
+        });
+      }
+    });
+
+    if (mistakes.length > 0) {
+      onRecordMistakes(mistakes);
+    }
   };
 
   return (
@@ -259,7 +287,7 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
       {quizQuestions.length > 0 && !isSubmitted && (
         <div className="flex justify-end pt-2">
           <button
-            onClick={() => setIsSubmitted(true)}
+            onClick={handleSubmit}
             className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-sm cursor-pointer"
           >
             Yanıtları Kontrol Et & Analiz Et

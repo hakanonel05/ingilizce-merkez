@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { VideoLesson } from '../../types';
+import { VideoLesson, MistakeEntry } from '../../types';
 import { extractYouTubeId } from '../../lib/youtube';
 import { useYouTubePlayer, formatSeconds } from '../../lib/useYouTubePlayer';
 import { Layer3ComprehensionQuiz } from './Layer3ComprehensionQuiz';
@@ -9,6 +9,7 @@ interface Props {
   lesson: VideoLesson;
   onCompleteLayer: () => void;
   onUpdateQuizData: (data: any) => void;
+  onRecordMistakes: (entries: Omit<MistakeEntry, 'id' | 'timestamp'>[]) => void;
 }
 
 /**
@@ -21,6 +22,7 @@ export const Layer4NoSubtitles: React.FC<Props> = ({
   lesson,
   onCompleteLayer,
   onUpdateQuizData,
+  onRecordMistakes,
 }) => {
   const ytId = lesson.youtubeId || extractYouTubeId(lesson.youtubeUrl);
   const { containerRef, currentTime } = useYouTubePlayer(ytId, 'yt-no-subs');
@@ -82,6 +84,7 @@ export const Layer4NoSubtitles: React.FC<Props> = ({
             lesson={lesson}
             onCompleteLayer={onCompleteLayer}
             onUpdateQuizData={onUpdateQuizData}
+            onRecordMistakes={onRecordMistakes}
           />
         </div>
       )}

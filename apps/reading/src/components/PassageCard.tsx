@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
-import { Passage, UserProgress } from '../types';
-import { ChevronLeft, Star, Volume2, CheckCircle2, AlertCircle, Bookmark, ArrowRight, HelpCircle, Award, Check, X } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { Passage, UserProgress, GradedQuestionResult, VocabularyWord } from '../types';
+import { ChevronLeft, Star, Volume2, CheckCircle2, AlertCircle, Bookmark, ArrowRight, HelpCircle, Award, Check, X, BrainCircuit } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { addWordToVocabBank, getAllCards, VOCAB_CHANGED_EVENT, readingPassageLessonId } from '../lib/vocabBank';
 
 interface PassageCardProps {
   passage: Passage;
@@ -10,6 +11,7 @@ interface PassageCardProps {
   onToggleFavorite: (id: number) => void;
   onWordStatusChange: (term: string, status: 'unstudied' | 'studied' | 'learned') => void;
   onSaveTestResult: (passageId: number, score: number, total: number) => void;
+  onGradeQuestions: (passage: Passage, source: 'quiz' | 'exercise', results: GradedQuestionResult[]) => void;
 }
 
 export default function PassageCard({
@@ -18,11 +20,12 @@ export default function PassageCard({
   onBackToList,
   onToggleFavorite,
   onWordStatusChange,
-  onSaveTestResult
+  onSaveTestResult,
+  onGradeQuestions
 }: PassageCardProps) {
   // Tabs inside specific passage
   const [activeTab, setActiveTab] = useState<'text' | 'quiz' | 'exercises'>('text');
-  
+
   // Selected interactive word detail
   const [selectedWord, setSelectedWord] = useState<string | null>(null);
 
@@ -37,6 +40,37 @@ export default function PassageCard({
   const [exercisesScore, setExercisesScore] = useState(0);
 
   const isFavorite = progress.favoritePassages.includes(passage.id);
+
+  // Paylaşılan FSRS kelime bankasına eklenmiş terimler (katmanlı ile ortak)
+  const [bankedTerms, setBankedTerms] = useState<Set<string>>(new Set());
+  const [addingTerm, setAddingTerm] = useState<string | null>(null);
+
+  const refreshBankedTerms = useCallback(() => {
+    getAllCards()
+      .then(cards => setBankedTerms(new Set(cards.map(c => c.front.toLowerCase()))))
+      .catch(err => console.warn('Kelime bankası okunamadı', err));
+  }, []);
+
+  useEffect(() => {
+    refreshBankedTerms();
+    window.addEventListener(VOCAB_CHANGED_EVENT, refreshBankedTerms);
+    return () => window.removeEventListener(VOCAB_CHANGED_EVENT, refreshBankedTerms);
+  }, [refreshBankedTerms]);
+
+  const handleAddWordToBank = async (word: VocabularyWord) => {
+    setAddingTerm(word.term);
+    try {
+      await addWordToVocabBank(
+        word,
+        { lessonId: readingPassageLessonId(passage.id), lessonTitle: passage.title },
+        passage.cefr
+      );
+    } catch (err) {
+      console.error('Kelime bankaya eklenemedi', err);
+    } finally {
+      setAddingTerm(null);
+    }
+  };
 
   // Reset states when passage changes
   useEffect(() => {
@@ -84,8 +118,8 @@ export default function PassageCard({
             key={index}
             onClick={() => handleWordClick(chunk)}
             className={`font-serif font-bold cursor-pointer px-1 transition-all duration-150 ${underlineStyle} ${
-              isSelected 
-                ? 'bg-editorial-accent text-white border-none' 
+              isSelected
+                ? 'bg-editorial-accent text-white border-none'
                 : 'text-editorial-text hover:bg-editorial-bg'
             }`}
           >
@@ -118,43 +152,50 @@ export default function PassageCard({
   // Submit comprehension quiz
   const submitComprehensionQuiz = () => {
     let score = 0;
-    passage.questions.forEach(q => {
-      const selected = comprehensionAnswers[q.id];
-      if (selected && q.options.find(o => o.startsWith(selected))?.startsWith(q.answer)) {
-        score++;
-      } else {
-        // Double check simple exact match
-        const option = q.options.find(o => o.startsWith(selected));
-        if (option && option.trim().startsWith(q.answer)) {
-          score++;
-        }
-      }
+    const gradedResults: GradedQuestionResult[] = passage.questions.map(q => {
+      const selected = comprehensionAnswers[q.id] || '';
+      const isCorrect = selected === q.answer;
+      if (isCorrect) score++;
+      return {
+        questionId: q.id,
+        question: q.question,
+        options: q.options,
+        correctAnswer: q.answer,
+        yourAnswer: selected,
+        isCorrect
+      };
     });
 
     setComprehensionScore(score);
     setComprehensionSubmitted(true);
-    
+
     // Save to overall scores
     onSaveTestResult(passage.id, score, passage.questions.length);
+    // Update the "Yanlışlar Defteri" (mistakes notebook)
+    onGradeQuestions(passage, 'quiz', gradedResults);
   };
 
   // Submit vocabulary exercises
   const submitExercisesQuiz = () => {
     let score = 0;
-    passage.exercises.forEach(ex => {
-      const selected = exerciseAnswers[ex.id];
-      if (selected && ex.options.find(o => o.startsWith(selected))?.startsWith(ex.answer)) {
-        score++;
-      } else {
-        const option = ex.options.find(o => o.startsWith(selected));
-        if (option && option.trim().startsWith(ex.answer)) {
-          score++;
-        }
-      }
+    const gradedResults: GradedQuestionResult[] = passage.exercises.map(ex => {
+      const selected = exerciseAnswers[ex.id] || '';
+      const isCorrect = selected === ex.answer;
+      if (isCorrect) score++;
+      return {
+        questionId: ex.id,
+        question: ex.question,
+        options: ex.options,
+        correctAnswer: ex.answer,
+        yourAnswer: selected,
+        isCorrect
+      };
     });
 
     setExercisesScore(score);
     setExercisesSubmitted(true);
+    // Update the "Yanlışlar Defteri" (mistakes notebook)
+    onGradeQuestions(passage, 'exercise', gradedResults);
   };
 
   // Trigger TTS voice representing term
@@ -173,7 +214,7 @@ export default function PassageCard({
 
   return (
     <div id="passage-card-container" className="space-y-6">
-      
+
       {/* Passage Top Nav & Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-editorial-border/40 p-4 gap-4">
         <button
@@ -233,11 +274,11 @@ export default function PassageCard({
 
       {/* Grid Container for Main Body */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-        
+
         {/* Left Column: METİN / SORULAR */}
         <div className="lg:col-span-2 space-y-6">
           <AnimatePresence mode="wait">
-            
+
             {/* okuma metni tab */}
             {activeTab === 'text' && (
               <motion.div
@@ -352,7 +393,7 @@ export default function PassageCard({
                             const isOptionCorrect = option.startsWith(q.answer);
 
                             let buttonStyle = 'bg-white border-editorial-border/30 text-editorial-text hover:bg-editorial-bg';
-                            
+
                             if (isOptionSelected && !comprehensionSubmitted) {
                               buttonStyle = 'bg-editorial-accent text-white border-editorial-accent font-bold';
                             } else if (comprehensionSubmitted) {
@@ -473,7 +514,7 @@ export default function PassageCard({
                             const isOptionCorrect = option.startsWith(ex.answer);
 
                             let buttonStyle = 'bg-white border-editorial-border/30 text-editorial-text hover:bg-editorial-bg';
-                            
+
                             if (isOptionSelected && !exercisesSubmitted) {
                               buttonStyle = 'bg-amber-500 text-white border-amber-500 font-bold';
                             } else if (exercisesSubmitted) {
@@ -562,7 +603,7 @@ export default function PassageCard({
 
         {/* Right Column: WORD DETAILS / QUICK INFO PANEL */}
         <div className="space-y-6 sticky top-6">
-          
+
           {/* Word Dictionary Peek Card */}
           <div className="bg-white border border-editorial-border/40 p-6 shadow-xs">
             <h3 className="text-base font-serif font-bold text-editorial-text mb-4 pb-2 border-b border-editorial-border/20 flex items-center gap-2">
@@ -627,7 +668,7 @@ export default function PassageCard({
                           key={btn.id}
                           onClick={() => onWordStatusChange(activeWordDetail.term, btn.id as any)}
                           className={`flex-1 py-2 border text-[10px] font-bold tracking-wider transition-all flex items-center justify-center gap-1 cursor-pointer ${
-                            isCurrent 
+                            isCurrent
                               ? btn.id === 'studied' ? 'bg-amber-500 text-white border-amber-500 font-bold' : 'bg-emerald-600 text-white border-emerald-600 font-bold'
                               : 'bg-white hover:bg-editorial-bg text-editorial-text/50 border-editorial-border/30'
                           }`}
@@ -639,6 +680,29 @@ export default function PassageCard({
                     })}
                   </div>
                 </div>
+
+                {/* Paylaşılan FSRS kelime bankasına ekle (katmanlı'nın Kelime Kartları ekranıyla ortak) */}
+                <button
+                  onClick={() => handleAddWordToBank(activeWordDetail)}
+                  disabled={bankedTerms.has(activeWordDetail.term.toLowerCase()) || addingTerm === activeWordDetail.term}
+                  className={`w-full flex items-center justify-center gap-1.5 py-2.5 border text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer disabled:cursor-default ${
+                    bankedTerms.has(activeWordDetail.term.toLowerCase())
+                      ? 'bg-editorial-bg text-emerald-700 border-emerald-200'
+                      : 'bg-white text-editorial-text/60 border-editorial-border/30 hover:border-editorial-accent hover:text-editorial-accent'
+                  }`}
+                  title="Bu kelimeyi katmanlı'daki FSRS tekrar destesine ekle"
+                >
+                  {bankedTerms.has(activeWordDetail.term.toLowerCase()) ? (
+                    <>
+                      <Check className="h-3.5 w-3.5" /> Tekrar Bankasında
+                    </>
+                  ) : (
+                    <>
+                      <BrainCircuit className="h-3.5 w-3.5" />
+                      {addingTerm === activeWordDetail.term ? 'Ekleniyor...' : 'Tekrar Bankasına Ekle'}
+                    </>
+                  )}
+                </button>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center text-center p-8 bg-editorial-bg border border-editorial-border/20">
@@ -654,7 +718,7 @@ export default function PassageCard({
           {/* Quick Stats of Current Passage */}
           <div className="bg-white border border-editorial-border/40 p-6 space-y-4">
             <h4 className="text-xs font-bold tracking-wider uppercase text-editorial-text">PARÇA ÇALIŞMA İLERLEMESİ</h4>
-            
+
             <div className="space-y-3.5 text-xs">
               <div className="flex justify-between items-center text-editorial-text/70 border-b border-editorial-border/10 pb-2">
                 <span className="font-serif italic">Okuma Durumu</span>
@@ -686,4 +750,3 @@ export default function PassageCard({
     </div>
   );
 }
-

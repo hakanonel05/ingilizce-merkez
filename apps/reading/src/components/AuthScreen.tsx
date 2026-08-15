@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
 import { supabase } from '../lib/supabase';
 import { BookOpen } from 'lucide-react';
 
@@ -9,7 +9,7 @@ export default function AuthScreen({ onContinueOffline }: { onContinueOffline: (
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);

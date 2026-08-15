@@ -79,6 +79,18 @@ export interface VideoLesson {
   hasRealTimings?: boolean;
 }
 
+export interface MistakeEntry {
+  id: string;
+  lessonId: string;
+  lessonTitle: string;
+  question: string;
+  options?: string[];
+  userAnswer: string;
+  correctAnswer: string;
+  explanationTr?: string;
+  timestamp: string;
+}
+
 export interface UserProgress {
   completedVideoCount: number;
   goalVideoCount: number;

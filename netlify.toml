@@ -6,6 +6,15 @@
 [build.environment]
   NODE_VERSION = "20"
 
+# `netlify dev`: derlenmiş çıktıyı (dist/) + API fonksiyonlarını tek adresten
+# servis eder — production'daki gibi tek origin'den reading + katmanlı.
+# Kaynak değiştikçe `npm run build` ile yeniden derleyip sayfayı yenilemek gerekir.
+[dev]
+  framework = "#static"
+  publish = "dist"
+  functions = "netlify/functions"
+  autoLaunch = false
+
 # /api/* -> Express'i saran serverless fonksiyon (Katmanlı'nın YZ uçları)
 [[redirects]]
   from = "/api/*"

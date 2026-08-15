@@ -5,3 +5,12 @@ dist_electron
 .env.local
 *.zip
 *.rar
+
+# Local Netlify folder
+.netlify
+
+# Yerel netlify dev / edge functions ortamı
+deno.lock
+
+# Claude Code oturum durumu
+.claude
