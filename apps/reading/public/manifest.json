@@ -1,0 +1,38 @@
+{
+  "name": "Lexis Trainer — İngilizce Okuma & Kelime",
+  "short_name": "Lexis Trainer",
+  "description": "YDS, YÖKDİL ve YKS-DİL için İngilizce okuma parçaları ve kelime çalışma uygulaması",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f1ec",
+  "theme_color": "#1a1a2e",
+  "orientation": "portrait-primary",
+  "lang": "tr",
+  "scope": "/",
+  "categories": ["education", "books"],
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Okuma Parçaları",
+      "short_name": "Parçalar",
+      "description": "Okuma parçaları kütüphanesini aç",
+      "url": "/?tab=passages",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Kelime Çalışma",
+      "short_name": "Kelimeler",
+      "description": "Kelime kartlarıyla çalış",
+      "url": "/?tab=trainer",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

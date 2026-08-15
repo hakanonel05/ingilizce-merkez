@@ -1,0 +1,353 @@
+import { useState, useMemo } from 'react';
+import { Passage, VocabularyWord, UserProgress } from '../types';
+import { CORE_VOCABULARY_DATA, CORE_VOCABULARY_CATEGORIES } from '../data/coreVocabulary';
+import { Search, Volume2, CheckCircle2, Bookmark, ArrowRight, Eye, Sparkles, BookOpen } from 'lucide-react';
+
+interface VocabularyListProps {
+  passages: Passage[];
+  progress: UserProgress;
+  onWordStatusChange: (term: string, status: 'unstudied' | 'studied' | 'learned') => void;
+  onSelectPassage: (id: number) => void;
+}
+
+export default function VocabularyList({ passages, progress, onWordStatusChange, onSelectPassage }: VocabularyListProps) {
+  const [sourceType, setSourceType] = useState<'passages' | 'core'>('passages');
+  const [coreCategoryFilter, setCoreCategoryFilter] = useState<string>('All');
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('All');
+  const [posFilter, setPartOfSpeechFilter] = useState<string>('All');
+
+  // Unified vocabulary loader based on sourceType
+  const flatVocabulary = useMemo(() => {
+    if (sourceType === 'passages') {
+      const list: (VocabularyWord & { passageId?: number; passageTitle?: string; isCore: boolean; category?: string })[] = [];
+      passages.forEach(p => {
+        if (!p) return;
+        (p.vocabulary ?? []).forEach(v => {
+          if (!list.some(item => item.term === v.term)) {
+            list.push({
+              ...v,
+              passageId: p.id,
+              passageTitle: p.title,
+              isCore: false
+            });
+          }
+        });
+      });
+      return list;
+    } else {
+      const list: (VocabularyWord & { passageId?: number; passageTitle?: string; isCore: boolean; category?: string })[] = [];
+      CORE_VOCABULARY_DATA.forEach(v => {
+        if (coreCategoryFilter === 'All' || v.category === coreCategoryFilter) {
+          list.push({
+            term: v.term,
+            meaning: v.meaning,
+            partOfSpeech: v.partOfSpeech,
+            definition: v.definition,
+            exampleSentence: v.exampleSentence,
+            isCore: true,
+            category: v.category
+          });
+        }
+      });
+      return list;
+    }
+  }, [passages, sourceType, coreCategoryFilter]);
+
+  // Filtered vocabulary list
+  const filteredVocabulary = useMemo(() => {
+    return flatVocabulary.filter(item => {
+      const matchesSearch = 
+        item.term.toLowerCase().includes(search.toLowerCase()) ||
+        item.meaning.toLowerCase().includes(search.toLowerCase()) ||
+        (item.definition && item.definition.toLowerCase().includes(search.toLowerCase()));
+
+      const status = progress.wordStatus[item.term] || 'unstudied';
+      const matchesStatus = statusFilter === 'All' || status === statusFilter;
+
+      const matchesPos = posFilter === 'All' || item.partOfSpeech === posFilter;
+
+      return matchesSearch && matchesStatus && matchesPos;
+    });
+  }, [flatVocabulary, progress.wordStatus, search, statusFilter, posFilter]);
+
+  // Word stats based on the active list
+  const totalCount = flatVocabulary.length;
+  const learnedCount = flatVocabulary.filter(item => progress.wordStatus[item.term] === 'learned').length;
+  const studiedCount = flatVocabulary.filter(item => progress.wordStatus[item.term] === 'studied').length;
+  const unstudiedCount = totalCount - learnedCount - studiedCount;
+
+  // Speak word
+  const speakWord = (term: string) => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(term);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.85;
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  return (
+    <div id="vocabulary-list-container" className="space-y-6">
+      
+      {/* List Source Tabs Selector */}
+      <div className="flex bg-white border border-editorial-border/40 p-1.5 shadow-xs font-mono text-xs justify-center sm:justify-start gap-2">
+        <button
+          onClick={() => {
+            setSourceType('passages');
+            setSearch('');
+            setStatusFilter('All');
+            setPartOfSpeechFilter('All');
+          }}
+          className={`px-5 py-3 font-bold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+            sourceType === 'passages'
+              ? 'bg-editorial-accent text-white border border-editorial-accent shadow-xs font-bold'
+              : 'text-editorial-text/50 hover:text-editorial-text hover:bg-editorial-bg'
+          }`}
+        >
+          <BookOpen className="h-4 w-4" />
+          Okuma Parçası Kelimeleri
+        </button>
+        <button
+          onClick={() => {
+            setSourceType('core');
+            setCoreCategoryFilter('All');
+            setSearch('');
+            setStatusFilter('All');
+            setPartOfSpeechFilter('All');
+          }}
+          className={`px-5 py-3 font-bold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+            sourceType === 'core'
+              ? 'bg-editorial-accent text-white border border-editorial-accent shadow-xs font-bold'
+              : 'text-editorial-text/50 hover:text-editorial-text hover:bg-editorial-bg'
+          }`}
+        >
+          <Sparkles className="h-4 w-4" />
+          Temel Kelime Listeleri (Workbook)
+        </button>
+      </div>
+
+      {/* Top Metrics Row */}
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 bg-white border border-editorial-border/40 p-6 shadow-xs font-mono">
+        <div className="space-y-1">
+          <p className="text-[10px] font-bold text-editorial-text/40 uppercase tracking-widest">LİSTE TOPLAMI</p>
+          <p className="text-3xl font-bold text-editorial-text">{totalCount}</p>
+        </div>
+        <div className="space-y-1 border-t sm:border-t-0 sm:border-l border-editorial-border/20 pt-4 sm:pt-0 sm:pl-6">
+          <p className="text-[10px] font-bold text-emerald-700 uppercase tracking-widest">ÖĞRENİLEN</p>
+          <p className="text-3xl font-bold text-emerald-700">{learnedCount}</p>
+        </div>
+        <div className="space-y-1 border-t sm:border-t-0 sm:border-l border-editorial-border/20 pt-4 sm:pt-0 sm:pl-6">
+          <p className="text-[10px] font-bold text-amber-600 uppercase tracking-widest">ÇALIŞILAN</p>
+          <p className="text-3xl font-bold text-amber-600">{studiedCount}</p>
+        </div>
+        <div className="space-y-1 border-t sm:border-t-0 sm:border-l border-editorial-border/20 pt-4 sm:pt-0 sm:pl-6">
+          <p className="text-[10px] font-bold text-editorial-text/40 uppercase tracking-widest">KALAN</p>
+          <p className="text-3xl font-bold text-editorial-text/50">{unstudiedCount}</p>
+        </div>
+      </div>
+
+      {/* Filters Toolbar */}
+      <div className="flex flex-col lg:flex-row gap-4 justify-between items-stretch lg:items-center bg-white border border-editorial-border/40 p-6 shadow-xs">
+        
+        {/* Search Input */}
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-editorial-text/40" />
+          <input
+            type="text"
+            placeholder={sourceType === 'passages' ? "Kelime, Türkçe anlam veya açıklamalarda ara..." : "Temel listelerde kelime ara..."}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full pl-10 pr-4 py-2.5 border border-editorial-border/30 bg-editorial-bg focus:bg-white focus:outline-hidden focus:border-editorial-accent transition-all font-sans text-xs sm:text-sm text-editorial-text"
+          />
+        </div>
+
+        {/* Dropdown Filters Row */}
+        <div className="flex flex-wrap gap-4 font-mono text-[11px] tracking-wider uppercase">
+          
+          {/* Core category filter (Only visible in 'core' source) */}
+          {sourceType === 'core' && (
+            <div className="flex items-center gap-2 text-editorial-text/60 font-bold">
+              <span>GRUP:</span>
+              <select
+                value={coreCategoryFilter}
+                onChange={(e) => setCoreCategoryFilter(e.target.value)}
+                className="px-3 py-2 border border-editorial-border/30 bg-white font-bold text-editorial-text focus:outline-hidden focus:border-editorial-accent text-xs cursor-pointer rounded-none uppercase"
+              >
+                <option value="All">TÜMÜ</option>
+                {Object.entries(CORE_VOCABULARY_CATEGORIES).map(([key, value]) => (
+                  <option key={key} value={key}>{value.title.split(' ')[0]}</option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {/* Status filter dropdown */}
+          <div className="flex items-center gap-2 text-editorial-text/60 font-bold">
+            <span>DURUM:</span>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="px-3 py-2 border border-editorial-border/30 bg-white font-bold text-editorial-text focus:outline-hidden focus:border-editorial-accent text-xs cursor-pointer rounded-none uppercase"
+            >
+              <option value="All">HEPSİ</option>
+              <option value="unstudied">ÇALIŞILMADI</option>
+              <option value="studied">ÇALIŞILIYOR</option>
+              <option value="learned">ÖĞRENİLDİ</option>
+            </select>
+          </div>
+
+          {/* Part of speech dropdown filter */}
+          <div className="flex items-center gap-2 text-editorial-text/60 font-bold">
+            <span>TÜR:</span>
+            <select
+              value={posFilter}
+              onChange={(e) => setPartOfSpeechFilter(e.target.value)}
+              className="px-3 py-2 border border-editorial-border/30 bg-white font-bold text-editorial-text focus:outline-hidden focus:border-editorial-accent text-xs cursor-pointer rounded-none uppercase"
+            >
+              <option value="All">TÜMÜ</option>
+              <option value="n">Noun (İsim)</option>
+              <option value="v">Verb (Fiil)</option>
+              <option value="adj">Adjective (Sıfat)</option>
+              <option value="adv">Adverb (Zarf)</option>
+              <option value="phr. v">Phrasal Verb (Deyim Fiil)</option>
+              <option value="prep">Preposition (Edat)</option>
+            </select>
+          </div>
+
+        </div>
+
+      </div>
+
+      {/* Words Inventory Grid */}
+      {filteredVocabulary.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredVocabulary.map(item => {
+            const status = progress.wordStatus[item.term] || 'unstudied';
+
+            // Status Styling matching editorial styles
+            let statusTag = '';
+            if (status === 'unstudied') statusTag = 'bg-editorial-bg text-editorial-text/40 border-editorial-border/20';
+            else if (status === 'studied') statusTag = 'bg-amber-50 text-amber-800 border-amber-200 font-bold';
+            else if (status === 'learned') statusTag = 'bg-emerald-50 text-emerald-800 border-emerald-200 font-bold';
+
+            return (
+              <div 
+                key={item.term}
+                className="group relative border border-editorial-border/40 bg-white p-6 shadow-xs hover:shadow-md hover:border-editorial-accent transition-all duration-300 flex flex-col justify-between"
+              >
+                <div>
+                  {/* Top line Info */}
+                  <div className="flex justify-between items-start gap-4 mb-3">
+                    <div className="space-y-1">
+                      <h4 className="text-lg font-serif font-extrabold text-editorial-text flex items-center gap-2">
+                        {item.term}
+                        <button
+                          onClick={() => speakWord(item.term)}
+                          className="p-1 rounded-xs text-editorial-text/30 hover:text-editorial-accent hover:bg-editorial-bg transition-colors cursor-pointer"
+                          title="Telaffuz Dinle"
+                        >
+                          <Volume2 className="h-4 w-4" />
+                        </button>
+                      </h4>
+                      <span className="inline-block text-[9px] font-bold text-editorial-text/50 bg-editorial-bg border border-editorial-border/30 px-1.5 py-0.5 uppercase font-mono tracking-wider">
+                        {item.partOfSpeech === 'n' ? 'Noun' :
+                         item.partOfSpeech === 'v' ? 'Verb' :
+                         item.partOfSpeech === 'adj' ? 'Adjective' :
+                         item.partOfSpeech === 'adv' ? 'Adverb' :
+                         item.partOfSpeech === 'prep' ? 'Preposition' : 'Phrasal Verb'}
+                      </span>
+                    </div>
+
+                    <span className={`px-2.5 py-0.5 text-[9px] uppercase font-bold tracking-widest border rounded-xs ${statusTag}`}>
+                      {status === 'unstudied' ? 'Kalan' : status === 'studied' ? 'Çalışılıyor' : 'Öğrenildi'}
+                    </span>
+                  </div>
+
+                  {/* Definition & Meaning info */}
+                  <div className="space-y-3 mt-4">
+                    <div className="bg-editorial-bg p-3.5 border border-editorial-border/20">
+                      <span className="text-[9px] text-editorial-text/40 block font-bold tracking-wider uppercase font-mono mb-0.5">Anlamı</span>
+                      <p className="font-bold text-editorial-accent text-sm font-sans">{item.meaning}</p>
+                    </div>
+
+                    {item.definition && (
+                      <p className="text-xs text-editorial-text/60 italic leading-relaxed font-serif line-clamp-2">
+                        {item.definition}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Footer status buttons & Backlink to Passage */}
+                <div className="mt-6 pt-4 border-t border-editorial-border/20 flex items-center justify-between gap-3">
+                  {!item.isCore && item.passageId && onSelectPassage ? (
+                    <button
+                      onClick={() => onSelectPassage(item.passageId!)}
+                      className="text-[10px] font-bold text-editorial-accent hover:underline transition-colors flex items-center gap-1 uppercase tracking-wide cursor-pointer font-mono"
+                      title={`Parçayı Gör: ${item.passageTitle}`}
+                    >
+                      <Eye className="h-3.5 w-3.5" /> Parçayı Gör
+                    </button>
+                  ) : item.isCore && item.category ? (
+                    <span className="text-[10px] font-bold text-editorial-text/40 font-mono uppercase tracking-wider bg-editorial-bg border border-editorial-border/20 px-2 py-0.5">
+                      🗂️ {CORE_VOCABULARY_CATEGORIES[item.category as keyof typeof CORE_VOCABULARY_CATEGORIES]?.title.split(' ')[0]}
+                    </span>
+                  ) : (
+                    <div />
+                  )}
+
+                  <div className="flex gap-1 font-mono text-[9px]">
+                    {[
+                      { id: 'studied', label: 'ÇALIŞTIM', color: 'bg-amber-500 text-white border-amber-600 font-bold' },
+                      { id: 'learned', label: 'ÖĞRENDİM', color: 'bg-emerald-600 text-white border-emerald-700 font-bold' }
+                    ].map(btn => {
+                      const isCurrent = status === btn.id;
+                      return (
+                        <button
+                          key={btn.id}
+                          onClick={() => onWordStatusChange(item.term, btn.id as any)}
+                          className={`px-2.5 py-1.5 border text-[9px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                            isCurrent
+                              ? btn.id === 'studied' ? 'bg-amber-500 text-white border-amber-500 font-bold' : 'bg-emerald-600 text-white border-emerald-600 font-bold'
+                              : 'bg-white hover:bg-editorial-bg text-editorial-text/40 border-editorial-border/30'
+                          }`}
+                        >
+                          {btn.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center p-16 bg-white border border-editorial-border/40 text-center">
+          <Bookmark className="h-12 w-12 text-editorial-text/20 mb-2" />
+          <p className="text-base font-serif font-bold text-editorial-text">Hiç kelime bulunamadı.</p>
+          <p className="text-xs text-editorial-text/50 mt-1 max-w-sm font-serif italic">
+            Seçtiğiniz filtreleri veya arama kriterlerini değiştirerek tekrar aramayı deneyebilirsiniz.
+          </p>
+          <button
+            onClick={() => {
+              setSearch('');
+              setStatusFilter('All');
+              setPartOfSpeechFilter('All');
+              if (sourceType === 'core') {
+                setCoreCategoryFilter('All');
+              }
+            }}
+            className="mt-5 px-5 py-2 bg-editorial-accent text-white text-xs font-bold hover:bg-white hover:text-editorial-text border border-editorial-accent transition-colors cursor-pointer"
+          >
+            Filtreleri Temizle
+          </button>
+        </div>
+      )}
+
+    </div>
+  );
+}
