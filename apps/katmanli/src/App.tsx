@@ -283,6 +283,51 @@ async function readJsonResponse(res: Response, fallbackMsg: string): Promise<any
 const TRANSLATE_BATCH_SIZE = 20;
 
 /**
+ * Bir ceviri grubunu ister; basarisiz olursa GRUBU IKIYE BOLUP tekrar dener.
+ *
+ * Neden gerekli: otomatik altyazi metni noktalamasiz ve dolgu sesleriyle dolu
+ * ("um", "like"). Yapay zeka saglayicisi boyle bir metinde 20 cumlelik grubu
+ * ara sira gecerli JSON'a ceviremiyor ve istek hata donuyor. Ayni grup ikinci
+ * denemede ya da kucuk parcalar halinde sorunsuz geciyor; yani hata iceriksel
+ * degil, KARARSIZ.
+ *
+ * Eskiden ilk basarisiz grup tum ice aktarmayi durduruyordu: 61 cumlelik bir
+ * ders, tek bir aksayan grup yuzunden bastan kayboluyordu. Artik grup
+ * kuculterek yeniden deneniyor; tek cumle bile cevrilemezse yalnizca o cumle
+ * cevirisiz kaliyor ve ders olusmaya devam ediyor (duzenleme ekranindan
+ * sonradan tamamlanabilir).
+ */
+async function translateBatchWithSplit(
+  chunk: { id: number; en: string }[],
+  onNote?: (message: string) => void
+): Promise<Record<number, string>> {
+  try {
+    const res = await apiFetch('/api/translate-batch', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sentences: chunk }),
+    });
+    const data = await readJsonResponse(res, 'Ceviri yapilamadi.');
+    if (!res.ok) throw new Error(data.error || 'Ceviri yapilamadi.');
+    return data.translations || {};
+  } catch (err) {
+    // Tek cumle de cevrilemiyorsa daha fazla bolunemez; bosluk birakip devam et
+    if (chunk.length <= 1) {
+      console.warn('Cumle cevrilemedi, cevirisiz birakildi:', chunk[0]?.en?.slice(0, 60), err);
+      return {};
+    }
+
+    onNote?.(`Grup yeniden deneniyor (${chunk.length} → ${Math.ceil(chunk.length / 2)})...`);
+    const mid = Math.ceil(chunk.length / 2);
+    const [left, right] = [chunk.slice(0, mid), chunk.slice(mid)];
+    return {
+      ...(await translateBatchWithSplit(left, onNote)),
+      ...(await translateBatchWithSplit(right, onNote)),
+    };
+  }
+}
+
+/**
  * Dersi PARCA PARCA olusturur: once cumleler ve gercek zaman damgalari,
  * sonra sirayla ceviri gruplari, en son ogrenme materyali. Boylece hicbir
  * istek serverless zaman sinirina takilmaz.
@@ -321,15 +366,20 @@ async function buildLessonData(
       .slice(i, i + TRANSLATE_BATCH_SIZE)
       .map((s) => ({ id: s.id, en: s.en }));
 
-    const trRes = await apiFetch('/api/translate-batch', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sentences: chunk }),
-    });
-    const trData = await readJsonResponse(trRes, 'Ceviri yapilamadi.');
-    if (!trRes.ok) throw new Error(trData.error || 'Ceviri yapilamadi.');
+    Object.assign(
+      translations,
+      await translateBatchWithSplit(chunk, (note) =>
+        onProgress?.(`Ceviriliyor... (${batchNo}/${totalBatches}) ${note}`)
+      )
+    );
+  }
 
-    Object.assign(translations, trData.translations || {});
+  // Hicbir sey cevrilemediyse ders anlamsiz olur; bu gercek bir hatadir
+  if (Object.keys(translations).length === 0) {
+    throw new Error(
+      'Ceviri yapilamadi. Yapay zeka saglayicisi yanit vermiyor olabilir; ' +
+      'birkac dakika sonra tekrar deneyin.'
+    );
   }
 
   const finalSentences = sentences.map((s) => ({
