@@ -113,41 +113,131 @@ function normalizeCues(items: any[]): Cue[] {
 const CAPTION_PROVIDER = (process.env.CAPTION_PROVIDER || 'auto').toLowerCase();
 
 /**
- * Gelen JSON'un icinde altyazi parcalarindan olusan diziyi arar.
+ * Gelen JSON'un icinde altyazi parcalarindan olusan TUM dizileri toplar.
  * youtube-transcript.io yanit semasini belgelemedigi icin sema tahmin
- * etmek yerine, "metin + baslangic zamani" iceren ilk diziyi buluyoruz.
+ * etmek yerine, "metin + baslangic zamani" iceren dizileri ariyoruz.
  * Bu sayede saglayici formatini degistirse de kod calismaya devam eder.
+ *
+ * KRITIK: Saglayici ayni video icin BIRDEN COK dil parcasi dondurur ve
+ * istekte dil belirtilemiyor (API yalnizca "ids" aliyor). Eskiden bulunan
+ * ILK dizi kullaniliyordu; TED gibi cok dilli videolarda bu Arnavutca gibi
+ * rastgele bir parca demekti ve ders "Ingilizce" adi altinda yabanci dille
+ * olusuyordu. Artik parcalar dil etiketiyle toplanip Ingilizce olan secilir.
  */
-function findSegmentArray(node: any, depth = 0): any[] | null {
-  if (!node || depth > 6) return null;
+interface TranscriptTrack {
+  segments: any[];
+  language: string;
+}
+
+const LANGUAGE_KEYS = new Set([
+  'language', 'languagecode', 'languagename', 'lang', 'langcode', 'tracklanguage',
+]);
+
+/** Bir nesnenin uzerindeki dil etiketini (varsa) okur. */
+function readLanguageHint(node: any): string {
+  if (!node || typeof node !== 'object' || Array.isArray(node)) return '';
+  for (const key of Object.keys(node)) {
+    if (LANGUAGE_KEYS.has(key.toLowerCase())) {
+      const value = node[key];
+      if (typeof value === 'string' && value.trim()) return value.trim();
+    }
+  }
+  return '';
+}
+
+/** Dizinin altyazi parcalarindan olusup olusmadigini anlar. */
+function looksLikeSegments(node: any[]): boolean {
+  return (
+    node.length > 0 &&
+    node.every(
+      (item) =>
+        item &&
+        typeof item === 'object' &&
+        (typeof item.text === 'string' || typeof item.snippet === 'string') &&
+        (item.start !== undefined || item.offset !== undefined || item.startMs !== undefined)
+    )
+  );
+}
+
+function collectTranscriptTracks(
+  node: any,
+  depth = 0,
+  languageHint = '',
+  out: TranscriptTrack[] = []
+): TranscriptTrack[] {
+  if (!node || depth > 8) return out;
 
   if (Array.isArray(node)) {
-    const looksLikeSegments =
-      node.length > 0 &&
-      node.every(
-        (item) =>
-          item &&
-          typeof item === 'object' &&
-          (typeof item.text === 'string' || typeof item.snippet === 'string') &&
-          (item.start !== undefined || item.offset !== undefined || item.startMs !== undefined)
-      );
-    if (looksLikeSegments) return node;
-
-    for (const item of node) {
-      const found = findSegmentArray(item, depth + 1);
-      if (found) return found;
+    if (looksLikeSegments(node)) {
+      out.push({ segments: node, language: languageHint });
+      return out;
     }
-    return null;
+    for (const item of node) collectTranscriptTracks(item, depth + 1, languageHint, out);
+    return out;
   }
 
   if (typeof node === 'object') {
+    const ownHint = readLanguageHint(node) || languageHint;
     for (const key of Object.keys(node)) {
-      const found = findSegmentArray(node[key], depth + 1);
-      if (found) return found;
+      // Anahtarin kendisi dil kodu olabilir: tracks: { en: [...], sq: [...] }
+      const keyIsLangCode = /^[a-z]{2}(?:[-_][A-Za-z]{2,4})?$/.test(key);
+      collectTranscriptTracks(node[key], depth + 1, keyIsLangCode ? key : ownHint, out);
     }
   }
 
-  return null;
+  return out;
+}
+
+/** Dil etiketinin Ingilizce'yi isaret edip etmedigini soyler. */
+function isEnglishLanguage(language: string): boolean {
+  const value = language.trim().toLowerCase();
+  return value === 'en' || /^en[-_]/.test(value) || value.startsWith('english');
+}
+
+// Ingilizce islev kelimeleri: her metinde yuksek oranda gecerler ve
+// dili etiket olmadan da guvenilir sekilde ele verirler.
+const ENGLISH_MARKERS = new Set([
+  'the', 'and', 'of', 'to', 'a', 'in', 'is', 'that', 'it', 'you',
+  'for', 'we', 'this', 'are', 'with', 'on', 'have', 'was', 'but', 'not',
+]);
+
+/** Metnin Ingilizce olma orani (0-1). Ingilizce dusuz genelde 0.2 uzerindedir. */
+function englishScore(text: string): number {
+  const words = text.toLowerCase().match(/[a-z']+/g);
+  if (!words || words.length === 0) return 0;
+  const sample = words.slice(0, 400);
+  const hits = sample.filter((w) => ENGLISH_MARKERS.has(w)).length;
+  return hits / sample.length;
+}
+
+/** Parcanin ilk cue'larindan dil tespiti icin ornek metin cikarir. */
+function sampleTrackText(segments: any[]): string {
+  return segments
+    .slice(0, 60)
+    .map((seg: any) => String(seg.text ?? seg.snippet ?? ''))
+    .join(' ');
+}
+
+/**
+ * Toplanan parcalar arasindan Ingilizce olani secer.
+ * Once dil etiketine, etiket yoksa metnin kendisine bakar.
+ * Ingilizce bulunamazsa SESSIZCE baska bir dile dusmez; hata firlatir ki
+ * cagiran taraf elle yapistirilan metne gecebilsin.
+ */
+function pickEnglishTrack(tracks: TranscriptTrack[]): TranscriptTrack {
+  const labelled = tracks.find((t) => isEnglishLanguage(t.language));
+  if (labelled) return labelled;
+
+  const scored = tracks
+    .map((t) => ({ track: t, score: englishScore(sampleTrackText(t.segments)) }))
+    .sort((a, b) => b.score - a.score);
+
+  if (scored.length > 0 && scored[0].score >= 0.08) return scored[0].track;
+
+  const available = tracks.map((t) => t.language || '(etiketsiz)').join(', ');
+  throw new Error(
+    `Bu videoda Ingilizce altyazi bulunamadi. Saglayicinin dondurdugu diller: ${available}`
+  );
 }
 
 /** youtube-transcript.io uzerinden altyazi ceker. */
@@ -176,16 +266,23 @@ async function fetchCuesFromApi(videoId: string): Promise<{ cues: Cue[]; raw: an
   }
 
   const data: any = await res.json();
-  const segments = findSegmentArray(data);
+  const tracks = collectTranscriptTracks(data);
 
-  if (!segments || segments.length === 0) {
+  if (tracks.length === 0) {
     throw new Error(
       "youtube-transcript.io yanitinda altyazi parcalari bulunamadi. Yanit semasi degismis olabilir."
     );
   }
 
+  const track = pickEnglishTrack(tracks);
+  console.log(
+    `[Transcript] ${tracks.length} dil parcasi bulundu ` +
+    `(${tracks.map((t) => t.language || '?').join(', ')}). ` +
+    `Secilen: ${track.language || 'etiketsiz, metinden Ingilizce tespit edildi'}`
+  );
+
   // Ortak bicime cevir; birim tespitini normalizeCues yapar
-  const items = segments.map((seg: any) => ({
+  const items = track.segments.map((seg: any) => ({
     text: seg.text ?? seg.snippet ?? '',
     offset: Number(seg.start ?? seg.offset ?? seg.startMs ?? 0),
     duration: Number(seg.dur ?? seg.duration ?? seg.durationMs ?? 0),
@@ -308,6 +405,71 @@ function buildSentencesFromPlainText(raw: string): BuiltSentence[] {
     .map((p) => p.trim())
     .filter((p) => p.length > 1)
     .map((p, i) => ({ id: i + 1, en: p }));
+}
+
+/**
+ * Elle yapistirilan cumleleri videonun GERCEK altyazi zamanlarina hizalar.
+ *
+ * Metin eslestirmesi yapilmaz; cunku altyazi baska bir dilde olabilir.
+ * Bunun yerine cumlelerin karakter uzunluklari kullanilarak konusma
+ * zaman cizgisi orantili bolunur. Cue ZAMANLARI dilden bagimsiz oldugu
+ * icin bu, altyazi dili ne olursa olsun calisir.
+ *
+ * Bulunan her deger, gercek bir cue baslangicina yaslanir; boylece damga
+ * her zaman videoda konusmanin fiilen basladigi bir ana denk gelir.
+ */
+function alignSentencesToCues(sentences: BuiltSentence[], cues: Cue[]): void {
+  if (sentences.length === 0 || cues.length === 0) return;
+
+  const timelineStart = cues[0].startSec;
+  let timelineEnd = timelineStart;
+  for (const cue of cues) timelineEnd = Math.max(timelineEnd, cue.endSec);
+
+  const span = timelineEnd - timelineStart;
+  if (span <= 0) return;
+
+  const lengths = sentences.map((s) => Math.max(1, s.en.length));
+  const totalChars = lengths.reduce((a, b) => a + b, 0);
+
+  // 1. gecis: baslangiclari orantili hesapla ve gercek cue basina yasla
+  const starts: number[] = [];
+  const rawEnds: number[] = [];
+  let consumedChars = 0;
+  let cueIndex = 0;
+
+  sentences.forEach((_, i) => {
+    const rawStart = timelineStart + span * (consumedChars / totalChars);
+    consumedChars += lengths[i];
+    rawEnds.push(timelineStart + span * (consumedChars / totalChars));
+
+    // Yalnizca ileri yuruyen isaretci: damgalar hicbir zaman geri gitmez
+    while (cueIndex + 1 < cues.length && cues[cueIndex + 1].startSec <= rawStart) {
+      cueIndex++;
+    }
+    starts.push(cues[cueIndex].startSec);
+  });
+
+  // 2. gecis: bitisi bir SONRAKI cumlenin baslangicina kilitle.
+  // Baslangiclar cue'ya yaslanirken geri kaydigi icin, orantili bitis degeri
+  // sonraki cumlenin uzerine tasabiliyordu. Layer3Shadowing endSec'i dongu
+  // durdurma noktasi olarak kullandigindan bu, cumlenin sonraki cumlenin
+  // sesine tasmasi demekti. Araliklar artik cakismaz.
+  sentences.forEach((sentence, i) => {
+    const startSec = starts[i];
+    const nextStart = starts[i + 1];
+    const endSec =
+      nextStart !== undefined && nextStart > startSec
+        ? nextStart
+        : Math.max(rawEnds[i], startSec + 0.5);
+
+    sentence.startSec = Number(startSec.toFixed(2));
+    sentence.endSec = Number(endSec.toFixed(2));
+  });
+
+  console.log(
+    `[Transcript] ${sentences.length} elle girilen cumle, ${cues.length} cue'nun ` +
+    `zaman cizgisine hizalandi (${formatTimestamp(timelineStart)} - ${formatTimestamp(timelineEnd)}).`
+  );
 }
 
 function formatTimestamp(totalSeconds: number): string {
@@ -979,33 +1141,46 @@ app.post("/api/extract-transcript", async (req, res) => {
       }
     }
 
-    // Bir YouTube ID varsa HER ZAMAN gercek altyazi zamanlarini cekmeyi dene.
-    // Gercek cue zamanlari, senkronizasyonun tek dogru kaynagidir.
+    // Elle yapistirilan metni ayirt et. Girdi yalnizca bir linkten ibaretse
+    // (bir-iki kelime) metin yok demektir; aksi halde kullanicinin
+    // yapistirdigi transkript vardir. Not: eskiden girdide herhangi bir yerde
+    // YouTube linki gecmesi metnin tamamen atilmasina yol aciyordu.
+    const inputIsOnlyLink = !!ytIdFromInput && inputTrimmed.split(/\s+/).length <= 2;
+    const manualText = inputIsOnlyLink ? '' : inputTrimmed;
+
+    // Altyaziyi her durumda cekmeyi dene: metin elle girilmis olsa bile
+    // cue ZAMANLARI senkronizasyonun tek dogru kaynagidir ve bu zamanlar
+    // altyazinin dilinden bagimsizdir.
+    let cues: Cue[] = [];
     if (activeYtId) {
       try {
-        const cues = await fetchYoutubeCues(activeYtId);
-        const built = buildSentencesFromCues(cues);
-        if (built.length > 0) {
-          sentences = built;
-          hasRealTimings = true;
-        }
+        cues = await fetchYoutubeCues(activeYtId);
       } catch (err: any) {
         captionError = err?.message || String(err);
         console.warn("YoutubeTranscript error:", captionError);
       }
     }
 
-    // Altyazi cekilemediyse elle yapistirilan metne dus
-    if (!hasRealTimings) {
-      const manualText = ytIdFromInput ? '' : inputTrimmed;
-      if (!manualText) {
-        return res.status(400).json({
-          error: "Bu YouTube videosunun altyazisi (CC) alinamadi. Lutfen 'Ingilizce Metin / Transkript Yapistir' sekmesini secip metni manuel yapistirin.",
-          reason: captionError || "bilinmiyor",
-        });
-      }
+    // ONCELIK: Elle yapistirilan metin HER ZAMAN kazanir.
+    // Eskiden cekilen altyazi metnin uzerine yaziliyordu; bu yuzden yanlis
+    // dilde altyazi gelince kullanicinin elle duzeltmesi imkansizdi.
+    if (manualText) {
       sentences = buildSentencesFromPlainText(manualText);
-      syncNotice = "Bu ders elle yapistirilan metinden olusturuldu; YouTube altyazi zamanlari bulunamadigi icin cumle bazli otomatik senkronizasyon devre disi.";
+      if (cues.length > 0) {
+        alignSentencesToCues(sentences, cues);
+        hasRealTimings = true;
+        syncNotice = "Metin sizin yapistirdiginiz transkriptten alindi; zaman damgalari videonun altyazi akisina hizalandi.";
+      } else {
+        syncNotice = "Bu ders elle yapistirilan metinden olusturuldu; YouTube altyazi zamanlari bulunamadigi icin cumle bazli otomatik senkronizasyon devre disi.";
+      }
+    } else if (cues.length > 0) {
+      sentences = buildSentencesFromCues(cues);
+      hasRealTimings = true;
+    } else {
+      return res.status(400).json({
+        error: "Bu YouTube videosunun altyazisi (CC) alinamadi. Lutfen 'Ingilizce Metin / Transkript Yapistir' sekmesini secip metni manuel yapistirin.",
+        reason: captionError || "bilinmiyor",
+      });
     }
 
     if (sentences.length === 0) {
