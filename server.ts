@@ -392,10 +392,103 @@ function buildSentencesFromCues(cues: Cue[]): BuiltSentence[] {
   return sentences;
 }
 
+/* ------------------------------------------------------------
+   ELLE YAPISTIRILAN ZAMAN DAMGALI TRANSKRIPT
+   ------------------------------------------------------------
+   Kullanicilar transkripti genellikle zaman damgalariyla birlikte
+   yapistiriyor. Bu damgalar KESIN veridir; tahmine gerek birakmaz.
+   Desteklenen bicimler:
+     0:15 Metin                 (satir ici)
+     0:15 \n Metin              (YouTube "transkripti kopyala" bicimi)
+     [0:15] Metin  /  (0:15)    (koseli/normal parantez)
+     1:02:03 Metin              (saat iceren)
+     00:00:15,000 --> 00:00:18,000 \n Metin   (SRT / WebVTT)
+   ------------------------------------------------------------ */
+
+// Gruplar: 1=saat (istege bagli), 2=dakika, 3=saniye, 4=salise
+const TIMESTAMP_CORE = String.raw`(?:(\d{1,2}):)?(\d{1,2}):(\d{2})(?:[.,](\d{1,3}))?`;
+// Bitis damgasi yakalanmaz; grup numaralari sabit kalsin diye non-capturing
+const TIMESTAMP_TAIL = String.raw`(?:\d{1,2}:)?\d{1,2}:\d{2}(?:[.,]\d{1,3})?`;
+
+const LEADING_TIMESTAMP = new RegExp(
+  String.raw`^\s*[\[\(<]?\s*${TIMESTAMP_CORE}\s*[\]\)>]?` +
+  String.raw`(?:\s*-->\s*[\[\(<]?\s*${TIMESTAMP_TAIL}\s*[\]\)>]?)?` +
+  String.raw`\s*[-–—:]?\s*`
+);
+
+function timestampToSeconds(h?: string, m?: string, s?: string, frac?: string): number {
+  return (
+    (Number(h) || 0) * 3600 +
+    (Number(m) || 0) * 60 +
+    (Number(s) || 0) +
+    (frac ? Number(`0.${frac}`) : 0)
+  );
+}
+
+/**
+ * Elle yapistirilan metindeki zaman damgalarini ayristirip cue'ya cevirir.
+ * Damga bulunamazsa bos dizi doner; cagiran taraf orantili hizalamaya duser.
+ */
+function parseTimestampedTranscript(raw: string): Cue[] {
+  const segments: { startSec: number; text: string }[] = [];
+  let pending: { startSec: number; text: string } | null = null;
+
+  for (const line of raw.split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    // WebVTT basligi, NOTE satirlari ve SRT sira numaralarini atla
+    if (/^WEBVTT\b/i.test(trimmed) || /^NOTE\b/i.test(trimmed)) continue;
+    if (/^\d{1,4}$/.test(trimmed)) continue;
+
+    const match = trimmed.match(LEADING_TIMESTAMP);
+    if (match) {
+      if (pending) segments.push(pending);
+      pending = {
+        startSec: timestampToSeconds(match[1], match[2], match[3], match[4]),
+        text: trimmed.slice(match[0].length).trim(),
+      };
+    } else if (pending) {
+      // Damgasiz satir, bir onceki damganin metnine aittir
+      pending.text += (pending.text ? ' ' : '') + trimmed;
+    }
+    // Ilk damgadan onceki basliklar/onsoz bilincli olarak atilir
+  }
+  if (pending) segments.push(pending);
+
+  const usable = segments.filter((s) => s.text.length > 0);
+  if (usable.length < 2) return [];
+
+  // Damgalar buyuk olcude artan olmali; degilse bu bir transkript degildir
+  let decreases = 0;
+  for (let i = 1; i < usable.length; i++) {
+    if (usable[i].startSec < usable[i - 1].startSec) decreases++;
+  }
+  if (decreases > usable.length * 0.1) return [];
+
+  const cues: Cue[] = [];
+  usable.forEach((seg, i) => {
+    const text = decodeEntities(seg.text).replace(/\s+/g, ' ').trim();
+    if (!text) return;
+    const next = usable[i + 1]?.startSec;
+    // Sure verilmedigi icin bitis, sonraki damgadir; son parcada
+    // okuma hizindan (~15 karakter/saniye) tahmin edilir
+    const endSec =
+      next !== undefined && next > seg.startSec
+        ? next
+        : seg.startSec + Math.max(2, text.length / 15);
+    cues.push({ text, startSec: seg.startSec, endSec });
+  });
+
+  return cues;
+}
+
 /** Elle yapistirilan metni cumlelere boler (gercek zaman bilgisi yoktur). */
 function buildSentencesFromPlainText(raw: string): BuiltSentence[] {
   const cleaned = raw
-    .replace(/\[\d{1,2}:\d{2}(?::\d{2})?\]/g, ' ')
+    .split(/\r?\n/)
+    .map((line) => line.replace(LEADING_TIMESTAMP, ''))
+    .join(' ')
+    .replace(/[\[\(]\s*(?:\d{1,2}:)?\d{1,2}:\d{2}(?:[.,]\d{1,3})?\s*[\]\)]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 
@@ -1148,11 +1241,18 @@ app.post("/api/extract-transcript", async (req, res) => {
     const inputIsOnlyLink = !!ytIdFromInput && inputTrimmed.split(/\s+/).length <= 2;
     const manualText = inputIsOnlyLink ? '' : inputTrimmed;
 
-    // Altyaziyi her durumda cekmeyi dene: metin elle girilmis olsa bile
-    // cue ZAMANLARI senkronizasyonun tek dogru kaynagidir ve bu zamanlar
-    // altyazinin dilinden bagimsizdir.
+    // Yapistirilan metin kendi zaman damgalarini tasiyor mu?
+    // Tasiyorsa bu KESIN veridir: ne altyazi cekmeye ne de tahmine gerek var.
+    const manualCues = manualText ? parseTimestampedTranscript(manualText) : [];
+    if (manualCues.length > 0) {
+      console.log(`[Transcript] Yapistirilan metinde ${manualCues.length} zaman damgasi bulundu; altyazi cekilmeyecek.`);
+    }
+
+    // Altyaziyi yalnizca gerektiginde cek. Elle girilen metin damgasizsa
+    // cue ZAMANLARI hizalama icin kullanilir; bu zamanlar altyazinin
+    // dilinden bagimsizdir.
     let cues: Cue[] = [];
-    if (activeYtId) {
+    if (activeYtId && manualCues.length === 0) {
       try {
         cues = await fetchYoutubeCues(activeYtId);
       } catch (err: any) {
@@ -1164,12 +1264,15 @@ app.post("/api/extract-transcript", async (req, res) => {
     // ONCELIK: Elle yapistirilan metin HER ZAMAN kazanir.
     // Eskiden cekilen altyazi metnin uzerine yaziliyordu; bu yuzden yanlis
     // dilde altyazi gelince kullanicinin elle duzeltmesi imkansizdi.
-    if (manualText) {
+    if (manualCues.length > 0) {
+      sentences = buildSentencesFromCues(manualCues);
+      hasRealTimings = true;
+    } else if (manualText) {
       sentences = buildSentencesFromPlainText(manualText);
       if (cues.length > 0) {
         alignSentencesToCues(sentences, cues);
         hasRealTimings = true;
-        syncNotice = "Metin sizin yapistirdiginiz transkriptten alindi; zaman damgalari videonun altyazi akisina hizalandi.";
+        syncNotice = "Metin sizin yapistirdiginiz transkriptten alindi; zaman damgasi icermedigi icin damgalar videonun altyazi akisina orantili olarak hizalandi.";
       } else {
         syncNotice = "Bu ders elle yapistirilan metinden olusturuldu; YouTube altyazi zamanlari bulunamadigi icin cumle bazli otomatik senkronizasyon devre disi.";
       }
