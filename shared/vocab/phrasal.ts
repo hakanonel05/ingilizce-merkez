@@ -21,9 +21,31 @@
  */
 
 import phrasalRaw from './phrasalVerbs.json';
-import { verbBaseForms } from './cefr';
+import phrasalLevelsRaw from './phrasalLevels.json';
+import { verbBaseForms, CefrLevel, CEFR_ORDER } from './cefr';
 
 const PHRASES: Set<string> = new Set(phrasalRaw as string[]);
+
+/**
+ * Onceden hesaplanmis kalip seviyeleri.
+ *
+ * Kaynak veri setinde CEFR yok; bu seviyeler Gemini'ye toplu halde
+ * sorulup buraya yazildi. Boylece calisma aninda yapay zekaya
+ * sorulmalari gerekmiyor: kota harcanmaz, sonuc tutarli ve aninda gelir.
+ *
+ * Liste HENUZ TAM DEGIL (3332 kalibin 621'i). Eksik kalanlarin seviyesi
+ * calisma aninda sorulup onbellege yazilir — yani kapsama artsa da
+ * artmasa da sistem calisir, sadece daha az yapay zeka cagrisi olur.
+ */
+const PHRASE_LEVELS = phrasalLevelsRaw as Record<string, string>;
+
+export const PHRASE_LEVEL_COUNT = Object.keys(PHRASE_LEVELS).length;
+
+/** Kalibin onceden bilinen CEFR seviyesi; yoksa null. */
+export function phraseLevelOf(phrase: string): CefrLevel | null {
+  const level = PHRASE_LEVELS[phrase.trim().toLowerCase()];
+  return level && CEFR_ORDER.includes(level as CefrLevel) ? (level as CefrLevel) : null;
+}
 
 /** En uzun kalip 4 kelime; oradan geriye dogru denenir. */
 const MAX_PHRASE_WORDS = 4;

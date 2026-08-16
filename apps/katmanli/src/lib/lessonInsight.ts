@@ -15,7 +15,7 @@
  */
 
 import { CefrLevel, CEFR_ORDER, analyzeCefr, CefrAnalysis, TokenizedWord } from '../../../../shared/vocab/cefr';
-import { findPhrases } from '../../../../shared/vocab/phrasal';
+import { findPhrases, phraseLevelOf } from '../../../../shared/vocab/phrasal';
 import { VocabCard, getAllCards } from '../../../../shared/vocab/vocabStore';
 import { CardState } from '../../../../shared/vocab/fsrs';
 import { levelOfCached } from './cefrCache';
@@ -136,7 +136,8 @@ export function buildLessonInsight(
       consumed.set(word, (consumed.get(word) || 0) + hit.count);
     }
 
-    const level = levelOfCached(hit.phrase);
+    // Once onceden hesaplanmis kalip seviyesi, sonra yapay zeka onbellegi
+    const level = phraseLevelOf(hit.phrase) ?? levelOfCached(hit.phrase);
     const deckStatus = deck.get(hit.phrase);
     let status: WordStatus;
     if (deckStatus === 'known') status = 'known';
