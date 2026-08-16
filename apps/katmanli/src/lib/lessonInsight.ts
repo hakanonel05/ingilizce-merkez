@@ -15,6 +15,7 @@
  */
 
 import { CefrLevel, CEFR_ORDER, analyzeCefr, CefrAnalysis, TokenizedWord } from '../../../../shared/vocab/cefr';
+import { findPhrases } from '../../../../shared/vocab/phrasal';
 import { VocabCard, getAllCards } from '../../../../shared/vocab/vocabStore';
 import { CardState } from '../../../../shared/vocab/fsrs';
 import { levelOfCached } from './cefrCache';
@@ -24,6 +25,16 @@ export const DEFAULT_USER_LEVEL: CefrLevel = 'B1';
 export type WordStatus = 'known' | 'learning' | 'unknown';
 
 export interface ScoredWord extends TokenizedWord {
+  level: CefrLevel | null;
+  status: WordStatus;
+}
+
+export interface ScoredPhrase {
+  /** Kok hali: "carry out" */
+  phrase: string;
+  /** Metinde gorulen bicimler: ["carried out"] */
+  surfaces: string[];
+  count: number;
   level: CefrLevel | null;
   status: WordStatus;
 }
@@ -41,6 +52,10 @@ export interface LessonInsight {
   unknownWords: ScoredWord[];
   /** Ogrenilmekte olan kelimeler. */
   learningWords: ScoredWord[];
+  /** Metinde bulunan tum cok sozcuklu kaliplar. */
+  phrases: ScoredPhrase[];
+  /** Bunlardan bilinmeyenler. */
+  unknownPhrases: ScoredPhrase[];
   /** Kart destesinde bulunan kelime sayisi (olgun + ogreniliyor). */
   deckHits: number;
 }
@@ -107,20 +122,63 @@ export function buildLessonInsight(
   const unknownWords: ScoredWord[] = [];
   const learningWords: ScoredWord[] = [];
 
+  /* --- Cok sozcuklu kaliplar --- */
+  // Once kaliplar bulunur, cunku onlari olusturan kelimeler ayrica
+  // sayilmamali: "carry out" B2 bir birimken, "carry" ve "out"u ayri ayri
+  // A1 diye saymak metni oldugundan kolay gosterirdi.
+  const phraseHits = findPhrases(text);
+  const consumed = new Map<string, number>();
+  const phrases: ScoredPhrase[] = [];
+  const unknownPhrases: ScoredPhrase[] = [];
+
+  for (const hit of phraseHits) {
+    for (const word of hit.words) {
+      consumed.set(word, (consumed.get(word) || 0) + hit.count);
+    }
+
+    const level = levelOfCached(hit.phrase);
+    const deckStatus = deck.get(hit.phrase);
+    let status: WordStatus;
+    if (deckStatus === 'known') status = 'known';
+    else if (level && CEFR_ORDER.indexOf(level) <= userLevelIndex) status = 'known';
+    else if (deckStatus === 'learning') status = 'learning';
+    else status = 'unknown';
+
+    const scored: ScoredPhrase = {
+      phrase: hit.phrase,
+      surfaces: hit.surfaces,
+      count: hit.count,
+      level,
+      status,
+    };
+    phrases.push(scored);
+    if (deckStatus) deckHits++;
+
+    if (status === 'known') knownTokens += hit.count;
+    else if (status === 'learning') learningTokens += hit.count;
+    else { unknownTokens += hit.count; unknownPhrases.push(scored); }
+  }
+
+  /* --- Tekil kelimeler --- */
   for (const token of cefr.tokens) {
     // Ozel isimler kelime bilgisi degildir; anlama oranini sisirmesinler
     if (token.isProperNoun) continue;
 
-    const scored = scoreWord(token, userLevelIndex, deck);
+    // Bir kalibin parcasi olarak sayilan gecisleri dus
+    const usedByPhrase = consumed.get(token.word) || 0;
+    const count = Math.max(0, token.count - usedByPhrase);
+    if (count === 0) continue;
+
+    const scored = scoreWord({ ...token, count }, userLevelIndex, deck);
     if (deck.has(token.word)) deckHits++;
 
     if (scored.status === 'known') {
-      knownTokens += token.count;
+      knownTokens += count;
     } else if (scored.status === 'learning') {
-      learningTokens += token.count;
+      learningTokens += count;
       learningWords.push(scored);
     } else {
-      unknownTokens += token.count;
+      unknownTokens += count;
       unknownWords.push(scored);
     }
   }
@@ -140,6 +198,8 @@ export function buildLessonInsight(
     comprehension,
     unknownWords,
     learningWords,
+    phrases,
+    unknownPhrases,
     deckHits,
   };
 }

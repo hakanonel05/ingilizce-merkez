@@ -95,6 +95,48 @@ const IRREGULAR_FORMS: Record<string, string> = {
 };
 
 /**
+ * Yalnizca FIIL cekimlerini geri alir: -s/-es, -ed/-ied, -ing ve duzensiz
+ * bicimler. Karsilastirma (-er/-est), zarf (-ly) ve isim cogullari
+ * UYGULANMAZ.
+ *
+ * Kalip eslestirmesi icin ayri tutuluyor: genel soyucu "layer" kelimesinden
+ * -er atip "lay" uretiyor ve metindeki "layer in" ifadesi "lay in" kalibina
+ * yanlis esleiyordu. Kalibin ilk kelimesi her zaman bir fiildir, dolayisiyla
+ * orada yalnizca fiil cekimleri gecerli.
+ */
+export function verbBaseForms(word: string): string[] {
+  const forms = [word];
+  const add = (f: string) => { if (f.length >= 2 && !forms.includes(f)) forms.push(f); };
+
+  const irregular = IRREGULAR_FORMS[word];
+  if (irregular) add(irregular);
+
+  // 3. tekil / cogul eki
+  if (word.endsWith('ies') && word.length > 4) add(word.slice(0, -3) + 'y');
+  if (word.endsWith('es') && word.length > 3) add(word.slice(0, -2));
+  if (word.endsWith('s') && !word.endsWith('ss')) add(word.slice(0, -1));
+
+  // Gecmis zaman
+  if (word.endsWith('ied') && word.length > 4) add(word.slice(0, -3) + 'y');
+  if (word.endsWith('ed') && word.length > 3) {
+    add(word.slice(0, -2));
+    add(word.slice(0, -1));
+    const stem = word.slice(0, -2);
+    if (/([bdfglmnprt])\1$/.test(stem)) add(stem.slice(0, -1));
+  }
+
+  // Simdiki zaman
+  if (word.endsWith('ing') && word.length > 4) {
+    const stem = word.slice(0, -3);
+    add(stem);
+    add(stem + 'e');
+    if (/([bdgflmnprt])\1$/.test(stem)) add(stem.slice(0, -1));
+  }
+
+  return forms;
+}
+
+/**
  * Bir kelimenin olasi kok bicimlerini uretir.
  * Sirayla denenir; ilk eslesme kazanir.
  */

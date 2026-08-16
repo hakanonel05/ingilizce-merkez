@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Gauge, Sparkles, Loader2, BookOpen } from 'lucide-react';
+import { Gauge, Sparkles, Loader2, BookOpen, Layers } from 'lucide-react';
 import { CefrLevel, CEFR_ORDER } from '../../../../shared/vocab/cefr';
 import { comprehensionVerdict, DEFAULT_USER_LEVEL, LessonInsight } from '../lib/lessonInsight';
 import { classifyMissingWords } from '../lib/cefrCache';
@@ -39,9 +39,12 @@ export const LessonInsightPanel: React.FC<Props> = ({
 
   const verdict = comprehensionVerdict(insight.comprehension);
 
-  // Yerel listede de onbellekte de olmayan kelimeler
+  // Yerel listede de onbellekte de olmayan maddeler (kelime + kalip)
   const unlisted = useMemo(
-    () => insight.unknownWords.filter((w) => w.level === null),
+    () => [
+      ...insight.unknownWords.filter((w) => w.level === null).map((w) => w.word),
+      ...insight.unknownPhrases.filter((p) => p.level === null).map((p) => p.phrase),
+    ],
     [insight]
   );
 
@@ -50,7 +53,7 @@ export const LessonInsightPanel: React.FC<Props> = ({
     setAiProgress('');
     try {
       await classifyMissingWords(
-        unlisted.map((w) => w.word),
+        unlisted,
         (done, total) => setAiProgress(`${done}/${total}`)
       );
       onClassified?.();
@@ -135,6 +138,33 @@ export const LessonInsightPanel: React.FC<Props> = ({
         ))}
       </div>
 
+      {/* Kaliplar: kelimeleri kolay olsa da birlikte zor olabilirler */}
+      {insight.unknownPhrases.length > 0 && (
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-1.5">
+            <Layers className="w-3.5 h-3.5 shrink-0 text-[var(--ink-3)]" />
+            <span className="text-[11px] font-semibold text-[var(--ink-2)]">
+              Kalıplar ({insight.unknownPhrases.length})
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-1">
+            {insight.unknownPhrases.slice(0, 16).map((p) => (
+              <span
+                key={p.phrase}
+                title={`${p.surfaces.join(', ')} · metinde ${p.count} kez`}
+                className="text-[11px] px-1.5 py-0.5 rounded border border-[var(--ink-3)]/40 bg-[var(--paper-3)] text-[var(--ink-2)]"
+              >
+                {p.phrase}
+                {p.level && <span className="ml-1 opacity-60">{p.level}</span>}
+              </span>
+            ))}
+          </div>
+          <p className="text-[10px] text-[var(--ink-3)]">
+            Bu kalıpların kelimeleri tek tek kolay olabilir ama birlikte farklı anlama gelirler.
+          </p>
+        </div>
+      )}
+
       {/* Bilmedigin kelimeler */}
       {insight.unknownWords.length > 0 && (
         <div className="space-y-1.5">
@@ -166,7 +196,7 @@ export const LessonInsightPanel: React.FC<Props> = ({
       {unlisted.length > 0 && (
         <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-[var(--hairline)]">
           <span className="text-[10px] text-[var(--ink-3)]">
-            {unlisted.length} kelimenin seviyesi listede yok
+            {unlisted.length} maddenin seviyesi listede yok
           </span>
           <button
             type="button"

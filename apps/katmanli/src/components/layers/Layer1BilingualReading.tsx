@@ -78,7 +78,7 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
     () => (lesson.sentences || []).map((s) => s.en).join(' '),
     [lesson.sentences]
   );
-  const { insight, unknownSet } = useLessonInsight(lessonText, userLevel, insightRefresh);
+  const { insight, unknownSet, phraseSet } = useLessonInsight(lessonText, userLevel, insightRefresh);
   const [playingSentenceId, setPlayingSentenceId] = useState<number | null>(null);
   const [viewMode, setViewMode] = useState<'split' | 'stacked'>('split');
 
@@ -722,7 +722,7 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                           {isActive ? (
                             <div className="bg-amber-100/90 text-amber-950 font-bold p-3.5 rounded-lg border border-amber-300 shadow-sm leading-relaxed">
                               <p className="transcript-en text-amber-950 font-medium">
-                                <MarkedText text={pair.en} unknown={unknownSet} />
+                                <MarkedText text={pair.en} unknown={unknownSet} phrases={phraseSet} />
                               </p>
                               <div className="mt-2 inline-flex items-center space-x-1.5 px-2.5 py-0.5 bg-amber-600 text-white text-xs font-bold rounded-full uppercase tracking-wider shadow-sm">
                                 <Volume2 className="w-3.5 h-3.5" />
@@ -731,7 +731,7 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                             </div>
                           ) : (
                             <p className="transcript-en text-slate-900">
-                              <MarkedText text={pair.en} unknown={unknownSet} />
+                              <MarkedText text={pair.en} unknown={unknownSet} phrases={phraseSet} />
                             </p>
                           )}
                         </div>

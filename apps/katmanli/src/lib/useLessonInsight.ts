@@ -17,7 +17,7 @@ export function useLessonInsight(
   userLevel: CefrLevel = DEFAULT_USER_LEVEL,
   /** Yapay zeka siniflandirmasindan sonra yeniden hesaplamak icin artirilir. */
   refreshToken = 0
-): { insight: LessonInsight; unknownSet: Set<string> } {
+): { insight: LessonInsight; unknownSet: Set<string>; phraseSet: Set<string> } {
   const [cards, setCards] = useState<VocabCard[]>([]);
 
   useEffect(() => {
@@ -46,5 +46,11 @@ export function useLessonInsight(
     [insight]
   );
 
-  return { insight, unknownSet };
+  // Kaliplarin metinde gectigi BICIMLERI: "carry out" degil "carried out"
+  const phraseSet = useMemo(
+    () => new Set(insight.unknownPhrases.flatMap((p) => p.surfaces)),
+    [insight]
+  );
+
+  return { insight, unknownSet, phraseSet };
 }

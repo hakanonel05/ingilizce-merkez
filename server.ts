@@ -1667,9 +1667,11 @@ KESIN KURALLAR:
 app.post("/api/classify-cefr", async (req, res) => {
   try {
     const raw = Array.isArray(req.body?.words) ? req.body.words : [];
+    // Bosluk da kabul edilir: "carry out" gibi cok sozcuklu kaliplarin
+    // seviyesi de buradan soruluyor.
     const words = [...new Set(
-      raw.map((w: any) => String(w || '').trim().toLowerCase())
-         .filter((w: string) => /^[a-z][a-z'-]*$/.test(w) && w.length <= 40)
+      raw.map((w: any) => String(w || '').trim().toLowerCase().replace(/\s+/g, ' '))
+         .filter((w: string) => /^[a-z][a-z' -]*$/.test(w) && w.length <= 40)
     )].slice(0, 60);
 
     if (words.length === 0) {
@@ -1678,18 +1680,22 @@ app.post("/api/classify-cefr", async (req, res) => {
 
     const ai = getAIClient();
 
-    const prompt = `Asagidaki Ingilizce kelimelerin her birine CEFR seviyesi ver.
+    const prompt = `Asagidaki Ingilizce kelime ve kaliplarin her birine CEFR seviyesi ver.
 
-KELIMELER: ${words.join(', ')}
+MADDELER: ${words.join(', ')}
 
 Kurallar:
 - Seviye yalnizca su altidan biri olabilir: A1, A2, B1, B2, C1, C2
-- Kelimenin bir Ingilizce OGRENCISI icin zorlugunu dusun; ana dili
-  Ingilizce olan biri icin degil.
+- Zorlugu bir Ingilizce OGRENCISI icin dusun; ana dili Ingilizce olan
+  biri icin degil.
 - Uzmanlik/teknik terimler (tip, sinirbilim, hukuk) genellikle C1 veya C2.
-- Emin olamadigin kelimede tahmin et, atlamayin; her kelime icin bir
-  satir dondur.
-- Kelimeyi verildigi gibi, kucuk harfle geri yaz.`;
+- BOSLUK iceren maddeler cok sozcuklu kaliptir (phrasal verb, deyim).
+  Seviyeyi kaliba BUTUN olarak ver, tek tek kelimelerine gore degil:
+  "carry out" B2'dir, "carry" A1 olsa bile. Anlami parcalarindan
+  cikarilabilen duz birlesimler ("talk to") dusuk seviyededir.
+- Emin olamadigin maddede tahmin et, atlama; her madde icin bir satir
+  dondur.
+- Maddeyi verildigi gibi, kucuk harfle geri yaz.`;
 
     const response = await generateContentWithRetry(ai, {
       contents: prompt,

@@ -77,8 +77,9 @@ export async function classifyMissingWords(
 ): Promise<Record<string, CefrLevel>> {
   const cache = loadCache();
 
+  // Bosluk korunur: "carry out" gibi kaliplarin seviyesi de burada sorulur
   const pending = [...new Set(
-    words.map((w) => w.trim().toLowerCase()).filter(Boolean)
+    words.map((w) => w.trim().toLowerCase().replace(/\s+/g, ' ')).filter(Boolean)
   )].filter((w) => levelOf(w) === null && cache[w] === undefined);
 
   if (pending.length === 0) return {};
