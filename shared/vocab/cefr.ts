@@ -207,6 +207,12 @@ export function tokenize(text: string): TokenizedWord[] {
 }
 
 export interface CefrAnalysis {
+  /**
+   * Metindeki tum benzersiz kelimeler (ozel isim isaretiyle birlikte).
+   * Cagiran taraf kendi olcutuyle yeniden puanlayabilsin diye tutuluyor;
+   * ornegin lessonInsight bunlari kart destesiyle kesistirir.
+   */
+  tokens: TokenizedWord[];
   /** Seviye basina BENZERSIZ kelime sayisi. */
   byLevel: Record<CefrLevel, number>;
   /** Listede bulunamayan (seviyesi bilinmeyen) kelimeler, siklik sirali. */
@@ -260,5 +266,5 @@ export function analyzeCefr(text: string): CefrAnalysis {
     }
   }
 
-  return { byLevel, unknown, properNouns, uniqueWords, totalWords, dominantLevel };
+  return { tokens, byLevel, unknown, properNouns, uniqueWords, totalWords, dominantLevel };
 }

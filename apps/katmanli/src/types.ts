@@ -94,6 +94,12 @@ export interface MistakeEntry {
 export interface UserProgress {
   completedVideoCount: number;
   goalVideoCount: number;
+  /**
+   * Kullanicinin kendi CEFR seviyesi. Anlama oraninin hesabinda kullanilir:
+   * bu seviyenin altindaki kelimeler "biliniyor" sayilir, ustundekiler icin
+   * kart destesine bakilir. Tanimsizsa B1 varsayilir.
+   */
+  cefrLevel?: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
   studyStreakDays: number;
   lastStudyDate: string;
   /** Calisma yapilan gunler (YYYY-MM-DD). Seri bu listeden hesaplanir. */

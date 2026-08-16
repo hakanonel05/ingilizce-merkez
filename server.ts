@@ -1656,6 +1656,100 @@ KESIN KURALLAR:
 });
 
 // 1e. Kullanicinin metinden sectigi tek bir kelime/ifade icin kart bilgisi uretir.
+/**
+ * Kelime listesinde bulunmayan kelimelerin CEFR seviyesini belirler.
+ *
+ * Yerel liste (shared/vocab/cefrWords.json) 9394 kelime kapsiyor ve gercek
+ * metinlerin %86-99'unu karsiliyor; buraya yalnizca ARTAKALAN uzmanlik
+ * kelimeleri gelir (neuroplasticity, acetylcholine gibi). Istemci sonuclari
+ * onbellekte tuttugu icin ayni kelime ikinci kez sorulmaz.
+ */
+app.post("/api/classify-cefr", async (req, res) => {
+  try {
+    const raw = Array.isArray(req.body?.words) ? req.body.words : [];
+    const words = [...new Set(
+      raw.map((w: any) => String(w || '').trim().toLowerCase())
+         .filter((w: string) => /^[a-z][a-z'-]*$/.test(w) && w.length <= 40)
+    )].slice(0, 60);
+
+    if (words.length === 0) {
+      return res.json({ levels: {} });
+    }
+
+    const ai = getAIClient();
+
+    const prompt = `Asagidaki Ingilizce kelimelerin her birine CEFR seviyesi ver.
+
+KELIMELER: ${words.join(', ')}
+
+Kurallar:
+- Seviye yalnizca su altidan biri olabilir: A1, A2, B1, B2, C1, C2
+- Kelimenin bir Ingilizce OGRENCISI icin zorlugunu dusun; ana dili
+  Ingilizce olan biri icin degil.
+- Uzmanlik/teknik terimler (tip, sinirbilim, hukuk) genellikle C1 veya C2.
+- Emin olamadigin kelimede tahmin et, atlamayin; her kelime icin bir
+  satir dondur.
+- Kelimeyi verildigi gibi, kucuk harfle geri yaz.`;
+
+    const response = await generateContentWithRetry(ai, {
+      contents: prompt,
+      jsonHint: '{"items":[{"word":"neuroplasticity","level":"C2"}]}',
+      config: {
+        systemInstruction:
+          "Sen CEFR seviyelendirmesi yapan bir dil olcme uzmanisin. Yalnizca istenen JSON'u dondur.",
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            items: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  word: { type: Type.STRING },
+                  level: { type: Type.STRING },
+                },
+                required: ["word", "level"],
+              },
+            },
+          },
+          required: ["items"],
+        },
+      },
+    });
+
+    let parsed: any = {};
+    try {
+      parsed = JSON.parse(response.text || "{}");
+    } catch (e) {
+      console.warn("[ClassifyCEFR] parse hatasi:", e);
+    }
+
+    const ALLOWED = ["A1", "A2", "B1", "B2", "C1", "C2"];
+    const requested = new Set(words);
+    const levels: Record<string, string> = {};
+
+    for (const item of Array.isArray(parsed.items) ? parsed.items : []) {
+      const word = String(item?.word || '').trim().toLowerCase();
+      const level = String(item?.level || '').trim().toUpperCase();
+      // Modelin uydurdugu, sorulmamis kelimeleri kabul etme
+      if (requested.has(word) && ALLOWED.includes(level)) {
+        levels[word] = level;
+      }
+    }
+
+    res.json({ levels });
+  } catch (error: any) {
+    console.error("Error in /api/classify-cefr:", error);
+    const isQuota = error?.status === "RESOURCE_EXHAUSTED" || error?.code === 429;
+    res.status(isQuota ? 429 : 500).json({
+      error: isQuota
+        ? describeRateLimit(error)
+        : formatErrorMessage(error, "Kelime seviyeleri belirlenemedi."),
+    });
+  }
+});
+
 app.post("/api/define-word", async (req, res) => {
   try {
     const { word, context } = req.body;
