@@ -16,7 +16,7 @@
 
 import { CefrLevel, CEFR_ORDER, analyzeCefr, CefrAnalysis, TokenizedWord } from '../../../../shared/vocab/cefr';
 import { findPhrases, phraseLevelOf } from '../../../../shared/vocab/phrasal';
-import { VocabCard, getAllCards } from '../../../../shared/vocab/vocabStore';
+import { VocabCard } from '../../../../shared/vocab/vocabStore';
 import { CardState } from '../../../../shared/vocab/fsrs';
 import { levelOfCached } from './cefrCache';
 
@@ -235,15 +235,6 @@ export function lessonComputedLevel(lesson: {
   const level = text.trim() ? analyzeCefr(text).dominantLevel : null;
   levelCache.set(lesson.id, { sentences, level });
   return level;
-}
-
-/** Kart destesini kendisi yukleyen kolaylik sarmalayicisi. */
-export async function analyseLesson(
-  text: string,
-  userLevel: CefrLevel = DEFAULT_USER_LEVEL
-): Promise<LessonInsight> {
-  const cards = await getAllCards();
-  return buildLessonInsight(text, userLevel, cards);
 }
 
 /**

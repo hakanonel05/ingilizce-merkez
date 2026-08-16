@@ -45,15 +45,10 @@ function saveCache(cache: CefrCacheData): void {
 }
 
 /** Onbellekte var mi? Yoksa veya siniflandirilamadiysa null. */
-export function cachedLevel(word: string): CefrLevel | null {
+function cachedLevel(word: string): CefrLevel | null {
   const value = loadCache()[word.trim().toLowerCase()];
   if (!value || value === UNCLASSIFIABLE) return null;
   return CEFR_ORDER.includes(value as CefrLevel) ? (value as CefrLevel) : null;
-}
-
-/** Daha once sorulmus mu (sonuc bulunamamis olsa bile)? */
-export function isResolved(word: string): boolean {
-  return loadCache()[word.trim().toLowerCase()] !== undefined;
 }
 
 /**

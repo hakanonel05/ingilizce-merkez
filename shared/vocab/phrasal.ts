@@ -39,8 +39,6 @@ const PHRASES: Set<string> = new Set(phrasalRaw as string[]);
  */
 const PHRASE_LEVELS = phrasalLevelsRaw as Record<string, string>;
 
-export const PHRASE_LEVEL_COUNT = Object.keys(PHRASE_LEVELS).length;
-
 /** Kalibin onceden bilinen CEFR seviyesi; yoksa null. */
 export function phraseLevelOf(phrase: string): CefrLevel | null {
   const level = PHRASE_LEVELS[phrase.trim().toLowerCase()];
@@ -49,8 +47,6 @@ export function phraseLevelOf(phrase: string): CefrLevel | null {
 
 /** En uzun kalip 4 kelime; oradan geriye dogru denenir. */
 const MAX_PHRASE_WORDS = 4;
-
-export const PHRASE_COUNT = PHRASES.size;
 
 export interface PhraseOccurrence {
   /** Kok hali: "carry out" */

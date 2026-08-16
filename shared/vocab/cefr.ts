@@ -42,9 +42,6 @@ const WORD_LEVELS: Map<string, CefrLevel> = (() => {
   return map;
 })();
 
-/** Listedeki toplam kelime sayisi. */
-export const CEFR_WORD_COUNT = WORD_LEVELS.size;
-
 /**
  * Duzensiz bicimler -> kok.
  *
@@ -219,7 +216,7 @@ export interface TokenizedWord {
  * ne de yapay zeka yedegine girmeliler (yoksa her isim "bilinmeyen
  * kelime" diye siniflandirilmaya gonderilir).
  */
-export function tokenize(text: string): TokenizedWord[] {
+function tokenize(text: string): TokenizedWord[] {
   const counts = new Map<string, { count: number; capitalHits: number; totalHits: number }>();
 
   // Cumleleri ayir ki her cumlenin ILK kelimesini ozel isim sanmayalim

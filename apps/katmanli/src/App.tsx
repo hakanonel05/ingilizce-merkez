@@ -3,7 +3,7 @@ import { PRESET_LESSONS } from './data/presetLessons';
 import { VideoLesson, UserProgress, VocabularyItem, GrammarRuleItem, QuizQuestion, MistakeEntry } from './types';
 import { Header } from './components/Header';
 import { LessonSelector } from './components/LessonSelector';
-import { LayerNavigation, LAYER_TABS } from './components/LayerNavigation';
+import { LayerNavigation, LAYER_TABS, CORE_LAYER_COUNT } from './components/LayerNavigation';
 import { Layer1BilingualReading } from './components/layers/Layer1BilingualReading';
 import { Layer2ActiveListening } from './components/layers/Layer2ActiveListening';
 import { Layer3Shadowing } from './components/layers/Layer3Shadowing';
@@ -188,7 +188,8 @@ export default function App() {
    * dogru kaliyor; ayni dersi iki kez bitirmek sayiyi sisirmiyor.
    */
   const displayProgress: UserProgress = useMemo(() => {
-    const completed = lessons.filter((l) => l.completedLayers?.includes(7)).length;
+    // Son cekirdek katman tamamlandiysa ders bitmis sayilir
+    const completed = lessons.filter((l) => l.completedLayers?.includes(CORE_LAYER_COUNT)).length;
     return {
       ...progress,
       completedVideoCount: completed,

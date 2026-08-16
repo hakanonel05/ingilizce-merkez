@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { KeyRound, Eye, EyeOff, ExternalLink, Save, Trash2, X, Check, ShieldCheck, Settings2 } from 'lucide-react';
 import { SyncPanel } from './vocab/SyncPanel';
+import { cachedWordCount, clearCefrCache } from '../lib/cefrCache';
 import {
   UserApiKeys,
   EMPTY_KEYS,
@@ -60,12 +61,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
   const [visible, setVisible] = useState<Record<string, boolean>>({});
   const [serverStatus, setServerStatus] = useState<ServerKeyStatus | null>(null);
   const [savedMsg, setSavedMsg] = useState('');
+  const [cefrCount, setCefrCount] = useState(0);
 
   useEffect(() => {
     if (!isOpen) return;
     setKeys(loadUserKeys());
     setSavedMsg('');
     setVisible({});
+    setCefrCount(cachedWordCount());
     fetchServerKeyStatus().then(setServerStatus);
   }, [isOpen]);
 
@@ -185,6 +188,28 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
           <div className="pt-2 border-t border-[var(--hairline)]">
             <SyncPanel />
           </div>
+
+          {/* Yapay zekaya sorulmus kelime seviyeleri.
+              Silmek yalnizca onbellegi bosaltir; kelimeler gerektiginde
+              yeniden sorulur, yani veri kaybi degil kota harcamasidir. */}
+          {cefrCount > 0 && (
+            <div className="pt-2 border-t border-[var(--hairline)] flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <div className="text-xs font-semibold text-[var(--ink)]">Seviye Önbelleği</div>
+                <p className="text-[11px] text-[var(--ink-3)]">
+                  {cefrCount} kelimenin seviyesi yapay zekâya bir kez soruldu ve saklandı
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => { clearCefrCache(); setCefrCount(0); }}
+                className="inline-flex items-center gap-1.5 h-8 px-3 rounded-[8px] border border-[var(--hairline)] text-[var(--ink-2)] text-[11px] font-medium hover:border-[var(--hairline-2)] hover:text-[var(--ink)] transition-colors cursor-pointer shrink-0"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Önbelleği Temizle</span>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Alt bar */}
