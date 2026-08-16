@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { VideoLesson, QuizQuestion, MistakeEntry } from '../../types';
+import { apiFetch } from '../../lib/userKeys';
 import { HelpCircle, CheckCircle2, XCircle, Sparkles, CheckCircle, Loader2, Award, AlertCircle } from 'lucide-react';
 
 interface Layer3ComprehensionQuizProps {
@@ -34,7 +35,7 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
     setErrorMsg('');
     try {
       const fullText = lesson.sentences.map((s) => s.en).join(' ');
-      const res = await fetch('/api/generate-quiz', {
+      const res = await apiFetch('/api/generate-quiz', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ transcriptText: fullText }),

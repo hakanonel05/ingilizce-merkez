@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Sparkles, Send, Loader2, BookOpen, Lightbulb } from 'lucide-react';
+import { apiFetch } from '../lib/userKeys';
 
 interface GrammarCoachDrawerProps {
   isOpen: boolean;
@@ -33,7 +34,7 @@ export const GrammarCoachDrawer: React.FC<GrammarCoachDrawerProps> = ({
     setIsLoading(true);
 
     try {
-      const res = await fetch('/api/ask-grammar-coach', {
+      const res = await apiFetch('/api/ask-grammar-coach', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

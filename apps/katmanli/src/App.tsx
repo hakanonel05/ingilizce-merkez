@@ -19,7 +19,9 @@ import { MistakesNotebook } from './components/MistakesNotebook';
 import { MethodologyGuideModal } from './components/MethodologyGuideModal';
 import { GrammarCoachDrawer } from './components/GrammarCoachDrawer';
 import { EditLessonModal } from './components/EditLessonModal';
+import { SettingsModal } from './components/SettingsModal';
 import { extractYouTubeId } from './lib/youtube';
+import { apiFetch } from './lib/userKeys';
 import AppSwitcher from './AppSwitcher';
 
 // Sürüm anahtarı: eski kayıtlarda bozuk/eksik zaman damgaları vardı.
@@ -83,6 +85,7 @@ export default function App() {
   const [activeLayer, setActiveLayer] = useState<number>(1);
   const [isGuideOpen, setIsGuideOpen] = useState<boolean>(false);
   const [isGrammarCoachOpen, setIsGrammarCoachOpen] = useState<boolean>(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const [editingLesson, setEditingLesson] = useState<VideoLesson | null>(null);
 
   // Sync lessons to localStorage when updated
@@ -257,7 +260,7 @@ async function buildLessonData(
 ) {
   onProgress?.('Altyazi aliniyor...');
 
-  const sentRes = await fetch('/api/transcript-sentences', {
+  const sentRes = await apiFetch('/api/transcript-sentences', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ videoInput: input, youtubeUrl: youtubeUrlInput }),
@@ -284,7 +287,7 @@ async function buildLessonData(
       .slice(i, i + TRANSLATE_BATCH_SIZE)
       .map((s) => ({ id: s.id, en: s.en }));
 
-    const trRes = await fetch('/api/translate-batch', {
+    const trRes = await apiFetch('/api/translate-batch', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ sentences: chunk }),
@@ -306,7 +309,7 @@ async function buildLessonData(
   try {
     onProgress?.('Kelime, gramer ve quiz hazirlaniyor...');
     const fullText = sentences.map((s) => s.en).join(' ');
-    const matRes = await fetch('/api/study-material', {
+    const matRes = await apiFetch('/api/study-material', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: fullText }),
@@ -373,13 +376,13 @@ async function buildLessonData(
         try {
           const fullText = activeLesson.sentences.map((s) => s.en).join(' ');
 
-          const phoneticsPromise = fetch('/api/analyze-phonetics-grammar', {
+          const phoneticsPromise = apiFetch('/api/analyze-phonetics-grammar', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ transcriptSentences: activeLesson.sentences }),
           }).then((r) => r.json());
 
-          const quizPromise = fetch('/api/generate-quiz', {
+          const quizPromise = apiFetch('/api/generate-quiz', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ transcriptText: fullText }),
@@ -556,6 +559,7 @@ async function buildLessonData(
         onUpdateProgress={handleUpdateProgress}
         onOpenGuide={() => setIsGuideOpen(true)}
         onOpenGrammarCoach={() => setIsGrammarCoachOpen(true)}
+        onOpenSettings={() => setIsSettingsOpen(true)}
       />
 
       {/* Main Content Workspace */}
@@ -721,6 +725,11 @@ async function buildLessonData(
         lesson={editingLesson}
         onClose={() => setEditingLesson(null)}
         onSaveLesson={handleSaveEditedLesson}
+      />
+
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
       />
     </div>
   );

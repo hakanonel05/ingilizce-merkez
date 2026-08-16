@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { VideoLesson, WritingEvaluationResult } from '../../types';
+import { apiFetch } from '../../lib/userKeys';
 import { Edit3, Sparkles, CheckCircle, Loader2, Lightbulb, AlertCircle, MessageSquareQuote, Check } from 'lucide-react';
 
 interface Layer4WritingEvaluationProps {
@@ -30,7 +31,7 @@ export const Layer4WritingEvaluation: React.FC<Layer4WritingEvaluationProps> = (
     setIsEvaluating(true);
     setErrorMsg('');
     try {
-      const res = await fetch('/api/evaluate-writing', {
+      const res = await apiFetch('/api/evaluate-writing', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

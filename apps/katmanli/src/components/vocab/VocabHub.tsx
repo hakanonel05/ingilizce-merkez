@@ -15,6 +15,7 @@ import {
   VOCAB_CHANGED_EVENT,
 } from '../../lib/vocabStore';
 import { CardState } from '../../lib/fsrs';
+import { apiFetch } from '../../lib/userKeys';
 import {
   VocabSettings, loadVocabSettings, saveVocabSettings,
   DEFAULT_VOCAB_SETTINGS, getDailyCounter, resetDailyCounter,
@@ -80,7 +81,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
     setManualBusy(true);
     setManualError(null);
     try {
-      const res = await fetch('/api/define-word', {
+      const res = await apiFetch('/api/define-word', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ word: manualFront.trim() }),
@@ -172,7 +173,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
       const text = (lesson.sentences || []).map((s) => s.en).join(' ');
       if (!text.trim()) throw new Error('Bu derste metin bulunmuyor.');
 
-      const res = await fetch('/api/extract-vocabulary', {
+      const res = await apiFetch('/api/extract-vocabulary', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text, count: settings.extractCount }),

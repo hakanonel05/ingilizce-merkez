@@ -1,7 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { VideoLesson, SentencePair } from '../types';
 import { extractYouTubeId } from '../lib/youtube';
-import { X, Save, Sparkles, Plus, Trash2, Edit3, Youtube, FileText, Loader2, Check, AlertCircle } from 'lucide-react';
+import { apiFetch } from '../lib/userKeys';
+import { X, Save, Sparkles, Plus, Trash2, Edit3, Youtube, FileText, Loader2, Check, AlertCircle, UploadCloud, Eraser } from 'lucide-react';
+
+/**
+ * Cumleleri ham metne cevirirken zaman damgalarini KORUR.
+ * Eskiden yalnizca s.en birlestiriliyordu; bu yuzden duzenleme ekranini
+ * acip "yeniden cevir" demek videonun senkronizasyonunu siliyor ve sistem
+ * damgalari yeniden tahmin etmek zorunda kaliyordu. Damgalar artik
+ * "00:08 Metin" biciminde yazilir; sunucudaki ayristirici bunu aynen okur.
+ */
+function sentencesToRawText(sentences: SentencePair[]): string {
+  return sentences
+    .map((s) => (s.timestamp ? `${s.timestamp} ${s.en}` : s.en))
+    .join('\n');
+}
 
 interface EditLessonModalProps {
   isOpen: boolean;
@@ -29,12 +43,11 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
   const [sentences, setSentences] = useState<SentencePair[]>(lesson.sentences || []);
 
   // Raw text re-analyze state
-  const [rawText, setRawText] = useState(
-    lesson.sentences ? lesson.sentences.map((s) => s.en).join(' ') : ''
-  );
+  const [rawText, setRawText] = useState(() => sentencesToRawText(lesson.sentences || []));
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [aiSuccessMsg, setAiSuccessMsg] = useState('');
   const [aiErrorMsg, setAiErrorMsg] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (lesson) {
@@ -44,7 +57,7 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
       setLevel(lesson.level || 'B2');
       setDurationMinutes(lesson.durationMinutes || 8);
       setSentences(lesson.sentences || []);
-      setRawText(lesson.sentences ? lesson.sentences.map((s) => s.en).join(' ') : '');
+      setRawText(sentencesToRawText(lesson.sentences || []));
       setAiSuccessMsg('');
       setAiErrorMsg('');
     }
@@ -75,6 +88,34 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
     setSentences((prev) => prev.filter((_, idx) => idx !== index));
   };
 
+  /**
+   * Tam transkripti dosyadan yukler ve mevcut ham metnin YERINE koyar.
+   * Yanlislikla baska bir videonun transkripti yuklendiginde geri donusu
+   * olmayan bir durum kalmasin diye icerik her zaman tamamen degistirilir.
+   * Sunucudaki ayristirici .srt ve .vtt damgalarini da okudugu icin bu
+   * dosyalar donusturulmeden dogrudan verilebilir.
+   */
+  const handleTranscriptFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setAiErrorMsg('');
+    setAiSuccessMsg('');
+    try {
+      const text = await file.text();
+      if (!text.trim()) throw new Error('Dosya boş görünüyor.');
+      setRawText(text);
+      setAiSuccessMsg(
+        `"${file.name}" yüklendi (${text.length.toLocaleString('tr-TR')} karakter). ` +
+        `Aşağıdaki "Yeniden Çevir" düğmesiyle işleyin.`
+      );
+    } catch (err: any) {
+      setAiErrorMsg(err?.message || 'Dosya okunamadı.');
+    } finally {
+      // Aynı dosya tekrar seçilebilsin diye girdiyi sıfırla
+      e.target.value = '';
+    }
+  };
+
   // AI Re-analyze handler
   const handleAiReanalyze = async () => {
     if (!rawText.trim()) return;
@@ -83,7 +124,7 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
     setAiSuccessMsg('');
 
     try {
-      const res = await fetch('/api/extract-transcript', {
+      const res = await apiFetch('/api/extract-transcript', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ videoInput: rawText.trim(), youtubeUrl: youtubeUrl.trim() }),
@@ -345,14 +386,54 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
               <div className="bg-amber-50 border border-amber-200 p-3 rounded-xl text-xs text-amber-900 space-y-1">
                 <strong className="block font-bold">🤖 Gemini AI Yapay Zeka Çevirisi</strong>
                 <p className="leading-relaxed">
-                  İngilizce konuşma metnini aşağıya tamamen yapıştırın. Yapay zeka tüm metni dilbilgisi kurallarına göre cümlelere böler ve kaliteli Türkçe çevirilerini hazırlayarak transkripti günceller.
+                  İngilizce konuşma metnini aşağıya yapıştırın veya dosyadan yükleyin. Yapay zeka metni cümlelere böler ve Türkçe çevirileriyle transkripti yeniden oluşturur.
+                </p>
+                <p className="leading-relaxed">
+                  Metinde <strong>zaman damgası</strong> varsa (<code className="font-mono">00:08 Metin</code>, ayrı satırda damga, <code className="font-mono">.srt</code> veya <code className="font-mono">.vtt</code>) damgalar aynen korunur ve senkronizasyon bozulmaz. Damga yoksa video altyazısının zaman çizgisine hizalanır.
                 </p>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Tam İngilizce Transkript / Konuşma Metni:
-                </label>
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
+                  <label className="text-xs font-bold text-slate-700">
+                    Tam İngilizce Transkript / Konuşma Metni:
+                  </label>
+
+                  <div className="flex items-center gap-2">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept=".txt,.srt,.vtt,.md,text/plain"
+                      onChange={handleTranscriptFile}
+                      className="hidden"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={isAnalyzing}
+                      className="inline-flex items-center space-x-1 px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 disabled:opacity-50 text-amber-800 border border-amber-200 text-[11px] font-bold rounded-lg transition cursor-pointer"
+                      title="Transkripti dosyadan yükle (.txt, .srt, .vtt)"
+                    >
+                      <UploadCloud className="w-3.5 h-3.5" />
+                      <span>Dosyadan Yükle</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setRawText('');
+                        setAiSuccessMsg('');
+                        setAiErrorMsg('');
+                      }}
+                      disabled={isAnalyzing || !rawText}
+                      className="inline-flex items-center space-x-1 px-2.5 py-1.5 bg-slate-50 hover:bg-slate-100 disabled:opacity-40 text-slate-600 border border-slate-200 text-[11px] font-bold rounded-lg transition cursor-pointer"
+                      title="Metni tamamen temizle ve baştan yapıştır"
+                    >
+                      <Eraser className="w-3.5 h-3.5" />
+                      <span>Temizle</span>
+                    </button>
+                  </div>
+                </div>
                 <textarea
                   value={rawText}
                   onChange={(e) => setRawText(e.target.value)}

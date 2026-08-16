@@ -50,9 +50,14 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Secim, vurgunun SOLUK tonunu (--marker-bg) kullaniyordu; bu da "su an
+   konusulan cumle"nin arka planiyla birebir ayni renk. Vurgulu cumlenin
+   icinde kelime secince secim tamamen gorunmez oluyordu. Secim artik
+   vurgunun canli tonunu kullaniyor: kagit zeminde de, soluk vurgunun
+   uzerinde de, koyu panellerde de okunuyor. */
 ::selection {
-  background: var(--marker-bg);
-  color: var(--marker-ink);
+  background: var(--marker);
+  color: var(--ink);
 }
 
 :focus-visible {

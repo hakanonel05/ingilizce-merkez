@@ -6,6 +6,7 @@ import path from "path";
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
 import { YoutubeTranscript } from "youtube-transcript";
+import { AsyncLocalStorage } from "async_hooks";
 
 dotenv.config();
 
@@ -22,6 +23,75 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json({ limit: "10mb" }));
+
+/* ============================================================
+   KULLANICI API ANAHTARLARI
+   ------------------------------------------------------------
+   Anahtarlar eskiden yalnizca sunucunun ortam degiskenlerinden
+   okunuyordu; yani siteyi kim kullanirsa kullansin fatura site
+   sahibine cikiyordu. Artik istemci kendi anahtarlarini baslikla
+   gonderebiliyor ve o istek boyunca onlar kullaniliyor.
+
+   Anahtarlar istek basina AsyncLocalStorage'da tutuluyor: her
+   process.env okumasini fonksiyon imzalarindan tasimak yerine tek
+   noktada cozuyoruz ve es zamanli isteklerin anahtarlari birbirine
+   karismiyor.
+
+   GERIYE DONUK UYUMLU: kullanici anahtar gondermezse ortam
+   degiskeni kullanilir, yani mevcut davranis aynen korunur.
+   ============================================================ */
+
+interface UserKeys {
+  gemini?: string;
+  groq?: string;
+  transcript?: string;
+  libre?: string;
+}
+
+const userKeyStore = new AsyncLocalStorage<UserKeys>();
+
+/** Once istegi yapan kullanicinin anahtari, yoksa sunucunun ortam degiskeni. */
+function resolveKey(which: keyof UserKeys, envName: string): string {
+  const fromUser = userKeyStore.getStore()?.[which];
+  if (typeof fromUser === 'string' && fromUser.trim()) return fromUser.trim();
+  return process.env[envName] || '';
+}
+
+function readKeyHeader(req: express.Request, name: string): string | undefined {
+  const value = req.get(name);
+  if (typeof value !== 'string') return undefined;
+  const trimmed = value.trim();
+  return trimmed ? trimmed : undefined;
+}
+
+// Anahtarlari istek baglamina koy. Deger ASLA loglanmaz.
+app.use((req, _res, next) => {
+  userKeyStore.run(
+    {
+      gemini: readKeyHeader(req, 'x-user-gemini-key'),
+      groq: readKeyHeader(req, 'x-user-groq-key'),
+      transcript: readKeyHeader(req, 'x-user-transcript-token'),
+      libre: readKeyHeader(req, 'x-user-libretranslate-key'),
+    },
+    () => next()
+  );
+});
+
+/**
+ * Sunucunun hangi anahtarlara sahip oldugunu bildirir; boylece ayarlar
+ * ekrani kullaniciya "bunu girmen sart" diyebilir.
+ * YALNIZCA true/false doner, anahtarin kendisi asla disari verilmez.
+ */
+app.get("/api/settings/status", (_req, res) => {
+  res.json({
+    server: {
+      gemini: !!process.env.GEMINI_API_KEY,
+      groq: !!process.env.GROQ_API_KEY,
+      transcript: !!process.env.YOUTUBE_TRANSCRIPT_IO_TOKEN,
+      libre: !!process.env.LIBRETRANSLATE_API_KEY,
+    },
+  });
+});
 
 /* ============================================================
    YOUTUBE ALTYAZI (CUE) İŞLEME
@@ -242,9 +312,12 @@ function pickEnglishTrack(tracks: TranscriptTrack[]): TranscriptTrack {
 
 /** youtube-transcript.io uzerinden altyazi ceker. */
 async function fetchCuesFromApi(videoId: string): Promise<{ cues: Cue[]; raw: any }> {
-  const token = process.env.YOUTUBE_TRANSCRIPT_IO_TOKEN;
+  const token = resolveKey('transcript', 'YOUTUBE_TRANSCRIPT_IO_TOKEN');
   if (!token) {
-    throw new Error("YOUTUBE_TRANSCRIPT_IO_TOKEN environment variable is missing.");
+    throw new Error(
+      "youtube-transcript.io anahtari bulunamadi. Ayarlar menusunden kendi anahtarinizi " +
+      "girin veya sunucuda YOUTUBE_TRANSCRIPT_IO_TOKEN tanimlayin."
+    );
   }
 
   const res = await fetch("https://www.youtube-transcript.io/api/transcripts", {
@@ -316,7 +389,7 @@ async function fetchCuesDirect(videoId: string): Promise<Cue[]> {
  * "auto" modunda once dogrudan denenir (bedava), olmazsa harici API'ye gecilir.
  */
 async function fetchYoutubeCues(videoId: string): Promise<Cue[]> {
-  const hasApiToken = !!process.env.YOUTUBE_TRANSCRIPT_IO_TOKEN;
+  const hasApiToken = !!resolveKey('transcript', 'YOUTUBE_TRANSCRIPT_IO_TOKEN');
 
   if (CAPTION_PROVIDER === 'api') {
     const { cues } = await fetchCuesFromApi(videoId);
@@ -614,8 +687,8 @@ function getProviderChain(): string[] {
   const requested = raw.split(',').map((p) => p.trim().toLowerCase()).filter(Boolean);
 
   const hasKey: Record<string, boolean> = {
-    gemini: !!process.env.GEMINI_API_KEY,
-    groq: !!process.env.GROQ_API_KEY,
+    gemini: !!resolveKey('gemini', 'GEMINI_API_KEY'),
+    groq: !!resolveKey('groq', 'GROQ_API_KEY'),
   };
 
   const available = requested.filter((p) => hasKey[p]);
@@ -629,9 +702,12 @@ function getProviderChain(): string[] {
 
 // Helper to instantiate Gemini AI
 function getGeminiClient() {
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = resolveKey('gemini', 'GEMINI_API_KEY');
   if (!apiKey) {
-    throw new Error("GEMINI_API_KEY environment variable is missing.");
+    throw new Error(
+      "Gemini API anahtari bulunamadi. Ayarlar menusunden kendi anahtarinizi girin " +
+      "veya sunucuda GEMINI_API_KEY tanimlayin."
+    );
   }
   return new GoogleGenAI({
     apiKey,
@@ -647,7 +723,7 @@ function getGeminiClient() {
 function getAIClient(): GoogleGenAI | null {
   // Zincirin ilk saglayicisi Gemini degilse istemci gerekmez.
   // Anahtar yoksa da hata firlatmayiz; zincirdeki diger saglayici devreye girer.
-  if (!process.env.GEMINI_API_KEY) return null;
+  if (!resolveKey('gemini', 'GEMINI_API_KEY')) return null;
   try {
     return getGeminiClient();
   } catch {
@@ -706,9 +782,12 @@ async function callGroq(
   systemInstruction: string,
   jsonHint?: string
 ): Promise<{ text: string }> {
-  const apiKey = process.env.GROQ_API_KEY;
+  const apiKey = resolveKey('groq', 'GROQ_API_KEY');
   if (!apiKey) {
-    throw new Error("GROQ_API_KEY environment variable is missing.");
+    throw new Error(
+      "Groq API anahtari bulunamadi. Ayarlar menusunden kendi anahtarinizi girin " +
+      "veya sunucuda GROQ_API_KEY tanimlayin."
+    );
   }
 
   const systemContent = jsonHint
@@ -882,8 +961,9 @@ async function translateWithLibre(
   };
 
   // Bazi ornekler (libretranslate.com dahil) anahtar istiyor, bazilari istemiyor
-  if (process.env.LIBRETRANSLATE_API_KEY) {
-    body.api_key = process.env.LIBRETRANSLATE_API_KEY;
+  const libreKey = resolveKey('libre', 'LIBRETRANSLATE_API_KEY');
+  if (libreKey) {
+    body.api_key = libreKey;
   }
 
   const res = await fetch(LIBRETRANSLATE_URL, {
@@ -1134,12 +1214,13 @@ app.get("/api/check-captions", async (req, res) => {
     // ?raw=1 eklenirse youtube-transcript.io'nun ham yaniti donulur.
     // Yanit semasi belgelenmedigi icin sorun cikarsa buradan gorulur.
     let rawSample: any = undefined;
-    if (req.query.raw && process.env.YOUTUBE_TRANSCRIPT_IO_TOKEN) {
+    const rawToken = resolveKey('transcript', 'YOUTUBE_TRANSCRIPT_IO_TOKEN');
+    if (req.query.raw && rawToken) {
       try {
         const r = await fetch("https://www.youtube-transcript.io/api/transcripts", {
           method: "POST",
           headers: {
-            "Authorization": `Basic ${process.env.YOUTUBE_TRANSCRIPT_IO_TOKEN}`,
+            "Authorization": `Basic ${rawToken}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ ids: [ytId] }),

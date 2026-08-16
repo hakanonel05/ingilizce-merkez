@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { buildCard, addCardsIfMissing, CardKind, CardLevel } from '../../lib/vocabStore';
+import { apiFetch } from '../../lib/userKeys';
 import { Plus, Loader2, Check, X, Layers } from 'lucide-react';
 
 interface Props {
@@ -102,7 +103,7 @@ export const SelectionToCard: React.FC<Props> = ({
     setError(null);
 
     try {
-      const res = await fetch('/api/define-word', {
+      const res = await apiFetch('/api/define-word', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ word: term, context }),

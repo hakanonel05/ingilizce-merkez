@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { VideoLesson, VocabularyItem, GrammarRuleItem } from '../../types';
+import { apiFetch } from '../../lib/userKeys';
 import { Sparkles, Volume2, BookOpen, CheckCircle, Lightbulb, Loader2, RefreshCw, AlertCircle } from 'lucide-react';
 
 interface Layer2PhoneticsGrammarProps {
@@ -50,7 +51,7 @@ export const Layer2PhoneticsGrammar: React.FC<Layer2PhoneticsGrammarProps> = ({
     setIsGenerating(true);
     setErrorMsg('');
     try {
-      const res = await fetch('/api/analyze-phonetics-grammar', {
+      const res = await apiFetch('/api/analyze-phonetics-grammar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ transcriptSentences: lesson.sentences }),

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { VideoLesson } from '../../types';
+import { apiFetch } from '../../lib/userKeys';
 import { Mic, MicOff, Volume2, Send, Sparkles, CheckCircle, Loader2, Award, RefreshCw, AlertCircle, Repeat, Plus, Minus } from 'lucide-react';
 
 /** Tekrar sayaçları ders bazında saklanır. */
@@ -85,7 +86,7 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
     setIsLoading(true);
     setErrorMsg('');
     try {
-      const res = await fetch('/api/speaking-chat', {
+      const res = await apiFetch('/api/speaking-chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -157,7 +158,7 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
 
     try {
       const currentTurn = history[history.length - 1];
-      const res = await fetch('/api/speaking-chat', {
+      const res = await apiFetch('/api/speaking-chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

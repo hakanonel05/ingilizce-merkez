@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BookOpen, Sparkles, Award, HelpCircle, Flame, Layers, Settings2, Check, X } from 'lucide-react';
+import { BookOpen, Sparkles, Award, HelpCircle, Flame, Layers, Settings2, Check, X, KeyRound } from 'lucide-react';
 import { UserProgress } from '../types';
 
 interface HeaderProps {
@@ -8,6 +8,8 @@ interface HeaderProps {
   onOpenGrammarCoach: () => void;
   /** Hedef ve seri degerlerini duzenlemek icin. */
   onUpdateProgress?: (patch: Partial<UserProgress>) => void;
+  /** Kullanicinin kendi API anahtarlarini girecegi ekran. */
+  onOpenSettings?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -15,6 +17,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenGuide,
   onOpenGrammarCoach,
   onUpdateProgress,
+  onOpenSettings,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [goalDraft, setGoalDraft] = useState(String(progress.goalVideoCount));
@@ -104,6 +107,85 @@ export const Header: React.FC<HeaderProps> = ({
             </span>
           </button>
 
+          {/* Hedef ve seri duzenleyici.
+              Bu panel eksikti: openEditor isEditing'i true yapiyordu ama
+              hicbir yerde okunmadigi icin rozete tiklamak gorunurde hicbir
+              sey yapmiyor, hedef de hep varsayilan degerde kaliyordu. */}
+          {isEditing && (
+            <>
+              <div
+                className="fixed inset-0 z-40"
+                onClick={() => setIsEditing(false)}
+                aria-hidden="true"
+              />
+              <div
+                role="dialog"
+                aria-label="Hedefi ve seriyi duzenle"
+                onKeyDown={(e) => {
+                  if (e.key === 'Escape') setIsEditing(false);
+                  if (e.key === 'Enter') saveEdits();
+                }}
+                className="absolute top-full right-0 mt-2 z-50 w-64 p-3.5 rounded-[10px] border border-[var(--hairline-2)] bg-[var(--paper-2)] shadow-lg space-y-3"
+              >
+                <div className="flex items-center gap-1.5 text-[var(--ink-2)]">
+                  <Settings2 className="w-3.5 h-3.5 shrink-0" />
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.1em]">
+                    Hedef ve seri
+                  </span>
+                </div>
+
+                <label className="block space-y-1">
+                  <span className="text-[11px] text-[var(--ink-2)]">Video hedefi</span>
+                  <input
+                    type="number"
+                    min={1}
+                    max={999}
+                    value={goalDraft}
+                    autoFocus
+                    onChange={(e) => setGoalDraft(e.target.value)}
+                    className="w-full px-2.5 py-1.5 rounded-[8px] border border-[var(--hairline)] bg-[var(--paper)] text-[var(--ink)] text-sm focus:outline-none focus:border-[var(--ink-3)]"
+                  />
+                </label>
+
+                <label className="block space-y-1">
+                  <span className="text-[11px] text-[var(--ink-2)]">Gun serisi</span>
+                  <input
+                    type="number"
+                    min={0}
+                    max={9999}
+                    value={streakDraft}
+                    onChange={(e) => setStreakDraft(e.target.value)}
+                    className="w-full px-2.5 py-1.5 rounded-[8px] border border-[var(--hairline)] bg-[var(--paper)] text-[var(--ink)] text-sm focus:outline-none focus:border-[var(--ink-3)]"
+                  />
+                </label>
+
+                <p className="text-[10px] leading-relaxed text-[var(--ink-3)]">
+                  Tamamlanan video sayisi derslerin durumundan turetilir, elle
+                  degistirilmez.
+                </p>
+
+                <div className="flex items-center gap-2 pt-0.5">
+                  <button
+                    type="button"
+                    onClick={saveEdits}
+                    className="flex-1 flex items-center justify-center gap-1.5 h-8 rounded-[8px] bg-[var(--ink)] text-[var(--paper-2)] text-xs font-medium hover:opacity-90 transition-opacity cursor-pointer"
+                  >
+                    <Check className="w-3.5 h-3.5 shrink-0" />
+                    <span>Kaydet</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsEditing(false)}
+                    className="flex items-center justify-center gap-1.5 h-8 px-3 rounded-[8px] border border-[var(--hairline)] text-[var(--ink-2)] text-xs font-medium hover:border-[var(--hairline-2)] hover:text-[var(--ink)] transition-colors cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5 shrink-0" />
+                    <span>Iptal</span>
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+
           <button
             onClick={onOpenGrammarCoach}
             title="Gramer koçuna sor"
@@ -121,6 +203,16 @@ export const Header: React.FC<HeaderProps> = ({
             <HelpCircle className="w-3.5 h-3.5 shrink-0" />
             <span className="hidden sm:inline">Metot</span>
           </button>
+
+          {onOpenSettings && (
+            <button
+              onClick={onOpenSettings}
+              title="API anahtarları"
+              className="flex items-center justify-center h-9 w-9 rounded-[10px] border border-[var(--hairline)] text-[var(--ink-2)] hover:border-[var(--hairline-2)] hover:text-[var(--ink)] transition-colors cursor-pointer shrink-0"
+            >
+              <KeyRound className="w-3.5 h-3.5 shrink-0" />
+            </button>
+          )}
         </div>
       </div>
     </header>
