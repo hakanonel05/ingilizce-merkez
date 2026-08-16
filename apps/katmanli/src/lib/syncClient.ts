@@ -91,7 +91,23 @@ const LOCAL_KEYS = [
   { storageKey: 'layered_learning_progress_v1', syncKey: 'progress' },
   { storageKey: 'layered_learning_vocab_settings_v1', syncKey: 'vocabSettings' },
   { storageKey: 'layered_learning_speaking_reps_v1', syncKey: 'speakingReps' },
+  // Yanlislar Defteri de senkronlanir; eskiden listede yoktu ve bu yuzden
+  // cihaz degistirildiginde sessizce kayboluyordu.
+  { storageKey: 'layered_learning_mistakes_v1', syncKey: 'mistakes' },
 ];
+
+/**
+ * Yerel bir kaydin DEGISTIGINI damgalar.
+ *
+ * "Son yazan kazanir" karsilastirmasi `<anahtar>__ts` degerine dayaniyor
+ * (bkz. runSync). Bu damgayi eskiden yalnizca runSync'in kendisi yaziyordu;
+ * uygulama veriyi degistirdiginde kimse yazmiyordu. Dolayisiyla bir cihazda
+ * yapilan gercek duzenleme, hicbir sey yapmamis baska bir cihazin verisiyle
+ * ayni "yas"ta gorunuyordu. Veri degisince burasi cagrilmali.
+ */
+export function stampLocalChange(storageKey: string): void {
+  writeLocalJson(`${storageKey}__ts`, Date.now());
+}
 
 function readLocalJson(key: string): any | null {
   try {
@@ -297,4 +313,108 @@ export function resetSyncState(): void {
   } catch {
     /* yoksay */
   }
+}
+
+/* ============================================================
+   OTOMATIK SENKRON
+   ------------------------------------------------------------
+   Senkron eskiden yalnizca elle calisiyordu ve panel hicbir yere
+   monte edilmedigi icin pratikte hic calismiyordu. Artik: kod bir
+   kez girilir, gerisi kendiliginden olur.
+
+   - Tek ucus kurali: ayni anda birden fazla senkron calismaz.
+     Ust uste calisirsa "son yazan kazanir" karsilastirmasi
+     kendi yazdigi damgalarla yarisir ve sonuc ongorulemez olur.
+   - Geciktirme: her tus vurusunda degil, degisiklikler durulunca
+     bir kez gonderilir.
+   - Sessiz basarisizlik: cevrimdisiyken veya sunucu hata verirse
+     uygulama calismaya devam eder; veri yerelde durur ve bir
+     sonraki firsatta gonderilir.
+   ============================================================ */
+
+const AUTO_SYNC_DELAY_MS = 8000;
+
+let autoSyncTimer: ReturnType<typeof setTimeout> | null = null;
+let syncInFlight: Promise<SyncResult> | null = null;
+let rerunRequested = false;
+
+export type SyncListener = (result: SyncResult) => void;
+
+const listeners = new Set<SyncListener>();
+
+/** Senkron bittiginde haber verir; cagiran taraf ekrani tazeleyebilir. */
+export function onSynced(listener: SyncListener): () => void {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
+function notify(result: SyncResult): void {
+  listeners.forEach((listener) => {
+    try {
+      listener(result);
+    } catch (e) {
+      console.error('Senkron dinleyicisi hata verdi:', e);
+    }
+  });
+}
+
+/** Senkron kodu tanimliysa true. */
+export function hasSyncCode(): boolean {
+  return getSyncCode().trim().length >= 6;
+}
+
+/**
+ * Senkronu simdi calistirir. Zaten calisiyorsa yenisini baslatmaz;
+ * bunun yerine mevcut olani bekler ve ardindan bir tur daha ister.
+ */
+export function syncNow(onProgress?: (message: string) => void): Promise<SyncResult> {
+  if (!hasSyncCode()) {
+    return Promise.reject(new Error('Önce en az 6 karakterlik bir senkron kodu belirleyin.'));
+  }
+
+  if (syncInFlight) {
+    rerunRequested = true;
+    return syncInFlight;
+  }
+
+  syncInFlight = runSync(onProgress)
+    .then((result) => {
+      notify(result);
+      return result;
+    })
+    .finally(() => {
+      syncInFlight = null;
+      if (rerunRequested) {
+        rerunRequested = false;
+        scheduleAutoSync();
+      }
+    });
+
+  return syncInFlight;
+}
+
+/**
+ * Veri degistikten sonra cagrilir: kisa bir sessizlikten sonra senkronu
+ * tetikler. Kod yoksa hicbir sey yapmaz, boylece senkronu hic kurmamis
+ * kullaniciya masraf cikmaz.
+ */
+export function scheduleAutoSync(): void {
+  if (!hasSyncCode()) return;
+
+  if (autoSyncTimer) clearTimeout(autoSyncTimer);
+  autoSyncTimer = setTimeout(() => {
+    autoSyncTimer = null;
+    syncNow().catch((err) => {
+      // Cevrimdisi olmak hata degil; veri yerelde, sonra gonderilir.
+      console.warn('Otomatik senkron simdilik basarisiz:', err?.message || err);
+    });
+  }, AUTO_SYNC_DELAY_MS);
+}
+
+/** Uygulama acilisinda bir kez: uzaktaki daha yeni veriyi getirir. */
+export function syncOnStartup(): void {
+  if (!hasSyncCode()) return;
+  syncNow().catch((err) => {
+    console.warn('Acilis senkronu basarisiz:', err?.message || err);
+  });
 }

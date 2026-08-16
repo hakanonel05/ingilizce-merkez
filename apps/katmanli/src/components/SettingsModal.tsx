@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { KeyRound, Eye, EyeOff, ExternalLink, Save, Trash2, X, Check, ShieldCheck } from 'lucide-react';
+import { KeyRound, Eye, EyeOff, ExternalLink, Save, Trash2, X, Check, ShieldCheck, Settings2 } from 'lucide-react';
+import { SyncPanel } from './vocab/SyncPanel';
 import {
   UserApiKeys,
   EMPTY_KEYS,
@@ -89,11 +90,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
         {/* Başlık */}
         <div className="flex items-center justify-between gap-4 px-6 py-4 border-b border-[var(--hairline)]">
           <div className="flex items-center gap-2.5 min-w-0">
-            <KeyRound className="w-4 h-4 shrink-0 text-[var(--ink-2)]" />
+            <Settings2 className="w-4 h-4 shrink-0 text-[var(--ink-2)]" />
             <div className="min-w-0">
-              <h3 className="text-sm font-semibold text-[var(--ink)]">API Anahtarları</h3>
+              <h3 className="text-sm font-semibold text-[var(--ink)]">Ayarlar</h3>
               <p className="text-[11px] text-[var(--ink-3)] truncate">
-                Kendi anahtarlarınızı girin — kullanım kendi hesabınıza işlenir
+                API anahtarları ve cihazlar arası senkron
               </p>
             </div>
           </div>
@@ -119,6 +120,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
 
         {/* Alanlar */}
         <div className="px-6 py-4 space-y-4 max-h-[55vh] overflow-y-auto">
+          <div className="flex items-center gap-1.5 pb-1">
+            <KeyRound className="w-3.5 h-3.5 shrink-0 text-[var(--ink-2)]" />
+            <span className="text-xs font-semibold text-[var(--ink)]">API Anahtarları</span>
+          </div>
+
           {KEY_FIELDS.map(({ field, label, hint, url, urlLabel }) => {
             const serverHas = serverStatus ? serverStatus[field] : null;
             const isVisible = !!visible[field];
@@ -175,6 +181,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
               </div>
             );
           })}
+
+          <div className="pt-2 border-t border-[var(--hairline)]">
+            <SyncPanel />
+          </div>
         </div>
 
         {/* Alt bar */}

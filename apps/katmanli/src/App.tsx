@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { PRESET_LESSONS } from './data/presetLessons';
 import { VideoLesson, UserProgress, VocabularyItem, GrammarRuleItem, QuizQuestion, MistakeEntry } from './types';
 import { Header } from './components/Header';
@@ -22,6 +22,7 @@ import { EditLessonModal } from './components/EditLessonModal';
 import { SettingsModal } from './components/SettingsModal';
 import { extractYouTubeId } from './lib/youtube';
 import { apiFetch } from './lib/userKeys';
+import { stampLocalChange, scheduleAutoSync, syncOnStartup, onSynced } from './lib/syncClient';
 import AppSwitcher from './AppSwitcher';
 
 // Sürüm anahtarı: eski kayıtlarda bozuk/eksik zaman damgaları vardı.
@@ -30,6 +31,50 @@ import AppSwitcher from './AppSwitcher';
 const LESSONS_STORAGE_KEY = 'layered_learning_lessons_v2';
 const PROGRESS_STORAGE_KEY = 'layered_learning_progress_v1';
 const MISTAKES_STORAGE_KEY = 'layered_learning_mistakes_v1';
+
+/**
+ * Bir degeri localStorage'a yazar, gercekten degistiyse senkron damgasi
+ * vurup otomatik senkronu tetikler.
+ *
+ * Iki incelik var:
+ * - ILK calistirma atlanir. O, sayfanin acilisidir; orada damga vurmak
+ *   hicbir sey degistirmemis bir cihazi "en son yazan" yapar ve baska bir
+ *   cihazdaki gercek duzenlemeyi ezmesine yol acardi.
+ * - Yazilacak deger oncekiyle AYNIYSA damga vurulmaz. Senkron cektigi
+ *   veriyi dogrudan localStorage'a yazip state'i tazeledigi icin, bu
+ *   kontrol olmasa her cekme islemi gereksiz bir gonderme daha dogururdu.
+ */
+function usePersistedSync<T>(storageKey: string, value: T): void {
+  const isFirstRun = useRef(true);
+
+  useEffect(() => {
+    let serialized: string;
+    try {
+      serialized = JSON.stringify(value);
+    } catch (e) {
+      console.error('Veri JSON’a cevrilemedi:', storageKey, e);
+      return;
+    }
+
+    let previous: string | null = null;
+    try {
+      previous = localStorage.getItem(storageKey);
+      localStorage.setItem(storageKey, serialized);
+    } catch (e) {
+      console.error('Veri kaydedilemedi:', storageKey, e);
+      return;
+    }
+
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    }
+    if (previous === serialized) return;
+
+    stampLocalChange(storageKey);
+    scheduleAutoSync();
+  }, [storageKey, value]);
+}
 
 /** Bugunun tarihi, YYYY-MM-DD (yerel saat). */
 function todayKey(date = new Date()): string {
@@ -88,14 +133,8 @@ export default function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const [editingLesson, setEditingLesson] = useState<VideoLesson | null>(null);
 
-  // Sync lessons to localStorage when updated
-  useEffect(() => {
-    try {
-      localStorage.setItem(LESSONS_STORAGE_KEY, JSON.stringify(lessons));
-    } catch (e) {
-      console.error('Failed to save lessons to localStorage:', e);
-    }
-  }, [lessons]);
+  // Dersleri sakla ve degistiyse Supabase'e gonder
+  usePersistedSync(LESSONS_STORAGE_KEY, lessons);
 
   const [progress, setProgress] = useState<UserProgress>(() => {
     try {
@@ -120,14 +159,8 @@ export default function App() {
     };
   });
 
-  // Ilerlemeyi kalici sakla
-  useEffect(() => {
-    try {
-      localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(progress));
-    } catch (e) {
-      console.error('Failed to save progress:', e);
-    }
-  }, [progress]);
+  // Ilerlemeyi kalici sakla ve degistiyse Supabase'e gonder
+  usePersistedSync(PROGRESS_STORAGE_KEY, progress);
 
   /** Bugunu calisma gunu olarak isaretler ve seriyi yeniden hesaplar. */
   const recordStudyToday = () => {
@@ -520,13 +553,40 @@ async function buildLessonData(
     return [];
   });
 
+  usePersistedSync(MISTAKES_STORAGE_KEY, mistakes);
+
+  /**
+   * Acilista bir kez senkronla, sonrasinda cekilen veri geldikce ekrani tazele.
+   * runSync localStorage'i dogrudan yaziyor; React state'i acilista okundugu
+   * icin cekme sonrasi ekran eski kalirdi. Bu yuzden cekilen kayit varsa
+   * state'i yeniden localStorage'dan besliyoruz.
+   */
   useEffect(() => {
-    try {
-      localStorage.setItem(MISTAKES_STORAGE_KEY, JSON.stringify(mistakes));
-    } catch (e) {
-      console.error('Failed to save mistakes:', e);
-    }
-  }, [mistakes]);
+    const unsubscribe = onSynced((result) => {
+      if (result.pulled === 0) return;
+      try {
+        const savedLessons = localStorage.getItem(LESSONS_STORAGE_KEY);
+        if (savedLessons) {
+          const parsed = JSON.parse(savedLessons);
+          if (Array.isArray(parsed)) setLessons(parsed);
+        }
+
+        const savedProgress = localStorage.getItem(PROGRESS_STORAGE_KEY);
+        if (savedProgress) setProgress(JSON.parse(savedProgress));
+
+        const savedMistakes = localStorage.getItem(MISTAKES_STORAGE_KEY);
+        if (savedMistakes) {
+          const parsed = JSON.parse(savedMistakes);
+          if (Array.isArray(parsed)) setMistakes(parsed);
+        }
+      } catch (e) {
+        console.error('Senkron sonrasi veriler okunamadi:', e);
+      }
+    });
+
+    syncOnStartup();
+    return unsubscribe;
+  }, []);
 
   const handleRecordMistakes = (entries: Omit<MistakeEntry, 'id' | 'timestamp'>[]) => {
     const timestamp = new Date().toISOString();

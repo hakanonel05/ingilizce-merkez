@@ -207,7 +207,7 @@ export const Header: React.FC<HeaderProps> = ({
           {onOpenSettings && (
             <button
               onClick={onOpenSettings}
-              title="API anahtarları"
+              title="Ayarlar — API anahtarları ve senkron"
               className="flex items-center justify-center h-9 w-9 rounded-[10px] border border-[var(--hairline)] text-[var(--ink-2)] hover:border-[var(--hairline-2)] hover:text-[var(--ink)] transition-colors cursor-pointer shrink-0"
             >
               <KeyRound className="w-3.5 h-3.5 shrink-0" />
