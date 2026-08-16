@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { VideoLesson } from '../types';
+import { lessonComputedLevel } from '../lib/lessonInsight';
 import { Youtube, Sparkles, Plus, Loader2, Play, CheckCircle2, Clock, BarChart2, Trash2, FileText, Edit3, RefreshCw } from 'lucide-react';
 
 interface LessonSelectorProps {
@@ -269,6 +270,10 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {lessons.map((lesson) => {
             const isSelected = activeLesson ? lesson.id === activeLesson.id : false;
+            // Metinden olculen seviye, elle girilenden once gelir: biri
+            // olcum, digeri beyan. Olculemezse (metin yoksa) beyana duselim.
+            const measuredLevel = lessonComputedLevel(lesson);
+            const shownLevel = measuredLevel || lesson.level;
             return (
               <div
                 key={lesson.id}
@@ -281,10 +286,25 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
               >
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between gap-2">
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                      lesson.level === 'C1' ? 'bg-purple-100 text-purple-800 border border-purple-200' : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                    }`}>
-                      {lesson.level} Level
+                    <span
+                      title={
+                        measuredLevel
+                          ? `Metindeki kelimelerin %90'ını kapsayan seviye.${
+                              lesson.level && lesson.level !== measuredLevel
+                                ? ` Derse elle girilen seviye: ${lesson.level}.`
+                                : ''
+                            }`
+                          : 'Elle girilen seviye (metin çözümlenemedi).'
+                      }
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                        shownLevel === 'C1' || shownLevel === 'C2'
+                          ? 'bg-purple-100 text-purple-800 border border-purple-200'
+                          : shownLevel === 'B2'
+                          ? 'bg-amber-100 text-amber-800 border border-amber-200'
+                          : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                      }`}
+                    >
+                      {shownLevel} Level
                     </span>
 
                     <div className="flex items-center space-x-2">

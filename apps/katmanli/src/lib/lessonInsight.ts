@@ -205,6 +205,38 @@ export function buildLessonInsight(
   };
 }
 
+/* ============================================================
+   DERS KARTI SEVIYESI
+   ------------------------------------------------------------
+   Ders listesi sik render ediliyor ve her kartin seviyesi icin
+   transkriptin TAMAMINI cozumlemek gerekiyor. Elli derste bu, liste
+   ekranini gozle gorulur yavaslatirdi. Bu yuzden sonuc ders bazinda
+   onbellege aliniyor.
+
+   Onbellek anahtari cumle DIZISININ KENDISI (referans karsilastirmasi):
+   metni her seferinde birlestirip karsilastirmak da masrafli olurdu.
+   React durumu, cumleler gercekten degismedikce ayni diziyi tasidigi
+   icin bu hem ucuz hem dogru; katman tamamlandiginde ders nesnesi
+   yenilense de cumle dizisi ayni kalir ve yeniden hesap yapilmaz.
+   ============================================================ */
+
+const levelCache = new Map<string, { sentences: unknown; level: CefrLevel | null }>();
+
+/** Dersin metninden hesaplanan agirlikli CEFR seviyesi. */
+export function lessonComputedLevel(lesson: {
+  id: string;
+  sentences?: { en: string }[];
+}): CefrLevel | null {
+  const sentences = lesson.sentences || [];
+  const cached = levelCache.get(lesson.id);
+  if (cached && cached.sentences === sentences) return cached.level;
+
+  const text = sentences.map((s) => s.en).join(' ');
+  const level = text.trim() ? analyzeCefr(text).dominantLevel : null;
+  levelCache.set(lesson.id, { sentences, level });
+  return level;
+}
+
 /** Kart destesini kendisi yukleyen kolaylik sarmalayicisi. */
 export async function analyseLesson(
   text: string,
