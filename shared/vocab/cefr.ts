@@ -145,8 +145,16 @@ function candidateForms(word: string): string[] {
   const irregular = IRREGULAR_FORMS[word];
   if (irregular) add(irregular);
 
-  // Iyelik ve kisaltma
-  if (word.endsWith("'s")) add(word.slice(0, -2));
+  // Iyelik ve kisaltmalar. Kesme isaretinden onceki parca her zaman
+  // denenir; boylece you're/we've/I'm/he'll gibi tum bicimler tek kuralla
+  // cozulur. Bunlar olmadan "you're" bilinmeyen kelime sayiliyordu.
+  // Not: add() tek harfli adaylari eler (asiri soyulmus govdeleri onlemek
+  // icin), ama kesme onceki parca gercek bir kelimedir — "I'm" -> "i".
+  const apostrophe = word.indexOf("'");
+  if (apostrophe > 0) {
+    const prefix = word.slice(0, apostrophe);
+    if (!forms.includes(prefix)) forms.push(prefix);
+  }
   if (word.endsWith("n't")) add(word.slice(0, -3));
 
   // Cogul / 3. tekil
@@ -190,16 +198,32 @@ function candidateForms(word: string): string[] {
   return forms;
 }
 
-/** Kelimenin CEFR seviyesi; listede hicbir bicimi yoksa null. */
+/**
+ * Kelimenin CEFR seviyesi; listede hicbir bicimi yoksa null.
+ *
+ * TUM aday bicimlere bakilir ve EN DUSUK seviye alinir. Eskiden ilk
+ * eslesmede donuluyordu ve kelimenin kendisi her zaman ilk adaydi; cekimli
+ * bicim listede nadir bir anlamla bulundugunda kokun kolay seviyesi hic
+ * denenmiyordu. Sonuc, en temel kelimelerin "zor" gorunmesiydi:
+ *   times -> B2 (oysa time A1)      making -> B2 (make A1)
+ *   found -> B2 (find A1)           trying -> C1 (try A1)
+ * Bir B1 ogrencisine "trying" kelimesini bilmiyorsun demek anlamsizdi.
+ *
+ * En dusugu almak, kaynak veride ayni kelimenin birden cok seviyede
+ * gectigi durumda zaten uyguladigimiz kuralin aynisi.
+ */
 export function levelOf(word: string): CefrLevel | null {
   const normalized = word.trim().toLowerCase();
   if (!normalized) return null;
 
+  let best: CefrLevel | null = null;
   for (const form of candidateForms(normalized)) {
     const level = WORD_LEVELS.get(form);
-    if (level) return level;
+    if (!level) continue;
+    if (!best || CEFR_ORDER.indexOf(level) < CEFR_ORDER.indexOf(best)) best = level;
+    if (best === 'A1') break; // daha dusugu yok
   }
-  return null;
+  return best;
 }
 
 export interface TokenizedWord {
