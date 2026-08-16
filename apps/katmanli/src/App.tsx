@@ -674,6 +674,8 @@ async function buildLessonData(
                   onCompleteLayer={() => handleCompleteLayer(1)}
                   onUpdateVideoUrl={handleUpdateLessonVideoUrl}
                   onResyncFromCaptions={(onProgress) => handleResyncLessonFromCaptions(activeLesson.id, onProgress)}
+                  userLevel={progress.cefrLevel}
+                  onChangeUserLevel={(level) => handleUpdateProgress({ cefrLevel: level })}
                 />
               )}
 

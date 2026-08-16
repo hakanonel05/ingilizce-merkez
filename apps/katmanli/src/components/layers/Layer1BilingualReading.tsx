@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { VideoLesson, SentencePair } from '../../types';
 import { extractYouTubeId } from '../../lib/youtube';
 import { SelectionToCard } from '../vocab/SelectionToCard';
+import { LessonInsightPanel } from '../LessonInsightPanel';
+import { CefrLevel } from '../../../../../shared/vocab/cefr';
 import { Volume2, Bookmark, CheckCircle, Search, Eye, EyeOff, Youtube, Edit2, Check, X, LayoutGrid, List, Play, Sliders, AlertTriangle, RefreshCw, Pause } from 'lucide-react';
 
 declare global {
@@ -19,6 +21,9 @@ interface Layer1BilingualReadingProps {
   onUpdateVideoUrl?: (youtubeUrl: string) => void;
   /** Dersi videonun gerçek YouTube altyazısından yeniden üretir. */
   onResyncFromCaptions?: (onProgress?: (message: string) => void) => Promise<void>;
+  /** Anlama oranı bu seviyeye göre hesaplanır. */
+  userLevel?: CefrLevel;
+  onChangeUserLevel?: (level: CefrLevel) => void;
 }
 
 /**
@@ -59,6 +64,8 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
   onCompleteLayer,
   onUpdateVideoUrl,
   onResyncFromCaptions,
+  userLevel,
+  onChangeUserLevel,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [hideTurkish, setHideTurkish] = useState(false);
@@ -511,6 +518,13 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
             </div>
           </div>
         )}
+
+        {/* Bu ders senin icin ne kadar zor? */}
+        <LessonInsightPanel
+          text={(lesson.sentences || []).map((s) => s.en).join(' ')}
+          userLevel={userLevel}
+          onChangeUserLevel={onChangeUserLevel}
+        />
 
         {/* Search Bar */}
         <div className="relative">
