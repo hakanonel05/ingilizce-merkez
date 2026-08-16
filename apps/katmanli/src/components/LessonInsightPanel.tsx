@@ -1,17 +1,19 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Gauge, Sparkles, Loader2, BookOpen } from 'lucide-react';
 import { CefrLevel, CEFR_ORDER } from '../../../../shared/vocab/cefr';
-import { getAllCards, VocabCard, VOCAB_CHANGED_EVENT } from '../../../../shared/vocab/vocabStore';
-import {
-  buildLessonInsight, comprehensionVerdict, DEFAULT_USER_LEVEL,
-} from '../lib/lessonInsight';
+import { comprehensionVerdict, DEFAULT_USER_LEVEL, LessonInsight } from '../lib/lessonInsight';
 import { classifyMissingWords } from '../lib/cefrCache';
 
 interface Props {
-  /** Dersin tam Ingilizce metni. */
-  text: string;
+  /**
+   * Hazir cozumleme. Panel kendi hesaplamaz: ayni sonucu metindeki alti
+   * cizme de kullaniyor, ikisi ayri hesaplasa birbirinden sapabilirdi.
+   */
+  insight: LessonInsight;
   userLevel?: CefrLevel;
   onChangeUserLevel?: (level: CefrLevel) => void;
+  /** Yapay zeka siniflandirmasi bitince cozumlemeyi tazelemek icin. */
+  onClassified?: () => void;
 }
 
 const TONE_CLASS: Record<'good' | 'ok' | 'hard', string> = {
@@ -25,29 +27,15 @@ const TONE_CLASS: Record<'good' | 'ok' | 'hard', string> = {
  * Sayi, CEFR listesi ile kelime destesinin kesisiminden gelir
  * (bkz. lib/lessonInsight).
  */
-export const LessonInsightPanel: React.FC<Props> = ({ text, userLevel, onChangeUserLevel }) => {
+export const LessonInsightPanel: React.FC<Props> = ({
+  insight,
+  userLevel,
+  onChangeUserLevel,
+  onClassified,
+}) => {
   const level = userLevel || DEFAULT_USER_LEVEL;
-  const [cards, setCards] = useState<VocabCard[]>([]);
   const [classifying, setClassifying] = useState(false);
   const [aiProgress, setAiProgress] = useState('');
-  const [aiTick, setAiTick] = useState(0); // siniflandirma sonrasi yeniden hesap
-
-  useEffect(() => {
-    let alive = true;
-    const load = () => getAllCards().then((c) => { if (alive) setCards(c); }).catch(() => {});
-    load();
-    // Kart eklenince oran aninda guncellensin
-    window.addEventListener(VOCAB_CHANGED_EVENT, load);
-    return () => {
-      alive = false;
-      window.removeEventListener(VOCAB_CHANGED_EVENT, load);
-    };
-  }, []);
-
-  const insight = useMemo(
-    () => buildLessonInsight(text, level, cards),
-    [text, level, cards, aiTick]
-  );
 
   const verdict = comprehensionVerdict(insight.comprehension);
 
@@ -65,14 +53,14 @@ export const LessonInsightPanel: React.FC<Props> = ({ text, userLevel, onChangeU
         unlisted.map((w) => w.word),
         (done, total) => setAiProgress(`${done}/${total}`)
       );
-      setAiTick((t) => t + 1);
+      onClassified?.();
     } finally {
       setClassifying(false);
       setAiProgress('');
     }
   };
 
-  if (!text.trim()) return null;
+  if (insight.analysedTokens === 0) return null;
 
   const gradedTotal = CEFR_ORDER.reduce((s, l) => s + insight.cefr.byLevel[l], 0);
 

@@ -3,6 +3,8 @@ import { VideoLesson, SentencePair } from '../../types';
 import { extractYouTubeId } from '../../lib/youtube';
 import { SelectionToCard } from '../vocab/SelectionToCard';
 import { LessonInsightPanel } from '../LessonInsightPanel';
+import { MarkedText } from '../MarkedText';
+import { useLessonInsight } from '../../lib/useLessonInsight';
 import { CefrLevel } from '../../../../../shared/vocab/cefr';
 import { Volume2, Bookmark, CheckCircle, Search, Eye, EyeOff, Youtube, Edit2, Check, X, LayoutGrid, List, Play, Sliders, AlertTriangle, RefreshCw, Pause } from 'lucide-react';
 
@@ -69,6 +71,14 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [hideTurkish, setHideTurkish] = useState(false);
+
+  // Zorluk cozumlemesi: hem ozet paneli hem de metindeki alti cizme bunu kullanir
+  const [insightRefresh, setInsightRefresh] = useState(0);
+  const lessonText = useMemo(
+    () => (lesson.sentences || []).map((s) => s.en).join(' '),
+    [lesson.sentences]
+  );
+  const { insight, unknownSet } = useLessonInsight(lessonText, userLevel, insightRefresh);
   const [playingSentenceId, setPlayingSentenceId] = useState<number | null>(null);
   const [viewMode, setViewMode] = useState<'split' | 'stacked'>('split');
 
@@ -521,9 +531,10 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
 
         {/* Bu ders senin icin ne kadar zor? */}
         <LessonInsightPanel
-          text={(lesson.sentences || []).map((s) => s.en).join(' ')}
+          insight={insight}
           userLevel={userLevel}
           onChangeUserLevel={onChangeUserLevel}
+          onClassified={() => setInsightRefresh((n) => n + 1)}
         />
 
         {/* Search Bar */}
@@ -710,14 +721,18 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                         <div className="flex-1">
                           {isActive ? (
                             <div className="bg-amber-100/90 text-amber-950 font-bold p-3.5 rounded-lg border border-amber-300 shadow-sm leading-relaxed">
-                              <p className="transcript-en text-amber-950 font-medium">{pair.en}</p>
+                              <p className="transcript-en text-amber-950 font-medium">
+                                <MarkedText text={pair.en} unknown={unknownSet} />
+                              </p>
                               <div className="mt-2 inline-flex items-center space-x-1.5 px-2.5 py-0.5 bg-amber-600 text-white text-xs font-bold rounded-full uppercase tracking-wider shadow-sm">
                                 <Volume2 className="w-3.5 h-3.5" />
                                 <span>Canlı Konuşuluyor{timeTag ? ` (${timeTag})` : ''}</span>
                               </div>
                             </div>
                           ) : (
-                            <p className="transcript-en text-slate-900">{pair.en}</p>
+                            <p className="transcript-en text-slate-900">
+                              <MarkedText text={pair.en} unknown={unknownSet} />
+                            </p>
                           )}
                         </div>
                       </div>
