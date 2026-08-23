@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Sparkles, HelpCircle, Edit3, Mic, CheckCircle2, Award, Ear, Volume2, EyeOff, Headphones, Layers, ListX } from 'lucide-react';
+import { BookOpen, Sparkles, HelpCircle, Edit3, Mic, CheckCircle2, Award, Ear, Volume2, EyeOff, Headphones, Layers, ListX, CalendarRange } from 'lucide-react';
 
 export interface LayerTab {
   id: number;
@@ -80,6 +80,12 @@ export const LAYER_TABS: LayerTab[] = [
     label: 'Yanlışlar Defteri',
     subLabel: 'Hatalı Sorular',
     icon: <ListX className="w-4 h-4" />
+  },
+  {
+    id: 12,
+    label: 'Karne',
+    subLabel: 'Çalışma Takvimi',
+    icon: <CalendarRange className="w-4 h-4" />
   }
 ];
 
@@ -93,9 +99,13 @@ export const LayerNavigation: React.FC<LayerNavigationProps> = ({
 }) => {
   return (
     <nav aria-label="Katmanlar" className="border-y border-[var(--hairline)] bg-[var(--paper)]">
-      {/* Kaydırma yok: her sekme min-w-0 flex-1 ile eşit pay alır, taşan metin
-          tek satırda üç nokta ile kısaltılır (truncate) — hep viewport'a sığar. */}
-      <div className="flex">
+      {/* Geniş ekranda kaydırma yok: her sekme min-w-0 flex-1 ile eşit pay
+          alır, taşan metin üç nokta ile kısaltılır.
+
+          Telefonda ise 12 sekme eşit bölününce her biri ~31px kalıyor ve
+          parmakla doğru sekmeye basmak mümkün olmuyor. Dar ekranda sekmeler
+          en az 64px alır ve şerit kendi içinde yatay kayar. */}
+      <div className="flex overflow-x-auto sm:overflow-x-visible scrollbar-hide">
         {LAYER_TABS.map((tab) => {
           const isActive = activeLayer === tab.id;
           const isCompleted = completedLayers.includes(tab.id);
@@ -107,7 +117,7 @@ export const LayerNavigation: React.FC<LayerNavigationProps> = ({
               onClick={() => onSelectLayer(tab.id)}
               aria-current={isActive ? 'step' : undefined}
               title={`${tab.label.replace(/^\d+\.\s*/, '')} — ${tab.subLabel}`}
-              className={`group relative min-w-0 flex-1 text-left px-1.5 sm:px-2.5 py-2.5 border-r border-[var(--hairline)] last:border-r-0 transition-colors cursor-pointer ${
+              className={`group relative min-w-16 sm:min-w-0 shrink-0 sm:shrink flex-1 text-left px-1.5 sm:px-2.5 py-2.5 border-r border-[var(--hairline)] last:border-r-0 transition-colors cursor-pointer ${
                 isActive
                   ? 'bg-[var(--paper-2)]'
                   : 'bg-transparent hover:bg-[var(--paper-3)]'

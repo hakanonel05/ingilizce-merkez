@@ -16,6 +16,10 @@ import { Layer4WritingEvaluation } from './components/layers/Layer4WritingEvalua
 import { Layer5SpeakingSimulation } from './components/layers/Layer5SpeakingSimulation';
 import { ProgressDashboard } from './components/ProgressDashboard';
 import { MistakesNotebook } from './components/MistakesNotebook';
+import { Dashboard } from '../../../shared/analytics/Dashboard';
+import { useActivityTimer } from '../../../shared/analytics/useActivityTimer';
+import { LAYER_SKILLS } from '../../../shared/analytics/collect';
+import { logActivity } from '../../../shared/analytics/activityLog';
 import { MethodologyGuideModal } from './components/MethodologyGuideModal';
 import { GrammarCoachDrawer } from './components/GrammarCoachDrawer';
 import { EditLessonModal } from './components/EditLessonModal';
@@ -239,6 +243,24 @@ export default function App() {
   };
 
   // Complete Layer handler
+  /**
+   * SURE OLCUMU.
+   *
+   * Her katman bilesenine ayri ayri kanca eklemek yerine tek yerden:
+   * aktif katman numarasi hangi beceriye karsilik geliyorsa (LAYER_SKILLS)
+   * sure ona yazilir. Kelime Kartlari sekmesi (10) 'vocab' sayilir.
+   * Ders secili degilken ya da pano/defter sekmelerindeyken olcum durur —
+   * orada calisma degil, bakinma yapiliyor.
+   */
+  const timedSkill = activeLayer === 10 ? 'vocab' : LAYER_SKILLS[activeLayer];
+  useActivityTimer(
+    'katmanli',
+    timedSkill || 'reading',
+    activeLesson?.id,
+    activeLesson?.title,
+    !!timedSkill && (activeLayer === 10 || !!activeLesson)
+  );
+
   const handleCompleteLayer = (layerNum: number) => {
     setLessons((prev) =>
       prev.map((l) => {
@@ -252,6 +274,16 @@ export default function App() {
 
     // Herhangi bir katman tamamlandiginda bugun "calisilmis" sayilir
     recordStudyToday();
+
+    // Karne icin: hangi katman NE ZAMAN bitti. Eski kayitlarda yalnizca
+    // "bitti" bilgisi vardi, tarihi hicbir yerde tutulmuyordu.
+    void logActivity({
+      app: 'katmanli',
+      skill: LAYER_SKILLS[layerNum] || 'reading',
+      kind: 'complete',
+      refId: activeLesson.id,
+      refTitle: activeLesson.title,
+    });
 
     // Çekirdek 7 katman içinde otomatik ilerle. 8 ekstra çalışma olduğu için
     // oradan otomatik geçiş yapılmıyor.
@@ -811,6 +843,8 @@ async function buildLessonData(
                   }}
                 />
               )}
+
+              {activeLayer === 12 && <Dashboard />}
             </>
           )}
         </div>

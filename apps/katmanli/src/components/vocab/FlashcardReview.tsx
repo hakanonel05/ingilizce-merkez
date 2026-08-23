@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { VocabCard, putCard, isNewCard } from '../../lib/vocabStore';
 import { POS_LABELS_TR } from '../../../../../shared/vocab/pos';
+import { logActivity } from '../../../../../shared/analytics/activityLog';
 import { bumpDailyCounter } from '../../lib/vocabSettings';
 import { FsrsScheduler, Rating, CardState, formatInterval } from '../../lib/fsrs';
 import { Volume2, RotateCcw, Check, Clock, PartyPopper, Pause, Play } from 'lucide-react';
@@ -99,6 +100,19 @@ export const FlashcardReview: React.FC<Props> = ({
 
     // Günlük sayaç: kart ilk kez çalışıldıysa "yeni", değilse "tekrar"
     bumpDailyCounter(wasNew ? 'new' : 'review');
+
+    // Karne için: günlük sayaç yalnızca BUGÜNÜ tutuyor ve gece sıfırlanıyor;
+    // takvimin geçmişi görebilmesi için tekrar ayrıca olay olarak yazılır.
+    void logActivity({
+      app: 'katmanli',
+      skill: 'vocab',
+      kind: 'review',
+      count: 1,
+      correct: rating === Rating.Again ? 0 : 1,
+      total: 1,
+      refId: current.id,
+      refTitle: current.front,
+    });
 
     setReviewedCount((c) => c + 1);
     if (rating === Rating.Again) setAgainCount((c) => c + 1);

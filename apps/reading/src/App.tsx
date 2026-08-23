@@ -12,6 +12,9 @@ import MistakesNotebook from './components/MistakesNotebook';
 import ExamSimulator from './components/ExamSimulator';
 import AppSwitcher from './AppSwitcher';
 import AuthScreen from './components/AuthScreen';
+import { Dashboard as StudyReport } from '../../../shared/analytics/Dashboard';
+import { useActivityTimer } from '../../../shared/analytics/useActivityTimer';
+import { Skill } from '../../../shared/analytics/activityLog';
 import { supabase } from './lib/supabase';
 import { getLocalFallbackPassage } from '../serverLocalPassage';
 import {
@@ -29,7 +32,8 @@ import {
   LogOut,
   CloudCog,
   BookX,
-  Timer
+  Timer,
+  CalendarRange
 } from 'lucide-react';
 
 const LOCAL_STORAGE_KEY = 'english_reading_trainer_progress_v1';
@@ -62,7 +66,7 @@ export default function App() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'passages' | 'trainer' | 'list' | 'workbook' | 'mistakes' | 'exam'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'passages' | 'trainer' | 'list' | 'workbook' | 'mistakes' | 'exam' | 'report'>('dashboard');
 
   // PWA kurulum prompt'u
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
@@ -133,6 +137,31 @@ export default function App() {
     input.click();
   };
   const [selectedPassageId, setSelectedPassageId] = useState<number | null>(null);
+
+  /**
+   * SURE OLCUMU (karne icin).
+   *
+   * Bir parca acikken okuma, kelime ekranlarindayken kelime, sinav
+   * simulasyonunda sinav sayilir. Liste/pano ekranlarinda olcum yapilmaz:
+   * orada calisilmiyor, bakiniliyor. Ayrintili aciklama:
+   * shared/analytics/activityLog.ts
+   */
+  const timedSkill: Skill | null =
+    selectedPassageId !== null
+      ? 'reading'
+      : activeTab === 'trainer' || activeTab === 'workbook' || activeTab === 'list'
+        ? 'vocab'
+        : activeTab === 'exam'
+          ? 'exam'
+          : null;
+
+  useActivityTimer(
+    'reading',
+    timedSkill || 'reading',
+    selectedPassageId !== null ? `passage:${selectedPassageId}` : activeTab,
+    undefined,
+    timedSkill !== null
+  );
 
   // Initialize passages with predefined offline data + any custom generated passages from cache
   const [passages, setPassages] = useState<Passage[]>(() => {
@@ -652,7 +681,7 @@ export default function App() {
 
         {/* Navigation Tab Menu Grid (Only when not viewing specific Passage card) */}
         {selectedPassageId === null && (
-          <nav className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3 mb-10">
+          <nav className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-3 mb-10">
             {[
               { id: 'dashboard', label: 'Gösterge Paneli', subtitle: 'İSTATİSTİK & İLERLEME', icon: LayoutDashboard },
               { id: 'passages', label: 'Okuma Parçaları', subtitle: 'KÜTÜPHANE METİNLERİ', icon: BookOpen },
@@ -660,7 +689,8 @@ export default function App() {
               { id: 'list', label: 'Kelime Haznesi', subtitle: 'KÜLLİYAT SÖZLÜĞÜ', icon: BookMarked },
               { id: 'workbook', label: 'Kelime Kitabı', subtitle: 'TABLOLAR & TESTLER', icon: BookText },
               { id: 'mistakes', label: 'Yanlışlar Defteri', subtitle: `${progress.mistakes.length} SORU`, icon: BookX },
-              { id: 'exam', label: 'Sınav Simülasyonu', subtitle: 'DENEME SINAVI', icon: Timer }
+              { id: 'exam', label: 'Sınav Simülasyonu', subtitle: 'DENEME SINAVI', icon: Timer },
+              { id: 'report', label: 'Karne', subtitle: 'ÇALIŞMA TAKVİMİ', icon: CalendarRange }
             ].map(tab => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -773,6 +803,8 @@ export default function App() {
                   onSelectPassage={handleSelectPassageDirectly}
                 />
               )}
+
+              {activeTab === 'report' && <StudyReport />}
             </>
           )}
         </div>

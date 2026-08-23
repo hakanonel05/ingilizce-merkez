@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* Tailwind v4 sinif taramasini Vite kokunden (apps/<uygulama>) baslatir;
+   shared/ o agacin disinda kaldigi icin YALNIZCA orada gecen siniflar
+   uretilmiyordu. Ortak bilesenler (ornegin analytics/Dashboard.tsx)
+   sessizce yari stilsiz kaliyordu: overflow-x-auto uretilmedigi icin
+   takvim serididen tasip sayfayi yatay kaydirmisti. */
+@source "../../../shared";
+
 /* =====================================================================
    KATMANLI İNGİLİZCE — TASARIM SİSTEMİ
 
