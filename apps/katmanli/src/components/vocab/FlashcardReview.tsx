@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { VocabCard, putCard, isNewCard } from '../../lib/vocabStore';
+import { POS_LABELS_TR } from '../../../../../shared/vocab/pos';
 import { bumpDailyCounter } from '../../lib/vocabSettings';
 import { FsrsScheduler, Rating, CardState, formatInterval } from '../../lib/fsrs';
 import { Volume2, RotateCcw, Check, Clock, PartyPopper, Pause, Play } from 'lucide-react';
@@ -244,6 +245,11 @@ export const FlashcardReview: React.FC<Props> = ({
             <span className="px-2 py-0.5 bg-slate-200 text-slate-700 font-semibold rounded">
               {KIND_LABEL[current.kind] || current.kind}
             </span>
+            {current.pos && (
+              <span className="px-2 py-0.5 bg-violet-100 text-violet-800 font-semibold rounded">
+                {POS_LABELS_TR[current.pos]}
+              </span>
+            )}
             {current.state !== CardState.Review && (
               <span className="px-2 py-0.5 bg-amber-100 text-amber-800 font-semibold rounded">
                 {current.state === CardState.Learning ? 'Öğreniliyor' : 'Yeniden'}

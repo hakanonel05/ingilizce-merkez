@@ -1,7 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { buildCard, addCardsIfMissing, CardKind, CardLevel } from '../../lib/vocabStore';
+import {
+  resolveCardMeta,
+  LEVEL_SOURCE_LABELS,
+  LevelSource,
+} from '../../../../../shared/vocab/autoClassify';
+import { PartOfSpeech, POS_ORDER, POS_LABELS_TR } from '../../../../../shared/vocab/pos';
+import { CEFR_ORDER } from '../../../../../shared/vocab/cefr';
 import { apiFetch } from '../../lib/userKeys';
-import { Plus, Loader2, Check, X, Layers } from 'lucide-react';
+import { Plus, Loader2, Check, X, Layers, Wand2 } from 'lucide-react';
 
 interface Props {
   /** Seçimin dinleneceği alan. */
@@ -18,6 +25,10 @@ interface Draft {
   ipa?: string;
   kind: CardKind;
   level: CardLevel;
+  /** Söz türü: isim / fiil / sıfat... Otomatik belirlenir. */
+  pos: PartOfSpeech;
+  /** Seviyenin nereden geldiği — kullanıcıya "neden bu seviye" diye göstermek için. */
+  levelSource: LevelSource;
   exampleEn?: string;
   exampleTr?: string;
   contextEn?: string;
@@ -118,12 +129,25 @@ export const SelectionToCard: React.FC<Props> = ({
       }
       if (!res.ok) throw new Error(data.error || 'Kelime bilgisi alınamadı.');
 
+      const front = data.front || term;
+      // Seviye/tür/söz türü OTOMATİK: önce yerel CEFR listesi, o bilmiyorsa
+      // yapay zekanın yanıtı, o da yoksa biçimsel tahmin. Eskiden burada
+      // sabit 'B2' vardı ve her kart B2 olarak açılıyordu.
+      const meta = resolveCardMeta(front, {
+        level: data.level,
+        kind: data.kind,
+        pos: data.pos,
+        context: context || data.exampleEn,
+      });
+
       setDraft({
-        front: data.front || term,
+        front,
         back: data.back || '',
         ipa: data.ipa,
-        kind: data.kind || 'word',
-        level: data.level || 'B2',
+        kind: meta.kind,
+        level: meta.level,
+        pos: meta.pos,
+        levelSource: meta.levelSource,
         exampleEn: data.exampleEn,
         exampleTr: data.exampleTr,
         contextEn: context,
@@ -147,6 +171,7 @@ export const SelectionToCard: React.FC<Props> = ({
         ipa: draft.ipa,
         kind: draft.kind,
         level: draft.level,
+        pos: draft.pos,
         exampleEn: draft.exampleEn,
         exampleTr: draft.exampleTr,
         contextEn: draft.contextEn,
@@ -234,16 +259,31 @@ export const SelectionToCard: React.FC<Props> = ({
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               <div className="space-y-1">
                 <label className="text-[11px] font-bold text-slate-600">Seviye</label>
                 <select
                   value={draft.level}
-                  onChange={(e) => setDraft({ ...draft, level: e.target.value as CardLevel })}
-                  className="w-full px-2.5 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold cursor-pointer"
+                  onChange={(e) =>
+                    setDraft({ ...draft, level: e.target.value as CardLevel, levelSource: 'ai' })
+                  }
+                  className="w-full px-2 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold cursor-pointer"
                 >
-                  {(['A2', 'B1', 'B2', 'C1', 'C2'] as CardLevel[]).map((l) => (
+                  {CEFR_ORDER.map((l) => (
                     <option key={l} value={l}>{l}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold text-slate-600">Söz türü</label>
+                <select
+                  value={draft.pos}
+                  onChange={(e) => setDraft({ ...draft, pos: e.target.value as PartOfSpeech })}
+                  className="w-full px-2 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold cursor-pointer"
+                >
+                  {POS_ORDER.map((p) => (
+                    <option key={p} value={p}>{POS_LABELS_TR[p]}</option>
                   ))}
                 </select>
               </div>
@@ -253,7 +293,7 @@ export const SelectionToCard: React.FC<Props> = ({
                 <select
                   value={draft.kind}
                   onChange={(e) => setDraft({ ...draft, kind: e.target.value as CardKind })}
-                  className="w-full px-2.5 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold cursor-pointer"
+                  className="w-full px-2 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold cursor-pointer"
                 >
                   <option value="word">Kelime</option>
                   <option value="phrasal_verb">Phrasal Verb</option>
@@ -263,6 +303,16 @@ export const SelectionToCard: React.FC<Props> = ({
                 </select>
               </div>
             </div>
+
+            {/* Alanların elle doldurulması gerekmediğini gösterir */}
+            <p className="flex items-start space-x-1.5 text-[10px] text-teal-800 bg-teal-50 border border-teal-100 rounded px-2 py-1.5">
+              <Wand2 className="w-3 h-3 shrink-0 mt-0.5" />
+              <span>
+                Seviye, söz türü ve tür otomatik belirlendi
+                {draft.levelSource !== 'ai' && ` (seviye: ${LEVEL_SOURCE_LABELS[draft.levelSource]})`}
+                . Yanlışsa değiştirebilirsiniz.
+              </span>
+            </p>
 
             {draft.exampleEn && (
               <div className="bg-slate-50 border border-slate-200 rounded-lg p-2.5 space-y-0.5">

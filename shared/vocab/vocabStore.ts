@@ -1,4 +1,7 @@
 import { FsrsCardFields, CardState, createNewCard } from './fsrs';
+import { CefrLevel } from './cefr';
+import { CardKindName, resolveCardMeta, localLevelOf } from './autoClassify';
+import { PartOfSpeech } from './pos';
 
 /**
  * Kelime kartları için IndexedDB deposu.
@@ -15,8 +18,13 @@ const DB_NAME = 'layered_learning_vocab';
 const DB_VERSION = 1;
 const STORE = 'cards';
 
-export type CardLevel = 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
-export type CardKind = 'word' | 'phrasal_verb' | 'collocation' | 'idiom' | 'expression';
+/**
+ * A1 dahil TUM CEFR basamaklari. Eskiden A1 yoktu ve reading tarafindaki
+ * A1 kelimeler A2'ye yuvarlaniyordu; artik kelime listesinde ne yaziyorsa
+ * kart da onu gosteriyor.
+ */
+export type CardLevel = CefrLevel;
+export type CardKind = CardKindName;
 
 export interface VocabCard extends FsrsCardFields {
   id: string;
@@ -29,6 +37,11 @@ export interface VocabCard extends FsrsCardFields {
   ipa?: string;
   kind: CardKind;
   level: CardLevel;
+  /**
+   * Söz türü (isim / fiil / sıfat ...). Kart eklenirken otomatik belirlenir;
+   * eski kartlarda bulunmayabilir, o yüzden isteğe bağlı.
+   */
+  pos?: PartOfSpeech;
   /** İfadenin geçtiği örnek cümle. */
   exampleEn?: string;
   exampleTr?: string;
@@ -94,27 +107,49 @@ export function makeCardId(lessonId: string, front: string): string {
   return `${lessonId}::${front.toLowerCase().trim()}`;
 }
 
+/**
+ * Kart olusturur.
+ *
+ * SEVIYE / TUR / SOZ TURU alanlari verilmezse resolveCardMeta ile
+ * OTOMATIK belirlenir (bkz. autoClassify.ts): once yerel CEFR listesi,
+ * sonra yapay zekanin onerisi, sonra bicimsel tahmin. Eskiden burada
+ * sabit `level: 'B2'` vardi ve alani doldurmayan her cagri kartlari B2
+ * yapiyordu — destedeki seviye bilgisi bu yuzden anlamsizdi.
+ *
+ * `level`/`kind`/`pos` alanlarina yapay zeka yaniti oldugu gibi
+ * verilebilir: dogrulama ve gerekirse duzeltme resolveCardMeta icinde.
+ */
 export function buildCard(input: {
   lessonId: string;
   lessonTitle: string;
   front: string;
   back: string;
   ipa?: string;
-  kind?: CardKind;
-  level?: CardLevel;
+  kind?: CardKind | string;
+  level?: CardLevel | string;
+  pos?: PartOfSpeech | string;
   exampleEn?: string;
   exampleTr?: string;
   contextEn?: string;
 }): VocabCard {
+  const front = input.front.trim();
+  const meta = resolveCardMeta(front, {
+    level: input.level,
+    kind: input.kind,
+    pos: input.pos,
+    context: input.contextEn || input.exampleEn,
+  });
+
   return {
     id: makeCardId(input.lessonId, input.front),
     lessonId: input.lessonId,
     lessonTitle: input.lessonTitle,
-    front: input.front.trim(),
+    front,
     back: input.back.trim(),
     ipa: input.ipa,
-    kind: input.kind || 'word',
-    level: input.level || 'B2',
+    kind: meta.kind,
+    level: meta.level,
+    pos: meta.pos,
     exampleEn: input.exampleEn,
     exampleTr: input.exampleTr,
     contextEn: input.contextEn,
@@ -154,6 +189,90 @@ export async function putCard(card: VocabCard): Promise<void> {
  */
 export async function putCardSilently(card: VocabCard): Promise<void> {
   await tx('readwrite', (s) => s.put(card));
+}
+
+/**
+ * Birden fazla kartı TEK işlemde günceller.
+ * Her kart için ayrı bağlantı açmak yüzlerce kartta çok yavaş; toplu
+ * yeniden sınıflandırma bunu kullanır.
+ */
+export async function putCardsBulk(cards: VocabCard[]): Promise<void> {
+  if (cards.length === 0) return;
+  const db = await openDb();
+  await new Promise<void>((resolve, reject) => {
+    const t = db.transaction(STORE, 'readwrite');
+    const store = t.objectStore(STORE);
+    const now = Date.now();
+    // updatedAt damgası senkronizasyon için şart: "son yazan kazanır"
+    // karşılaştırması bu alana bakıyor (bkz. syncClient).
+    for (const card of cards) store.put({ ...card, updatedAt: now } as any);
+    t.oncomplete = () => { db.close(); resolve(); };
+    t.onerror = () => { db.close(); reject(t.error); };
+  });
+  notifyChanged();
+}
+
+export interface ReclassifyResult {
+  /** Bakılan kart sayısı. */
+  scanned: number;
+  /** Seviyesi değişen kart sayısı. */
+  levelUpdated: number;
+  /** Türü düzeltilen kart sayısı (ör. "word" -> "phrasal_verb"). */
+  kindUpdated: number;
+  /** Söz türü ilk kez yazılan veya değişen kart sayısı. */
+  posUpdated: number;
+}
+
+/**
+ * MEVCUT kartları yerel listelere göre yeniden sınıflandırır.
+ *
+ * Neden gerekli: bu özellik gelmeden önce eklenen kartların hepsi "B2" ve
+ * söz türü olmadan kaydedildi. Ağ isteği yapılmaz — yalnızca
+ * cefrWords.json / phrasalLevels.json kullanılır, saniyeler sürer.
+ *
+ * SEVIYE yalnızca yerel listede KESIN karşılığı olan ifadelerde değişir
+ * (word-list / phrase-list). Listede olmayan kelimelerde eski seviye
+ * korunur: orada tek bilgi kaynağı zamanında yapay zekadan gelen yanıttı,
+ * onu tahminle bozmanın anlamı yok.
+ */
+export async function reclassifyAllCards(): Promise<ReclassifyResult> {
+  const cards = await getAllCards();
+  const result: ReclassifyResult = {
+    scanned: cards.length,
+    levelUpdated: 0,
+    kindUpdated: 0,
+    posUpdated: 0,
+  };
+
+  const changed: VocabCard[] = [];
+
+  for (const card of cards) {
+    const meta = resolveCardMeta(card.front, {
+      // Eski değerler yapay zeka önerisi yerine geçer: liste bilmiyorsa korunur
+      level: card.level,
+      kind: card.kind,
+      pos: card.pos,
+      context: card.contextEn || card.exampleEn,
+    });
+
+    const local = localLevelOf(card.front);
+    const nextLevel =
+      local && local.source !== 'phrase-parts' ? local.level : card.level;
+
+    const levelChanged = nextLevel !== card.level;
+    const kindChanged = meta.kind !== card.kind;
+    const posChanged = meta.pos !== card.pos;
+    if (!levelChanged && !kindChanged && !posChanged) continue;
+
+    if (levelChanged) result.levelUpdated++;
+    if (kindChanged) result.kindUpdated++;
+    if (posChanged) result.posUpdated++;
+
+    changed.push({ ...card, level: nextLevel, kind: meta.kind, pos: meta.pos });
+  }
+
+  await putCardsBulk(changed);
+  return result;
 }
 
 /**

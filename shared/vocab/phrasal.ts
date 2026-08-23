@@ -45,6 +45,21 @@ export function phraseLevelOf(phrase: string): CefrLevel | null {
   return level && CEFR_ORDER.includes(level as CefrLevel) ? (level as CefrLevel) : null;
 }
 
+/**
+ * Verilen ifade bilinen bir phrasal verb mi?
+ *
+ * Kart eklerken turu ("phrasal_verb") yapay zekaya sormadan belirlemek
+ * icin. Ilk kelime cekimli olabilir ("came across"), o yuzden metin
+ * icinde arama yapan matchAt ile ayni kok indirgeme uygulanir.
+ */
+export function isPhrasalVerb(term: string): boolean {
+  const words = term.trim().toLowerCase().replace(/\s+/g, ' ').split(' ');
+  if (words.length < 2 || words.length > MAX_PHRASE_WORDS) return false;
+
+  const tail = words.slice(1).join(' ');
+  return verbBaseForms(words[0]).some((base) => PHRASES.has(`${base} ${tail}`));
+}
+
 /** En uzun kalip 4 kelime; oradan geriye dogru denenir. */
 const MAX_PHRASE_WORDS = 4;
 

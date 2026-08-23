@@ -2,7 +2,6 @@ import { VocabularyWord, CEFRLevel } from '../types';
 import {
   VocabCard,
   CardKind,
-  CardLevel,
   buildCard,
   addCardsIfMissing,
   getAllCards,
@@ -26,10 +25,6 @@ function mapPartOfSpeechToKind(partOfSpeech: string): CardKind {
   return partOfSpeech === 'phr. v' ? 'phrasal_verb' : 'word';
 }
 
-function mapCefrToCardLevel(cefr: CEFRLevel): CardLevel {
-  return cefr === 'A1' ? 'A2' : cefr;
-}
-
 export function addWordToVocabBank(
   word: VocabularyWord,
   source: { lessonId: string; lessonTitle: string },
@@ -41,7 +36,12 @@ export function addWordToVocabBank(
     front: word.term,
     back: word.meaning,
     kind: mapPartOfSpeechToKind(word.partOfSpeech),
-    level: mapCefrToCardLevel(cefr),
+    // Kart seviyesi artik A1'i de tasiyabiliyor; eskiden A1 kelimeler
+    // A2'ye yuvarlaniyordu cunku CardLevel'da A1 yoktu.
+    level: cefr,
+    // Reading verisinde soz turu ("n", "v", "adj") zaten var; buildCard
+    // bunu normalize eder, bilinmeyeni kendi tahmin eder.
+    pos: word.partOfSpeech,
     exampleEn: word.exampleSentence,
   });
   return addCardsIfMissing([card]);

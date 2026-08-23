@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { VideoLesson } from '../../types';
 import {
   VocabCard,
@@ -12,8 +12,16 @@ import {
   putCard,
   computeStats,
   selectDueCards,
+  reclassifyAllCards,
   VOCAB_CHANGED_EVENT,
 } from '../../lib/vocabStore';
+import {
+  resolveCardMeta,
+  LEVEL_SOURCE_LABELS,
+  LevelSource,
+} from '../../../../../shared/vocab/autoClassify';
+import { PartOfSpeech, POS_ORDER, POS_LABELS_TR } from '../../../../../shared/vocab/pos';
+import { CEFR_ORDER } from '../../../../../shared/vocab/cefr';
 import { CardState } from '../../lib/fsrs';
 import { apiFetch } from '../../lib/userKeys';
 import {
@@ -24,6 +32,7 @@ import { FlashcardReview } from './FlashcardReview';
 import {
   Layers, Sparkles, Loader2, Search, Trash2, Play, BookMarked,
   Filter, EyeOff, Eye, Download, AlertTriangle, Settings2, PlusCircle, X, Check,
+  Wand2, RefreshCw,
 } from 'lucide-react';
 
 interface Props {
@@ -33,7 +42,8 @@ interface Props {
 
 type Tab = 'lesson' | 'all' | 'study';
 
-const LEVELS: CardLevel[] = ['A2', 'B1', 'B2', 'C1', 'C2'];
+/** A1 dahil tum CEFR basamaklari; kelime listesi A1 kelimeleri de iceriyor. */
+const LEVELS: CardLevel[] = [...CEFR_ORDER];
 const KINDS: { value: CardKind; label: string }[] = [
   { value: 'word', label: 'Kelime' },
   { value: 'phrasal_verb', label: 'Phrasal Verb' },
@@ -53,6 +63,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
   const [search, setSearch] = useState('');
   const [levelFilter, setLevelFilter] = useState<CardLevel | 'all'>('all');
   const [kindFilter, setKindFilter] = useState<CardKind | 'all'>('all');
+  const [posFilter, setPosFilter] = useState<PartOfSpeech | 'all'>('all');
   const [lessonFilter, setLessonFilter] = useState<string>('all');
   const [studyScope, setStudyScope] = useState<'all' | 'lesson'>('all');
 
@@ -62,12 +73,20 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
   const [showManualAdd, setShowManualAdd] = useState(false);
   const [manualFront, setManualFront] = useState('');
   const [manualBack, setManualBack] = useState('');
-  const [manualLevel, setManualLevel] = useState<CardLevel>('B2');
+  const [manualLevel, setManualLevel] = useState<CardLevel>('B1');
   const [manualKind, setManualKind] = useState<CardKind>('word');
+  const [manualPos, setManualPos] = useState<PartOfSpeech>('noun');
+  const [manualLevelSource, setManualLevelSource] = useState<LevelSource | null>(null);
   const [manualExample, setManualExample] = useState('');
   const [manualBusy, setManualBusy] = useState(false);
   const [manualError, setManualError] = useState<string | null>(null);
   const [daily, setDaily] = useState(() => getDailyCounter());
+  const [reclassifyBusy, setReclassifyBusy] = useState(false);
+  const [reclassifyInfo, setReclassifyInfo] = useState<string | null>(null);
+  /** En son otomatik çözümlenen ifade; aynı kelime için tekrar tekrar istek atılmasın. */
+  const resolvedTerm = useRef('');
+  /** Kutuda o an yazan ifade; geç gelen yanıt yazmaya devam eden kullanıcıyı bozmasın. */
+  const typedTerm = useRef('');
 
   const updateSettings = (patch: Partial<VocabSettings>) => {
     const next = { ...settings, ...patch };
@@ -75,16 +94,41 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
     saveVocabSettings(next);
   };
 
-  /** Yapay zekadan anlamı doldurmasını iste. */
-  const autoFillManual = async () => {
-    if (!manualFront.trim()) return;
+  /**
+   * Seviye / tür / söz türünü YEREL verilerden anında belirler.
+   * Ağ beklenmeden doğru değerler görünsün diye ayrı tutuluyor; yapay zeka
+   * yanıtı gelince aynı fonksiyon ipuçlarıyla tekrar çağrılır.
+   */
+  const applyManualMeta = (term: string, hints: Record<string, unknown> = {}) => {
+    const meta = resolveCardMeta(term, hints as any);
+    setManualLevel(meta.level);
+    setManualKind(meta.kind);
+    setManualPos(meta.pos);
+    setManualLevelSource(meta.levelSource);
+  };
+
+  /**
+   * Bir ifade için kartın TAMAMINI doldurur: anlam, örnek, IPA, seviye,
+   * tür ve söz türü. Kullanıcı kelimeyi yazıp beklediğinde kendiliğinden
+   * çalışır (aşağıdaki useEffect); "Yenile" düğmesi elle tetikler.
+   *
+   * @param force true ise kullanıcının yazdığı anlam/örnek de güncellenir.
+   */
+  const resolveManualCard = async (rawTerm: string, force = false) => {
+    const term = rawTerm.trim();
+    if (!term) return;
+
+    resolvedTerm.current = term.toLowerCase();
+    // Önce ağsız sonuç: liste biliyorsa seviye anında doğru görünür
+    applyManualMeta(term);
+
     setManualBusy(true);
-    setManualError(null);
+    if (force) setManualError(null);
     try {
       const res = await apiFetch('/api/define-word', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ word: manualFront.trim() }),
+        body: JSON.stringify({ word: term }),
       });
       const raw = await res.text();
       let data: any;
@@ -95,15 +139,66 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
       }
       if (!res.ok) throw new Error(data.error || 'Anlam getirilemedi.');
 
-      setManualFront(data.front || manualFront);
-      setManualBack(data.back || '');
-      if (data.level) setManualLevel(data.level);
-      if (data.kind) setManualKind(data.kind);
-      if (data.exampleEn) setManualExample(data.exampleEn);
+      // Yanıt beklerken kullanıcı yazmaya devam ettiyse sonucu uygulama:
+      // yarım kelime için gelen cevap kutudaki metni bozardı.
+      if (!force && typedTerm.current !== term.toLowerCase()) return;
+
+      const front = data.front || term;
+      resolvedTerm.current = front.toLowerCase();
+      typedTerm.current = front.toLowerCase();
+      setManualFront(front);
+      // Kullanıcı anlamı kendi yazdıysa üzerine yazma
+      setManualBack((prev) => (force || !prev.trim() ? data.back || prev : prev));
+      setManualExample((prev) => (force || !prev.trim() ? data.exampleEn || prev : prev));
+      applyManualMeta(front, {
+        level: data.level,
+        kind: data.kind,
+        pos: data.pos,
+        context: data.exampleEn,
+      });
     } catch (err: any) {
-      setManualError(err?.message || 'Anlam getirilemedi.');
+      // Sessiz (otomatik) denemede hata gösterilmez: yerel liste zaten
+      // seviyeyi ve söz türünü doldurdu, kullanıcı anlamı elle yazabilir.
+      if (force) setManualError(err?.message || 'Anlam getirilemedi.');
     } finally {
       setManualBusy(false);
+    }
+  };
+
+  /**
+   * Kullanıcı yazmayı bıraktıktan kısa süre sonra kartı kendiliğinden
+   * doldurur. "Doldur" düğmesine basmak gerekmez.
+   */
+  useEffect(() => {
+    if (!showManualAdd) return;
+    const term = manualFront.trim();
+    typedTerm.current = term.toLowerCase();
+    if (term.length < 2) return;
+    if (term.toLowerCase() === resolvedTerm.current) return;
+
+    // 1 saniye: kullanıcı kelimeyi bitirmeden yarım metinle istek atılmasın
+    const timer = setTimeout(() => { void resolveManualCard(term); }, 1000);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [manualFront, showManualAdd]);
+
+  /** Mevcut kartların seviyesini/türünü yerel listelere göre tazeler. */
+  const handleReclassify = async () => {
+    setReclassifyBusy(true);
+    setReclassifyInfo(null);
+    try {
+      const r = await reclassifyAllCards();
+      await refresh();
+      setReclassifyInfo(
+        r.levelUpdated + r.kindUpdated + r.posUpdated === 0
+          ? `${r.scanned} kart tarandı, hepsi zaten güncel.`
+          : `${r.scanned} kart tarandı: ${r.levelUpdated} seviye, ${r.kindUpdated} tür, ` +
+            `${r.posUpdated} söz türü güncellendi.`
+      );
+    } catch (err: any) {
+      setReclassifyInfo(err?.message || 'Kartlar yeniden sınıflandırılamadı.');
+    } finally {
+      setReclassifyBusy(false);
     }
   };
 
@@ -117,6 +212,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
         back: manualBack.trim(),
         kind: manualKind,
         level: manualLevel,
+        pos: manualPos,
         exampleEn: manualExample.trim() || undefined,
       });
       await addCardsIfMissing([card]);
@@ -124,6 +220,8 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
       setManualFront('');
       setManualBack('');
       setManualExample('');
+      setManualLevelSource(null);
+      resolvedTerm.current = '';
       setShowManualAdd(false);
     } catch (err: any) {
       setManualError(err?.message || 'Kart eklenemedi.');
@@ -199,7 +297,10 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
           back: it.back,
           ipa: it.ipa,
           kind: it.kind,
+          // Seviye/tur/soz turu buildCard icinde dogrulanir; model bos
+          // birakirsa yerel CEFR listesinden belirlenir.
           level: it.level,
+          pos: it.pos,
           exampleEn: it.exampleEn,
           exampleTr: it.exampleTr,
           contextEn: it.contextEn,
@@ -226,6 +327,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
     return allCards
       .filter((c) => (levelFilter === 'all' ? true : c.level === levelFilter))
       .filter((c) => (kindFilter === 'all' ? true : c.kind === kindFilter))
+      .filter((c) => (posFilter === 'all' ? true : c.pos === posFilter))
       .filter((c) => (lessonFilter === 'all' ? true : c.lessonId === lessonFilter))
       .filter(
         (c) =>
@@ -234,7 +336,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
           c.back.toLowerCase().includes(term)
       )
       .sort((a, b) => a.due - b.due);
-  }, [allCards, search, levelFilter, kindFilter, lessonFilter]);
+  }, [allCards, search, levelFilter, kindFilter, posFilter, lessonFilter]);
 
   const studyPool = useMemo(
     () => (studyScope === 'lesson' ? lessonCards : allCards),
@@ -271,11 +373,11 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
   const exportCsv = () => {
     // Anki'ye alınabilecek basit CSV
     const rows = filtered.map((c) =>
-      [c.front, c.back, c.exampleEn || '', c.level, c.lessonTitle]
+      [c.front, c.back, c.exampleEn || '', c.level, c.pos ? POS_LABELS_TR[c.pos] : '', c.lessonTitle]
         .map((v) => `"${String(v).replace(/"/g, '""')}"`)
         .join(',')
     );
-    const csv = ['"Front","Back","Example","Level","Lesson"', ...rows].join('\n');
+    const csv = ['"Front","Back","Example","Level","PartOfSpeech","Lesson"', ...rows].join('\n');
     const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -474,6 +576,41 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
             </p>
           </div>
 
+          {/* Eski kartlarin seviyesini/turunu yerel listelerle tazeleme */}
+          <div className="pt-3 border-t border-slate-200 space-y-1.5">
+            <h4 className="text-[11px] font-bold text-slate-700">
+              Seviyeleri ve söz türlerini yeniden hesapla
+            </h4>
+            <p className="text-[10px] text-slate-500 leading-relaxed">
+              Bu özellik eklenmeden önce oluşturulan kartların hepsi
+              <strong> B2</strong> olarak ve söz türü olmadan kaydedilmişti.
+              Bu düğme kartları 9394 kelimelik CEFR listesi ve kalıp listesiyle
+              yeniden etiketler. Yapay zekaya sorulmaz, internet gerekmez ve
+              tekrar geçmişiniz korunur. Listede bulunmayan kelimelerin seviyesi
+              olduğu gibi bırakılır.
+            </p>
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                type="button"
+                onClick={handleReclassify}
+                disabled={reclassifyBusy || allCards.length === 0}
+                className="flex items-center space-x-1.5 px-3 py-1.5 bg-teal-600 hover:bg-teal-700 disabled:bg-slate-300 text-white text-[11px] font-bold rounded-lg cursor-pointer"
+              >
+                {reclassifyBusy ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                ) : (
+                  <RefreshCw className="w-3.5 h-3.5" />
+                )}
+                <span>{allCards.length} kartı yeniden sınıflandır</span>
+              </button>
+              {reclassifyInfo && (
+                <span className="text-[11px] font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 rounded px-2.5 py-1.5">
+                  {reclassifyInfo}
+                </span>
+              )}
+            </div>
+          </div>
+
           <div className="flex items-center gap-2 pt-1 border-t border-slate-200">
             <button
               type="button"
@@ -529,23 +666,30 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                   value={manualFront}
                   onChange={(e) => setManualFront(e.target.value)}
                   placeholder="örn. come across"
-                  className="flex-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm font-bold focus:outline-none focus:border-teal-500"
+                  className="flex-1 min-w-0 px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm font-bold focus:outline-none focus:border-teal-500"
                 />
                 <button
                   type="button"
-                  onClick={autoFillManual}
+                  onClick={() => void resolveManualCard(manualFront, true)}
                   disabled={!manualFront.trim() || manualBusy}
                   className="flex items-center space-x-1.5 px-3 py-2 bg-teal-600 hover:bg-teal-700 disabled:bg-slate-300 text-white text-xs font-bold rounded-lg cursor-pointer"
-                  title="Anlamı ve örneği yapay zeka doldursun"
+                  title="Anlamı, örneği, seviyeyi ve söz türünü yeniden doldur"
                 >
                   {manualBusy ? (
                     <Loader2 className="w-3.5 h-3.5 animate-spin" />
                   ) : (
                     <Sparkles className="w-3.5 h-3.5" />
                   )}
-                  <span>Doldur</span>
+                  <span>Yenile</span>
                 </button>
               </div>
+              <p className="flex items-start space-x-1.5 text-[10px] text-slate-500">
+                <Wand2 className="w-3 h-3 shrink-0 mt-0.5" />
+                <span>
+                  Kelimeyi yazın, yeterli: anlam, örnek, seviye ve söz türü
+                  kendiliğinden doldurulur.
+                </span>
+              </p>
             </div>
 
             <div className="space-y-1">
@@ -558,16 +702,31 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               <div className="space-y-1">
                 <label className="text-[11px] font-bold text-slate-600">Seviye</label>
                 <select
                   value={manualLevel}
-                  onChange={(e) => setManualLevel(e.target.value as CardLevel)}
-                  className="w-full px-2.5 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold cursor-pointer"
+                  onChange={(e) => {
+                    setManualLevel(e.target.value as CardLevel);
+                    setManualLevelSource(null);
+                  }}
+                  className="w-full px-2 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold cursor-pointer"
                 >
                   {LEVELS.map((l) => (
                     <option key={l} value={l}>{l}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold text-slate-600">Söz türü</label>
+                <select
+                  value={manualPos}
+                  onChange={(e) => setManualPos(e.target.value as PartOfSpeech)}
+                  className="w-full px-2 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold cursor-pointer"
+                >
+                  {POS_ORDER.map((p) => (
+                    <option key={p} value={p}>{POS_LABELS_TR[p]}</option>
                   ))}
                 </select>
               </div>
@@ -576,7 +735,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 <select
                   value={manualKind}
                   onChange={(e) => setManualKind(e.target.value as CardKind)}
-                  className="w-full px-2.5 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold cursor-pointer"
+                  className="w-full px-2 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold cursor-pointer"
                 >
                   {KINDS.map((k) => (
                     <option key={k.value} value={k.value}>{k.label}</option>
@@ -584,6 +743,14 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 </select>
               </div>
             </div>
+
+            {manualLevelSource && (
+              <p className="text-[10px] text-teal-800 bg-teal-50 border border-teal-100 rounded px-2 py-1.5">
+                Seviye otomatik: <strong>{manualLevel}</strong> (
+                {LEVEL_SOURCE_LABELS[manualLevelSource]}). Yanlışsa yukarıdan
+                değiştirebilirsiniz.
+              </p>
+            )}
 
             <div className="space-y-1">
               <label className="text-[11px] font-bold text-slate-600">Örnek cümle (isteğe bağlı)</label>
@@ -777,6 +944,17 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
               </select>
 
               <select
+                value={posFilter}
+                onChange={(e) => setPosFilter(e.target.value as any)}
+                className="px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 cursor-pointer"
+              >
+                <option value="all">Tüm söz türleri</option>
+                {POS_ORDER.map((p) => (
+                  <option key={p} value={p}>{POS_LABELS_TR[p]}</option>
+                ))}
+              </select>
+
+              <select
                 value={lessonFilter}
                 onChange={(e) => setLessonFilter(e.target.value)}
                 className="px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 cursor-pointer max-w-[220px]"
@@ -928,6 +1106,11 @@ const CardTable: React.FC<{
                   <span className="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[10px] font-semibold rounded">
                     {KINDS.find((k) => k.value === c.kind)?.label || c.kind}
                   </span>
+                  {c.pos && (
+                    <span className="px-1.5 py-0.5 bg-violet-100 text-violet-800 text-[10px] font-semibold rounded">
+                      {POS_LABELS_TR[c.pos]}
+                    </span>
+                  )}
                   {c.state !== CardState.Review && (
                     <span className="px-1.5 py-0.5 bg-amber-100 text-amber-800 text-[10px] font-semibold rounded">
                       yeni

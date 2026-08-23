@@ -1548,6 +1548,31 @@ app.post("/api/study-material", async (req, res) => {
 });
 
 // 1d. B2-C1 seviyesinde ifade ve gerçek diyalog kaliplarini ayiklar.
+/* ------------------------------------------------------------
+   Kart alanlarinin dogrulanmasi
+
+   Model gecerli bir deger vermediyse alan BOS birakilir; uydurulmus bir
+   varsayilan (eskiden "B2") gonderilmez. Istemci bos alani kendi yerel
+   CEFR listesinden dolduruyor — bkz. shared/vocab/autoClassify.ts.
+   ------------------------------------------------------------ */
+
+const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
+
+const PARTS_OF_SPEECH = [
+  "noun", "verb", "adjective", "adverb", "preposition",
+  "pronoun", "conjunction", "determiner", "interjection", "phrase",
+];
+
+function normalizeCefrLevel(raw: any): string | undefined {
+  const value = String(raw || "").trim().toUpperCase();
+  return CEFR_LEVELS.includes(value) ? value : undefined;
+}
+
+function normalizePartOfSpeech(raw: any): string | undefined {
+  const value = String(raw || "").trim().toLowerCase();
+  return PARTS_OF_SPEECH.includes(value) ? value : undefined;
+}
+
 app.post("/api/extract-vocabulary", async (req, res) => {
   try {
     const { text, count } = req.body;
@@ -1576,13 +1601,18 @@ KESIN KURALLAR:
 - A2 ve altindaki basit kelimeleri alma.
 - TAM OLARAK ${target} adet dondur. Metinde bu kadar ileri seviye ifade yoksa,\n  B1 seviyesindeki faydali kaliplarla tamamla. Sayiyi eksik birakma.
 - "contextEn" alanina ifadenin metinde gectigi cumleyi AYNEN yaz.
-- "level" alani A2, B1, B2, C1 veya C2 olmali; agirlik B2-C1'de olsun.
+- "level" alani A1, A2, B1, B2, C1 veya C2 olmali; agirlik B2-C1'de olsun.
+  Her ifade icin GERCEKTEN karar ver, hepsine B2 yazma: olcut, ifadeyi
+  hangi seviyedeki ogrencinin bilmesinin beklendigidir.
 - "kind" alani: word, phrasal_verb, collocation, idiom veya expression.
+- "pos" alani ifadenin SOZ TURU: noun, verb, adjective, adverb, preposition,
+  pronoun, conjunction, determiner, interjection veya phrase. Metindeki
+  KULLANIMINA gore sec (ayni kelime baska cumlede baska tur olabilir).
 - Ceviriler ("back") dogal Turkce olsun, sozluk kalibi degil.`;
 
     const response = await generateContentWithRetry(ai, {
       contents: prompt,
-      jsonHint: '{"items":[{"front":"","back":"","ipa":"","kind":"word","level":"B2","exampleEn":"","exampleTr":"","contextEn":""}]}',
+      jsonHint: '{"items":[{"front":"","back":"","ipa":"","kind":"word","pos":"","level":"","exampleEn":"","exampleTr":"","contextEn":""}]}',
       config: {
         systemInstruction: SYSTEM_INSTRUCTION_COACH,
         responseMimeType: "application/json",
@@ -1598,12 +1628,13 @@ KESIN KURALLAR:
                   back: { type: Type.STRING },
                   ipa: { type: Type.STRING },
                   kind: { type: Type.STRING },
+                  pos: { type: Type.STRING },
                   level: { type: Type.STRING },
                   exampleEn: { type: Type.STRING },
                   exampleTr: { type: Type.STRING },
                   contextEn: { type: Type.STRING },
                 },
-                required: ["front", "back", "kind", "level"],
+                required: ["front", "back", "kind", "pos", "level"],
               },
             },
           },
@@ -1621,7 +1652,6 @@ KESIN KURALLAR:
     }
 
     const allowedKinds = ["word", "phrasal_verb", "collocation", "idiom", "expression"];
-    const allowedLevels = ["A2", "B1", "B2", "C1", "C2"];
     const seen = new Set<string>();
 
     const cleaned = items
@@ -1630,8 +1660,9 @@ KESIN KURALLAR:
         front: String(it.front).trim(),
         back: String(it.back).trim(),
         ipa: it.ipa ? String(it.ipa).trim() : undefined,
-        kind: allowedKinds.includes(it.kind) ? it.kind : 'word',
-        level: allowedLevels.includes(it.level) ? it.level : 'B2',
+        kind: allowedKinds.includes(it.kind) ? it.kind : undefined,
+        pos: normalizePartOfSpeech(it.pos),
+        level: normalizeCefrLevel(it.level),
         exampleEn: it.exampleEn ? String(it.exampleEn).trim() : undefined,
         exampleTr: it.exampleTr ? String(it.exampleTr).trim() : undefined,
         contextEn: it.contextEn ? String(it.contextEn).trim() : undefined,
@@ -1783,13 +1814,30 @@ Bu ifade icin kart bilgisi uret:
   degil, akici bir ceviri. Kelimenin birden fazla anlami varsa bu baglamdakini sec.
 - "ipa": telaffuz (IPA)
 - "kind": word, phrasal_verb, collocation, idiom veya expression
-- "level": A2, B1, B2, C1 veya C2
+- "pos": ifadenin SOZ TURU. Su degerlerden BIRI olmali:
+    noun, verb, adjective, adverb, preposition, pronoun, conjunction,
+    determiner, interjection, phrase
+  BAGLAMA gore sec: ayni kelime cumleye gore farkli tur olabilir
+  ("a long run" -> noun, "I run every day" -> verb). Cok kelimeli
+  kaliplarda fiille baslayanlar "verb", digerleri "phrase".
+- "level": ifadenin CEFR seviyesi. A1, A2, B1, B2, C1 veya C2.
+  DIKKAT: burada varsayilan deger YOKTUR, her ifade icin gercekten karar ver.
+  Olcut, ifadeyi hangi seviyedeki bir ogrencinin BILMESI beklenir:
+    A1 = en temel 500 kelime (go, big, water)
+    A2 = gunluk temel kelimeler (weather, decide, careful)
+    B1 = orta duzey gunluk kelimeler (achieve, opportunity, complicated)
+    B2 = soyut/akademik gunluk kelimeler (approach, significant, tackle)
+    C1 = ileri, daha az sik kelimeler (compelling, undermine, discrepancy)
+    C2 = nadir, edebi veya uzmanlik kelimeleri (ubiquitous, quintessential)
+  Temel bir kelimeye B2 demek de nadir bir kelimeye B2 demek de hatadir.
 - "exampleEn": ifadeyi kullanan YENI ve basit bir ornek cumle
 - "exampleTr": ornek cumlenin Turkcesi`;
 
     const response = await generateContentWithRetry(ai, {
       contents: prompt,
-      jsonHint: '{"front":"","back":"","ipa":"","kind":"word","level":"B2","exampleEn":"","exampleTr":""}',
+      // NOT: sema orneginde seviye BOS birakiliyor. Burada "B2" yazdigi
+      // surece model cogu kelimeye bakmadan B2 diyordu.
+      jsonHint: '{"front":"","back":"","ipa":"","kind":"word","pos":"","level":"","exampleEn":"","exampleTr":""}',
       config: {
         systemInstruction: SYSTEM_INSTRUCTION_COACH,
         responseMimeType: "application/json",
@@ -1800,11 +1848,12 @@ Bu ifade icin kart bilgisi uret:
             back: { type: Type.STRING },
             ipa: { type: Type.STRING },
             kind: { type: Type.STRING },
+            pos: { type: Type.STRING },
             level: { type: Type.STRING },
             exampleEn: { type: Type.STRING },
             exampleTr: { type: Type.STRING },
           },
-          required: ["front", "back", "kind", "level"],
+          required: ["front", "back", "kind", "pos", "level"],
         },
       },
     });
@@ -1817,14 +1866,21 @@ Bu ifade icin kart bilgisi uret:
     }
 
     const allowedKinds = ["word", "phrasal_verb", "collocation", "idiom", "expression"];
-    const allowedLevels = ["A2", "B1", "B2", "C1", "C2"];
+
+    // Seviye ve soz turu DOGRULANIR ama uydurulmaz: model gecerli bir
+    // deger vermediyse alan bos birakilir. Istemci o durumda yerel CEFR
+    // listesinden karar veriyor (bkz. shared/vocab/autoClassify.ts);
+    // burada "B2" yazmak o mekanizmayi devre disi birakiyordu.
+    const level = normalizeCefrLevel(item.level);
+    const pos = normalizePartOfSpeech(item.pos);
 
     res.json({
       front: String(item.front || term).trim(),
       back: String(item.back || '').trim(),
       ipa: item.ipa ? String(item.ipa).trim() : undefined,
-      kind: allowedKinds.includes(item.kind) ? item.kind : 'word',
-      level: allowedLevels.includes(item.level) ? item.level : 'B2',
+      kind: allowedKinds.includes(item.kind) ? item.kind : undefined,
+      pos,
+      level,
       exampleEn: item.exampleEn ? String(item.exampleEn).trim() : undefined,
       exampleTr: item.exampleTr ? String(item.exampleTr).trim() : undefined,
     });
