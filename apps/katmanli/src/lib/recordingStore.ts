@@ -8,7 +8,19 @@
  */
 
 const DB_NAME = 'layered_learning_recordings';
-const DB_VERSION = 1;
+/**
+ * SURUM 2 — ONARIM.
+ *
+ * Karne sayfasi bu veritabanini bir sure SURUM VERMEDEN acti. Henuz hic
+ * kayit yapmamis cihazlarda bu, veritabanini surum 1'de ve BOS yaratti;
+ * buradaki acilis da surum 1 istedigi icin onupgradeneeded hic
+ * tetiklenmedi ve 'recordings' deposu olusmadi. Sonuc: her kayit islemi
+ * ve senkronizasyon "object store not found" ile patliyordu.
+ *
+ * Surum 2'ye cikmak yukseltmeyi zorlar; depo yoksa olusturulur, varsa
+ * dokunulmaz. (Bkz. shared/analytics/collect.ts — ayni sema.)
+ */
+const DB_VERSION = 2;
 const STORE = 'recordings';
 
 export interface StoredRecording {

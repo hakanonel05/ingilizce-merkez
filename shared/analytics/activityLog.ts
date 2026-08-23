@@ -1,29 +1,34 @@
 /**
- * ÇALIŞMA OLAY GÜNLÜĞÜ (append-only)
+ * ÇALIŞMA KAYITLARI (gün + cihaz başına toplam)
  *
  * NEDEN VAR: uygulama bugüne kadar yalnızca DURUM tuttu — "bu katman
  * tamamlandı", "bu kelime öğrenildi". Ne zaman ve ne kadar süreyle
- * çalışıldığı hiçbir yere yazılmadı. Bu yüzden "ne kadar reading, ne
- * kadar listening çalıştım" sorusu mevcut veriyle yanıtlanamıyordu:
- * tamamlanan katman SAYISI biliniyor ama tarihi de süresi de bilinmiyor.
+ * çalışıldığı hiçbir yere yazılmadı, dolayısıyla "ne kadar reading, ne
+ * kadar listening çalıştım" sorusunun karşılığı yoktu.
  *
- * Buradaki günlük bunu düzeltir. Her kayıt olup bitmiş tek bir olaydır;
- * hiçbir zaman güncellenmez, yalnızca eklenir. Böylece takvim, beceri
- * dağılımı ve süre grafikleri tek bir kaynaktan hesaplanabilir.
+ * NEDEN OLAY DEĞİL DE GÜNLÜK TOPLAM: ilk sürüm her ölçümü ayrı bir olay
+ * olarak yazıyordu. Süre sayacı dakikada bir yazdığı için günde iki saat
+ * çalışan biri yılda ~44.000 kayıt üretiyordu; bu hacim senkronizasyona
+ * sığmıyor (sunucu istek başına 500 kayıt alıyor ve her senkronda tüm
+ * kayıtlar gönderiliyor). Panoda gösterilen her şey zaten GÜNLÜK toplam
+ * olduğu için kayıtlar doğrudan o biçimde tutuluyor: yılda ~365 satır.
  *
- * AYRI VERİTABANI: kelime kartları 'layered_learning_vocab' içinde
- * yaşıyor. Oraya yeni bir store eklemek sürüm yükseltmesi gerektirir ve
- * servis çalışanının önbelleğinde kalmış eski bir istemci o veritabanını
- * açamaz hale gelir. Olaylar bu yüzden kendi veritabanında.
+ * CİHAZ KİMLİĞİ: satır anahtarı `gün|cihaz`. İki cihaz aynı gün çalışırsa
+ * ayrı satır yazarlar ve pano ikisini toplar. Ortak tek satır olsaydı
+ * senkronda "son yazan kazanır" kuralı diğer cihazın dakikalarını
+ * silerdi.
  *
- * GÜN SINIRI: takvim yerel güne göre çizilir, o yüzden her olay epoch
- * damgasının yanında yerel 'YYYY-MM-DD' anahtarını da taşır. Sonradan
- * hesaplamak, kaydı başka saat diliminde okumak gerektiğinde yanıltırdı.
+ * SENKRON: satırlar `stat:<gün|cihaz>` anahtarıyla kartlarla aynı yoldan
+ * gider (bkz. apps/katmanli/src/lib/syncClient.ts). Tarayıcı verisi
+ * silinse ya da başka bir cihazdan girilse takvim geri gelir.
  */
 
 const DB_NAME = 'layered_learning_activity';
-const DB_VERSION = 1;
-const STORE = 'events';
+const DB_VERSION = 2;
+const STORE = 'stats';
+/** İlk sürümün olay deposu; sürüm 2'ye geçerken içeriği toplamlara katlanıyor. */
+const LEGACY_STORE = 'events';
+const DEVICE_KEY = 'layered_learning_device_id_v1';
 
 /** Ölçtüğümüz beceriler. Katman numaraları ve ekranlar buraya eşlenir. */
 export type Skill =
@@ -45,7 +50,6 @@ export const SKILL_LABELS_TR: Record<Skill, string> = {
   exam: 'Sınav',
 };
 
-/** Olayın türü — süre mi, tamamlama mı, tekrar mı olduğunu ayırır. */
 export type ActivityKind =
   /** Ekranda geçirilen süre (zamanlayıcıdan). */
   | 'session'
@@ -53,34 +57,30 @@ export type ActivityKind =
   | 'complete'
   /** Kelime kartı tekrarı yapıldı. */
   | 'review'
-  /** Yeni kart(lar) eklendi. */
+  /** Yeni kart(lar) eklendi — kartın kendi createdAt'i de var, sayaç bilgi amaçlı. */
   | 'card-added'
   /** Quiz / alıştırma / sınav sonucu. */
   | 'quiz'
   /** Gölgeleme kaydı alındı. */
   | 'recording';
 
-export interface ActivityEvent {
+/** Bir günün, bir cihazdaki toplamı. */
+export interface DayStatRow {
+  /** `${day}|${deviceId}` */
   id: string;
-  /** Epoch milisaniye. */
-  ts: number;
-  /** Yerel gün anahtarı, 'YYYY-MM-DD'. Takvim bunu kullanır. */
+  /** Yerel gün anahtarı, 'YYYY-MM-DD'. */
   day: string;
-  app: 'katmanli' | 'reading';
-  skill: Skill;
-  kind: ActivityKind;
-  /** Süre (saniye) — yalnızca 'session' olaylarında dolu. */
-  seconds?: number;
-  /** Adet: eklenen kart, çalışılan kart, çözülen soru sayısı. */
-  count?: number;
-  /** Doğru sayısı (quiz/review). */
-  correct?: number;
-  /** Toplam soru (quiz). */
-  total?: number;
-  /** Ders veya parça kimliği. */
-  refId?: string;
-  /** Ders veya parça başlığı — sonradan silinse bile panoda okunabilsin. */
-  refTitle?: string;
+  deviceId: string;
+  /** Beceri başına saniye. Dakikaya pano tarafında çevriliyor. */
+  secondsBySkill: Partial<Record<Skill, number>>;
+  reviews: number;
+  /** Doğru hatırlanan tekrar sayısı (tutma oranı için). */
+  reviewsCorrect: number;
+  quizzes: number;
+  completions: number;
+  recordings: number;
+  cardsAdded: number;
+  updatedAt: number;
 }
 
 /** Yerel güne göre 'YYYY-MM-DD'. */
@@ -90,6 +90,21 @@ export function dayKey(date: Date | number = Date.now()): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 
+/** Bu tarayıcıya özel, kalıcı kimlik. */
+export function getDeviceId(): string {
+  try {
+    let id = localStorage.getItem(DEVICE_KEY);
+    if (!id) {
+      id = `d${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
+      localStorage.setItem(DEVICE_KEY, id);
+    }
+    return id;
+  } catch {
+    // Depolama kapalıysa oturumluk kimlik: kayıt tutulur ama senkronlanmaz
+    return 'dgecici';
+  }
+}
+
 function openDb(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     const req = indexedDB.open(DB_NAME, DB_VERSION);
@@ -97,10 +112,7 @@ function openDb(): Promise<IDBDatabase> {
       const db = req.result;
       if (!db.objectStoreNames.contains(STORE)) {
         const store = db.createObjectStore(STORE, { keyPath: 'id' });
-        // Takvim gün gün okuyor; beceri kırılımı da sık sorulan sorgu.
         store.createIndex('day', 'day', { unique: false });
-        store.createIndex('ts', 'ts', { unique: false });
-        store.createIndex('skill', 'skill', { unique: false });
       }
     };
     req.onsuccess = () => resolve(req.result);
@@ -108,7 +120,7 @@ function openDb(): Promise<IDBDatabase> {
   });
 }
 
-/** Pano açıkken yeni olay düşerse kendini tazeleyebilsin diye. */
+/** Pano açıkken kayıt değişirse kendini tazeleyebilsin diye. */
 export const ACTIVITY_CHANGED_EVENT = 'activity-log-changed';
 
 function notifyChanged(): void {
@@ -119,56 +131,133 @@ function notifyChanged(): void {
   }
 }
 
-function makeId(): string {
-  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+function emptyRow(day: string, deviceId: string): DayStatRow {
+  return {
+    id: `${day}|${deviceId}`,
+    day,
+    deviceId,
+    secondsBySkill: {},
+    reviews: 0,
+    reviewsCorrect: 0,
+    quizzes: 0,
+    completions: 0,
+    recordings: 0,
+    cardsAdded: 0,
+    updatedAt: Date.now(),
+  };
+}
+
+export interface ActivityInput {
+  app: 'katmanli' | 'reading';
+  skill: Skill;
+  kind: ActivityKind;
+  /** Süre (saniye) — 'session' için. */
+  seconds?: number;
+  /** Adet: tekrar, kart, soru. */
+  count?: number;
+  /** Doğru sayısı (review/quiz). */
+  correct?: number;
+  total?: number;
+  refId?: string;
+  refTitle?: string;
+  /** Farklı bir güne yazmak için (geriye dönük aktarım). */
+  ts?: number;
 }
 
 /**
- * Olayı yazar.
+ * Kaydı ilgili günün satırına ekler.
  *
- * Sessizce başarısız olur: günlük tutmak çalışmanın kendisinden daha
- * önemli değil. Depolama kotası dolduğunda ya da özel sekmede
- * IndexedDB kapalı olduğunda ders ekranı çalışmaya devam etmeli.
+ * Sessizce başarısız olur: kayıt tutmak çalışmanın kendisinden daha
+ * önemli değil. Kota dolduğunda ya da özel sekmede IndexedDB kapalı
+ * olduğunda ders ekranı çalışmaya devam etmeli.
  */
-export async function logActivity(
-  event: Omit<ActivityEvent, 'id' | 'ts' | 'day'> & { ts?: number }
-): Promise<void> {
-  const ts = event.ts ?? Date.now();
-  const record: ActivityEvent = { ...event, id: makeId(), ts, day: dayKey(ts) };
+export async function logActivity(input: ActivityInput): Promise<void> {
+  const ts = input.ts ?? Date.now();
+  const day = dayKey(ts);
+  const deviceId = getDeviceId();
+  const id = `${day}|${deviceId}`;
 
   try {
     const db = await openDb();
     await new Promise<void>((resolve, reject) => {
       const t = db.transaction(STORE, 'readwrite');
-      t.objectStore(STORE).put(record);
+      const store = t.objectStore(STORE);
+      const getReq = store.get(id);
+
+      getReq.onsuccess = () => {
+        const row: DayStatRow = getReq.result || emptyRow(day, deviceId);
+
+        switch (input.kind) {
+          case 'session':
+            row.secondsBySkill[input.skill] =
+              (row.secondsBySkill[input.skill] || 0) + (input.seconds || 0);
+            break;
+          case 'review':
+            row.reviews += input.count || 1;
+            row.reviewsCorrect += input.correct ?? 0;
+            break;
+          case 'quiz':
+            row.quizzes += input.count || 1;
+            break;
+          case 'complete':
+            row.completions += input.count || 1;
+            break;
+          case 'recording':
+            row.recordings += input.count || 1;
+            break;
+          case 'card-added':
+            row.cardsAdded += input.count || 1;
+            break;
+        }
+
+        row.updatedAt = Date.now();
+        store.put(row);
+      };
+
       t.oncomplete = () => { db.close(); resolve(); };
       t.onerror = () => { db.close(); reject(t.error); };
     });
     notifyChanged();
   } catch (err) {
-    console.warn('[activity] olay yazılamadı:', err);
+    console.warn('[activity] kayıt yazılamadı:', err);
   }
 }
 
-/** Tüm olaylar, eskiden yeniye. */
-export async function getAllActivity(): Promise<ActivityEvent[]> {
+/** Tüm günlük satırlar (tüm cihazlar), gün sırasıyla. */
+export async function getAllDayStats(): Promise<DayStatRow[]> {
   try {
+    await migrateLegacyEvents();
     const db = await openDb();
-    const rows = await new Promise<ActivityEvent[]>((resolve, reject) => {
+    const rows = await new Promise<DayStatRow[]>((resolve, reject) => {
       const t = db.transaction(STORE, 'readonly');
       const req = t.objectStore(STORE).getAll();
       req.onsuccess = () => resolve(req.result || []);
       req.onerror = () => reject(req.error);
       t.oncomplete = () => db.close();
     });
-    return rows.sort((a, b) => a.ts - b.ts);
+    return rows.sort((a, b) => a.day.localeCompare(b.day));
   } catch (err) {
-    console.warn('[activity] olaylar okunamadı:', err);
+    console.warn('[activity] kayıtlar okunamadı:', err);
     return [];
   }
 }
 
-/** Günlüğü siler (ayarlardaki veri sıfırlama için). */
+/**
+ * Senkronizasyondan gelen satırı yazar.
+ * Satırların sahibi cihazdır: aynı kimlikli satırda son yazan kazanır,
+ * farklı cihazların satırları birbirine dokunmaz.
+ */
+export async function putDayStatSilently(row: DayStatRow): Promise<void> {
+  const db = await openDb();
+  await new Promise<void>((resolve, reject) => {
+    const t = db.transaction(STORE, 'readwrite');
+    t.objectStore(STORE).put(row);
+    t.oncomplete = () => { db.close(); resolve(); };
+    t.onerror = () => { db.close(); reject(t.error); };
+  });
+}
+
+/** Kayıtları siler (ayarlardaki veri sıfırlama için). */
 export async function clearActivity(): Promise<void> {
   const db = await openDb();
   await new Promise<void>((resolve, reject) => {
@@ -178,6 +267,61 @@ export async function clearActivity(): Promise<void> {
     t.onerror = () => { db.close(); reject(t.error); };
   });
   notifyChanged();
+}
+
+/**
+ * İlk sürümdeki olay kayıtlarını günlük toplamlara katlar.
+ *
+ * Olay deposu yalnızca kısa bir süre yayında kaldı, ama o sırada
+ * çalışılmışsa takvimde boşluk kalmasın. Bir kez çalışır: katlanan
+ * olaylar silinir.
+ */
+let migrationDone = false;
+async function migrateLegacyEvents(): Promise<void> {
+  if (migrationDone) return;
+  migrationDone = true;
+
+  try {
+    const db = await openDb();
+    if (!db.objectStoreNames.contains(LEGACY_STORE)) {
+      db.close();
+      return;
+    }
+
+    const events = await new Promise<any[]>((resolve) => {
+      const t = db.transaction(LEGACY_STORE, 'readonly');
+      const req = t.objectStore(LEGACY_STORE).getAll();
+      req.onsuccess = () => resolve(req.result || []);
+      req.onerror = () => resolve([]);
+    });
+    db.close();
+
+    if (events.length === 0) return;
+
+    for (const event of events) {
+      if (!event?.day || !event?.kind) continue;
+      await logActivity({
+        app: event.app || 'katmanli',
+        skill: event.skill || 'reading',
+        kind: event.kind,
+        seconds: event.seconds,
+        count: event.count,
+        correct: event.correct,
+        ts: event.ts,
+      });
+    }
+
+    const db2 = await openDb();
+    await new Promise<void>((resolve) => {
+      const t = db2.transaction(LEGACY_STORE, 'readwrite');
+      t.objectStore(LEGACY_STORE).clear();
+      t.oncomplete = () => { db2.close(); resolve(); };
+      t.onerror = () => { db2.close(); resolve(); };
+    });
+    console.info(`[activity] ${events.length} eski olay günlük toplamlara aktarıldı.`);
+  } catch (err) {
+    console.warn('[activity] eski olaylar aktarılamadı:', err);
+  }
 }
 
 /* ============================================================
@@ -260,7 +404,7 @@ export class ActivityTimer {
     this.accumulated += elapsed;
   }
 
-  /** Biriken süreyi olay olarak yazar ve sayacı sıfırlar. */
+  /** Biriken süreyi güne yazar ve sayacı sıfırlar. */
   async flush(): Promise<void> {
     this.tick();
     const seconds = Math.round(this.accumulated / 1000);

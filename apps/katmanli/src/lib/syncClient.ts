@@ -1,5 +1,11 @@
 import { VocabCard, getAllCards, putCardSilently, VOCAB_CHANGED_EVENT } from './vocabStore';
 import { listAllRecordings, saveRecordingSilently, StoredRecording } from './recordingStore';
+import {
+  ACTIVITY_CHANGED_EVENT,
+  DayStatRow,
+  getAllDayStats,
+  putDayStatSilently,
+} from '../../../../shared/analytics/activityLog';
 
 /**
  * Cihazlar arası senkronizasyon.
@@ -149,8 +155,12 @@ export async function runSync(
   const localCards = await getAllCards();
   const localCardMap = new Map(localCards.map((c) => [c.id, c]));
 
+  const localStats = await getAllDayStats();
+  const localStatMap = new Map(localStats.map((r) => [r.id, r]));
+
   let pulled = 0;
   let audioDown = 0;
+  let statsPulled = 0;
 
   for (const item of remoteItems) {
     const { key, value, deleted } = item;
@@ -165,6 +175,21 @@ export async function runSync(
       if (!local || remoteTime > localTime) {
         await putCardSilently(remote as VocabCard);
         pulled++;
+      }
+      continue;
+    }
+
+    if (key.startsWith('stat:')) {
+      // Calisma karnesinin gunluk satirlari. Anahtar `gun|cihaz` oldugu
+      // icin iki cihaz birbirinin satirini ezmez; ayni satirda son yazan
+      // kazanir.
+      if (deleted) continue;
+      const remote = value as DayStatRow;
+      const local = localStatMap.get(remote.id);
+      if (!local || (remote.updatedAt || 0) > (local.updatedAt || 0)) {
+        await putDayStatSilently(remote);
+        pulled++;
+        statsPulled++;
       }
       continue;
     }
@@ -228,6 +253,12 @@ export async function runSync(
     });
   }
 
+  // Karne satirlari: gun basina bir kayit oldugu icin hacim kucuk
+  // (yilda ~365). Kartlarla ayni yoldan gider, ayri bir uc gerekmez.
+  for (const row of await getAllDayStats()) {
+    items.push({ key: `stat:${row.id}`, value: row });
+  }
+
   for (const { storageKey, syncKey } of LOCAL_KEYS) {
     const data = readLocalJson(storageKey);
     if (data === null) continue;
@@ -287,9 +318,19 @@ export async function runSync(
   const serverTime = pullData.serverTime || new Date().toISOString();
   setLastSync(serverTime);
 
-  // Listeleri tazele
+  // Listeleri tazele. Karne satirlari sessizce yaziliyor
+  // (putDayStatSilently), yoksa yuzlerce satirlik bir cekimde pano her
+  // satirda yeniden ciziliyordu; cekim bitince tek sefer haber veriliyor.
+  //
+  // DIKKAT: ACTIVITY_CHANGED_EVENT'i App dinliyor ve senkron planliyor.
+  // Kosulsuz yayinlanirsa her senkron bir sonrakini tetikler ve donguye
+  // girer. Yalnizca GERCEKTEN satir cekildiginde yayinlaniyor: bir sonraki
+  // senkron ayni satirlari getirmeyecegi icin dongu tek turda kapanir.
   try {
     window.dispatchEvent(new CustomEvent(VOCAB_CHANGED_EVENT));
+    if (statsPulled > 0) {
+      window.dispatchEvent(new CustomEvent(ACTIVITY_CHANGED_EVENT));
+    }
   } catch {
     /* yoksay */
   }

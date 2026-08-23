@@ -25,10 +25,10 @@ import { getAllCards, VocabCard } from '../vocab/vocabStore';
 import { CefrLevel, CEFR_ORDER } from '../vocab/cefr';
 import { PartOfSpeech } from '../vocab/pos';
 import {
-  ActivityEvent,
+  DayStatRow,
   Skill,
   dayKey,
-  getAllActivity,
+  getAllDayStats,
 } from './activityLog';
 
 /* ------------------------------------------------------------------ */
@@ -40,6 +40,8 @@ const KEY_KATMANLI_LESSONS = 'layered_learning_lessons_v2';
 const KEY_KATMANLI_MISTAKES = 'layered_learning_mistakes_v1';
 const KEY_READING_PROGRESS = 'english_reading_trainer_progress_v1';
 const RECORDINGS_DB = 'layered_learning_recordings';
+/** recordingStore ile ayni surum olmali; aciklama countRecordings'te. */
+const RECORDINGS_DB_VERSION = 2;
 
 function readJson<T>(key: string, fallback: T): T {
   try {
@@ -245,11 +247,31 @@ function computeStreaks(activeDays: Set<string>): { current: number; longest: nu
   return { current, longest };
 }
 
-/** Ses kaydı sayısı. Blob'ları belleğe almamak için yalnızca sayılır. */
+/**
+ * Ses kaydı sayısı. Blob'ları belleğe almamak için yalnızca sayılır.
+ *
+ * DİKKAT — SÜRÜM VE ŞEMA: veritabanı sürüm verilmeden açılırsa ve henüz
+ * yoksa, tarayıcı onu SÜRÜM 1'de ve BOŞ olarak yaratır. recordingStore
+ * daha sonra aynı veritabanını sürüm 1 ile açtığında onupgradeneeded
+ * tetiklenmez, 'recordings' deposu hiç oluşmaz ve her kayıt işlemi
+ * "object store not found" ile patlar — senkronizasyon dahil, çünkü
+ * runSync kayıtları listeliyor.
+ *
+ * Bu yüzden burada recordingStore ile AYNI sürüm ve şema kullanılıyor:
+ * hangisi önce açarsa açsın depo doğru kurulur.
+ * (Şema değişirse iki dosyanın birlikte güncellenmesi gerekir.)
+ */
 async function countRecordings(): Promise<number> {
   return new Promise((resolve) => {
     try {
-      const req = indexedDB.open(RECORDINGS_DB);
+      const req = indexedDB.open(RECORDINGS_DB, RECORDINGS_DB_VERSION);
+      req.onupgradeneeded = () => {
+        const db = req.result;
+        if (!db.objectStoreNames.contains('recordings')) {
+          const store = db.createObjectStore('recordings', { keyPath: 'key' });
+          store.createIndex('lessonId', 'lessonId', { unique: false });
+        }
+      };
       req.onsuccess = () => {
         const db = req.result;
         if (!db.objectStoreNames.contains('recordings')) {
@@ -274,9 +296,9 @@ async function countRecordings(): Promise<number> {
 /* ------------------------------------------------------------------ */
 
 export async function collectSnapshot(): Promise<Snapshot> {
-  const [cards, events, recordings] = await Promise.all([
+  const [cards, statRows, recordings] = await Promise.all([
     getAllCards().catch(() => [] as VocabCard[]),
-    getAllActivity(),
+    getAllDayStats(),
     countRecordings(),
   ]);
 
@@ -292,33 +314,20 @@ export async function collectSnapshot(): Promise<Snapshot> {
     return stat;
   };
 
-  /* --- 1. Olay günlüğü (süre + bundan sonraki her şey) --- */
-  for (const event of events) {
-    const stat = touch(event.day);
-    switch (event.kind) {
-      case 'session': {
-        const minutes = (event.seconds || 0) / 60;
-        stat.minutesBySkill[event.skill] += minutes;
-        stat.minutesTotal += minutes;
-        break;
-      }
-      case 'review':
-        stat.reviews += event.count || 1;
-        break;
-      case 'card-added':
-        // Kart eklemeleri createdAt'ten de sayılıyor; iki kez saymamak
-        // için burada yalnızca süre/tamamlama olayları işleniyor.
-        break;
-      case 'quiz':
-        stat.quizzes += 1;
-        break;
-      case 'complete':
-        stat.completions += 1;
-        break;
-      case 'recording':
-        stat.completions += 0; // kayıt sayısı ayrı gösteriliyor
-        break;
+  /* --- 1. Günlük çalışma kayıtları (süre ve sayaçlar) ---
+     Satırlar gün + CİHAZ başına tutuluyor; aynı günü birden çok cihazda
+     çalıştıysan hepsi toplanır. Kart eklemeleri buradan değil, kartların
+     kendi createdAt'inden sayılıyor (iki kez saymamak için). */
+  for (const row of statRows as DayStatRow[]) {
+    const stat = touch(row.day);
+    for (const [skill, seconds] of Object.entries(row.secondsBySkill || {})) {
+      const minutes = (seconds as number) / 60;
+      stat.minutesBySkill[skill as Skill] += minutes;
+      stat.minutesTotal += minutes;
     }
+    stat.reviews += row.reviews || 0;
+    stat.quizzes += row.quizzes || 0;
+    stat.completions += row.completions || 0;
   }
 
   /* --- 2. Kelime kartları --- */

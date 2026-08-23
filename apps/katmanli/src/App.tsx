@@ -19,7 +19,7 @@ import { MistakesNotebook } from './components/MistakesNotebook';
 import { Dashboard } from '../../../shared/analytics/Dashboard';
 import { useActivityTimer } from '../../../shared/analytics/useActivityTimer';
 import { LAYER_SKILLS } from '../../../shared/analytics/collect';
-import { logActivity } from '../../../shared/analytics/activityLog';
+import { logActivity, ACTIVITY_CHANGED_EVENT } from '../../../shared/analytics/activityLog';
 import { MethodologyGuideModal } from './components/MethodologyGuideModal';
 import { GrammarCoachDrawer } from './components/GrammarCoachDrawer';
 import { EditLessonModal } from './components/EditLessonModal';
@@ -668,7 +668,17 @@ async function buildLessonData(
     });
 
     syncOnStartup();
-    return unsubscribe;
+
+    // Karne satirlari degistikce senkronu tetikle. scheduleAutoSync zaten
+    // 8 saniyelik bir sessizlik bekliyor; sure sayaci dakikada bir yazdigi
+    // icin bu, "calismayi birakinca gonder" davranisina donusuyor.
+    const onActivity = () => scheduleAutoSync();
+    window.addEventListener(ACTIVITY_CHANGED_EVENT, onActivity);
+
+    return () => {
+      unsubscribe();
+      window.removeEventListener(ACTIVITY_CHANGED_EVENT, onActivity);
+    };
   }, []);
 
   const handleRecordMistakes = (entries: Omit<MistakeEntry, 'id' | 'timestamp'>[]) => {
