@@ -408,7 +408,7 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
               value={userSpeechInput}
               onChange={(e) => setUserSpeechInput(e.target.value)}
               placeholder={isListening ? 'Mikrofon dinliyor... İngilizce konuşun...' : 'Sesinizi veya metninizi buraya yazın...'}
-              className="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+              className="flex-1 min-w-0 px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
               disabled={isLoading}
             />
 

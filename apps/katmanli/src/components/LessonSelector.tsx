@@ -162,7 +162,7 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
                   value={youtubeInput}
                   onChange={(e) => setYoutubeInput(e.target.value)}
                   placeholder="Örn: https://www.youtube.com/watch?v=1bszFX_XcbU"
-                  className="flex-1 px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="flex-1 min-w-0 px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                   disabled={isLoading}
                 />
                 <button

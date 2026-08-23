@@ -546,14 +546,17 @@ export default function App() {
       {/* Top Banner Navigation Bar */}
       <header className="sticky top-0 z-40 bg-white border-b border-editorial-border/40 backdrop-blur-md">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-20 items-center justify-between">
+          {/* Telefonda tek satira sigmiyordu: baslik ve arac dugmeleri yan yana
+              zorlandigi icin sayfa yatay kayiyordu. Artik satir sarabiliyor ve
+              yukseklik icerige gore buyuyor. */}
+          <div className="flex min-h-20 flex-wrap items-center justify-between gap-x-4 gap-y-2 py-2.5 sm:py-0">
 
             {/* Brand Logo & Slogan */}
-            <div className="flex items-center gap-4">
-              <div className="flex h-11 w-11 items-center justify-center bg-editorial-accent text-white font-serif text-xl italic font-bold">
+            <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+              <div className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center bg-editorial-accent text-white font-serif text-xl italic font-bold">
                 L
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="font-serif text-2xl font-bold tracking-tight text-editorial-text leading-none flex items-center gap-1.5">
                   Lexis <span className="text-xs font-sans font-normal tracking-widest uppercase opacity-40">Trainer</span>
                 </p>
@@ -564,7 +567,7 @@ export default function App() {
             </div>
 
             {/* Streak, Timer & Backup Widgets */}
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center justify-end gap-1.5 sm:gap-2">
 
               {/* Cloud Sync Status */}
               {session && (

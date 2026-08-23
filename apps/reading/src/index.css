@@ -19,3 +19,65 @@ body {
   color: var(--color-editorial-text);
   font-family: var(--font-sans);
 }
+
+/* =====================================================================
+   MOBİL / DOKUNMATİK KULLANIM
+
+   Arayüz dar ekranda zaten taşmıyor; buradaki kurallar telefonda
+   KULLANILABİLİRLİĞİ düzeltiyor. Hepsi yalnızca dokunmatik cihazlarda
+   (pointer: coarse) devreye girer, masaüstü görünümü değişmez.
+
+   1) iOS ZIPLAMASI. Safari, yazı tipi 16px'ten küçük bir form alanına
+      dokunulduğunda sayfayı otomatik yakınlaştırır ve geri
+      uzaklaştırmaz. Arayüzdeki kutular text-xs (12px) olduğu için her
+      dokunuşta ekran kayıyordu.
+   2) DOKUNMA HEDEFİ. 22-28px'lik simge düğmeleri parmakla ıskalanıyor;
+      görsel boyut korunarak tıklama alanı en az 40px'e çıkarılıyor
+      (Apple 44pt, Google 48dp önerir; 40px sıkışık listelerde
+      komşu düğmelerin üst üste binmemesi için seçilen alt sınır).
+   3) touch-action: manipulation — çift dokunuşla yakınlaştırmayı ve
+      onun getirdiği ~300ms tıklama gecikmesini kaldırır.
+   4) Metin içinde tıklanan kelimeler <span> olarak işleniyor; bu
+      kurallar <button> hedeflediği için satır akışı bozulmaz.
+   ===================================================================== */
+
+/* Yatay çevirmede iOS'un yazıyı kendiliğinden büyütmesini engeller */
+html { -webkit-text-size-adjust: 100%; }
+
+@media (pointer: coarse) {
+  input, select, textarea { font-size: 16px !important; }
+
+  button, select, summary, [role="button"], [role="tab"] {
+    touch-action: manipulation;
+  }
+
+  button, select { min-height: 40px; }
+
+  /* Yalnızca simge taşıyan düğmeler kare bir hedefe çıkar */
+  button:has(> svg:only-child) { min-width: 40px; }
+
+  /* Simge düğmelerinin dar dolgusunu parmak ölçüsüne açar */
+  button.p-1, button.p-1\.5 { padding: 0.5rem !important; }
+
+  /* Basılı tutunca çıkan gri kutuyu kaldırır */
+  button, a, [role="button"] { -webkit-tap-highlight-color: transparent; }
+}
+
+/* Telefon tarayıcılarında 100vh adres çubuğunu saymaz: sayfa alta taşar.
+   dvh destekleyen tarayıcılarda gerçek görünür yükseklik kullanılır. */
+@supports (height: 100dvh) {
+  .min-h-screen { min-height: 100dvh; }
+  .max-h-\[90vh\] { max-height: 90dvh; }
+  .max-h-\[75vh\] { max-height: 75dvh; }
+  .max-h-\[70vh\] { max-height: 70dvh; }
+  .max-h-\[65vh\] { max-height: 65dvh; }
+  .max-h-\[55vh\] { max-height: 55dvh; }
+}
+
+/* Çentikli / ev çubuğu olan telefonlarda güvenli alan payı */
+@supports (padding: env(safe-area-inset-bottom)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}

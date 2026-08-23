@@ -117,7 +117,7 @@ export const GrammarCoachDrawer: React.FC<GrammarCoachDrawerProps> = ({
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
             placeholder="Örn: 'Would' ne zaman kullanılır? veya 'Relative clauses' yapısı nedir?"
-            className="flex-1 px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+            className="flex-1 min-w-0 px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
             disabled={isLoading}
           />
           <button
