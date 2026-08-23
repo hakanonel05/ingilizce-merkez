@@ -18,6 +18,7 @@ import { readingPassageLessonId, READING_CORE_LESSON_ID, READING_CORE_LESSON_TIT
 import { useActivityTimer } from '../../../shared/analytics/useActivityTimer';
 import { Skill } from '../../../shared/analytics/activityLog';
 import { supabase } from './lib/supabase';
+import { mergeCloudProgress } from './lib/mergeProgress';
 import { getLocalFallbackPassage } from '../serverLocalPassage';
 import {
   LayoutDashboard,
@@ -225,19 +226,8 @@ export default function App() {
 
         if (progressRes.data) {
           const cp = progressRes.data;
-          setProgress(prev => {
-             // Merging strategy: simple overwrite for now if cloud is newer (or just overwrite since user wants sync)
-             return {
-               ...prev,
-               completedPassages: cp.completed_passages || prev.completedPassages,
-               scores: cp.scores || prev.scores,
-               wordStatus: cp.word_status || prev.wordStatus,
-               favoritePassages: cp.favorite_passages || prev.favoritePassages,
-               dailyStreak: cp.daily_streak || prev.dailyStreak,
-               totalTimeSpent: cp.total_time_spent || prev.totalTimeSpent,
-               workbookState: cp.workbook_state || prev.workbookState,
-             };
-          });
+          // Uzerine yazma YOK: iki taraf birlestirilir (bkz. mergeCloudProgress)
+          setProgress(prev => mergeCloudProgress(prev, cp));
         }
       }).finally(() => setIsSyncing(false));
     }
