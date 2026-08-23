@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Sparkles, HelpCircle, Edit3, Mic, CheckCircle2, Award, Ear, Volume2, EyeOff, Headphones, Layers, ListX, CalendarRange } from 'lucide-react';
+import { BookOpen, Sparkles, HelpCircle, Edit3, Mic, CheckCircle2, Award, Ear, Volume2, EyeOff, Headphones, Layers, ListX } from 'lucide-react';
 
 export interface LayerTab {
   id: number;
@@ -80,12 +80,6 @@ export const LAYER_TABS: LayerTab[] = [
     label: 'Yanlışlar Defteri',
     subLabel: 'Hatalı Sorular',
     icon: <ListX className="w-4 h-4" />
-  },
-  {
-    id: 12,
-    label: 'Karne',
-    subLabel: 'Çalışma Takvimi',
-    icon: <CalendarRange className="w-4 h-4" />
   }
 ];
 

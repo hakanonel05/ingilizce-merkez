@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BookOpen, Sparkles, Award, HelpCircle, Flame, Layers, Settings2, Check, X, KeyRound } from 'lucide-react';
+import { BookOpen, Sparkles, Award, HelpCircle, Flame, Layers, Settings2, Check, X, KeyRound, CalendarRange } from 'lucide-react';
 import { UserProgress } from '../types';
 
 interface HeaderProps {
@@ -10,6 +10,11 @@ interface HeaderProps {
   onUpdateProgress?: (patch: Partial<UserProgress>) => void;
   /** Kullanicinin kendi API anahtarlarini girecegi ekran. */
   onOpenSettings?: () => void;
+  /** Calisma karnesi. Katman seridinde degil burada duruyor: bir katman
+   *  degil, tum calismanin ozeti. */
+  onOpenReport?: () => void;
+  /** Karne acikken dugme isaretli gorunur; katman seridi onu vurgulamiyor. */
+  isReportActive?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -18,6 +23,8 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenGrammarCoach,
   onUpdateProgress,
   onOpenSettings,
+  onOpenReport,
+  isReportActive,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [goalDraft, setGoalDraft] = useState(String(progress.goalVideoCount));
@@ -203,6 +210,22 @@ export const Header: React.FC<HeaderProps> = ({
             <HelpCircle className="w-3.5 h-3.5 shrink-0" />
             <span className="hidden sm:inline">Metot</span>
           </button>
+
+          {onOpenReport && (
+            <button
+              onClick={onOpenReport}
+              title="Karne — çalışma takvimi"
+              aria-current={isReportActive ? 'page' : undefined}
+              className={`flex items-center gap-1.5 h-9 px-3.5 rounded-[10px] border text-xs font-medium transition-colors cursor-pointer shrink-0 whitespace-nowrap ${
+                isReportActive
+                  ? 'border-[var(--ink)] text-[var(--ink)] bg-[var(--paper-3)]'
+                  : 'border-[var(--hairline)] text-[var(--ink-2)] hover:border-[var(--hairline-2)] hover:text-[var(--ink)]'
+              }`}
+            >
+              <CalendarRange className="w-3.5 h-3.5 shrink-0" />
+              <span className="hidden sm:inline">Karne</span>
+            </button>
+          )}
 
           {onOpenSettings && (
             <button

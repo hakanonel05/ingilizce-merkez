@@ -13,6 +13,8 @@ import ExamSimulator from './components/ExamSimulator';
 import AppSwitcher from './AppSwitcher';
 import AuthScreen from './components/AuthScreen';
 import { Dashboard as StudyReport } from '../../../shared/analytics/Dashboard';
+import { VocabHub, VocabHubLesson } from '../../../shared/vocab/VocabHub';
+import { readingPassageLessonId, READING_CORE_LESSON_ID, READING_CORE_LESSON_TITLE } from './lib/vocabBank';
 import { useActivityTimer } from '../../../shared/analytics/useActivityTimer';
 import { Skill } from '../../../shared/analytics/activityLog';
 import { supabase } from './lib/supabase';
@@ -33,7 +35,8 @@ import {
   CloudCog,
   BookX,
   Timer,
-  CalendarRange
+  CalendarRange,
+  Layers
 } from 'lucide-react';
 
 const LOCAL_STORAGE_KEY = 'english_reading_trainer_progress_v1';
@@ -66,7 +69,7 @@ export default function App() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'passages' | 'trainer' | 'list' | 'workbook' | 'mistakes' | 'exam' | 'report'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'passages' | 'trainer' | 'list' | 'workbook' | 'mistakes' | 'exam' | 'cards' | 'report'>('dashboard');
 
   // PWA kurulum prompt'u
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
@@ -524,6 +527,25 @@ export default function App() {
   }, [passages]);
 
   // Active Selected Passage details
+  /**
+   * Kart merkezindeki "ders" filtresi icin: kartlar hangi kimliklerle
+   * kaydediliyorsa (bkz. lib/vocabBank) burada da ayni kimlikler uretilir.
+   */
+  const cardLessons: VocabHubLesson[] = useMemo(
+    () => [
+      { id: READING_CORE_LESSON_ID, title: READING_CORE_LESSON_TITLE },
+      // Onbellekten gelen ozel parcalar arasinda bozuk kayit olabiliyor;
+      // bu yuzden listenin baska yerlerinde de p?.id ile korunuluyor.
+      ...passages
+        .filter((p) => p && typeof p.id === 'number')
+        .map((p) => ({
+          id: readingPassageLessonId(p.id),
+          title: p.title || `Parça ${p.id}`,
+        })),
+    ],
+    [passages]
+  );
+
   const activePassage = useMemo(() => {
     if (selectedPassageId === null) return null;
     return passages.find(p => p?.id === selectedPassageId) || null;
@@ -681,7 +703,7 @@ export default function App() {
 
         {/* Navigation Tab Menu Grid (Only when not viewing specific Passage card) */}
         {selectedPassageId === null && (
-          <nav className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-3 mb-10">
+          <nav className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 gap-3 mb-10">
             {[
               { id: 'dashboard', label: 'Gösterge Paneli', subtitle: 'İSTATİSTİK & İLERLEME', icon: LayoutDashboard },
               { id: 'passages', label: 'Okuma Parçaları', subtitle: 'KÜTÜPHANE METİNLERİ', icon: BookOpen },
@@ -690,6 +712,7 @@ export default function App() {
               { id: 'workbook', label: 'Kelime Kitabı', subtitle: 'TABLOLAR & TESTLER', icon: BookText },
               { id: 'mistakes', label: 'Yanlışlar Defteri', subtitle: `${progress.mistakes.length} SORU`, icon: BookX },
               { id: 'exam', label: 'Sınav Simülasyonu', subtitle: 'DENEME SINAVI', icon: Timer },
+              { id: 'cards', label: 'Kelime Kartları', subtitle: 'FSRS ARALIKLI TEKRAR', icon: Layers },
               { id: 'report', label: 'Karne', subtitle: 'ÇALIŞMA TAKVİMİ', icon: CalendarRange }
             ].map(tab => {
               const Icon = tab.icon;
@@ -802,6 +825,10 @@ export default function App() {
                   }}
                   onSelectPassage={handleSelectPassageDirectly}
                 />
+              )}
+
+              {activeTab === 'cards' && (
+                <VocabHub lesson={null} lessons={cardLessons} />
               )}
 
               {activeTab === 'report' && <StudyReport />}

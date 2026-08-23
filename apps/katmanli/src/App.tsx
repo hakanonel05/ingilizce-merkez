@@ -713,6 +713,8 @@ async function buildLessonData(
         onOpenGuide={() => setIsGuideOpen(true)}
         onOpenGrammarCoach={() => setIsGrammarCoachOpen(true)}
         onOpenSettings={() => setIsSettingsOpen(true)}
+        onOpenReport={() => setActiveLayer(12)}
+        isReportActive={activeLayer === 12}
       />
 
       {/* Main Content Workspace */}
@@ -739,7 +741,11 @@ async function buildLessonData(
         />
 
         <div className="min-h-[500px] max-w-[1400px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {!activeLesson && activeLayer !== 9 && activeLayer !== 10 && activeLayer !== 11 ? (
+          {!activeLesson &&
+          activeLayer !== 9 &&
+          activeLayer !== 10 &&
+          activeLayer !== 11 &&
+          activeLayer !== 12 ? (
             <div className="max-w-md mx-auto my-16 text-center space-y-4">
               <p className="eyebrow">Başlangıç</p>
               <h3 className="font-display text-2xl text-[var(--ink)]">

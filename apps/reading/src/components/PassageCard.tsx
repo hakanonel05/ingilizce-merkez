@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Passage, UserProgress, GradedQuestionResult, VocabularyWord } from '../types';
 import { ChevronLeft, Star, Volume2, CheckCircle2, AlertCircle, Bookmark, ArrowRight, HelpCircle, Award, Check, X, BrainCircuit } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { addWordToVocabBank, getAllCards, VOCAB_CHANGED_EVENT, readingPassageLessonId } from '../lib/vocabBank';
+import { SelectionToCard } from '../../../../shared/vocab/SelectionToCard';
 
 interface PassageCardProps {
   passage: Passage;
@@ -40,6 +41,13 @@ export default function PassageCard({
   const [exercisesScore, setExercisesScore] = useState(0);
 
   const isFavorite = progress.favoritePassages.includes(passage.id);
+
+  /**
+   * Metin gövdesi. Katmanlıdaki gibi, buradan yapılan HER seçim (yalnızca
+   * önceden tanımlı kelimeler değil) karta eklenebilsin diye
+   * SelectionToCard'a veriliyor.
+   */
+  const textRef = useRef<HTMLDivElement | null>(null);
 
   // Paylaşılan FSRS kelime bankasına eklenmiş terimler (katmanlı ile ortak)
   const [bankedTerms, setBankedTerms] = useState<Set<string>>(new Set());
@@ -290,13 +298,24 @@ export default function PassageCard({
                 className="bg-white border border-editorial-border/40 p-6 sm:p-10 shadow-xs space-y-8"
               >
                 {/* Paragraphs Panel */}
-                <div className="space-y-6 leading-relaxed text-[15px] sm:text-base text-editorial-text/90 font-serif tracking-wide">
+                <div
+                  ref={textRef}
+                  className="space-y-6 leading-relaxed text-[15px] sm:text-base text-editorial-text/90 font-serif tracking-wide"
+                >
                   {passage.paragraphs.map((p, i) => (
                     <p key={i} className="text-justify indent-6">
                       {renderParagraphWithHighlights(p)}
                     </p>
                   ))}
                 </div>
+
+                {/* Metinde herhangi bir ifadeyi seçince "Karta Ekle" balonu */}
+                <SelectionToCard
+                  containerRef={textRef}
+                  lessonId={readingPassageLessonId(passage.id)}
+                  lessonTitle={passage.title}
+                  onAdded={refreshBankedTerms}
+                />
 
                 {/* Subtitle / Note */}
                 <div className="flex gap-3 bg-editorial-bg p-5 text-xs text-editorial-text/80 border border-editorial-border/30">
