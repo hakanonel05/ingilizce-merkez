@@ -39,3 +39,9 @@
 
 [functions."api"]
   timeout = 26
+
+# Supabase ucretsiz plani bir hafta hareketsiz kalan projeyi askiya alir ve
+# alt alan adini kaldirir; uygulama o anda giris yapamaz hale gelir. Gunluk
+# tek bir sorgu bunu onler (bkz. netlify/functions/keepalive.ts).
+[functions."keepalive"]
+  schedule = "@daily"
