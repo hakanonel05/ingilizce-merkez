@@ -37,7 +37,8 @@ import {
   BookX,
   Timer,
   CalendarRange,
-  Layers
+  Layers,
+  CloudOff
 } from 'lucide-react';
 
 const LOCAL_STORAGE_KEY = 'english_reading_trainer_progress_v1';
@@ -734,6 +735,35 @@ export default function App() {
 
       {/* Main Body Layout */}
       <main className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-10 flex-1">
+
+        {/*
+          ÇEVRİMDIŞI UYARISI.
+
+          Bu uygulamada senkron kodu yok; eşitleme hesapla girişe bağlı.
+          Oturum açık değilken ekranda bunu söyleyen hiçbir şey yoktu:
+          kullanıcı katmanlıdaki gibi bir "kod" alanı arıyor, bulamıyor ve
+          çalışmasının neden diğer bilgisayara gelmediğini anlamıyordu.
+        */}
+        {!session && (
+          <div className="mb-8 flex flex-wrap items-center justify-between gap-3 border border-editorial-accent/25 bg-white px-4 py-3">
+            <div className="flex items-start gap-2.5 min-w-0">
+              <CloudOff className="h-4 w-4 shrink-0 mt-0.5 text-editorial-accent" />
+              <p className="text-xs leading-relaxed text-editorial-text/80">
+                <strong className="font-bold">Çevrimdışı moddasın.</strong>{' '}
+                Okuduğun parçalar, kelime durumların ve alıştırma cevapların
+                yalnızca <strong>bu bilgisayarda</strong> tutuluyor. Başka bir
+                cihazda görebilmek için hesabınla giriş yapman gerekiyor —
+                bu tarafta senkron kodu yoktur.
+              </p>
+            </div>
+            <button
+              onClick={() => setIsOfflineMode(false)}
+              className="shrink-0 border border-editorial-accent bg-editorial-accent px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white transition-colors hover:bg-white hover:text-editorial-accent cursor-pointer"
+            >
+              Giriş yap ve eşitle
+            </button>
+          </div>
+        )}
 
         {/* Navigation Tab Menu Grid (Only when not viewing specific Passage card) */}
         {selectedPassageId === null && (
