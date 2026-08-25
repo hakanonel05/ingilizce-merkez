@@ -115,6 +115,21 @@ function openDb(): Promise<IDBDatabase> {
         store.createIndex('day', 'day', { unique: false });
       }
     };
+    /**
+     * BASKA SEKME ENGELLIYOR.
+     *
+     * Surum yukseltmesi, veritabanini eski surumle acik tutan baska bir
+     * sekme varsa baslamaz: onblocked tetiklenir ve onsuccess HIC
+     * gelmez. Bu ele alinmadiginda soz sonsuza kadar beklemede kalir —
+     * senkron "Senkronize ediliyor..." yazisinda takilir ve bir daha
+     * hicbir senkron calismaz (bkz. syncInFlight).
+     */
+    req.onblocked = () =>
+      reject(
+        new Error(
+        'Veritabani guncellemesi bekliyor: uygulamanin acik diger sekmelerini kapatip tekrar deneyin.'
+        )
+      );
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error);
   });

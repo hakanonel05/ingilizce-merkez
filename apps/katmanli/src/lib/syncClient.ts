@@ -73,12 +73,42 @@ export async function isSyncAvailable(): Promise<boolean> {
   }
 }
 
-async function api(path: string, body: any): Promise<any> {
-  const res = await fetch(path, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
+/**
+ * Istek zaman asimlari.
+ *
+ * NEDEN: fetch varsayilan olarak sonsuza kadar bekler. Ag yarida
+ * kesildiginde runSync hic sonuclanmiyor, syncInFlight temizlenmiyor ve
+ * o noktadan sonra HICBIR senkron calismiyordu — arayuz sonsuza kadar
+ * "Senkronize ediliyor..." yaziyordu. Artik belirli surede kesilip
+ * anlasilir bir hata veriyor.
+ */
+const API_TIMEOUT_MS = 45_000;
+/** Ses dosyalari buyuk olabilir; onlara daha genis sure taniniyor. */
+const AUDIO_TIMEOUT_MS = 120_000;
+
+async function api(path: string, body: any, timeoutMs = API_TIMEOUT_MS): Promise<any> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  let res: Response;
+  try {
+    res = await fetch(path, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: controller.signal,
+    });
+  } catch (err: any) {
+    if (err?.name === 'AbortError') {
+      throw new Error(
+        `Sunucu ${Math.round(timeoutMs / 1000)} saniye icinde yanit vermedi. ` +
+          'Baglantinizi kontrol edip tekrar deneyin.'
+      );
+    }
+    throw err;
+  } finally {
+    clearTimeout(timer);
+  }
   const raw = await res.text();
   let data: any;
   try {
@@ -216,7 +246,7 @@ export async function runSync(
 
       try {
         onProgress?.(`Ses kaydı indiriliyor (${audioDown + 1}/${remoteRecMeta.length})...`);
-        const dl = await api('/api/sync/download-audio', { syncCode, path: info.path });
+        const dl = await api('/api/sync/download-audio', { syncCode, path: info.path }, AUDIO_TIMEOUT_MS);
         const bytes = Uint8Array.from(atob(dl.dataBase64), (c) => c.charCodeAt(0));
         await saveRecordingSilently({
           key: info.key,
@@ -285,7 +315,7 @@ export async function runSync(
       onProgress?.(`Ses kaydı yükleniyor (${audioUp + 1})...`);
       const base64 = await blobToBase64(rec.blob);
       const path = `${rec.lessonId}/${rec.sentenceId}.webm`;
-      await api('/api/sync/upload-audio', { syncCode, path, dataBase64: base64 });
+      await api('/api/sync/upload-audio', { syncCode, path, dataBase64: base64 }, AUDIO_TIMEOUT_MS);
 
       metaItems.push({
         key: metaKey,
@@ -372,6 +402,8 @@ const AUTO_SYNC_DELAY_MS = 8000;
 
 let autoSyncTimer: ReturnType<typeof setTimeout> | null = null;
 let syncInFlight: Promise<SyncResult> | null = null;
+/** Calisan senkronun asama yazilarini dinleyen taraf. */
+let activeProgress: ((message: string) => void) | undefined;
 let rerunRequested = false;
 
 export type SyncListener = (result: SyncResult) => void;
@@ -408,18 +440,26 @@ export function syncNow(onProgress?: (message: string) => void): Promise<SyncRes
     return Promise.reject(new Error('Önce en az 6 karakterlik bir senkron kodu belirleyin.'));
   }
 
+  // Ilerleme dinleyicisi calisan senkrona da baglanir. Eskiden yalnizca
+  // senkronu BASLATAN cagriya bagliydi: acilis senkronu surerken panelden
+  // "Simdi Senkronize Et" denildiginde asama yazisi hic gelmiyor, dugme
+  // yalnizca "Senkronize ediliyor..." diyordu ve kullanici uygulamanin
+  // takildigini saniyordu.
+  activeProgress = onProgress;
+
   if (syncInFlight) {
     rerunRequested = true;
     return syncInFlight;
   }
 
-  syncInFlight = runSync(onProgress)
+  syncInFlight = runSync((message) => activeProgress?.(message))
     .then((result) => {
       notify(result);
       return result;
     })
     .finally(() => {
       syncInFlight = null;
+      activeProgress = undefined;
       if (rerunRequested) {
         rerunRequested = false;
         scheduleAutoSync();

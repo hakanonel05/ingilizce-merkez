@@ -286,6 +286,9 @@ async function countRecordings(): Promise<number> {
         countReq.onsuccess = () => { db.close(); resolve(countReq.result || 0); };
         countReq.onerror = () => { db.close(); resolve(0); };
       };
+      // Baska sekme yukseltmeyi engelliyorsa bekleme; kayit sayisi
+      // panonun calismasi icin sart degil.
+      req.onblocked = () => resolve(0);
       req.onerror = () => resolve(0);
     } catch {
       resolve(0);
