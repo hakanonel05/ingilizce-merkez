@@ -38,6 +38,13 @@ export interface Passage {
 export interface UserProgress {
   completedPassages: number[]; // Array of completed passage IDs
   scores: Record<number, { score: number; total: number; timestamp: string }>; // passageId -> score details
+  /**
+   * Kelime alıştırmalarının sonucu. Anlama testi (scores) ile ayrı
+   * tutuluyor: ikisi farklı testler ve parça kartında ayrı gösteriliyor.
+   * Eskiden hiç kaydedilmiyordu; parçadan çıkıp dönünce alıştırmalar hiç
+   * yapılmamış gibi görünüyordu.
+   */
+  exerciseScores?: Record<number, { score: number; total: number; timestamp: string }>;
   wordStatus: Record<string, 'unstudied' | 'studied' | 'learned'>; // word term -> status
   favoritePassages: number[]; // Array of favorited passage IDs
   dailyStreak: number;

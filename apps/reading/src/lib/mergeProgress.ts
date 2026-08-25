@@ -47,6 +47,16 @@ export function mergeCloudProgress(local: UserProgress, cloud: any): UserProgres
     }
   }
 
+  const mergedExercises: NonNullable<UserProgress['exerciseScores']> = {
+    ...(cloud?.exercise_scores || {}),
+  };
+  for (const [id, entry] of Object.entries(local.exerciseScores || {})) {
+    const current = mergedExercises[Number(id)];
+    if (!current || (entry?.score ?? 0) >= (current?.score ?? 0)) {
+      mergedExercises[Number(id)] = entry;
+    }
+  }
+
   const union = (a: number[] = [], b: number[] = []) => [...new Set([...a, ...b])];
 
   /**
@@ -76,6 +86,7 @@ export function mergeCloudProgress(local: UserProgress, cloud: any): UserProgres
     favoritePassages: union(local.favoritePassages, cloud?.favorite_passages),
     wordStatus: mergedWordStatus,
     scores: mergedScores,
+    exerciseScores: mergedExercises,
     dailyStreak: Math.max(local.dailyStreak || 0, cloud?.daily_streak || 0),
     totalTimeSpent: Math.max(local.totalTimeSpent || 0, cloud?.total_time_spent || 0),
     // Alistirma cevaplarinda anahtar bazinda birlestir; cakisirsa yerel kalir

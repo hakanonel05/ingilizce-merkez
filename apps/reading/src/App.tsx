@@ -55,6 +55,7 @@ const EXTRA_COLUMNS_FLAG = 'reading_sync_extra_columns_missing_v1';
 const INITIAL_PROGRESS: UserProgress = {
   completedPassages: [],
   scores: {},
+  exerciseScores: {},
   wordStatus: {},
   favoritePassages: [],
   dailyStreak: 0,
@@ -300,7 +301,12 @@ export default function App() {
         const extrasUnsupported = localStorage.getItem(EXTRA_COLUMNS_FLAG) === '1';
         const payload = extrasUnsupported
           ? base
-          : { ...base, mistakes: progress.mistakes, exam_history: progress.examHistory };
+          : {
+              ...base,
+              mistakes: progress.mistakes,
+              exam_history: progress.examHistory,
+              exercise_scores: progress.exerciseScores || {},
+            };
 
         supabase.from('user_progress').upsert(payload).then(({ error }: any) => {
           if (!error) return;
@@ -318,7 +324,7 @@ export default function App() {
       }, 5000); // 5 second debounce
       return () => clearTimeout(timeoutId);
     }
-  }, [progress.completedPassages, progress.scores, progress.wordStatus, progress.favoritePassages, progress.workbookState, progress.mistakes, progress.examHistory, session, isSyncing]);
+  }, [progress.completedPassages, progress.scores, progress.exerciseScores, progress.wordStatus, progress.favoritePassages, progress.workbookState, progress.mistakes, progress.examHistory, session, isSyncing]);
 
   // Track study time using simple interval
   useEffect(() => {
@@ -429,6 +435,17 @@ export default function App() {
   // Grade a batch of questions (from a quiz, exercise, or exam) and update
   // the mistakes notebook: wrong answers are added/refreshed, questions the
   // user now gets right are removed (they've caught up).
+  /** Kelime alıştırması sonucunu kalıcı yazar. */
+  const handleSaveExerciseResult = useCallback((passageId: number, score: number, total: number) => {
+    setProgress(prev => ({
+      ...prev,
+      exerciseScores: {
+        ...(prev.exerciseScores || {}),
+        [passageId]: { score, total, timestamp: new Date().toISOString() },
+      },
+    }));
+  }, []);
+
   const handleGradeQuestions = useCallback((
     passage: { id: number; title: string; cefr: import('./types').CEFRLevel },
     source: 'quiz' | 'exercise' | 'exam',
@@ -822,6 +839,7 @@ export default function App() {
               onToggleFavorite={handleToggleFavorite}
               onWordStatusChange={handleWordStatusChange}
               onSaveTestResult={handleSaveTestResult}
+              onSaveExerciseResult={handleSaveExerciseResult}
               onGradeQuestions={handleGradeQuestions}
             />
           ) : (

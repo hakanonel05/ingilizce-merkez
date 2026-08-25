@@ -12,6 +12,7 @@ interface PassageCardProps {
   onToggleFavorite: (id: number) => void;
   onWordStatusChange: (term: string, status: 'unstudied' | 'studied' | 'learned') => void;
   onSaveTestResult: (passageId: number, score: number, total: number) => void;
+  onSaveExerciseResult: (passageId: number, score: number, total: number) => void;
   onGradeQuestions: (passage: Passage, source: 'quiz' | 'exercise', results: GradedQuestionResult[]) => void;
 }
 
@@ -22,6 +23,7 @@ export default function PassageCard({
   onToggleFavorite,
   onWordStatusChange,
   onSaveTestResult,
+  onSaveExerciseResult,
   onGradeQuestions
 }: PassageCardProps) {
   // Tabs inside specific passage
@@ -80,16 +82,25 @@ export default function PassageCard({
     }
   };
 
-  // Reset states when passage changes
+  /**
+   * Parca degisince ekrani sifirla — ama DAHA ONCE COZULDUYSE sonucu geri
+   * yukle. Eskiden her donuste testler bos ve gonderilmemis gorunuyordu;
+   * puan kayitliyken bile kullanici hic cozmemis sanıyordu.
+   */
   useEffect(() => {
     setActiveTab('text');
     setSelectedWord(null);
     setComprehensionAnswers({});
-    setComprehensionSubmitted(false);
-    setComprehensionScore(0);
     setExerciseAnswers({});
-    setExercisesSubmitted(false);
-    setExercisesScore(0);
+
+    const savedQuiz = progress.scores?.[passage.id];
+    setComprehensionSubmitted(!!savedQuiz);
+    setComprehensionScore(savedQuiz?.score ?? 0);
+
+    const savedExercise = progress.exerciseScores?.[passage.id];
+    setExercisesSubmitted(!!savedExercise);
+    setExercisesScore(savedExercise?.score ?? 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [passage]);
 
   // Handle highlighted word click in text
@@ -202,6 +213,9 @@ export default function PassageCard({
 
     setExercisesScore(score);
     setExercisesSubmitted(true);
+    // Sonucu kalici yaz: eskiden yalnizca bilesen durumunda kaliyordu ve
+    // parcadan cikip donunce alistirmalar hic yapilmamis gibi gorunuyordu.
+    onSaveExerciseResult(passage.id, score, passage.exercises.length);
     // Update the "Yanlışlar Defteri" (mistakes notebook)
     onGradeQuestions(passage, 'exercise', gradedResults);
   };

@@ -136,6 +136,21 @@ export default function PassageList({ passages, progress, onSelectPassage, onTog
             const isCompleted = progress.completedPassages.includes(p.id);
             const isFavorite = progress.favoritePassages.includes(p.id);
             const scoreDetail = progress.scores[p.id];
+            const exerciseDetail = progress.exerciseScores?.[p.id];
+
+            /**
+             * "Okundu" yalnizca ANLAMA TESTI gonderildiginde isaretleniyor.
+             * Parcayi okuyup kelimelerini calisan ama testi cozmemis
+             * kullaniciya kart "hic calisilmadi" diyordu. Elimizdeki tum
+             * izlere bakip ara bir durum gosteriyoruz.
+             */
+            const studiedWordCount = (p.vocabulary || []).filter(
+              (w) => {
+                const status = progress.wordStatus[w.term];
+                return status === 'studied' || status === 'learned';
+              }
+            ).length;
+            const hasActivity = !!exerciseDetail || studiedWordCount > 0;
 
             // Badges color coding matching editorial styles
             let cefrBadgeStyle = '';
@@ -186,6 +201,10 @@ export default function PassageList({ passages, progress, onSelectPassage, onTog
                         <span className="flex items-center gap-1 text-[8px] text-emerald-800 bg-emerald-50 border border-emerald-200/50 font-bold px-1.5 py-0.5 uppercase tracking-wider rounded-xs">
                           <CheckCircle2 className="h-2.5 w-2.5 fill-emerald-600 text-white" /> OKUNDU
                         </span>
+                      ) : hasActivity ? (
+                        <span className="flex items-center gap-1 text-[8px] text-amber-800 bg-amber-50 border border-amber-200/50 font-bold px-1.5 py-0.5 uppercase tracking-wider rounded-xs">
+                          ÇALIŞILIYOR
+                        </span>
                       ) : !p.isLoaded ? (
                         <span className="flex items-center gap-1 text-[8px] text-amber-800 bg-amber-50 border border-amber-200/50 font-bold px-1.5 py-0.5 uppercase tracking-wider rounded-xs" title="Google Search destekli Yapay Zeka ile orijinal kitaptan yüklenecektir">
                           <Sparkles className="h-2.5 w-2.5 text-amber-600 animate-pulse" /> AI-YÜKLE
@@ -227,12 +246,29 @@ export default function PassageList({ passages, progress, onSelectPassage, onTog
 
                 {/* Bottom Action Section */}
                 <div className="mt-6 pt-4 border-t border-editorial-border/20 flex items-center justify-between">
-                  {scoreDetail ? (
-                    <div className="text-xs">
-                      <span className="text-editorial-text/40 font-bold tracking-wider text-[8px] uppercase">SKOR:</span>{' '}
-                      <span className="font-bold text-editorial-text font-mono text-xs text-emerald-800">
-                        {scoreDetail.score}/{scoreDetail.total}
-                      </span>
+                  {scoreDetail || exerciseDetail || hasActivity ? (
+                    <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs">
+                      {scoreDetail && (
+                        <span>
+                          <span className="text-editorial-text/40 font-bold tracking-wider text-[8px] uppercase">TEST:</span>{' '}
+                          <span className="font-bold font-mono text-xs text-emerald-800">
+                            {scoreDetail.score}/{scoreDetail.total}
+                          </span>
+                        </span>
+                      )}
+                      {exerciseDetail && (
+                        <span>
+                          <span className="text-editorial-text/40 font-bold tracking-wider text-[8px] uppercase">ALIŞTIRMA:</span>{' '}
+                          <span className="font-bold font-mono text-xs text-amber-700">
+                            {exerciseDetail.score}/{exerciseDetail.total}
+                          </span>
+                        </span>
+                      )}
+                      {!scoreDetail && !exerciseDetail && (
+                        <span className="text-[10px] text-amber-700 font-mono uppercase tracking-wider">
+                          {studiedWordCount} KELİME ÇALIŞILDI
+                        </span>
+                      )}
                     </div>
                   ) : (
                     <span className="text-[10px] text-editorial-text/40 font-mono uppercase tracking-wider">
