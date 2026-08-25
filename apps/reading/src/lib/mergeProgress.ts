@@ -49,6 +49,27 @@ export function mergeCloudProgress(local: UserProgress, cloud: any): UserProgres
 
   const union = (a: number[] = [], b: number[] = []) => [...new Set([...a, ...b])];
 
+  /**
+   * Yanlislar ve sinav gecmisi: kimlige gore birlestirilir.
+   *
+   * Bunlar da tek yonlu birikir; ayni soruyu iki cihazda kacirdiysan tek
+   * kayit kalir ama hicbiri silinmez. Sutunlar tabloda yoksa `cloud`
+   * tarafi bos gelir ve yerel liste oldugu gibi korunur.
+   */
+  const mergeById = <T extends Record<string, any>>(
+    localList: T[] = [],
+    cloudList: T[] = [],
+    idField: string
+  ): T[] => {
+    const byId = new Map<string, T>();
+    for (const item of [...(cloudList || []), ...(localList || [])]) {
+      const key = String(item?.[idField] ?? JSON.stringify(item));
+      // Yerel liste sonra geldigi icin ayni kimlikte yerel kayit kazanir
+      byId.set(key, item);
+    }
+    return [...byId.values()];
+  };
+
   return {
     ...local,
     completedPassages: union(local.completedPassages, cloud?.completed_passages),
@@ -59,5 +80,7 @@ export function mergeCloudProgress(local: UserProgress, cloud: any): UserProgres
     totalTimeSpent: Math.max(local.totalTimeSpent || 0, cloud?.total_time_spent || 0),
     // Alistirma cevaplarinda anahtar bazinda birlestir; cakisirsa yerel kalir
     workbookState: { ...(cloud?.workbook_state || {}), ...(local.workbookState || {}) },
+    mistakes: mergeById(local.mistakes, cloud?.mistakes, 'key'),
+    examHistory: mergeById(local.examHistory, cloud?.exam_history, 'id'),
   };
 }

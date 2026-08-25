@@ -42,6 +42,15 @@ import {
 
 const LOCAL_STORAGE_KEY = 'english_reading_trainer_progress_v1';
 
+/**
+ * "user_progress tablosunda mistakes/exam_history sutunlari yok" bayragi.
+ * Bir kez 42703 alindiginda kurulur; sutunlar eklenirse elle silmek ya da
+ * tarayici verisini temizlemek yerine asagidaki not gecerlidir: bayrak
+ * yalnizca hata halinde kuruldugu icin, sutunlar eklendikten sonra
+ * temizlenmesi yeter.
+ */
+const EXTRA_COLUMNS_FLAG = 'reading_sync_extra_columns_missing_v1';
+
 const INITIAL_PROGRESS: UserProgress = {
   completedPassages: [],
   scores: {},
@@ -226,6 +235,14 @@ export default function App() {
 
         if (progressRes.data) {
           const cp = progressRes.data;
+
+          // Sutunlar sonradan eklendiyse select('*') artik onlari da
+          // dondurur; bayragi burada temizlemek, kullanicinin tarayici
+          // verisini elle temizlemesini gereksiz kilar.
+          if ('mistakes' in cp || 'exam_history' in cp) {
+            localStorage.removeItem(EXTRA_COLUMNS_FLAG);
+          }
+
           // Uzerine yazma YOK: iki taraf birlestirilir (bkz. mergeCloudProgress)
           setProgress(prev => mergeCloudProgress(prev, cp));
         }
@@ -259,7 +276,7 @@ export default function App() {
   useEffect(() => {
     if (session && !isSyncing) {
       const timeoutId = setTimeout(() => {
-        supabase.from('user_progress').upsert({
+        const base = {
           id: session.user.id,
           completed_passages: progress.completedPassages,
           scores: progress.scores,
@@ -269,11 +286,38 @@ export default function App() {
           total_time_spent: progress.totalTimeSpent,
           workbook_state: progress.workbookState,
           updated_at: new Date().toISOString()
-        }).then(undefined, console.error);
+        };
+
+        /**
+         * Yanlislar defteri ve sinav gecmisi tabloya SONRADAN eklenen
+         * sutunlar. Henuz eklenmemis bir veritabaninda bunlari gondermek
+         * TUM upsert'i 42703 ile dusurur ve ilerlemenin tamami senkronsuz
+         * kalir. Bu yuzden: once tam veriyle dene, sutun yoksa bir daha
+         * deneme ve sutunsuz gonder. Sutunlar eklendigi an kendiliginden
+         * calismaya baslar (bayrak yalnizca hatada kurulur).
+         */
+        const extrasUnsupported = localStorage.getItem(EXTRA_COLUMNS_FLAG) === '1';
+        const payload = extrasUnsupported
+          ? base
+          : { ...base, mistakes: progress.mistakes, exam_history: progress.examHistory };
+
+        supabase.from('user_progress').upsert(payload).then(({ error }: any) => {
+          if (!error) return;
+          if (error.code === '42703') {
+            console.warn(
+              '[sync] user_progress tablosunda mistakes/exam_history sutunlari yok; ' +
+                'ilerlemenin geri kalani gonderiliyor.'
+            );
+            localStorage.setItem(EXTRA_COLUMNS_FLAG, '1');
+            supabase.from('user_progress').upsert(base).then(undefined, console.error);
+            return;
+          }
+          console.error(error);
+        }, console.error);
       }, 5000); // 5 second debounce
       return () => clearTimeout(timeoutId);
     }
-  }, [progress.completedPassages, progress.scores, progress.wordStatus, progress.favoritePassages, progress.workbookState, session, isSyncing]);
+  }, [progress.completedPassages, progress.scores, progress.wordStatus, progress.favoritePassages, progress.workbookState, progress.mistakes, progress.examHistory, session, isSyncing]);
 
   // Track study time using simple interval
   useEffect(() => {
