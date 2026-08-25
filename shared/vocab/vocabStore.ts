@@ -26,10 +26,28 @@ const STORE = 'cards';
 export type CardLevel = CefrLevel;
 export type CardKind = CardKindName;
 
-export interface VocabCard extends FsrsCardFields {
-  id: string;
+/**
+ * Kartın geldiği bir yer: hangi ders/parça ve orada geçtiği cümle.
+ *
+ * Aynı kelimeyi birden çok yerde görürsen kart çoğalmıyor, bu liste
+ * uzuyor: tekrar geçmişi tek elde kalırken kelimeyi nerede gördüğün
+ * bilgisi de kaybolmuyor.
+ */
+export interface CardSource {
   lessonId: string;
   lessonTitle: string;
+  /** İfadenin o metinde geçtiği cümle. */
+  contextEn?: string;
+  addedAt: number;
+}
+
+export interface VocabCard extends FsrsCardFields {
+  id: string;
+  /** İlk eklendiği yer. sources[0] ile aynıdır; eski kayıtlarla uyum için duruyor. */
+  lessonId: string;
+  lessonTitle: string;
+  /** Kelimenin görüldüğü TÜM yerler, eklenme sırasıyla. */
+  sources?: CardSource[];
   /** İngilizce ifade (kartın ön yüzü). */
   front: string;
   /** Türkçe karşılık (kartın arka yüzü). */
@@ -103,8 +121,16 @@ function notifyChanged() {
   }
 }
 
-export function makeCardId(lessonId: string, front: string): string {
-  return `${lessonId}::${front.toLowerCase().trim()}`;
+/**
+ * Kart kimliği YALNIZCA ifadeden üretilir.
+ *
+ * Eskiden `ders::kelime` idi; aynı kelimeyi hem bir videoda hem bir okuma
+ * parçasında görünce iki ayrı kart oluşuyor, ikisi ayrı ayrı sorulup
+ * tekrar geçmişi bölünüyordu. Artık tek kart var, geldiği yerler
+ * `sources` listesinde birikiyor.
+ */
+export function makeCardId(front: string): string {
+  return front.toLowerCase().trim().replace(/\s+/g, ' ');
 }
 
 /**
@@ -140,10 +166,20 @@ export function buildCard(input: {
     context: input.contextEn || input.exampleEn,
   });
 
+  const now = Date.now();
+
   return {
-    id: makeCardId(input.lessonId, input.front),
+    id: makeCardId(front),
     lessonId: input.lessonId,
     lessonTitle: input.lessonTitle,
+    sources: [
+      {
+        lessonId: input.lessonId,
+        lessonTitle: input.lessonTitle,
+        contextEn: input.contextEn,
+        addedAt: now,
+      },
+    ],
     front,
     back: input.back.trim(),
     ipa: input.ipa,
@@ -159,7 +195,102 @@ export function buildCard(input: {
 }
 
 export async function getAllCards(): Promise<VocabCard[]> {
+  await mergeDuplicateCards();
   return tx<VocabCard[]>('readonly', (s) => s.getAll());
+}
+
+/** Kartın bu ders/parçadan gelip gelmediği (tüm kaynaklara bakar). */
+export function cardBelongsTo(card: VocabCard, lessonId: string): boolean {
+  if (card.lessonId === lessonId) return true;
+  return (card.sources || []).some((s) => s.lessonId === lessonId);
+}
+
+/** Kartın geldiği yerlerin listesi; eski kartlarda tek kayıt üretir. */
+export function cardSources(card: VocabCard): CardSource[] {
+  if (card.sources?.length) return card.sources;
+  return [
+    {
+      lessonId: card.lessonId,
+      lessonTitle: card.lessonTitle,
+      contextEn: card.contextEn,
+      addedAt: card.createdAt,
+    },
+  ];
+}
+
+/**
+ * ESKİ KİMLİKLERİN BİRLEŞTİRİLMESİ (bir kez çalışır).
+ *
+ * Kart kimliği `ders::kelime` iken aynı kelime birden çok derste ayrı
+ * kartlar olarak duruyordu. Kimlik artık yalnızca kelime olduğu için
+ * bu kayıtların tek karta indirilmesi gerekiyor.
+ *
+ * Hayatta kalan kart, tekrar geçmişi EN ZENGİN olandır (en çok tekrar,
+ * eşitlikte en eski kayıt): amaç FSRS ilerlemesini korumak. Diğerlerinin
+ * geldiği yerler `sources` listesine eklenir, boş alanları da tamamlar.
+ */
+let mergeDone = false;
+async function mergeDuplicateCards(): Promise<void> {
+  if (mergeDone) return;
+  mergeDone = true;
+
+  try {
+    const cards = await tx<VocabCard[]>('readonly', (s) => s.getAll());
+    if (cards.length === 0) return;
+
+    const groups = new Map<string, VocabCard[]>();
+    for (const card of cards) {
+      const key = makeCardId(card.front);
+      const list = groups.get(key);
+      if (list) list.push(card);
+      else groups.set(key, [card]);
+    }
+
+    const writes: VocabCard[] = [];
+    const deletes: string[] = [];
+
+    for (const [id, group] of groups.entries()) {
+      const needsWork = group.length > 1 || group[0].id !== id || !group[0].sources?.length;
+      if (!needsWork) continue;
+
+      const survivor = [...group].sort(
+        (a, b) => (b.reps || 0) - (a.reps || 0) || (a.createdAt || 0) - (b.createdAt || 0)
+      )[0];
+
+      let merged: VocabCard = { ...survivor, id };
+      merged.sources = cardSources(survivor);
+
+      for (const other of group) {
+        if (other === survivor) continue;
+        const next = withSource(merged, other);
+        if (next) merged = next;
+      }
+
+      writes.push(merged);
+      for (const other of group) {
+        if (other.id !== id) deletes.push(other.id);
+      }
+    }
+
+    if (writes.length === 0 && deletes.length === 0) return;
+
+    const db = await openDb();
+    await new Promise<void>((resolve, reject) => {
+      const t = db.transaction(STORE, 'readwrite');
+      const store = t.objectStore(STORE);
+      for (const id of deletes) store.delete(id);
+      for (const card of writes) store.put({ ...card, updatedAt: Date.now() } as any);
+      t.oncomplete = () => { db.close(); resolve(); };
+      t.onerror = () => { db.close(); reject(t.error); };
+    });
+
+    console.info(
+      `[vocab] ${writes.length} kart tek kimliğe indirildi, ${deletes.length} yinelenen kayıt kaldırıldı.`
+    );
+    notifyChanged();
+  } catch (err) {
+    console.warn('[vocab] kartlar birleştirilemedi:', err);
+  }
 }
 
 export async function getCardsByLesson(lessonId: string): Promise<VocabCard[]> {
@@ -181,6 +312,62 @@ export async function getCardsByLesson(lessonId: string): Promise<VocabCard[]> {
 export async function putCard(card: VocabCard): Promise<void> {
   await tx('readwrite', (s) => s.put({ ...card, updatedAt: Date.now() } as any));
   notifyChanged();
+}
+
+/**
+ * Senkronizasyondan gelen kartı yerelle birleştirir.
+ *
+ * İki iş birden yapıyor:
+ *  - Eski `ders::kelime` kimlikleriyle gelen kayıtları yeni kimliğe
+ *    çeviriyor, yoksa buluttaki eski kayıtlar her çekişte yinelenen
+ *    kartları geri getirirdi.
+ *  - Tekrar durumunda "son yazan kazanır" kuralı sürüyor, ama kelimenin
+ *    geldiği yerler İKİ TARAFTAN da birleştiriliyor: bir cihazda videodan,
+ *    başka cihazda okuma parçasından eklenmişse ikisi de kalır.
+ *
+ * Değişiklik yapıldıysa true döner; olay fırlatmaz (toplu çekimde arayüz
+ * her satırda yeniden çizilmesin diye).
+ */
+export async function mergeRemoteCard(remote: VocabCard): Promise<boolean> {
+  const id = makeCardId(remote.front || remote.id);
+  const incoming: VocabCard = { ...remote, id, sources: cardSources({ ...remote, id }) };
+
+  const db = await openDb();
+  return new Promise<boolean>((resolve, reject) => {
+    const t = db.transaction(STORE, 'readwrite');
+    const store = t.objectStore(STORE);
+    const getReq = store.get(id);
+    let changed = false;
+
+    getReq.onsuccess = () => {
+      const local: VocabCard | undefined = getReq.result;
+
+      if (!local) {
+        store.put(incoming);
+        changed = true;
+        return;
+      }
+
+      const localTime = (local as any).updatedAt || local.lastReview || local.createdAt || 0;
+      const remoteTime = (remote as any).updatedAt || remote.lastReview || remote.createdAt || 0;
+
+      // Once tekrar durumunu sec, sonra iki tarafin kaynaklarini birlestir
+      const base = remoteTime > localTime ? incoming : local;
+      const other = remoteTime > localTime ? local : incoming;
+      const merged = withSource(base, other);
+
+      if (merged) {
+        store.put(merged);
+        changed = true;
+      } else if (base !== local) {
+        store.put(base);
+        changed = true;
+      }
+    };
+
+    t.oncomplete = () => { db.close(); resolve(changed); };
+    t.onerror = () => { db.close(); reject(t.error); };
+  });
 }
 
 /**
@@ -276,6 +463,56 @@ export async function reclassifyAllCards(): Promise<ReclassifyResult> {
 }
 
 /**
+ * Var olan karta yeni bir kaynak ekler. Eklenecek bir şey yoksa null
+ * döner ki gereksiz yazma (ve senkron trafiği) olmasın.
+ *
+ * Eksik alanlar da bu sırada tamamlanır: kelime ilk kez anlamsız/örneksiz
+ * eklendiyse ikinci karşılaşmada gelen bilgi boşlukları doldurur, ama
+ * dolu bir alanın üzerine asla yazılmaz.
+ */
+function withSource(existing: VocabCard, incoming: VocabCard): VocabCard | null {
+  const sources = existing.sources?.length
+    ? [...existing.sources]
+    : [
+        {
+          lessonId: existing.lessonId,
+          lessonTitle: existing.lessonTitle,
+          contextEn: existing.contextEn,
+          addedAt: existing.createdAt,
+        },
+      ];
+
+  const incomingSources = incoming.sources?.length
+    ? incoming.sources
+    : [
+        {
+          lessonId: incoming.lessonId,
+          lessonTitle: incoming.lessonTitle,
+          contextEn: incoming.contextEn,
+          addedAt: incoming.createdAt,
+        },
+      ];
+
+  let changed = !existing.sources?.length;
+  for (const source of incomingSources) {
+    if (sources.some((s) => s.lessonId === source.lessonId)) continue;
+    sources.push(source);
+    changed = true;
+  }
+
+  const filled: Partial<VocabCard> = {};
+  if (!existing.back?.trim() && incoming.back?.trim()) filled.back = incoming.back;
+  if (!existing.ipa && incoming.ipa) filled.ipa = incoming.ipa;
+  if (!existing.exampleEn && incoming.exampleEn) filled.exampleEn = incoming.exampleEn;
+  if (!existing.exampleTr && incoming.exampleTr) filled.exampleTr = incoming.exampleTr;
+  if (!existing.pos && incoming.pos) filled.pos = incoming.pos;
+  if (Object.keys(filled).length > 0) changed = true;
+
+  if (!changed) return null;
+  return { ...existing, ...filled, sources, updatedAt: Date.now() } as VocabCard;
+}
+
+/**
  * Kartları toplu ekler. AYNI kart varsa ÜZERİNE YAZMAZ — tekrar geçmişi
  * korunur. Aynı dersten kelimeler yeniden çıkarıldığında ilerleme kaybolmaz.
  */
@@ -295,10 +532,19 @@ export async function addCardsIfMissing(cards: VocabCard[]): Promise<number> {
     cards.forEach((card) => {
       const getReq = store.get(card.id);
       getReq.onsuccess = () => {
-        if (!getReq.result) {
+        const existing: VocabCard | undefined = getReq.result;
+
+        if (!existing) {
           store.put(card);
           added++;
+        } else {
+          // Kart zaten var: tekrar gecmisine DOKUNULMAZ, yalnizca kelimeyi
+          // bu kez nerede gordugun kaydedilir. Ayni yerden tekrar eklenirse
+          // liste sismesin diye ders kimligi kontrol ediliyor.
+          const merged = withSource(existing, card);
+          if (merged) store.put(merged);
         }
+
         if (--pending === 0) {
           /* transaction oncomplete halleder */
         }

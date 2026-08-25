@@ -21,7 +21,7 @@
  * içinde korumalı, hata durumunda o kaynak boş sayılır.
  */
 
-import { getAllCards, VocabCard } from '../vocab/vocabStore';
+import { getAllCards, VocabCard, cardSources } from '../vocab/vocabStore';
 import { CefrLevel, CEFR_ORDER } from '../vocab/cefr';
 import { PartOfSpeech } from '../vocab/pos';
 import {
@@ -116,7 +116,9 @@ export interface WordRow {
   pos?: PartOfSpeech;
   kind: string;
   lessonTitle: string;
-  /** 'reading' veya 'katmanli' — kartın hangi uygulamadan geldiği. */
+  /** Kelimenin görüldüğü tüm yerler, geçtiği cümleyle birlikte. */
+  sources: { lessonTitle: string; contextEn?: string }[];
+  /** 'reading' veya 'katmanli' — kartın İLK eklendiği uygulama. */
   source: 'reading' | 'katmanli';
   createdAt: number;
   day: string;
@@ -350,6 +352,8 @@ export async function collectSnapshot(): Promise<Snapshot> {
     const day = dayKey(card.createdAt);
     touch(day).wordsAdded += 1;
 
+    const sources = cardSources(card);
+
     const row: WordRow = {
       front: card.front,
       back: card.back,
@@ -357,6 +361,7 @@ export async function collectSnapshot(): Promise<Snapshot> {
       pos: card.pos,
       kind: card.kind,
       lessonTitle: card.lessonTitle,
+      sources: sources.map((s) => ({ lessonTitle: s.lessonTitle, contextEn: s.contextEn })),
       source: card.lessonId.startsWith('reading:') ? 'reading' : 'katmanli',
       createdAt: card.createdAt,
       day,
@@ -371,7 +376,11 @@ export async function collectSnapshot(): Promise<Snapshot> {
     const posKey = card.pos || 'bilinmiyor';
     byPos[posKey] = (byPos[posKey] || 0) + 1;
     byKind[card.kind] = (byKind[card.kind] || 0) + 1;
-    bySourceMap.set(card.lessonTitle, (bySourceMap.get(card.lessonTitle) || 0) + 1);
+    // Kelime birden cok metinde gectiyse her birinde sayilir; toplam kart
+    // sayisindan buyuk cikabilir, bu yuzden basligi "gecis" degil "kart".
+    for (const src of sources) {
+      bySourceMap.set(src.lessonTitle, (bySourceMap.get(src.lessonTitle) || 0) + 1);
+    }
 
     totalReps += card.reps;
     totalLapses += card.lapses;

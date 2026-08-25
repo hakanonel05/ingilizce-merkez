@@ -6,6 +6,8 @@ import {
   getAllCards,
   getCardsByLesson,
   addCardsIfMissing,
+  cardBelongsTo,
+  cardSources,
   buildCard,
   deleteCard,
   putCard,
@@ -272,7 +274,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
   }, []);
 
   const lessonCards = useMemo(
-    () => (lesson ? allCards.filter((c) => c.lessonId === lesson.id) : []),
+    () => (lesson ? allCards.filter((c) => cardBelongsTo(c, lesson.id)) : []),
     [allCards, lesson]
   );
 
@@ -343,7 +345,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
       .filter((c) => (levelFilter === 'all' ? true : c.level === levelFilter))
       .filter((c) => (kindFilter === 'all' ? true : c.kind === kindFilter))
       .filter((c) => (posFilter === 'all' ? true : c.pos === posFilter))
-      .filter((c) => (lessonFilter === 'all' ? true : c.lessonId === lessonFilter))
+      .filter((c) => (lessonFilter === 'all' ? true : cardBelongsTo(c, lessonFilter)))
       .filter(
         (c) =>
           !term ||
@@ -388,7 +390,14 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
   const exportCsv = () => {
     // Anki'ye alınabilecek basit CSV
     const rows = filtered.map((c) =>
-      [c.front, c.back, c.exampleEn || '', c.level, c.pos ? POS_LABELS_TR[c.pos] : '', c.lessonTitle]
+      [
+        c.front,
+        c.back,
+        c.exampleEn || '',
+        c.level,
+        c.pos ? POS_LABELS_TR[c.pos] : '',
+        cardSources(c).map((src) => src.lessonTitle).join(' | '),
+      ]
         .map((v) => `"${String(v).replace(/"/g, '""')}"`)
         .join(',')
     );
@@ -1151,11 +1160,18 @@ const CardTable: React.FC<{
                   <span>tekrar: {c.reps}</span>
                   {c.lapses > 0 && <span>unutma: {c.lapses}</span>}
                   {c.stability !== null && <span>S: {c.stability.toFixed(1)}g</span>}
-                  {showLesson && (
-                    <span className="truncate max-w-[180px]" title={c.lessonTitle}>
-                      · {c.lessonTitle}
-                    </span>
-                  )}
+                  {showLesson &&
+                    cardSources(c).map((src) => (
+                      <span
+                        key={src.lessonId}
+                        className="truncate max-w-[180px]"
+                        title={src.contextEn ? `${src.lessonTitle}
+
+"${src.contextEn}"` : src.lessonTitle}
+                      >
+                        · {src.lessonTitle}
+                      </span>
+                    ))}
                 </div>
               </div>
 

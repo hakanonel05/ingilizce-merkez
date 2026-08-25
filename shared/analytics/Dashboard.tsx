@@ -453,8 +453,13 @@ export const Dashboard: React.FC = () => {
                         <td className="px-3 py-2 text-slate-500 hidden sm:table-cell">
                           {w.pos ? POS_LABELS_TR[w.pos] : '—'}
                         </td>
-                        <td className="px-3 py-2 text-slate-500 hidden md:table-cell max-w-[200px] truncate">
-                          {w.lessonTitle}
+                        <td
+                          className="px-3 py-2 text-slate-500 hidden md:table-cell max-w-[220px] truncate"
+                          title={w.sources
+                            .map((s) => (s.contextEn ? `${s.lessonTitle}: "${s.contextEn}"` : s.lessonTitle))
+                            .join(' · ')}
+                        >
+                          {w.sources.map((s) => s.lessonTitle).join(', ')}
                         </td>
                         <td className="px-3 py-2 text-slate-500 whitespace-nowrap">{formatDay(w.day)}</td>
                       </tr>

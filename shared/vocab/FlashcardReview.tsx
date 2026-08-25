@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { VocabCard, putCard, isNewCard } from './vocabStore';
+import { VocabCard, putCard, isNewCard, cardSources } from './vocabStore';
 import { POS_LABELS_TR } from './pos';
 import { logActivity } from '../analytics/activityLog';
 import { bumpDailyCounter } from './vocabSettings';
@@ -270,9 +270,21 @@ export const FlashcardReview: React.FC<Props> = ({
               </span>
             )}
           </div>
-          <span className="text-slate-500 truncate max-w-[45%]" title={current.lessonTitle}>
-            {current.lessonTitle}
-          </span>
+          {(() => {
+            const sources = cardSources(current);
+            const label =
+              sources.length > 1
+                ? `${sources[0].lessonTitle} +${sources.length - 1}`
+                : sources[0].lessonTitle;
+            return (
+              <span
+                className="text-slate-500 truncate max-w-[45%]"
+                title={sources.map((s) => s.lessonTitle).join(', ')}
+              >
+                {label}
+              </span>
+            );
+          })()}
         </div>
 
         <div className="p-6 sm:p-10 text-center space-y-4 min-h-[220px] flex flex-col justify-center">
@@ -303,11 +315,18 @@ export const FlashcardReview: React.FC<Props> = ({
                 </div>
               )}
 
-              {current.contextEn && current.contextEn !== current.exampleEn && (
-                <p className="text-[11px] text-slate-500 italic px-2">
-                  Videoda: &ldquo;{current.contextEn}&rdquo;
-                </p>
-              )}
+              {/* Kelimeyi nerede gördüğün: her kaynak kendi cümlesiyle.
+                  Aynı kelime birden çok metinde geçtiyse hepsi burada. */}
+              {cardSources(current)
+                .filter((src) => src.contextEn && src.contextEn !== current.exampleEn)
+                .map((src) => (
+                  <p key={src.lessonId} className="text-[11px] text-slate-500 italic px-2 text-left">
+                    <span className="not-italic font-semibold text-slate-600">
+                      {src.lessonTitle}:
+                    </span>{' '}
+                    &ldquo;{src.contextEn}&rdquo;
+                  </p>
+                ))}
             </div>
           )}
         </div>

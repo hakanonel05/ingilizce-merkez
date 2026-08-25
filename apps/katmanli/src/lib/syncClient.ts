@@ -1,4 +1,4 @@
-import { VocabCard, getAllCards, putCardSilently, VOCAB_CHANGED_EVENT } from './vocabStore';
+import { VocabCard, getAllCards, mergeRemoteCard, VOCAB_CHANGED_EVENT } from './vocabStore';
 import { listAllRecordings, saveRecordingSilently, StoredRecording } from './recordingStore';
 import {
   ACTIVITY_CHANGED_EVENT,
@@ -152,9 +152,6 @@ export async function runSync(
   const pullData = await api('/api/sync/pull', { syncCode, since });
   const remoteItems: any[] = pullData.items || [];
 
-  const localCards = await getAllCards();
-  const localCardMap = new Map(localCards.map((c) => [c.id, c]));
-
   const localStats = await getAllDayStats();
   const localStatMap = new Map(localStats.map((r) => [r.id, r]));
 
@@ -167,15 +164,10 @@ export async function runSync(
 
     if (key.startsWith('card:')) {
       if (deleted) continue;
+      // Kimlik normalizasyonu ve kaynak birlestirmesi mergeRemoteCard'da:
+      // buluttaki eski `ders::kelime` kayitlari yinelenen kart uretmesin.
       const remote = value as VocabCard & { updatedAt?: number };
-      const local = localCardMap.get(remote.id);
-      // Son yazan kazanır: uzaktaki daha yeniyse al
-      const localTime = (local as any)?.updatedAt || local?.lastReview || 0;
-      const remoteTime = remote.updatedAt || remote.lastReview || 0;
-      if (!local || remoteTime > localTime) {
-        await putCardSilently(remote as VocabCard);
-        pulled++;
-      }
+      if (await mergeRemoteCard(remote)) pulled++;
       continue;
     }
 
