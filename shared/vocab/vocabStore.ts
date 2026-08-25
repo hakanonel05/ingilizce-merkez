@@ -293,20 +293,17 @@ async function mergeDuplicateCards(): Promise<void> {
   }
 }
 
+/**
+ * Bir ders/parçadan gelen kartlar.
+ *
+ * 'lessonId' INDEKSİ KULLANILMIYOR: o indeks yalnızca kartın İLK eklendiği
+ * yeri tutuyor. Kart artık birden çok kaynağa sahip olabildiği için
+ * (bkz. CardSource), videodan eklenip sonra bir okuma parçasında da
+ * görülen kelime indeks üzerinden aranınca bulunamazdı.
+ */
 export async function getCardsByLesson(lessonId: string): Promise<VocabCard[]> {
-  const db = await openDb();
-  return new Promise((resolve, reject) => {
-    const t = db.transaction(STORE, 'readonly');
-    const req = t.objectStore(STORE).index('lessonId').getAll(lessonId);
-    req.onsuccess = () => {
-      db.close();
-      resolve(req.result || []);
-    };
-    req.onerror = () => {
-      db.close();
-      reject(req.error);
-    };
-  });
+  const all = await getAllCards();
+  return all.filter((card) => cardBelongsTo(card, lessonId));
 }
 
 export async function putCard(card: VocabCard): Promise<void> {
@@ -573,9 +570,33 @@ export async function deleteCard(id: string): Promise<void> {
   notifyChanged();
 }
 
+/**
+ * Bir ders silinince o dersten gelen kartları temizler.
+ *
+ * Kelime başka bir metinde de görüldüyse KART SİLİNMEZ, yalnızca o ders
+ * kaynak listesinden çıkarılır: tek kimlikli kartta silme işlemi diğer
+ * metinlerin geçmişini de götürürdü.
+ */
 export async function deleteCardsByLesson(lessonId: string): Promise<void> {
   const cards = await getCardsByLesson(lessonId);
-  for (const c of cards) await deleteCard(c.id);
+
+  for (const card of cards) {
+    const remaining = cardSources(card).filter((s) => s.lessonId !== lessonId);
+
+    if (remaining.length === 0) {
+      await deleteCard(card.id);
+      continue;
+    }
+
+    await putCard({
+      ...card,
+      sources: remaining,
+      // Birincil alanlar kalan ilk kaynağa taşınır ki filtreler tutarlı kalsın
+      lessonId: remaining[0].lessonId,
+      lessonTitle: remaining[0].lessonTitle,
+      contextEn: remaining[0].contextEn,
+    });
+  }
 }
 
 export interface DueSelectionLimits {

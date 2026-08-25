@@ -88,3 +88,53 @@ html { -webkit-text-size-adjust: 100%; }
     padding-right: env(safe-area-inset-right);
   }
 }
+
+/* =====================================================================
+   OKUMA PARÇASI GÖVDE METNİ
+
+   Gövde metni "Playfair Display" ile diziliyordu. Playfair bir BAŞLIK
+   yazı tipi: ince-kalın geçişleri çok sert, küçük puntoda gözü yorar.
+   Üstüne iki yana yaslama (justify) tireleme olmadan kelime aralarını
+   düzensizleştiriyor ve sayfada "nehirler" oluşturuyordu; harf aralığı da
+   (tracking-wide) gövde metni için fazlaydı.
+
+   ABB VOICE: yazı tipi yığınında ilk sırada. ABB'nin kurumsal yazı tipi
+   olduğu ve lisanslı dağıtılmadığı için dosyaları siteye GÖMÜLMEDİ —
+   bu, lisansı olmayan bir yeniden dağıtım olurdu. Kurulu olduğu
+   bilgisayarlarda (ör. iş makinen) doğrudan devreye girer; kurulu
+   olmayan yerlerde aşağıdaki yedekler kullanılır.
+   ===================================================================== */
+
+.passage-body {
+  font-family: "ABB Voice", "Inter", "Segoe UI Variable Text", ui-sans-serif,
+    system-ui, sans-serif;
+  font-size: 1.0625rem;          /* 17px */
+  line-height: 1.8;
+  letter-spacing: normal;
+  text-align: left;              /* yaslama yok: aralıklar eşit kalsın */
+  hyphens: auto;
+  font-variant-numeric: oldstyle-nums;
+}
+
+@media (min-width: 640px) {
+  .passage-body {
+    font-size: 1.125rem;         /* 18px */
+    line-height: 1.85;
+  }
+}
+
+/* Satır uzunluğu: göz satır sonundan başına dönerken kaybolmasın diye
+   sınırlanıyor. Rahat aralık 45-75 karakter; ölçtüğümde 66ch satır başına
+   78 karakter veriyordu. ch birimi "0" genişliğidir ve gerçek harf
+   ortalamasından geniş olduğu için tahmin şaşırtıyor; ölçerek 48ch'e
+   inildi (~64 karakter). */
+.passage-body > p {
+  max-width: 48ch;
+}
+
+/* Metindeki tıklanabilir kelimeler gövdeyle aynı yazı tipinde kalmalı;
+   aksi halde her vurgulu kelimede yazı tipi değişiyordu. */
+.passage-body .passage-word {
+  font-family: inherit;
+  font-weight: 600;
+}

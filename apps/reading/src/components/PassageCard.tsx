@@ -125,7 +125,7 @@ export default function PassageCard({
           <span
             key={index}
             onClick={() => handleWordClick(chunk)}
-            className={`font-serif font-bold cursor-pointer px-1 transition-all duration-150 ${underlineStyle} ${
+            className={`passage-word cursor-pointer px-1 transition-all duration-150 ${underlineStyle} ${
               isSelected
                 ? 'bg-editorial-accent text-white border-none'
                 : 'text-editorial-text hover:bg-editorial-bg'
@@ -295,15 +295,15 @@ export default function PassageCard({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.2 }}
-                className="bg-white border border-editorial-border/40 p-6 sm:p-10 shadow-xs space-y-8"
+                className="bg-white border border-editorial-border/40 p-4 sm:p-10 shadow-xs space-y-8"
               >
                 {/* Paragraphs Panel */}
                 <div
                   ref={textRef}
-                  className="space-y-6 leading-relaxed text-[15px] sm:text-base text-editorial-text/90 font-serif tracking-wide"
+                  className="passage-body space-y-6 text-editorial-text/90"
                 >
                   {passage.paragraphs.map((p, i) => (
-                    <p key={i} className="text-justify indent-6">
+                    <p key={i}>
                       {renderParagraphWithHighlights(p)}
                     </p>
                   ))}
