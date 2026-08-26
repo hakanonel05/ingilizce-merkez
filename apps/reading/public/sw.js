@@ -60,10 +60,24 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
+  /*
+   * 0. HTTP DIŞI ŞEMALARI PAS GEÇ.
+   *
+   * Tarayıcı eklentileri sayfaya kendi isteklerini enjekte ediyor
+   * (chrome-extension://, moz-extension://). Cache API bu şemaları kabul
+   * etmiyor: cache.put() "Request scheme 'chrome-extension' is
+   * unsupported" ile atıyor, konsol her sayfa açılışında bu hatayla
+   * doluyor ve o istek için fetch işleyicisi yarıda kalıyor.
+   */
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+    return;
+  }
+
   // 1. API veya kendi sunucumuz dışındaki istekleri pas geç
   if (url.pathname.startsWith('/api/') || request.method !== 'GET') {
     return;
   }
+
 
   // 2. Sayfa Navigasyon İstekleri (HTML)
   if (request.mode === 'navigate') {
