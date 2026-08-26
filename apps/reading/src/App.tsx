@@ -19,6 +19,8 @@ import { useActivityTimer } from '../../../shared/analytics/useActivityTimer';
 import { Skill } from '../../../shared/analytics/activityLog';
 import { supabase } from './lib/supabase';
 import { mergeCloudProgress } from './lib/mergeProgress';
+import { syncOnStartup, scheduleAutoSync } from '../../../shared/vocab/syncClient';
+import { ACTIVITY_CHANGED_EVENT } from '../../../shared/analytics/activityLog';
 import { getLocalFallbackPassage } from '../serverLocalPassage';
 import {
   LayoutDashboard,
@@ -169,6 +171,25 @@ export default function App() {
         : activeTab === 'exam'
           ? 'exam'
           : null;
+
+  /**
+   * ÇALIŞMA TAKVİMİNİN GÖNDERİLMESİ.
+   *
+   * Takvim satırları iki uygulamanın paylaştığı IndexedDB'de birikiyor
+   * ama senkronu yalnızca katmanlı tetikliyordu: sadece okuma çalışılan
+   * bir cihazda satırlar buluta hiç çıkmıyor, başka bilgisayarda takvim
+   * eksik kalıyordu. Artık reading de açılışta ve kayıt değiştikçe
+   * gönderiyor.
+   *
+   * Senkron kodu yoksa scheduleAutoSync hiçbir şey yapmaz, yani senkron
+   * kurmamış kullanıcı için bir maliyet yok.
+   */
+  useEffect(() => {
+    syncOnStartup();
+    const onActivity = () => scheduleAutoSync();
+    window.addEventListener(ACTIVITY_CHANGED_EVENT, onActivity);
+    return () => window.removeEventListener(ACTIVITY_CHANGED_EVENT, onActivity);
+  }, []);
 
   useActivityTimer(
     'reading',
