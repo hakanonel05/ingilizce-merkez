@@ -1573,6 +1573,200 @@ function normalizePartOfSpeech(raw: any): string | undefined {
   return PARTS_OF_SPEECH.includes(value) ? value : undefined;
 }
 
+/* ============================================================
+   HIKAYE URETECI
+
+   AMAC: kullanicinin HALA OGRENEMEDIGI kelimeleri tek bir metinde,
+   dogal bir baglamda tekrar karsisina cikarmak. Kelimeyi listede
+   ezberlemek yerine anlamli bir hikayede gormek hatirlamayi belirgin
+   sekilde kolaylastiriyor.
+
+   IKI ASAMA, BILEREK: kullanici beklemeden okumaya baslasin diye once
+   YALNIZCA hikaye uretiliyor (/api/generate-story). Sorular ve
+   alistirmalar ikinci bir cagriyla arkadan geliyor
+   (/api/generate-story-tasks); tek cagrida uretmek bekleme suresini
+   iki katina cikariyordu.
+   ============================================================ */
+
+app.post("/api/generate-story", async (req, res) => {
+  try {
+    const words: string[] = Array.isArray(req.body?.words)
+      ? req.body.words.map((w: any) => String(w || '').trim()).filter(Boolean).slice(0, 15)
+      : [];
+    const level = String(req.body?.level || 'B1').toUpperCase();
+    const topic = String(req.body?.topic || '').trim().slice(0, 120);
+
+    if (words.length === 0) {
+      return res.status(400).json({ error: "Hikaye icin en az bir kelime gerekli." });
+    }
+    if (!["B1", "B2", "C1"].includes(level)) {
+      return res.status(400).json({ error: "Seviye B1, B2 veya C1 olmali." });
+    }
+
+    const ai = getAIClient();
+
+    const wordList = words.map((w) => "- " + w).join("\n");
+    const topicLine = topic
+      ? "KONU: " + topic
+      : "Konu GUNCEL ve ilgi cekici olsun: teknoloji, yapay zeka, iklim, saglik, uzay, sehir hayati, spor ya da calisma hayati gibi bugunun dunyasindan bir mesele.";
+
+    const prompt = `Bir Ingilizce ogrencisi icin KISA BIR HIKAYE yaz.
+
+SEVIYE: ${level} (CEFR). Cumle yapisi ve kelime secimi bu seviyeye uygun olsun.
+
+HIKAYEDE MUTLAKA GECMESI GEREKEN KELIMELER:
+${wordList}
+
+KURALLAR:
+- Yukaridaki kelimelerin HEPSI hikayede gecmeli. Cekimli hallerini
+  kullanabilirsin (run -> ran, decide -> decided).
+- Kelimeleri zorlama; hikaye once DOGAL ve akici olmali, kelimeler
+  cumleye kendiliginden oturmali.
+- 3-5 paragraf, her paragraf 3-6 cumle.
+- ${topicLine}
+- Hikayenin bir olay orgusu olsun: bir durum, bir gelisme, bir sonuc.
+  Ansiklopedi maddesi gibi olmasin.
+- "title": kisa ve merak uyandiran Ingilizce baslik.
+- "theme": konuyu ozetleyen 2-4 kelimelik Ingilizce etiket.
+- "paragraphs": paragraf metinleri dizisi. Markdown ya da isaret KULLANMA.`;
+
+    const response = await generateContentWithRetry(ai, {
+      contents: prompt,
+      jsonHint: '{"title":"","theme":"","paragraphs":[""]}',
+      config: {
+        systemInstruction: SYSTEM_INSTRUCTION_COACH,
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            title: { type: Type.STRING },
+            theme: { type: Type.STRING },
+            paragraphs: { type: Type.ARRAY, items: { type: Type.STRING } },
+          },
+          required: ["title", "theme", "paragraphs"],
+        },
+      },
+    });
+
+    let story: any = {};
+    try {
+      story = JSON.parse(response.text || "{}");
+    } catch (e) {
+      console.warn("[Story] parse hatasi:", e);
+    }
+
+    const paragraphs = Array.isArray(story.paragraphs)
+      ? story.paragraphs.map((p: any) => String(p || '').trim()).filter(Boolean)
+      : [];
+
+    if (paragraphs.length === 0) {
+      return res.status(502).json({ error: "Hikaye uretilemedi, tekrar deneyin." });
+    }
+
+    res.json({
+      title: String(story.title || 'Untitled Story').trim(),
+      theme: String(story.theme || 'Story').trim(),
+      paragraphs,
+    });
+  } catch (error: any) {
+    console.error("Error in /api/generate-story:", error);
+    const isQuota = isRateLimitError(error);
+    res.status(isQuota ? 429 : 500).json({
+      error: isQuota ? describeRateLimit(error) : formatErrorMessage(error, "Hikaye uretilemedi."),
+    });
+  }
+});
+
+app.post("/api/generate-story-tasks", async (req, res) => {
+  try {
+    const text = String(req.body?.text || '').trim();
+    const level = String(req.body?.level || 'B1').toUpperCase();
+    const words: string[] = Array.isArray(req.body?.words)
+      ? req.body.words.map((w: any) => String(w || '').trim()).filter(Boolean).slice(0, 15)
+      : [];
+
+    if (!text) return res.status(400).json({ error: "Hikaye metni gerekli." });
+
+    const ai = getAIClient();
+
+    const prompt = `Asagidaki ${level} seviyesindeki hikaye icin ALISTIRMA uret.
+
+HIKAYE:
+"${text.slice(0, 6000)}"
+
+HEDEF KELIMELER: ${words.join(', ')}
+
+URETILECEKLER:
+1. "questions": 5 adet OKUDUGUNU ANLAMA sorusu. Yaniti metinde olan,
+   ezber degil anlama olcen sorular. Her biri 4 secenekli.
+2. "exercises": 5 adet KELIME alistirmasi. HEDEF KELIMELERI olcsun:
+   cumlede bosluk doldurma ya da anlam esleme. Her biri 4 secenekli.
+
+BICIM KURALLARI:
+- "options" dizisindeki her secenek "A) ...", "B) ...", "C) ...", "D) ..."
+  bicimde yazili olsun.
+- "answer" alani yalnizca harf olsun: "A", "B", "C" veya "D".
+- "explanation" alistirmalarda kisa Turkce aciklama.
+- Sorular hikayenin diliyle ayni seviyede olsun.`;
+
+    const questionSchema = {
+      type: Type.OBJECT,
+      properties: {
+        question: { type: Type.STRING },
+        options: { type: Type.ARRAY, items: { type: Type.STRING } },
+        answer: { type: Type.STRING },
+        explanation: { type: Type.STRING },
+      },
+      required: ["question", "options", "answer"],
+    };
+
+    const response = await generateContentWithRetry(ai, {
+      contents: prompt,
+      jsonHint: '{"questions":[{"question":"","options":["A) "],"answer":"A"}],"exercises":[{"question":"","options":["A) "],"answer":"A","explanation":""}]}',
+      config: {
+        systemInstruction: SYSTEM_INSTRUCTION_COACH,
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            questions: { type: Type.ARRAY, items: questionSchema },
+            exercises: { type: Type.ARRAY, items: questionSchema },
+          },
+          required: ["questions", "exercises"],
+        },
+      },
+    });
+
+    let parsed: any = {};
+    try {
+      parsed = JSON.parse(response.text || "{}");
+    } catch (e) {
+      console.warn("[StoryTasks] parse hatasi:", e);
+    }
+
+    /** Yalnizca en az iki secenekli ve gecerli yanitli sorular gecer. */
+    const clean = (list: any): any[] =>
+      (Array.isArray(list) ? list : [])
+        .filter((q) => q && typeof q.question === 'string' && Array.isArray(q.options))
+        .map((q: any, index: number) => ({
+          id: index + 1,
+          question: String(q.question).trim(),
+          options: q.options.map((o: any) => String(o || '').trim()).filter(Boolean),
+          answer: String(q.answer || 'A').trim().toUpperCase().slice(0, 1),
+          explanation: q.explanation ? String(q.explanation).trim() : undefined,
+        }))
+        .filter((q: any) => q.options.length >= 2 && ['A', 'B', 'C', 'D'].includes(q.answer));
+
+    res.json({ questions: clean(parsed.questions), exercises: clean(parsed.exercises) });
+  } catch (error: any) {
+    console.error("Error in /api/generate-story-tasks:", error);
+    const isQuota = isRateLimitError(error);
+    res.status(isQuota ? 429 : 500).json({
+      error: isQuota ? describeRateLimit(error) : formatErrorMessage(error, "Alistirmalar uretilemedi."),
+    });
+  }
+});
+
 app.post("/api/extract-vocabulary", async (req, res) => {
   try {
     const { text, count } = req.body;

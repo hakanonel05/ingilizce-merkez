@@ -12,6 +12,7 @@ import MistakesNotebook from './components/MistakesNotebook';
 import ExamSimulator from './components/ExamSimulator';
 import AppSwitcher from './AppSwitcher';
 import AuthScreen from './components/AuthScreen';
+import StoryComposer from './components/StoryComposer';
 import { Dashboard as StudyReport } from '../../../shared/analytics/Dashboard';
 import { VocabHub, VocabHubLesson } from '../../../shared/vocab/VocabHub';
 import { readingPassageLessonId, READING_CORE_LESSON_ID, READING_CORE_LESSON_TITLE } from './lib/vocabBank';
@@ -457,6 +458,25 @@ export default function App() {
   // the mistakes notebook: wrong answers are added/refreshed, questions the
   // user now gets right are removed (they've caught up).
   /** Kelime alıştırması sonucunu kalıcı yazar. */
+  /**
+   * Uretilen hikaye listeye eklenir ve hemen acilir. Sorular/alistirmalar
+   * bos gelir; arkadan onTasksReady ile doldurulur.
+   */
+  const handleStoryReady = useCallback((story: Passage) => {
+    setPassages(prev => [...prev, story]);
+    setSelectedPassageId(story.id);
+  }, []);
+
+  /** Arka planda gelen sorular ve alistirmalar hikayeye islenir. */
+  const handleStoryTasksReady = useCallback(
+    (passageId: number, questions: Passage['questions'], exercises: Passage['exercises']) => {
+      setPassages(prev =>
+        prev.map(p => (p && p.id === passageId ? { ...p, questions, exercises } : p))
+      );
+    },
+    []
+  );
+
   const handleSaveExerciseResult = useCallback((passageId: number, score: number, total: number) => {
     setProgress(prev => ({
       ...prev,
@@ -872,6 +892,15 @@ export default function App() {
                   passages={passages}
                   onSelectPassage={handleSelectPassageDirectly}
                   onResetProgress={handleResetProgress}
+                />
+              )}
+
+              {activeTab === 'passages' && (
+                <StoryComposer
+                  progress={progress}
+                  passages={passages}
+                  onStoryReady={handleStoryReady}
+                  onTasksReady={handleStoryTasksReady}
                 />
               )}
 
