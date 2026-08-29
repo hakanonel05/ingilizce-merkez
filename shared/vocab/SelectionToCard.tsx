@@ -45,17 +45,31 @@ export const SelectionToCard: React.FC<Props> = ({
   lessonTitle,
   onAdded,
 }) => {
-  const [selection, setSelection] = useState<{ text: string; x: number; y: number } | null>(null);
+  /**
+   * Seçim balonu. Bağlam cümlesi BURADA saklanıyor, tıklama anında değil:
+   * telefonda düğmeye dokunmak seçimi düşürebiliyor ve o anda okunmaya
+   * çalışılan seçim çoktan yok oluyordu.
+   */
+  const [selection, setSelection] = useState<
+    { text: string; context: string; x: number; y: number } | null
+  >(null);
   const [isLoading, setIsLoading] = useState(false);
   const [draft, setDraft] = useState<Draft | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [savedMsg, setSavedMsg] = useState<string | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
+  const bubbleRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
-    const handleSelection = () => {
+    const handleSelection = (event?: Event) => {
       // Taslak paneli açıkken seçim balonunu güncelleme
       if (draft || isLoading) return;
+
+      // Balonun kendisine dokunulduysa seçimi bozma: mobilde dokunuş
+      // seçimi daraltıyor, balon anında kayboluyor ve tıklama hiç
+      // gerçekleşmiyordu.
+      const target = event?.target as Node | null;
+      if (target && bubbleRef.current?.contains(target)) return;
 
       const sel = window.getSelection();
       if (!sel || sel.isCollapsed) {
@@ -80,6 +94,7 @@ export const SelectionToCard: React.FC<Props> = ({
         const rect = sel.getRangeAt(0).getBoundingClientRect();
         setSelection({
           text,
+          context: captureContext(),
           x: rect.left + rect.width / 2,
           y: rect.top,
         });
@@ -108,7 +123,7 @@ export const SelectionToCard: React.FC<Props> = ({
   const handleLookup = async () => {
     if (!selection) return;
     const term = selection.text;
-    const context = captureContext();
+    const context = selection.context;
 
     setIsLoading(true);
     setError(null);
@@ -197,6 +212,7 @@ export const SelectionToCard: React.FC<Props> = ({
       {selection && !draft && (
         <button
           type="button"
+          ref={bubbleRef}
           onClick={handleLookup}
           disabled={isLoading}
           style={{
@@ -351,6 +367,26 @@ export const SelectionToCard: React.FC<Props> = ({
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Hata bildirimi.
+
+          Hata eskiden YALNIZCA taslak panelinin içinde gösteriliyordu;
+          arama başarısız olunca panel hiç açılmadığı için (anahtar yok,
+          kota dolu, ağ hatası) kullanıcı düğmeye basıyor ve hiçbir şey
+          olmuyor sanıyordu. Panel yokken de görünür. */}
+      {error && !draft && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[80] max-w-[92vw] flex items-start gap-2 px-4 py-2.5 bg-rose-50 border border-rose-200 text-rose-900 text-xs font-semibold rounded-xl shadow-lg">
+          <span className="leading-relaxed">{error}</span>
+          <button
+            type="button"
+            onClick={() => setError(null)}
+            className="shrink-0 text-rose-700 hover:text-rose-900 cursor-pointer"
+            aria-label="Kapat"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
         </div>
       )}
 
