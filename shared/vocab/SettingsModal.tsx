@@ -29,6 +29,16 @@ interface KeyFieldSpec {
   hint: string;
   url: string;
   urlLabel: string;
+  /**
+   * Bu servis olmadan da uygulama tam calisiyor mu?
+   *
+   * Rozet eskiden yalnizca "sunucuda anahtar var mi" sorusuna bakiyordu
+   * ve yoksa "gerekli" yaziyordu. LibreTranslate icin bu yanlisti: o bir
+   * ALTERNATIF ceviri servisi, varsayilan olarak zaten kullanilmiyor.
+   * Yani kullaniciya hic ihtiyaci olmayan bir anahtari almasi gerektigi
+   * soyleniyordu.
+   */
+  optional?: boolean;
 }
 
 const KEY_FIELDS: KeyFieldSpec[] = [
@@ -56,9 +66,10 @@ const KEY_FIELDS: KeyFieldSpec[] = [
   {
     field: 'libre',
     label: 'LibreTranslate',
-    hint: 'Yapay zekâ yerine kullanılabilen alternatif çeviri servisi. İsteğe bağlı.',
+    hint: 'Yapay zekâ yerine kullanılabilen alternatif çeviri servisi. Uygulama bunu varsayılan olarak kullanmıyor; girmene gerek yok.',
     url: 'https://portal.libretranslate.com/',
     urlLabel: 'portal.libretranslate.com',
+    optional: true,
   },
 ];
 
@@ -140,7 +151,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <span className="text-xs font-semibold text-[var(--ink)]">API Anahtarları</span>
           </div>
 
-          {KEY_FIELDS.map(({ field, label, hint, url, urlLabel }) => {
+          {KEY_FIELDS.map(({ field, label, hint, url, urlLabel, optional }) => {
             const serverHas = serverStatus ? serverStatus[field] : null;
             const isVisible = !!visible[field];
             return (
@@ -150,14 +161,16 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   {serverHas !== null && (
                     <span
                       className={`text-[10px] px-1.5 py-0.5 border ${
-                        serverHas
+                        serverHas || optional
                           ? 'border-[var(--hairline)] text-[var(--ink-3)]'
                           : 'border-[var(--marker)] bg-[var(--marker-bg)] text-[var(--marker-ink)]'
                       }`}
                     >
-                      {serverHas
-                        ? 'sitede var — girmesen de çalışır'
-                        : 'sitede yok — bunu girmen gerek'}
+                      {optional
+                        ? 'gerekmiyor'
+                        : serverHas
+                          ? 'sitede var — girmesen de çalışır'
+                          : 'sitede yok — bunu girmen gerek'}
                     </span>
                   )}
                 </div>
