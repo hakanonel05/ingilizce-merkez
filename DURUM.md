@@ -143,6 +143,30 @@ de yanlıştı: kaldırılan modeller 404 veriyor, yeni çıkanlar kod
 değiştirilmeden görünmüyordu. Groq yarın Llama eklerse kendiliğinden çıkar.
 (Bu hesapta şu an Llama ve Kimi servis EDİLMİYOR — sadece GPT-OSS ve Qwen.)
 
+**Aynı ders Gemini tarafında ÖĞRENİLMEMİŞTİ; `GEMINI_MODELS` hâlâ elle
+yazılmış sabit bir liste.** 30 Ağustos 2026'da yeni açılan bir anahtarla
+listedeki üç modelin ÜÇÜ DE 404 verdi ("no longer available to new users").
+Sonuç SESSİZ bir arızaydı: zincir Gemini'yi atlayıp Groq'a düşüyor ve
+arayüzde hiçbir şey bozuk görünmüyor — çünkü sağlayıcı atlamak zincirin
+normal davranışı. Ancak Groq'un günlük kotası da dolunca ortaya çıktı.
+
+Liste artık `gemini-3.6-flash` ile başlıyor (Google'ın 404 gövdesinde
+önerdiği model), arkasında `gemini-flash-latest` takma adı var. Sıra
+ölçümle seçildi: takma ad tek başına öndeyken yük altında 503 veriyordu
+(2/3 başarı), sabit kimlik 3/3. Takma ad yine de listede duruyor, çünkü
+3.6 da kapatılırsa kendini günceller.
+
+**BİR SAĞLAYICININ ÇALIŞTIĞINI ARAYÜZDEN ANLAYAMAZSIN.** Yanıttaki
+`model` alanına bak; GERÇEKTEN kullanılan modeli bildiriyor. "Hikaye
+geldi, demek ki Gemini çalışıyor" akıl yürütmesi bu oturumda bir kez
+yanılttı — gelen hikayeyi Gemini değil Groq yazmıştı.
+
+```bash
+curl -s -X POST localhost:3000/api/generate-story \
+  -H "Content-Type: application/json" \
+  -d '{"words":["record"],"level":"B1","model":"auto"}' | grep -o '"model":"[^"]*"'
+```
+
 **Seslendirme** `gemini-2.5-flash-preview-tts` ile; ham PCM sunucuda WAV
 başlığıyla sarılıyor. Başarısız olursa istemci tarayıcının kendi sesine
 düşüyor ve bunu kullanıcıya söylüyor.
@@ -192,22 +216,54 @@ bileşenlerde atlanmıştı. Son tarama: **10 ekran, 14.349 metin ögesi,
 
 ## 6. Açık kalan işler
 
-**1. Hikaye istemi CANLI MODELLE ölçülmedi.** Kod ve derleme sağlam
-(`tsc` temiz, iki uygulama da derleniyor) ama bu makinede `.env` yok,
-yani Gemini/Groq anahtarı olmadan gerçek bir üretim denenemedi.
-Yapılması gereken ölçüm: söz türü belirtilmiş kelimelerle (örneğin
-`compelling` = adjective) birkaç hikaye üretip kelimenin gerçekten o
-türde geçip geçmediğine bakmak. Sorunun çıktığı yer buydu; düzeldiğini
-ancak aynı yerden ölçerek bilebiliriz.
+**1. Hikaye istemi ÖLÇÜLDÜ, düzeltme tuttu — ama ölçüt seçimi kritik.**
+Gerçek anahtarlarla, aynı kelimelerle, eski/yeni istek biçimi yan yana
+(kelimenin geçtiği cümledeki söz türünü ayrı bir model etiketledi):
+
+| model | eski biçim | yeni biçim |
+|---|---|---|
+| GPT-OSS 120B (Groq) | 14/50 doğru | 49/50 |
+| Gemini 3.6 Flash | 5/20 doğru | 15/15 |
+
+**KELİME SEÇİMİ ÖLÇÜMÜ BELİRLİYOR.** İlk denemede `compelling`,
+`decision`, `apparent`, `consequence`, `reluctant` kullanıldı ve İKİ
+BİÇİM DE 50/50 çıktı — bu kelimelerin baskın bir söz türü var, model
+zaten doğru yapıyor, açıklamanın düzeltecek bir şeyi yok. Kusur ancak
+GERÇEKTEN belirsiz kelimelerde görünüyor: `record`, `conduct`, `object`,
+`increase` (isim) ve `present` (sıfat) — hepsinin fiil hâli de yaygın.
+Bunu tekrar ölçecek olan aynı tuzağa düşmesin.
+
+Ölçüt de iki kez yanlış kuruldu: metnin herhangi bir yerinde türetilmiş
+biçim aramak hem normal İngilizceyi hata sayıyor ("kararı" ve "karar
+verdi" aynı hikayede olabilir) hem de asıl hatayı kaçırıyor —
+`compelling` fiil olarak da "compelling" yazılır. Bakılması gereken tek
+şey kelimenin GEÇTİĞİ CUMLEDEKİ işlevi.
 
 **2. `.env` ve `.claude/launch.json` yerel, ikisi de `.gitignore`'da.**
-`.env` yalnızca arayüzü açabilmek için SAHTE Supabase değerleri
-taşıyor (`supabase.ts` bu iki değişken yoksa modül yüklenirken hata
-fırlatıyor ve React hiç mount olmuyor). Gerçek değerler için
-`.env.example`'a bak. `launch.json` node'un tam yolunu yazıyor çünkü
-bu makinede PATH'te değildi.
+Gerçek anahtarlar Netlify'ın ortam değişkenlerinde; depoda hiçbir
+kopyası yok, `.env.example` yalnızca değişken adlarını listeliyor.
+`launch.json` node'un tam yolunu yazıyor çünkü bir makinede PATH'te
+değildi.
 
-**3. Kelime kartı silinen kod yok ama bir süs kaldırıldı.** Gösterge
+**3. Açıklama sızıntısı düzeltmesi YETERİNCE ÖLÇÜLMEDİ.** Ölçüm
+sırasında model bir kez yönergeyi hikayenin içine yazdı:
+
+```
+The AI then presents (adjective) "mevcut, şimdiki" data on the streets.
+```
+
+İsteme "bu işaretler sana verilen bilgidir, metne asla yazma" satırı
+eklendi. Ama düzeltmeden SONRA yalnızca 5 temiz hikaye üretilebildi;
+kusurun ilk görülme sıklığı 10 hikayede 1 idi, yani 5 hikaye hiçbir şey
+kanıtlamaz. Kota (hem Gemini hem Groq günlük limit) dolduğu için koşu
+tamamlanamadı.
+
+Yapılacak: `scratchpad`'deki gibi 20+ hikaye üretip metinde
+`(adjective)` / `(noun)` gibi parantezli söz türü ya da Türkçe karşılık
+aramak. Hakem çağrısı gerekmiyor, düz metin araması yetiyor — kota da
+yanmıyor.
+
+**4. Kelime kartı silinen kod yok ama bir süs kaldırıldı.** Gösterge
 panelindeki dev "L" filigranı silindi: Playfair'in serif harf biçimi
 köşe süsü olarak çalışıyordu, Inter'e geçince `overflow-hidden`
 tarafından kesilen anlamsız bir dikdörtgene döndü. Geri istenirse
