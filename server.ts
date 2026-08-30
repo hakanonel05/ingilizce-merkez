@@ -1767,6 +1767,160 @@ BICIM KURALLARI:
   }
 });
 
+/* ============================================================
+   DOGAL SESLENDIRME  (/api/speak)
+
+   NEDEN TARAYICININ KENDI SESI DEGIL: window.speechSynthesis
+   ucretsiz ve aninda calisiyor ama sesin kalitesi tamamen cihaza
+   bagli. Windows'ta "Microsoft ... Online (Natural)" sesleri iyi,
+   ama ayni sayfa baska bir bilgisayarda ya da telefonda 2000'lerin
+   robot sesiyle okuyor. Gemini'nin TTS modeli her cihazda AYNI ve
+   dogal sesi veriyor; kullanicinin zaten girdigi anahtarla
+   calistigi icin ek bir servis ya da ucret gerekmiyor.
+
+   TARAYICI SESI YEDEKTE KALIYOR: bu uc hata verirse (kota, anahtar
+   yok, cevrimdisi) istemci speechSynthesis'e dusuyor. Yani ses her
+   zaman var, yalnizca kalitesi degisiyor.
+
+   PARAGRAF PARAGRAF: Netlify fonksiyonu 26 saniyede kesiliyor
+   (netlify.toml). Bes paragrafli bir hikayeyi tek istekte
+   seslendirmek bu sureyi asardi. Istemci her paragrafi ayri
+   istiyor; bu ayni zamanda ilk sesin ~2 saniyede baslamasini ve
+   okunan paragrafin vurgulanmasini sagliyor.
+   ============================================================ */
+
+/** Gemini'nin TTS modelleri; ilki calismazsa sonraki denenir. */
+const GEMINI_TTS_MODELS = [
+  "gemini-2.5-flash-preview-tts",
+  "gemini-2.5-pro-preview-tts",
+];
+
+/**
+ * Anlatici sesler. Gemini'nin hazir ses listesinden hikaye anlatimina
+ * uygun olanlar secildi; adlar API'nin bekledigi bicimde.
+ */
+const TTS_VOICES: Record<string, string> = {
+  Kore: "Kore",
+  Puck: "Puck",
+  Charon: "Charon",
+  Aoede: "Aoede",
+  Leda: "Leda",
+  Orus: "Orus",
+};
+
+/**
+ * Ham PCM'i WAV'a cevirir.
+ *
+ * Gemini basliksiz 16-bit PCM donduruyor; <audio> etiketi bunu
+ * calamaz. 44 baytlik standart WAV basligi eklemek tarayicinin
+ * dosyayi tanimasi icin yeterli - yeniden kodlama, ek bagimlilik yok.
+ */
+function pcmToWav(pcm: Buffer, sampleRate: number, channels = 1, bitsPerSample = 16): Buffer {
+  const byteRate = (sampleRate * channels * bitsPerSample) / 8;
+  const blockAlign = (channels * bitsPerSample) / 8;
+  const header = Buffer.alloc(44);
+
+  header.write("RIFF", 0);
+  header.writeUInt32LE(36 + pcm.length, 4);
+  header.write("WAVE", 8);
+  header.write("fmt ", 12);
+  header.writeUInt32LE(16, 16);           // fmt yigin boyutu
+  header.writeUInt16LE(1, 20);            // 1 = PCM
+  header.writeUInt16LE(channels, 22);
+  header.writeUInt32LE(sampleRate, 24);
+  header.writeUInt32LE(byteRate, 28);
+  header.writeUInt16LE(blockAlign, 32);
+  header.writeUInt16LE(bitsPerSample, 34);
+  header.write("data", 36);
+  header.writeUInt32LE(pcm.length, 40);
+
+  return Buffer.concat([header, pcm]);
+}
+
+/** mimeType "audio/L16;codec=pcm;rate=24000" icindeki ornekleme hizi. */
+function sampleRateFromMime(mime: string): number {
+  const match = /rate=(\d+)/i.exec(mime || "");
+  const rate = match ? parseInt(match[1], 10) : NaN;
+  return Number.isFinite(rate) && rate > 0 ? rate : 24000;
+}
+
+app.post("/api/speak", async (req, res) => {
+  try {
+    const text = String(req.body?.text || "").trim();
+    const voice = TTS_VOICES[String(req.body?.voice || "")] || "Kore";
+
+    if (!text) return res.status(400).json({ error: "Seslendirilecek metin gerekli." });
+
+    // Tek paragraf sinirini asan metin fonksiyon suresini zorlar.
+    if (text.length > 3000) {
+      return res.status(400).json({ error: "Metin tek seferde seslendirilemeyecek kadar uzun." });
+    }
+
+    const ai = getGeminiClient();
+
+    // Modele nasil OKUYACAGINI soyluyoruz: TTS modeli metnin basindaki
+    // yonergeyi seslendirmiyor, uslup olarak uyguluyor.
+    const prompt =
+      "Read the following story aloud in a warm, natural storytelling voice, " +
+      "at a calm pace suitable for an English learner. Do not add any words " +
+      "of your own:\n\n" + text;
+
+    let lastError: any = null;
+
+    for (const model of GEMINI_TTS_MODELS) {
+      try {
+        const response: any = await ai.models.generateContent({
+          model,
+          contents: prompt,
+          config: {
+            responseModalities: ["AUDIO"],
+            speechConfig: {
+              voiceConfig: { prebuiltVoiceConfig: { voiceName: voice } },
+            },
+          } as any,
+        });
+
+        const part = response?.candidates?.[0]?.content?.parts?.find(
+          (p: any) => p?.inlineData?.data
+        );
+        const base64 = part?.inlineData?.data;
+
+        if (!base64) {
+          lastError = new Error("Model ses dondurmedi.");
+          continue;
+        }
+
+        const mime = part.inlineData.mimeType || "";
+        const pcm = Buffer.from(base64, "base64");
+
+        // Model bazen dogrudan calinabilir bir bicim donebiliyor;
+        // yalnizca ham PCM'i sarmaliyoruz.
+        const isRawPcm = /L16|pcm/i.test(mime);
+        const audio = isRawPcm ? pcmToWav(pcm, sampleRateFromMime(mime)) : pcm;
+
+        return res.json({
+          audio: audio.toString("base64"),
+          mimeType: isRawPcm ? "audio/wav" : mime || "audio/wav",
+          voice,
+          model,
+        });
+      } catch (err) {
+        lastError = err;
+        // Kota hatasinda diger modeli denemek anlamsiz: ayni kotayi paylasirlar.
+        if (isRateLimitError(err)) break;
+      }
+    }
+
+    throw lastError || new Error("Ses uretilemedi.");
+  } catch (error: any) {
+    console.error("Error in /api/speak:", error);
+    const isQuota = isRateLimitError(error);
+    res.status(isQuota ? 429 : 500).json({
+      error: isQuota ? describeRateLimit(error) : formatErrorMessage(error, "Ses uretilemedi."),
+    });
+  }
+});
+
 app.post("/api/extract-vocabulary", async (req, res) => {
   try {
     const { text, count } = req.body;

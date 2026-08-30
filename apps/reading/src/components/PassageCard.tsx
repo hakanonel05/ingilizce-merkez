@@ -4,6 +4,8 @@ import { ChevronLeft, Star, Volume2, CheckCircle2, AlertCircle, Bookmark, ArrowR
 import { motion, AnimatePresence } from 'motion/react';
 import { addWordToVocabBank, getAllCards, VOCAB_CHANGED_EVENT, readingPassageLessonId } from '../lib/vocabBank';
 import { SelectionToCard } from '../../../../shared/vocab/SelectionToCard';
+import { useNarration } from '../lib/narration';
+import NarrationBar from './NarrationBar';
 
 interface PassageCardProps {
   passage: Passage;
@@ -50,6 +52,12 @@ export default function PassageCard({
    * SelectionToCard'a veriliyor.
    */
   const textRef = useRef<HTMLDivElement | null>(null);
+
+  /**
+   * Sesli okuma. Parca degisince otomatik sifirlanmasi icin passage.id
+   * veriliyor; okunan paragraf asagida vurgulaniyor.
+   */
+  const narration = useNarration(passage.id, passage.paragraphs);
 
   // Paylaşılan FSRS kelime bankasına eklenmiş terimler (katmanlı ile ortak)
   const [bankedTerms, setBankedTerms] = useState<Set<string>>(new Set());
@@ -312,12 +320,25 @@ export default function PassageCard({
                 className="bg-white border border-editorial-border/40 p-4 sm:p-10 shadow-xs space-y-8"
               >
                 {/* Paragraphs Panel */}
+                {/* Sesli okuma kumandasi */}
+                <NarrationBar narration={narration} total={passage.paragraphs.length} />
+
                 <div
                   ref={textRef}
                   className="passage-body space-y-6 text-editorial-text/90"
                 >
                   {passage.paragraphs.map((p, i) => (
-                    <p key={i}>
+                    <p
+                      key={i}
+                      /* Okunan paragrafi isaretlemek gozun sesi takip
+                         etmesini sagliyor; dinlerken okumak, yalnizca
+                         dinlemekten cok daha ogretici. */
+                      className={
+                        narration.currentIndex === i
+                          ? 'bg-amber-100/70 -mx-2 px-2 py-1 transition-colors'
+                          : 'transition-colors'
+                      }
+                    >
                       {renderParagraphWithHighlights(p)}
                     </p>
                   ))}

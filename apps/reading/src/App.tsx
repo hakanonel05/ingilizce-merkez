@@ -12,7 +12,7 @@ import MistakesNotebook from './components/MistakesNotebook';
 import ExamSimulator from './components/ExamSimulator';
 import AppSwitcher from './AppSwitcher';
 import AuthScreen from './components/AuthScreen';
-import StoryComposer from './components/StoryComposer';
+import StoryLibrary from './components/StoryLibrary';
 import { Dashboard as StudyReport } from '../../../shared/analytics/Dashboard';
 import { VocabHub, VocabHubLesson } from '../../../shared/vocab/VocabHub';
 import { readingPassageLessonId, READING_CORE_LESSON_ID, READING_CORE_LESSON_TITLE } from './lib/vocabBank';
@@ -27,6 +27,7 @@ import {
   LayoutDashboard,
   BookOpen,
   Sparkles,
+  Wand2,
   BookMarked,
   Zap,
   Clock,
@@ -84,7 +85,7 @@ export default function App() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'passages' | 'trainer' | 'list' | 'workbook' | 'mistakes' | 'exam' | 'cards' | 'report'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'passages' | 'stories' | 'trainer' | 'list' | 'workbook' | 'mistakes' | 'exam' | 'cards' | 'report'>('dashboard');
 
   // PWA kurulum prompt'u
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
@@ -464,7 +465,17 @@ export default function App() {
    */
   const handleStoryReady = useCallback((story: Passage) => {
     setPassages(prev => [...prev, story]);
+    setActiveTab('stories');
     setSelectedPassageId(story.id);
+  }, []);
+
+  /**
+   * Hikayeyi raftan kaldirir. Yalnizca uretilen parcalar silinebilir;
+   * katalog parcalari listeden gelir, silinemez.
+   */
+  const handleDeleteStory = useCallback((id: number) => {
+    setPassages(prev => prev.filter(p => !(p && p.id === id && p.isGenerated)));
+    setSelectedPassageId(prev => (prev === id ? null : prev));
   }, []);
 
   /** Arka planda gelen sorular ve alistirmalar hikayeye islenir. */
@@ -580,7 +591,9 @@ export default function App() {
     const existing = passages.find(p => p?.id === id);
     if (existing) {
       setSelectedPassageId(id);
-      setActiveTab('passages');
+      // Parcayi kapatinca geldigi listeye donsun: hikayeler katalog
+      // listesinde yer almadigi icin "passages" sekmesi onlar icin bos.
+      setActiveTab(existing.isGenerated ? 'stories' : 'passages');
       return;
     }
 
@@ -829,6 +842,7 @@ export default function App() {
             {[
               { id: 'dashboard', label: 'Gösterge Paneli', subtitle: 'İSTATİSTİK & İLERLEME', icon: LayoutDashboard },
               { id: 'passages', label: 'Okuma Parçaları', subtitle: 'KÜTÜPHANE METİNLERİ', icon: BookOpen },
+              { id: 'stories', label: 'Hikayelerim', subtitle: 'SANA ÖZEL & SESLİ', icon: Wand2 },
               { id: 'trainer', label: 'Kelime Çalışma', subtitle: 'HAFIZA KARTLARI & TEST', icon: Sparkles },
               { id: 'list', label: 'Kelime Haznesi', subtitle: 'KÜLLİYAT SÖZLÜĞÜ', icon: BookMarked },
               { id: 'workbook', label: 'Kelime Kitabı', subtitle: 'TABLOLAR & TESTLER', icon: BookText },
@@ -895,12 +909,14 @@ export default function App() {
                 />
               )}
 
-              {activeTab === 'passages' && (
-                <StoryComposer
-                  progress={progress}
+              {activeTab === 'stories' && (
+                <StoryLibrary
                   passages={passages}
+                  progress={progress}
+                  onSelectPassage={handleSelectPassage}
                   onStoryReady={handleStoryReady}
                   onTasksReady={handleStoryTasksReady}
+                  onDeleteStory={handleDeleteStory}
                 />
               )}
 
