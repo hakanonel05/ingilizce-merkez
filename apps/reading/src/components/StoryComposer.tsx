@@ -43,6 +43,21 @@ interface OpenModel { id: string; label: string; note: string }
 
 const MODEL_PREF_KEY = 'reading_story_model_v1';
 
+/**
+ * VARSAYILAN MODEL.
+ *
+ * Ayni kelimeler ve ayni seviyeyle yapilan karsilastirmada acik
+ * agirlikli modeller arasinda B1 seviyesini en iyi tutturan buydu
+ * (ortalama cumle uzunlugu ~11.6 kelime; Qwen 3.8 ~15 ile bandin
+ * uzerine cikiyor, GPT-OSS 20B ~9.7 ile altinda kaliyor). Kelime
+ * kapsamasi ve alistirma bicimi zaten butun modellerde kusursuzdu.
+ *
+ * Gemini'ye gore iki ek faydasi var: daha hizli ve AYRI KOTASI var,
+ * yani Gemini'nin gunluk kotasi dolsa da hikaye uretilmeye devam
+ * ediyor. Servis edilmiyorsa listeden dusuyor ve otomatige donuluyor.
+ */
+const DEFAULT_MODEL = 'openai/gpt-oss-120b';
+
 /** Üretilen hikayelerin kimlikleri; hazır parçalarla çakışmasın. */
 function nextStoryId(passages: Passage[]): number {
   const max = passages.reduce((acc, p) => (p && p.id > acc ? p.id : acc), 0);
@@ -56,7 +71,7 @@ export default function StoryComposer({ progress, passages, onStoryReady, onTask
   const [busy, setBusy] = useState(false);
   const [models, setModels] = useState<OpenModel[]>([]);
   const [model, setModel] = useState<string>(
-    () => localStorage.getItem(MODEL_PREF_KEY) || 'auto'
+    () => localStorage.getItem(MODEL_PREF_KEY) || DEFAULT_MODEL
   );
   const [error, setError] = useState<string | null>(null);
   const [note, setNote] = useState<string | null>(null);
@@ -81,12 +96,22 @@ export default function StoryComposer({ progress, passages, onStoryReady, onTask
         const list: OpenModel[] = Array.isArray(d?.models) ? d.models : [];
         setModels(list);
         // Kayitli tercih artik servis edilmiyorsa otomatige don.
+        // Kayitli/varsayilan tercih artik servis edilmiyorsa otomatige
+        // don; olmayan bir modeli secili gostermek hataya goturuyordu.
         setModel(prev =>
           prev === 'auto' || list.some(m => m.id === prev) ? prev : 'auto'
         );
       })
       .catch(() => setModels([]));
   }, []);
+
+  /** Model kimligini arayuzde gosterilecek ada cevirir. */
+  const labelForModel = (id?: string): string => {
+    if (!id) return 'Gemini';
+    const known = models.find(m => m.id === id);
+    if (known) return known.label;
+    return id.startsWith('gemini') ? 'Gemini' : id;
+  };
 
   const chooseModel = (id: string) => {
     setModel(id);
@@ -135,7 +160,9 @@ export default function StoryComposer({ progress, passages, onStoryReady, onTask
         questions: [],
         exercises: [],
         isGenerated: true,
-        generatedBy: models.find(m => m.id === model)?.label || 'Gemini',
+        // Sunucu GERCEKTEN kullanilan modeli bildiriyor: tercih edilen
+        // model kotasi dolu oldugu icin atlanmis olabilir.
+        generatedBy: labelForModel(data.model),
       };
 
       onStoryReady(story);
@@ -288,7 +315,8 @@ export default function StoryComposer({ progress, passages, onStoryReady, onTask
                 <option value="auto">Otomatik (Gemini)</option>
                 {models.map(m => (
                   <option key={m.id} value={m.id}>
-                    {m.label} — {m.note}
+                    {m.label}
+                    {m.id === DEFAULT_MODEL ? ' (önerilen)' : ''} — {m.note}
                   </option>
                 ))}
               </select>

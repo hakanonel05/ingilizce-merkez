@@ -21,6 +21,28 @@
   --color-editorial-card: #FFFFFF;
 }
 
+/* =====================================================================
+   PAYLASILAN BILESENLERIN RENK DEGISKENLERI
+
+   shared/ altindaki bilesenler (ornegin ayarlar penceresi) kagit/murekkep
+   degiskenleriyle yazilmis. Iki uygulamanin paleti artik ayni oldugu icin
+   burada AYNI degerlerle tanimlaniyorlar; boylece ortak bir bilesen iki
+   tarafta da dogru gorunuyor ve iki kez yazilmasi gerekmiyor.
+   ===================================================================== */
+:root {
+  --paper:      #F9F7F2;
+  --paper-2:    #FFFFFF;
+  --paper-3:    #F2EFE8;
+  --ink:        #1A1A1A;
+  --ink-2:      rgba(26, 26, 26, 0.62);
+  --ink-3:      rgba(26, 26, 26, 0.40);
+  --hairline:   rgba(26, 26, 26, 0.12);
+  --hairline-2: rgba(26, 26, 26, 0.22);
+  --marker:     #F2C94C;
+  --marker-bg:  #FCF3D8;
+  --marker-ink: #5E4A10;
+}
+
 body {
   background-color: var(--color-editorial-bg);
   color: var(--color-editorial-text);

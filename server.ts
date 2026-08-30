@@ -852,7 +852,7 @@ async function generateContentWithRetry(
      */
     temperature?: number;
   }
-): Promise<{ text: string }> {
+): Promise<{ text: string; usedModel: string }> {
   const providers = params.providers?.length ? params.providers : getProviderChain();
   let lastError: any = null;
 
@@ -875,13 +875,14 @@ async function generateContentWithRetry(
       for (let attempt = 0; attempt < 3; attempt++) {
         try {
           if (isGroq) {
-            return await callGroq(
+            const groqResult = await callGroq(
               modelName,
               typeof params.contents === 'string' ? params.contents : JSON.stringify(params.contents),
               params.config?.systemInstruction || '',
               params.jsonHint || (params.config?.responseMimeType === 'application/json' ? '{}' : undefined),
               params.temperature
             );
+            return { ...groqResult, usedModel: modelName };
           }
 
           const client = ai || getGeminiClient();
@@ -890,7 +891,7 @@ async function generateContentWithRetry(
             contents: params.contents,
             config: params.config,
           });
-          return { text: response.text || "" };
+          return { text: response.text || "", usedModel: modelName };
         } catch (err: any) {
           lastError = err;
 
@@ -1775,8 +1776,16 @@ async function listOpenModels(): Promise<OpenModel[]> {
 function resolveModelChoice(raw: any): { providers?: string[]; primaryModel?: string } {
   const model = String(raw || '').trim();
   if (!model || model === 'auto') return {};
-  if (model.startsWith('gemini')) return { providers: ['gemini'], primaryModel: model };
-  return { providers: ['groq'], primaryModel: model };
+
+  // Secilen model ONCE denenir ama zincir ona KILITLENMEZ. Onceki
+  // surumde tek saglayiciya sabitleniyordu; o modelin kotasi dolunca
+  // hikaye hic uretilemiyordu. Kullaniciyi bos birakmaktansa sirada ne
+  // varsa onunla uretip HANGI MODELIN yazdigini bildirmek daha dogru -
+  // yanit ve rafitaki rozet gercek modeli gosteriyor, yani kimse
+  // yanilmiyor.
+  const preferred = model.startsWith('gemini') ? 'gemini' : 'groq';
+  const rest = getProviderChain().filter((p) => p !== preferred);
+  return { providers: [preferred, ...rest], primaryModel: model };
 }
 
 app.get("/api/ai/models", async (_req, res) => {
@@ -1874,9 +1883,10 @@ KURALLAR:
       title: String(story.title || 'Untitled Story').trim(),
       theme: String(story.theme || 'Story').trim(),
       paragraphs,
-      // Arayuz hangi modelin yazdigini gosteriyor; kullanici
-      // modelleri karsilastirabilsin diye.
-      model: choice.primaryModel || 'auto',
+      // ISTENEN degil, GERCEKTEN KULLANILAN model. Tercih edilen model
+      // kotasi dolu oldugu icin atlanmis olabilir; arayuzun dogruyu
+      // gosterebilmesi buna bagli.
+      model: response.usedModel,
     });
   } catch (error: any) {
     console.error("Error in /api/generate-story:", error);

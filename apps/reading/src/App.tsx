@@ -13,6 +13,7 @@ import ExamSimulator from './components/ExamSimulator';
 import AppSwitcher from './AppSwitcher';
 import AuthScreen from './components/AuthScreen';
 import StoryLibrary from './components/StoryLibrary';
+import { SettingsModal } from '../../../shared/vocab/SettingsModal';
 import { Dashboard as StudyReport } from '../../../shared/analytics/Dashboard';
 import { VocabHub, VocabHubLesson } from '../../../shared/vocab/VocabHub';
 import { readingPassageLessonId, READING_CORE_LESSON_ID, READING_CORE_LESSON_TITLE } from './lib/vocabBank';
@@ -28,6 +29,7 @@ import {
   BookOpen,
   Sparkles,
   Wand2,
+  Settings2,
   BookMarked,
   Zap,
   Clock,
@@ -85,6 +87,7 @@ export default function App() {
     return () => subscription.unsubscribe();
   }, []);
 
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'dashboard' | 'passages' | 'stories' | 'trainer' | 'list' | 'workbook' | 'mistakes' | 'exam' | 'cards' | 'report'>('dashboard');
 
   // PWA kurulum prompt'u
@@ -765,6 +768,20 @@ export default function App() {
                 </button>
               )}
 
+              {/* Ayarlar — API anahtarlari.
+                  Reading tarafinda hic ayar ekrani yoktu: anahtarlar
+                  yalnizca katmanlidan girilebiliyordu. Hikaye ureteci ve
+                  sesli okuma bu anahtarlara bagli oldugu icin yeni bir
+                  cihazda reading tek basina kullanilamiyordu. */}
+              <button
+                onClick={() => setIsSettingsOpen(true)}
+                title="API anahtarları"
+                className="flex items-center gap-1.5 border border-editorial-text/20 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-editorial-text/70 hover:border-editorial-accent hover:text-editorial-accent transition-colors cursor-pointer"
+              >
+                <Settings2 className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Ayarlar</span>
+              </button>
+
               {/* Veri Yedekle */}
               <button
                 onClick={handleBackupData}
@@ -985,6 +1002,12 @@ export default function App() {
         </div>
 
       </main>
+
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        subtitle="Hikaye üreteci ve sesli okuma için API anahtarları"
+      />
 
       {/* Footer Branding */}
       <footer className="bg-white border-t border-editorial-border/30 py-8 mt-16 text-center text-editorial-text/50 text-xs">
