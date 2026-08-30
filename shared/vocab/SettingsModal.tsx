@@ -124,9 +124,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         <div className="mx-6 mt-4 flex items-start gap-2.5 border border-[var(--hairline)] bg-[var(--paper-3)] p-3">
           <ShieldCheck className="w-4 h-4 shrink-0 mt-0.5 text-[var(--ink-2)]" />
           <p className="text-[11px] leading-relaxed text-[var(--ink-2)]">
-            Anahtarlar <strong>yalnızca bu tarayıcıda</strong> saklanır ve her istekte
-            doğrudan ilgili servise iletilmek üzere gönderilir. Sunucuya kaydedilmez.
-            Boş bıraktığınız alanlar için sitenin kendi anahtarı kullanılır.
+            <strong>Bu alanları doldurmak zorunda değilsin.</strong> Sitenin kendi
+            anahtarları var ve boş bıraktığın her alan için onlar kullanılır — hikaye
+            üreteci de sesli okuma da hiçbir şey girmeden çalışır. Kendi anahtarını
+            yalnızca <em>kendi kotanı</em> kullanmak istersen gir; ortak kota
+            dolduğunda beklemekten kurtulursun. Girdiklerin{' '}
+            <strong>yalnızca bu tarayıcıda</strong> saklanır, sunucuya kaydedilmez.
           </p>
         </div>
 
@@ -152,7 +155,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           : 'border-[var(--marker)] bg-[var(--marker-bg)] text-[var(--marker-ink)]'
                       }`}
                     >
-                      {serverHas ? 'sitede tanımlı — isteğe bağlı' : 'sitede yok — gerekli'}
+                      {serverHas
+                        ? 'sitede var — girmesen de çalışır'
+                        : 'sitede yok — bunu girmen gerek'}
                     </span>
                   )}
                 </div>

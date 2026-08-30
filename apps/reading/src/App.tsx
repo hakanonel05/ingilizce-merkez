@@ -1006,7 +1006,7 @@ export default function App() {
       <SettingsModal
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
-        subtitle="Hikaye üreteci ve sesli okuma için API anahtarları"
+        subtitle="API anahtarları — isteğe bağlı, site kendi anahtarlarıyla çalışır"
       />
 
       {/* Footer Branding */}

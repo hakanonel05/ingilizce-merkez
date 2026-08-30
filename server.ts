@@ -761,7 +761,14 @@ function describeRateLimit(error: any): string {
   const isPerMinute = /PerMinute|RequestsPerMinute|TokensPerMinute/i.test(raw);
 
   if (isDaily) {
-    return "GUNLUK ucretsiz kotan doldu. Bu kota UTC gece yarisinda (Turkiye saatiyle 03:00) sifirlanir. Beklemek istemiyorsan AI_PROVIDER ortam degiskenini 'groq' yapip Groq'un ayri kotasini kullanabilirsin.";
+    // Bu mesaji KULLANICI goruyor. Eskiden "AI_PROVIDER ortam degiskenini
+    // degistir" diyordu; bunu yalnizca siteyi isleten kisi yapabilir, yani
+    // okuyan icin hem anlamsiz hem de "demek bir seyler kurmam gerek"
+    // hissi veren bir yonlendirmeydi. Yerine ekranda gercekten
+    // yapilabilecek iki sey yaziliyor.
+    return "Gunluk ucretsiz kota doldu (UTC gece yarisi, Turkiye saatiyle 03:00'te sifirlanir). " +
+      "Hikaye ureticide 'Yazan model' olarak acik kaynak bir model secersen ayri bir kotayla hemen devam edebilirsin. " +
+      "Istersen Ayarlar'dan kendi API anahtarini da girebilirsin.";
   }
 
   if (isPerMinute) {
