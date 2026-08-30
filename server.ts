@@ -1882,10 +1882,17 @@ app.post("/api/generate-story", async (req, res) => {
     // turu" diye bir sey yok, olmayan bir seyi tarif etmek modeli
     // yaniltiyor.
     const annotated = words.some((w) => w.partOfSpeech || w.meaning);
+    // SON IKI SATIR OLCUMLE EKLENDI. Yoklarken model 50 kelimede bir kez
+    // aciklamayi hikayenin ICINE yazdi:
+    //   `The AI then presents (adjective) "mevcut, simdiki" data...`
+    // Etiketin yalnizca yonerge oldugunu acikca soylemezsen model onu
+    // metnin bir parcasi sanabiliyor.
     const senseNote = annotated
       ? `\nParantez icindeki SOZ TURU ve tirnak icindeki TURKCE KARSILIK,
 kullanicinin bu kelimeyi calisirken ogrendigi anlamdir. Kelimeyi
-BASKA bir anlamda kullanmak hikayeyi ise yaramaz kiliyor.\n`
+BASKA bir anlamda kullanmak hikayeyi ise yaramaz kiliyor.
+Bu isaretler SANA VERILEN BILGIDIR, hikayenin parcasi DEGIL: soz turunu,
+Turkce karsiligi ya da parantezleri hikaye metnine ASLA yazma.\n`
       : "";
     const topicLine = topic
       ? "KONU: " + topic
