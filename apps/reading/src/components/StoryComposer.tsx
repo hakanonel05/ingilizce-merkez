@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react';
 import { Passage, UserProgress, CEFRLevel } from '../types';
 import { collectStrugglingWords, StrugglingWord, MAX_STORY_WORDS } from '../lib/strugglingWords';
 import { apiFetch } from '../../../../shared/vocab/userKeys';
-import { Sparkles, Loader2, AlertTriangle, BookOpenCheck, RefreshCw } from 'lucide-react';
+import { Sparkles, Loader2, AlertTriangle, BookOpenCheck, RefreshCw, Cpu } from 'lucide-react';
 
 interface Props {
   progress: UserProgress;
@@ -29,6 +29,20 @@ interface Props {
 
 const LEVELS: CEFRLevel[] = ['B1', 'B2', 'C1'];
 
+/**
+ * Hikayeyi yazacak model.
+ *
+ * "auto" Gemini ile baslar, kotasi dolarsa acik kaynak modellere duser.
+ * Kullanici acik kaynak bir model secerse zincir YALNIZCA orada kalir:
+ * "Llama istiyorum" deyip Gemini'den cevap almak secimi anlamsiz kilardi.
+ *
+ * Liste sunucudan geliyor (/api/ai/models) cunku Groq'un model kadrosu
+ * sik degisiyor; kaldirilan bir modeli arayuzde gostermek istemiyoruz.
+ */
+interface OpenModel { id: string; label: string; note: string }
+
+const MODEL_PREF_KEY = 'reading_story_model_v1';
+
 /** Üretilen hikayelerin kimlikleri; hazır parçalarla çakışmasın. */
 function nextStoryId(passages: Passage[]): number {
   const max = passages.reduce((acc, p) => (p && p.id > acc ? p.id : acc), 0);
@@ -40,6 +54,10 @@ export default function StoryComposer({ progress, passages, onStoryReady, onTask
   const [level, setLevel] = useState<CEFRLevel>('B1');
   const [topic, setTopic] = useState('');
   const [busy, setBusy] = useState(false);
+  const [models, setModels] = useState<OpenModel[]>([]);
+  const [model, setModel] = useState<string>(
+    () => localStorage.getItem(MODEL_PREF_KEY) || 'auto'
+  );
   const [error, setError] = useState<string | null>(null);
   const [note, setNote] = useState<string | null>(null);
 
@@ -54,6 +72,27 @@ export default function StoryComposer({ progress, passages, onStoryReady, onTask
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [progress.wordStatus, passages.length]);
 
+  // Acik kaynak model listesi. Alinamazsa liste bos kalir ve yalnizca
+  // "Otomatik" gorunur; bu bir hata durumu degil.
+  useEffect(() => {
+    apiFetch('/api/ai/models')
+      .then(r => r.json())
+      .then(d => {
+        const list: OpenModel[] = Array.isArray(d?.models) ? d.models : [];
+        setModels(list);
+        // Kayitli tercih artik servis edilmiyorsa otomatige don.
+        setModel(prev =>
+          prev === 'auto' || list.some(m => m.id === prev) ? prev : 'auto'
+        );
+      })
+      .catch(() => setModels([]));
+  }, []);
+
+  const chooseModel = (id: string) => {
+    setModel(id);
+    localStorage.setItem(MODEL_PREF_KEY, id);
+  };
+
   const selected = words.slice(0, MAX_STORY_WORDS);
 
   const handleGenerate = async () => {
@@ -66,7 +105,7 @@ export default function StoryComposer({ progress, passages, onStoryReady, onTask
       const res = await apiFetch('/api/generate-story', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ words: selected.map((w) => w.term), level, topic: topic.trim() }),
+        body: JSON.stringify({ words: selected.map((w) => w.term), level, topic: topic.trim(), model }),
       });
       const raw = await res.text();
       let data: any;
@@ -111,6 +150,7 @@ export default function StoryComposer({ progress, passages, onStoryReady, onTask
               text: data.paragraphs.join('\n\n'),
               level,
               words: selected.map((w) => w.term),
+              model,
             }),
           });
           const taskData = await taskRes.json();
@@ -228,6 +268,32 @@ export default function StoryComposer({ progress, passages, onStoryReady, onTask
             className="w-full border border-editorial-border/40 bg-white px-3 py-1.5 text-xs text-editorial-text focus:outline-none focus:border-editorial-accent"
           />
         </div>
+
+        {/* Modeli yazan yapay zeka. Acik kaynak modeller Groq uzerinden
+            calisiyor ve ayri bir kotasi var; Gemini kotasi dolunca da
+            hikaye uretmeye devam edebiliyorsun. */}
+        {models.length > 0 && (
+          <div className="space-y-1">
+            <label className="block text-[10px] font-bold uppercase tracking-wider text-editorial-text/50">
+              Yazan model
+            </label>
+            <div className="flex items-center gap-1.5">
+              <Cpu className="h-3.5 w-3.5 text-editorial-text/40" />
+              <select
+                value={model}
+                onChange={e => chooseModel(e.target.value)}
+                className="border border-editorial-border/40 bg-white px-2 py-1.5 text-xs text-editorial-text focus:outline-none focus:border-editorial-accent cursor-pointer"
+              >
+                <option value="auto">Otomatik (Gemini)</option>
+                {models.map(m => (
+                  <option key={m.id} value={m.id}>
+                    {m.label} — {m.note}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        )}
 
         <button
           type="button"

@@ -780,7 +780,8 @@ async function callGroq(
   model: string,
   prompt: string,
   systemInstruction: string,
-  jsonHint?: string
+  jsonHint?: string,
+  temperature = 0.3
 ): Promise<{ text: string }> {
   const apiKey = resolveKey('groq', 'GROQ_API_KEY');
   if (!apiKey) {
@@ -806,7 +807,7 @@ async function callGroq(
         { role: "system", content: systemContent },
         { role: "user", content: prompt },
       ],
-      temperature: 0.3,
+      temperature,
       ...(jsonHint ? { response_format: { type: "json_object" } } : {}),
     }),
   });
@@ -839,16 +840,34 @@ async function generateContentWithRetry(
     primaryModel?: string;
     /** Groq icin beklenen JSON semasinin kisa tarifi. Gemini bunu yok sayar. */
     jsonHint?: string;
+    /**
+     * Ortam degiskenindeki zinciri EZER. Kullanici arayuzden belirli bir
+     * saglayici sectiginde (ornegin acik kaynak bir model) kullanilir.
+     */
+    providers?: string[];
+    /**
+     * Uretim sicakligi. Varsayilan 0.3 cozumleme isleri icin dogru ama
+     * HIKAYE yaziminda fazla dusuk: cumleler tekduze ve kaliplasmis
+     * cikiyor. Yaratici islerde cagiran bunu yukseltiyor.
+     */
+    temperature?: number;
   }
 ): Promise<{ text: string }> {
-  const providers = getProviderChain();
+  const providers = params.providers?.length ? params.providers : getProviderChain();
   let lastError: any = null;
 
   // Saglayicilar sirayla denenir. Biri kotasini doldurursa digerine gecilir.
   for (const provider of providers) {
     const isGroq = provider === 'groq';
     const baseModels = isGroq ? GROQ_MODELS : GEMINI_MODELS;
-    const models = params.primaryModel ? [params.primaryModel, ...baseModels] : baseModels;
+    // primaryModel bir saglayiciya AITTIR: "gemini-*" Gemini'nin,
+    // digerleri Groq'un. Yanlis zincire eklenirse saglayici o modeli
+    // taniyamayip 404 veriyor, o yuzden sahibine gore ayiriliyor.
+    const isGeminiModel = !!params.primaryModel?.startsWith('gemini');
+    const belongsHere = !!params.primaryModel && (isGroq ? !isGeminiModel : isGeminiModel);
+    const models = belongsHere && params.primaryModel
+      ? [params.primaryModel, ...baseModels.filter((m) => m !== params.primaryModel)]
+      : baseModels;
 
     let providerExhausted = false;
 
@@ -860,7 +879,8 @@ async function generateContentWithRetry(
               modelName,
               typeof params.contents === 'string' ? params.contents : JSON.stringify(params.contents),
               params.config?.systemInstruction || '',
-              params.jsonHint || (params.config?.responseMimeType === 'application/json' ? '{}' : undefined)
+              params.jsonHint || (params.config?.responseMimeType === 'application/json' ? '{}' : undefined),
+              params.temperature
             );
           }
 
@@ -1588,6 +1608,114 @@ function normalizePartOfSpeech(raw: any): string | undefined {
    iki katina cikariyordu.
    ============================================================ */
 
+/* ============================================================
+   ACIK KAYNAK MODELLER  (/api/ai/models)
+
+   Hikaye ureteci Gemini disinda acik kaynak modellerle de
+   calisabilsin diye. Hepsi Groq uzerinden servis ediliyor:
+   agirliklari acik yayimlanmis modeller (Llama, Kimi, Qwen,
+   gpt-oss), Groq'un kendi ucretsiz kotasiyla.
+
+   MODEL KIMLIKLERI TAHMIN EDILMIYOR: Groq'un model listesi sik
+   degisiyor ve kaldirilan modeller 404 veriyor. Bu uc, asagidaki
+   ADAY listesini Groq'un CANLI listesiyle kesistirip yalnizca
+   gercekten calisanlari donduruyor. Arayuz de yalnizca bunlari
+   gosteriyor, yani olmayan bir model secilemiyor.
+   ============================================================ */
+
+interface OpenModel {
+  id: string;
+  label: string;
+  /** Kisa tanitim; arayuzde secenegin altinda gorunur. */
+  note: string;
+}
+
+/**
+ * Hikaye yazimina uygun aday modeller, tercih sirasiyla. Kucuk
+ * modeller listede yok: hikaye uretimi uzun baglam ve akici anlati
+ * istiyor, 8B civari modeller burada belirgin sekilde zayif kaliyor.
+ */
+const OPEN_MODEL_CANDIDATES: OpenModel[] = [
+  { id: "moonshotai/kimi-k2-instruct-0905", label: "Kimi K2", note: "Moonshot AI — uzun ve akici anlati" },
+  { id: "moonshotai/kimi-k2-instruct",      label: "Kimi K2", note: "Moonshot AI — uzun ve akici anlati" },
+  { id: "meta-llama/llama-4-maverick-17b-128e-instruct", label: "Llama 4 Maverick", note: "Meta — dengeli ve hizli" },
+  { id: "meta-llama/llama-4-scout-17b-16e-instruct",     label: "Llama 4 Scout",    note: "Meta — en hizlisi" },
+  { id: "llama-3.3-70b-versatile",          label: "Llama 3.3 70B", note: "Meta — klasik, guclu" },
+  { id: "openai/gpt-oss-120b",              label: "GPT-OSS 120B",  note: "OpenAI acik agirlikli — en guclu" },
+  { id: "qwen/qwen3.6-27b",                 label: "Qwen 3.6",      note: "Alibaba — iyi Ingilizce" },
+  { id: "openai/gpt-oss-20b",               label: "GPT-OSS 20B",   note: "OpenAI acik agirlikli — hafif" },
+];
+
+/** Groq'un o an servis ettigi model kimlikleri. Kisa sureli onbellekli. */
+let groqModelCache: { ids: Set<string>; at: number } | null = null;
+const GROQ_MODEL_CACHE_MS = 10 * 60 * 1000;
+
+async function fetchGroqModelIds(): Promise<Set<string>> {
+  if (groqModelCache && Date.now() - groqModelCache.at < GROQ_MODEL_CACHE_MS) {
+    return groqModelCache.ids;
+  }
+
+  const apiKey = resolveKey('groq', 'GROQ_API_KEY');
+  if (!apiKey) throw new Error("Groq API anahtari bulunamadi.");
+
+  const res = await fetch("https://api.groq.com/openai/v1/models", {
+    headers: { Authorization: `Bearer ${apiKey}` },
+  });
+  if (!res.ok) {
+    throw new Error(`Groq model listesi alinamadi (${res.status}).`);
+  }
+
+  const data: any = await res.json();
+  const ids = new Set<string>(
+    (Array.isArray(data?.data) ? data.data : []).map((m: any) => String(m?.id || ''))
+  );
+  groqModelCache = { ids, at: Date.now() };
+  return ids;
+}
+
+/**
+ * Adaylardan CANLI olanlari, ayni etikete sahip kopyalari eleyerek
+ * dondurur (Kimi'nin iki surumu gibi: hangisi varsa o kalir).
+ */
+async function listOpenModels(): Promise<OpenModel[]> {
+  const live = await fetchGroqModelIds();
+  const seen = new Set<string>();
+  const out: OpenModel[] = [];
+  for (const m of OPEN_MODEL_CANDIDATES) {
+    if (!live.has(m.id) || seen.has(m.label)) continue;
+    seen.add(m.label);
+    out.push(m);
+  }
+  return out;
+}
+
+/**
+ * Istekteki model secimini uretim parametrelerine cevirir.
+ *
+ * Bos ya da "auto" gelirse hicbir sey zorlanmaz: ortam degiskenindeki
+ * varsayilan zincir (once Gemini, sonra Groq) isler. Acik kaynak bir
+ * model secildiyse zincir YALNIZCA Groq'a sabitlenir - kullanici acik
+ * kaynak istedigini soylemisken sessizce Gemini'ye dusmek, secimin
+ * anlamini ortadan kaldirirdi.
+ */
+function resolveModelChoice(raw: any): { providers?: string[]; primaryModel?: string } {
+  const model = String(raw || '').trim();
+  if (!model || model === 'auto') return {};
+  if (model.startsWith('gemini')) return { providers: ['gemini'], primaryModel: model };
+  return { providers: ['groq'], primaryModel: model };
+}
+
+app.get("/api/ai/models", async (_req, res) => {
+  try {
+    const models = await listOpenModels();
+    res.json({ models });
+  } catch (error: any) {
+    // Liste alinamazsa arayuz yalnizca Gemini gosterir; bu bir hata
+    // ekrani sebebi degil.
+    res.json({ models: [], error: formatErrorMessage(error, "Model listesi alinamadi.") });
+  }
+});
+
 app.post("/api/generate-story", async (req, res) => {
   try {
     const words: string[] = Array.isArray(req.body?.words)
@@ -1595,6 +1723,7 @@ app.post("/api/generate-story", async (req, res) => {
       : [];
     const level = String(req.body?.level || 'B1').toUpperCase();
     const topic = String(req.body?.topic || '').trim().slice(0, 120);
+    const choice = resolveModelChoice(req.body?.model);
 
     if (words.length === 0) {
       return res.status(400).json({ error: "Hikaye icin en az bir kelime gerekli." });
@@ -1633,6 +1762,10 @@ KURALLAR:
     const response = await generateContentWithRetry(ai, {
       contents: prompt,
       jsonHint: '{"title":"","theme":"","paragraphs":[""]}',
+      ...choice,
+      // Hikaye YARATICI bir is: varsayilan 0.3 burada tekduze,
+      // birbirinin ayni metinler uretiyordu.
+      temperature: 0.9,
       config: {
         systemInstruction: SYSTEM_INSTRUCTION_COACH,
         responseMimeType: "application/json",
@@ -1667,6 +1800,9 @@ KURALLAR:
       title: String(story.title || 'Untitled Story').trim(),
       theme: String(story.theme || 'Story').trim(),
       paragraphs,
+      // Arayuz hangi modelin yazdigini gosteriyor; kullanici
+      // modelleri karsilastirabilsin diye.
+      model: choice.primaryModel || 'auto',
     });
   } catch (error: any) {
     console.error("Error in /api/generate-story:", error);
@@ -1686,6 +1822,8 @@ app.post("/api/generate-story-tasks", async (req, res) => {
       : [];
 
     if (!text) return res.status(400).json({ error: "Hikaye metni gerekli." });
+
+    const choice = resolveModelChoice(req.body?.model);
 
     const ai = getAIClient();
 
@@ -1723,6 +1861,7 @@ BICIM KURALLARI:
     const response = await generateContentWithRetry(ai, {
       contents: prompt,
       jsonHint: '{"questions":[{"question":"","options":["A) "],"answer":"A"}],"exercises":[{"question":"","options":["A) "],"answer":"A","explanation":""}]}',
+      ...choice,
       config: {
         systemInstruction: SYSTEM_INSTRUCTION_COACH,
         responseMimeType: "application/json",
