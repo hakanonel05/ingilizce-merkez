@@ -16,7 +16,7 @@ import { Passage, UserProgress } from '../types';
 import StoryComposer from './StoryComposer';
 import {
   Sparkles, BookOpen, Trash2, CheckCircle2, Clock, HelpCircle,
-  BrainCircuit, Library, AlertTriangle,
+  BrainCircuit, Library, AlertTriangle, Cpu,
 } from 'lucide-react';
 
 interface Props {
@@ -103,6 +103,13 @@ export default function StoryLibrary({
                       <span className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-editorial-accent">
                         <Sparkles className="h-3 w-3" /> Sana özel
                       </span>
+                      {/* Hangi model yazdi: acik kaynak modellerle
+                          Gemini'yi karsilastirabilmek icin. */}
+                      {story.generatedBy && (
+                        <span className="flex items-center gap-1 font-mono text-[10px] text-editorial-text/40">
+                          <Cpu className="h-3 w-3" /> {story.generatedBy}
+                        </span>
+                      )}
                       {isRead && (
                         <span className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-emerald-700">
                           <CheckCircle2 className="h-3 w-3" /> Okundu

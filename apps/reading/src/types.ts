@@ -33,6 +33,12 @@ export interface Passage {
   questions: ComprehensionQuestion[];
   exercises: VocabularyExercise[];
   isGenerated?: boolean;
+  /**
+   * Uretilen hikayeyi hangi modelin yazdigi (ornek: "Llama 4" ya da
+   * "Gemini"). Kullanici acik kaynak modellerle Gemini'yi
+   * karsilastirabilsin diye hikayenin uzerinde kaliyor.
+   */
+  generatedBy?: string;
 }
 
 export interface UserProgress {

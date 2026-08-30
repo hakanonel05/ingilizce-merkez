@@ -135,6 +135,7 @@ export default function StoryComposer({ progress, passages, onStoryReady, onTask
         questions: [],
         exercises: [],
         isGenerated: true,
+        generatedBy: models.find(m => m.id === model)?.label || 'Gemini',
       };
 
       onStoryReady(story);
