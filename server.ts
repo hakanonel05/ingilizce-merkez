@@ -1631,26 +1631,79 @@ interface OpenModel {
 }
 
 /**
- * Hikaye yazimina uygun aday modeller, tercih sirasiyla. Kucuk
- * modeller listede yok: hikaye uretimi uzun baglam ve akici anlati
- * istiyor, 8B civari modeller burada belirgin sekilde zayif kaliyor.
+ * ACIK AGIRLIKLI MODEL AILELERI.
+ *
+ * Liste SABIT DEGIL: Groq'un o an servis ettigi modeller okunup burada
+ * taninan ailelere gore suzuluyor. Sabit bir model listesi tutmak iki
+ * yonden de yanlisti - kaldirilan modeller 404 veriyor, yeni cikanlar
+ * ise kod degistirilmeden gorunmuyordu.
+ *
+ * `rank` kucukten buyuge tercih sirasi.
  */
-const OPEN_MODEL_CANDIDATES: OpenModel[] = [
-  { id: "moonshotai/kimi-k2-instruct-0905", label: "Kimi K2", note: "Moonshot AI — uzun ve akici anlati" },
-  { id: "moonshotai/kimi-k2-instruct",      label: "Kimi K2", note: "Moonshot AI — uzun ve akici anlati" },
-  { id: "meta-llama/llama-4-maverick-17b-128e-instruct", label: "Llama 4 Maverick", note: "Meta — dengeli ve hizli" },
-  { id: "meta-llama/llama-4-scout-17b-16e-instruct",     label: "Llama 4 Scout",    note: "Meta — en hizlisi" },
-  { id: "llama-3.3-70b-versatile",          label: "Llama 3.3 70B", note: "Meta — klasik, guclu" },
-  { id: "openai/gpt-oss-120b",              label: "GPT-OSS 120B",  note: "OpenAI acik agirlikli — en guclu" },
-  { id: "qwen/qwen3.6-27b",                 label: "Qwen 3.6",      note: "Alibaba — iyi Ingilizce" },
-  { id: "openai/gpt-oss-20b",               label: "GPT-OSS 20B",   note: "OpenAI acik agirlikli — hafif" },
+const OPEN_FAMILIES: { match: RegExp; label: string; note: string; rank: number }[] = [
+  // SIRA ONEMLI: eslesen ILK aile kazaniyor. "deepseek-r1-distill-llama-70b"
+  // gibi kimlikler iki aile adini birden tasiyor; daha ozel olan once
+  // denenmezse model yanlis aileye yaziliyor.
+  { match: /kimi|moonshot/i,   label: 'Kimi',     note: 'Moonshot AI — uzun ve akici anlati', rank: 1 },
+  { match: /deepseek/i,        label: 'DeepSeek', note: 'DeepSeek — guclu akil yurutme',      rank: 3 },
+  { match: /llama/i,           label: 'Llama',    note: 'Meta — dengeli ve guclu',            rank: 2 },
+  { match: /gpt-oss/i,         label: 'GPT-OSS',  note: 'OpenAI acik agirlikli',              rank: 4 },
+  { match: /qwen/i,            label: 'Qwen',     note: 'Alibaba — iyi Ingilizce',            rank: 5 },
+  { match: /mistral|mixtral/i, label: 'Mistral',  note: 'Mistral AI — hizli',                 rank: 6 },
+  { match: /gemma/i,           label: 'Gemma',    note: 'Google acik agirlikli',              rank: 7 },
 ];
 
+/**
+ * Hikaye yazamayacak modeller. Groq ayni listede ses, koruma ve
+ * gomme modellerini de donduruyor; bunlar sohbet ucu degil.
+ */
+const NOT_A_WRITER = /whisper|tts|guard|embed|rerank|vision|ocr|moderation|compound/i;
+
+/** Model kimligindeki parametre sayisi (ornek: "70b" -> 70). */
+function paramSizeOf(id: string): number | null {
+  const m = /(\d+(?:\.\d+)?)\s*b(?![a-z0-9])/i.exec(id);
+  return m ? parseFloat(m[1]) : null;
+}
+
+/** "meta-llama/llama-4-maverick-17b-128e-instruct" -> "Llama 4 Maverick 17B" */
+function prettyName(id: string, family: string): string {
+  const tail = id.includes('/') ? id.slice(id.indexOf('/') + 1) : id;
+  const words = tail
+    .split(/[-_]/)
+    .filter(w => w && !/^(instruct|it|chat|preview|latest|versatile|maxtokens)$/i.test(w))
+    // Tarih damgalari ("0905") ada bir sey katmiyor
+    .filter(w => !/^\d{4}$/.test(w) || /b$/i.test(w))
+    .map(w => (/^\d+(\.\d+)?b$/i.test(w) ? w.toUpperCase() : w.charAt(0).toUpperCase() + w.slice(1)));
+
+  const name = words.join(' ').trim();
+
+  if (!name) return family;
+
+  // Aile adi zaten basta geciyorsa tekrar etme. Karsilastirma yalnizca
+  // harf ve rakamlar uzerinden: "GPT-OSS" ile "Gpt Oss" ayni sey ama
+  // duz metin karsilastirmasi bunu goremiyor ve ad ikileniyordu.
+  //
+  // Bastaki kisim aile adiyla ortusuyorsa DOGRU YAZIMIYLA degistirilir;
+  // kimlikten turetilen bicim ("Gpt Oss", "Deepseek") markanin kendi
+  // yazimi degil.
+  const bare = (t: string) => t.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const bareFamily = bare(family);
+  if (!bare(name).startsWith(bareFamily)) return `${family} ${name}`;
+
+  let consumed = 0, seen = '';
+  while (consumed < name.length && seen.length < bareFamily.length) {
+    seen += bare(name[consumed]);
+    consumed++;
+  }
+  const rest = name.slice(consumed).trim();
+  return rest ? `${family} ${rest}` : family;
+}
+
 /** Groq'un o an servis ettigi model kimlikleri. Kisa sureli onbellekli. */
-let groqModelCache: { ids: Set<string>; at: number } | null = null;
+let groqModelCache: { ids: string[]; at: number } | null = null;
 const GROQ_MODEL_CACHE_MS = 10 * 60 * 1000;
 
-async function fetchGroqModelIds(): Promise<Set<string>> {
+async function fetchGroqModelIds(): Promise<string[]> {
   if (groqModelCache && Date.now() - groqModelCache.at < GROQ_MODEL_CACHE_MS) {
     return groqModelCache.ids;
   }
@@ -1666,27 +1719,48 @@ async function fetchGroqModelIds(): Promise<Set<string>> {
   }
 
   const data: any = await res.json();
-  const ids = new Set<string>(
-    (Array.isArray(data?.data) ? data.data : []).map((m: any) => String(m?.id || ''))
-  );
+  const ids = (Array.isArray(data?.data) ? data.data : [])
+    .map((m: any) => String(m?.id || ''))
+    .filter(Boolean);
+
   groqModelCache = { ids, at: Date.now() };
   return ids;
 }
 
 /**
- * Adaylardan CANLI olanlari, ayni etikete sahip kopyalari eleyerek
- * dondurur (Kimi'nin iki surumu gibi: hangisi varsa o kalir).
+ * Canli listeden hikaye yazabilecek acik agirlikli modelleri secer.
+ *
+ * Cok kucuk modeller (10B alti) elenir: hikaye uretimi uzun baglam ve
+ * akici anlati istiyor, o boyutta belirgin sekilde zayif kaliyorlar.
+ * Ayni aileden birden fazla model varsa hepsi kalir - kullanici Llama'nin
+ * iki surumu arasinda secim yapabilmeli.
  */
 async function listOpenModels(): Promise<OpenModel[]> {
-  const live = await fetchGroqModelIds();
-  const seen = new Set<string>();
-  const out: OpenModel[] = [];
-  for (const m of OPEN_MODEL_CANDIDATES) {
-    if (!live.has(m.id) || seen.has(m.label)) continue;
-    seen.add(m.label);
-    out.push(m);
+  const ids = await fetchGroqModelIds();
+
+  const picked: (OpenModel & { rank: number; size: number })[] = [];
+
+  for (const id of ids) {
+    if (NOT_A_WRITER.test(id)) continue;
+    const family = OPEN_FAMILIES.find(f => f.match.test(id));
+    if (!family) continue;
+
+    const size = paramSizeOf(id);
+    if (size !== null && size < 10) continue;
+
+    picked.push({
+      id,
+      label: prettyName(id, family.label),
+      note: family.note,
+      rank: family.rank,
+      size: size ?? 0,
+    });
   }
-  return out;
+
+  // Once aile tercihi, sonra buyukten kucuge (buyuk model daha iyi yaziyor)
+  picked.sort((a, b) => a.rank - b.rank || b.size - a.size || a.id.localeCompare(b.id));
+
+  return picked.map(({ id, label, note }) => ({ id, label, note }));
 }
 
 /**
