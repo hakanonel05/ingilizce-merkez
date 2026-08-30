@@ -669,7 +669,39 @@ const GROQ_MODELS = [
   "openai/gpt-oss-20b",
 ];
 
+/**
+ * Gemini model sirasi.
+ *
+ * ILK SIRADA TAKMA AD VAR, BILEREK. Sabit surum kimlikleri Google
+ * tarafindan yeni anahtarlara kapatilabiliyor: 30 Agustos 2026'da
+ * yeni acilan bir anahtarla gemini-2.5-flash, gemini-2.5-pro ve
+ * gemini-2.0-flash'in UCU DE 404 dondu ("no longer available to new
+ * users"), yani Gemini zinciri bastan sona bosa dusuyordu.
+ *
+ * Bu SESSIZ bir ariza: zincir hatayi yutup Groq'a geciyor, arayuzde
+ * her sey calisiyor gorunuyor. Fark ancak Groq'un da kotasi dolunca
+ * ortaya cikiyor - o noktada yedegi olmayan tek saglayiciya bagimli
+ * kalmis oluyoruz.
+ *
+ * SIRA OLCUMLE SECILDI (ucer deneme, ayni anahtar):
+ *   gemini-3.6-flash      3/3  <- Google'in 404 mesajinda onerdigi model
+ *   gemini-flash-latest   2/3  (503 UNAVAILABLE, "high demand")
+ *   gemini-2.5-flash      0/3  (404)
+ * Once sabit ve o an calisan kimlik, arkasinda takma ad: takma ad tek
+ * basina onde olsaydi yogun anlarda zincir bosa dusuyordu, ama gelecekte
+ * 3.6 da kapatilirsa `-latest` kendini gunceller. Ikisi birbirini tutuyor.
+ *
+ * Eski kimlikler en arkada duruyor ki erisimi olan (daha eski)
+ * anahtarlarda davranis degismesin.
+ *
+ * Ayni ders Groq tarafinda zaten ogrenilmisti (bkz. /api/ai/models:
+ * "MODEL KIMLIKLERI TAHMIN EDILMIYOR"); Gemini tarafi atlanmisti.
+ * Seslendirme modelleri BUNDAN ETKILENMIYOR, olcumle dogrulandi:
+ * gemini-2.5-flash-preview-tts ayni anahtarla ses uretiyor.
+ */
 const GEMINI_MODELS = [
+  "gemini-3.6-flash",
+  "gemini-flash-latest",
   "gemini-2.5-flash",
   "gemini-2.5-pro",
   "gemini-2.0-flash",
