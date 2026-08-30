@@ -1,5 +1,10 @@
 # İngilizce Merkez — Birleşik Proje
 
+> **Projeye yeni başlıyorsan / başka bir bilgisayardan devam ediyorsan:**
+> önce [DURUM.md](DURUM.md) — mimari kararlar, zaman kaybettiren tuzaklar
+> ve açık kalan işler orada.
+
+
 İki uygulama tek sitede:
 
 | Yol | Uygulama |
