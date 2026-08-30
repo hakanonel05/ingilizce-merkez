@@ -1806,11 +1806,63 @@ app.get("/api/ai/models", async (_req, res) => {
   }
 });
 
+/* ------------------------------------------------------------
+   HEDEF KELIME: yalnizca yazilisi degil, HANGI ANLAMDA calisildigi.
+
+   Istemci eskiden yalnizca kelimeyi yolluyordu, dolayisiyla model
+   anlami kendi seciyordu: olcumde "compelling" sifat yerine fiil
+   olarak gecmisti ve bu BUTUN modellerde (Gemini dahil) goruluyordu.
+   Kullanicinin kartinda soz turu ve Turkce karsilik ZATEN yazili;
+   ikisini de isteme koyunca modelin tahmin etmesi gerekmiyor.
+
+   Eski bicim (duz metin dizisi) hala kabul ediliyor - yayimdaki
+   istemci guncellenene kadar istekler kirilmasin diye.
+   ------------------------------------------------------------ */
+
+interface StoryWord {
+  term: string;
+  partOfSpeech?: string;
+  meaning?: string;
+}
+
+/** Reading tarafinin kisa soz turu bicimini modele acik yazar. */
+const POS_LONG_FORM: Record<string, string> = {
+  n: "noun", v: "verb", adj: "adjective", adv: "adverb",
+  prep: "preposition", conj: "conjunction", pron: "pronoun",
+  det: "determiner", int: "interjection", phr: "phrase",
+};
+
+function normalizeStoryWords(raw: any): StoryWord[] {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map((entry: any): StoryWord => {
+      if (typeof entry === "string") return { term: entry.trim() };
+      const pos = String(entry?.partOfSpeech || "").trim().toLowerCase();
+      return {
+        term: String(entry?.term || "").trim(),
+        partOfSpeech: POS_LONG_FORM[pos] || (PARTS_OF_SPEECH.includes(pos) ? pos : undefined),
+        meaning: String(entry?.meaning || "").trim() || undefined,
+      };
+    })
+    .filter((w) => w.term)
+    .slice(0, 15);
+}
+
+/**
+ * Isteme yazilan satir: `- compelling (adjective) = "etkileyici, ikna edici"`.
+ * Soz turu ya da karsilik yoksa o parca sessizce dusuyor; eski bicimde
+ * gelen istekler eskisi gibi yalnizca kelimeyi gosteriyor.
+ */
+function formatStoryWord(word: StoryWord): string {
+  let line = "- " + word.term;
+  if (word.partOfSpeech) line += " (" + word.partOfSpeech + ")";
+  if (word.meaning) line += ' = "' + word.meaning + '"';
+  return line;
+}
+
 app.post("/api/generate-story", async (req, res) => {
   try {
-    const words: string[] = Array.isArray(req.body?.words)
-      ? req.body.words.map((w: any) => String(w || '').trim()).filter(Boolean).slice(0, 15)
-      : [];
+    const words = normalizeStoryWords(req.body?.words);
     const level = String(req.body?.level || 'B1').toUpperCase();
     const topic = String(req.body?.topic || '').trim().slice(0, 120);
     const choice = resolveModelChoice(req.body?.model);
@@ -1824,7 +1876,17 @@ app.post("/api/generate-story", async (req, res) => {
 
     const ai = getAIClient();
 
-    const wordList = words.map((w) => "- " + w).join("\n");
+    const wordList = words.map(formatStoryWord).join("\n");
+    // Aciklama satiri YALNIZCA en az bir kelimede ek bilgi varsa
+    // yaziliyor; eski bicimde gelen istekte "parantez icindeki soz
+    // turu" diye bir sey yok, olmayan bir seyi tarif etmek modeli
+    // yaniltiyor.
+    const annotated = words.some((w) => w.partOfSpeech || w.meaning);
+    const senseNote = annotated
+      ? `\nParantez icindeki SOZ TURU ve tirnak icindeki TURKCE KARSILIK,
+kullanicinin bu kelimeyi calisirken ogrendigi anlamdir. Kelimeyi
+BASKA bir anlamda kullanmak hikayeyi ise yaramaz kiliyor.\n`
+      : "";
     const topicLine = topic
       ? "KONU: " + topic
       : "Konu GUNCEL ve ilgi cekici olsun: teknoloji, yapay zeka, iklim, saglik, uzay, sehir hayati, spor ya da calisma hayati gibi bugunun dunyasindan bir mesele.";
@@ -1835,12 +1897,23 @@ SEVIYE: ${level} (CEFR). Cumle yapisi ve kelime secimi bu seviyeye uygun olsun.
 
 HIKAYEDE MUTLAKA GECMESI GEREKEN KELIMELER:
 ${wordList}
-
+${senseNote}
 KURALLAR:
-- Yukaridaki kelimelerin HEPSI hikayede gecmeli. Cekimli hallerini
-  kullanabilirsin (run -> ran, decide -> decided).
-- Kelimeleri zorlama; hikaye once DOGAL ve akici olmali, kelimeler
-  cumleye kendiliginden oturmali.
+- Yukaridaki kelimelerin HEPSI hikayede gecmeli.
+- HER KELIME BELIRTILEN SOZ TURUNDE ve BELIRTILEN ANLAMDA gecmeli.
+  Soz turu belirtilmemisse kelimenin EN YAYGIN anlamini kullan;
+  nadir, mecazi ya da teknik anlamlari kullanma.
+- CEKIM serbest, TUR DEGISTIRME yasak. Ayni soz turu icinde kalan
+  cekimler serbesttir (run -> ran, city -> cities, easy -> easier).
+  Kelimeyi baska bir turden turetmek YASAKTIR: "compelling" sifat
+  olarak verildiyse "compel/compelled" diye fiil yapma, "decision"
+  isim olarak verildiyse "decide" diye fiil yapma.
+- Her kelimeyi DOGAL ESDIZIMIYLE kullan: anadili Ingilizce olan
+  birinin o kelimeyle birlikte kullandigi kaliplarla. "a compelling
+  argument/story/reason" dogal, "he compelling the crowd" degil.
+- Kelimeyi zorlama; hikaye once DOGAL ve akici olmali. Bir kelime
+  dogru anlamiyla cumleye oturmuyorsa ANLAMI DEGISTIRME - o kelimenin
+  gecebilecegi baska bir sahne kur ve cumleyi ona gore yaz.
 - 3-5 paragraf, her paragraf 3-6 cumle.
 - ${topicLine}
 - Hikayenin bir olay orgusu olsun: bir durum, bir gelisme, bir sonuc.
@@ -1908,9 +1981,7 @@ app.post("/api/generate-story-tasks", async (req, res) => {
   try {
     const text = String(req.body?.text || '').trim();
     const level = String(req.body?.level || 'B1').toUpperCase();
-    const words: string[] = Array.isArray(req.body?.words)
-      ? req.body.words.map((w: any) => String(w || '').trim()).filter(Boolean).slice(0, 15)
-      : [];
+    const words = normalizeStoryWords(req.body?.words);
 
     if (!text) return res.status(400).json({ error: "Hikaye metni gerekli." });
 
@@ -1923,13 +1994,16 @@ app.post("/api/generate-story-tasks", async (req, res) => {
 HIKAYE:
 "${text.slice(0, 6000)}"
 
-HEDEF KELIMELER: ${words.join(', ')}
+HEDEF KELIMELER:
+${words.map(formatStoryWord).join("\n")}
 
 URETILECEKLER:
 1. "questions": 5 adet OKUDUGUNU ANLAMA sorusu. Yaniti metinde olan,
    ezber degil anlama olcen sorular. Her biri 4 secenekli.
 2. "exercises": 5 adet KELIME alistirmasi. HEDEF KELIMELERI olcsun:
    cumlede bosluk doldurma ya da anlam esleme. Her biri 4 secenekli.
+   Alistirma, kelimenin YUKARIDA BELIRTILEN soz turu ve anlamini
+   olcsun - baska bir anlamini test etmek yanlis olani pekistirir.
 
 BICIM KURALLARI:
 - "options" dizisindeki her secenek "A) ...", "B) ...", "C) ...", "D) ..."

@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+/* Playfair Display ARTIK YUKLENMIYOR. Basliklar Inter'e gecti (asagidaki
+   tasarim dili notuna bakin); yuklenmeye devam etseydi hicbir yerde
+   kullanilmayan bir yazi tipi dosyasi her acilista indiriliyor olurdu. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
 @import "tailwindcss";
 
 /* Tailwind v4 sinif taramasini Vite kokunden (apps/<uygulama>) baslatir;
@@ -8,45 +11,157 @@
    takvim serididen tasip sayfayi yatay kaydirmisti. */
 @source "../../../shared";
 
+/* =====================================================================
+   TASARIM DILI — KATMANLI ILE ORTAK
+
+   Reading bir sure "editoryal" dilde duruyordu: krem zemin (#F9F7F2),
+   Playfair Display basliklar, saf siyah vurgu, keskin koseler. Katmanli
+   ise modern SaaS diline (slate/indigo, Inter, yuvarlak kose) gecmisti;
+   ayni sitede yan yana duran iki uygulama gorsel olarak ayrisiyordu.
+   Reading artik ayni dilde.
+
+   ISIMLENDIRME: renk token'lari CSS degiskenleriyle AYNI adi tasiyor
+   (paper, ink, hairline, accent). Boylece `bg-paper` yazan bir Tailwind
+   sinifi ile `var(--paper)` yazan ortak bir bilesen ayni seyi soyluyor -
+   depoda tek bir renk sozlugu var. Eski `editorial-*` adlari kaldirildi:
+   degerleri degistikten sonra yaptiklari isi anlatmiyorlardi ve bir
+   sonraki okuyanı yaniltacaklardi.
+
+   TEK ISTISNA: okuma parcasi govde tipografisi (.passage-body, en altta)
+   korundu. O ayar palet degil OKUMA KONFORU - satir uzunlugu, satir
+   araligi ve rakam bicimi olcerek secilmisti, tasarim diliyle ilgisi yok.
+   ===================================================================== */
+
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
-  
-  --color-editorial-bg: #F9F7F2;
-  --color-editorial-text: #1A1A1A;
-  --color-editorial-accent: #000000;
-  --color-editorial-border: rgba(26, 26, 26, 0.1);
-  --color-editorial-muted: rgba(26, 26, 26, 0.6);
-  --color-editorial-card: #FFFFFF;
+
+  /* Degerler katmanlinin :root paletiyle BIREBIR ayni. Iki yerde
+     tutuluyor olmasi hos degil ama Tailwind'in @theme blogu her
+     uygulamanin kendi CSS girisinde olmak zorunda; kopyalarken
+     degerleri degil, ADLARI esitlemek onemli. */
+  --color-paper:     #F8FAFC;   /* slate-50  — sayfa zemini */
+  --color-paper-2:   #FFFFFF;   /* saf beyaz — kartlar */
+  --color-paper-3:   #F1F5F9;   /* slate-100 — ikincil yuzey */
+  --color-ink:       #0F172A;   /* slate-900 — ana metin */
+  --color-ink-2:     #475569;   /* slate-600 — ikincil metin */
+  --color-ink-3:     #64748B;   /* slate-500 — pasif metin */
+  --color-hairline:  #E2E8F0;   /* slate-200 — cizgi */
+
+  /* Vurgu ucu da token: shared/ altindaki ortak bilesenler `bg-accent`,
+     `bg-accent-700` (hover) ve `bg-accent-soft` yaziyor; ayni adlar
+     katmanlinin @theme blogunda da tanimli, yani iki uygulamada da
+     ayni sinif uretiliyor. */
+  --color-accent:       #4F46E5;   /* indigo-600 — birincil eylem */
+  --color-accent-700:   #4338CA;   /* indigo-700 — hover */
+  --color-accent-soft:  #EEF2FF;   /* indigo-50  — yumusak zemin */
 }
 
 /* =====================================================================
    PAYLASILAN BILESENLERIN RENK DEGISKENLERI
 
    shared/ altindaki bilesenler (ornegin ayarlar penceresi) kagit/murekkep
-   degiskenleriyle yazilmis. Iki uygulamanin paleti artik ayni oldugu icin
-   burada AYNI degerlerle tanimlaniyorlar; boylece ortak bir bilesen iki
-   tarafta da dogru gorunuyor ve iki kez yazilmasi gerekmiyor.
+   degiskenleriyle yazilmis. Iki uygulamanin paleti yeniden ayni oldugu
+   icin burada AYNI degerlerle tanimlaniyorlar; boylece ortak bir bilesen
+   iki tarafta da dogru gorunuyor ve iki kez yazilmasi gerekmiyor.
+
+   VURGU VE DURUM DEGISKENLERI de burada: shared/ bugun yalnizca
+   ink/paper/hairline/marker kullaniyor, ama katmanlida --accent, --ok,
+   --danger tanimliyken burada tanimsizdi. Bunlari kullanan bir ortak
+   bilesen yazilsa reading tarafinda SESSIZCE renksiz kalirdi - degisken
+   bulunamayinca hata verilmiyor, ozellik hic uygulanmiyor.
    ===================================================================== */
 :root {
-  --paper:      #F9F7F2;
+  --paper:      #F8FAFC;
   --paper-2:    #FFFFFF;
-  --paper-3:    #F2EFE8;
-  --ink:        #1A1A1A;
-  --ink-2:      rgba(26, 26, 26, 0.62);
-  --ink-3:      rgba(26, 26, 26, 0.40);
-  --hairline:   rgba(26, 26, 26, 0.12);
-  --hairline-2: rgba(26, 26, 26, 0.22);
-  --marker:     #F2C94C;
-  --marker-bg:  #FCF3D8;
-  --marker-ink: #5E4A10;
+  --paper-3:    #F1F5F9;
+  --ink:        #0F172A;
+  --ink-2:      #475569;
+  --ink-3:      #64748B;
+  --hairline:   #E2E8F0;
+  --hairline-2: #CBD5E1;
+
+  --accent:      #4F46E5;  /* indigo-600 */
+  --accent-700:  #4338CA;  /* indigo-700 */
+  --accent-soft: #EEF2FF;  /* indigo-50  */
+  --accent-ring: rgba(79, 70, 229, 0.18);
+
+  --ok:         #059669;   /* emerald-600 */
+  --ok-bg:      #ECFDF5;   /* emerald-50  */
+  --danger:     #DC2626;   /* red-600 */
+  --danger-bg:  #FEF2F2;   /* red-50 */
+
+  --marker:     #F59E0B;   /* amber-500 */
+  --marker-bg:  #FFFBEB;   /* amber-50  */
+  --marker-ink: #92400E;   /* amber-800 */
+
+  --radius:     12px;
 }
 
+html { background: var(--paper); }
+
 body {
-  background-color: var(--color-editorial-bg);
-  color: var(--color-editorial-text);
+  background: var(--paper);
+  color: var(--ink);
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: #C7D2FE;      /* indigo-200 */
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--hairline-2) transparent;
+}
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--hairline-2);
+  border-radius: 999px;
+}
+
+/* =====================================================================
+   BASLIKLAR
+
+   Katmanlidaki kuralin AYNISI. Ayrim yazi tipiyle degil AGIRLIK ve
+   HARF ARALIGIYLA yapiliyor; `font-display` eskiden `font-serif`
+   yazan yerlerin karsiligi.
+
+   @layer base SART. Tailwind v4 yardimci siniflari `utilities`
+   katmaninda yayimliyor ve katmansiz (unlayered) bir kural,
+   OZGULLUGUNE BAKILMAKSIZIN katmanli olani ezer. Katmanlida bu blok
+   katmansizken ve `color` atarken, `text-slate-300` yazan basliklar
+   bile slate-900'e donup koyu panellerde gorunmez olmustu (olculen
+   kontrast orani 1.0). Burada da `color` bilerek YOK: basliklar
+   body'den --ink miras aliyor, farkli renk isteyen kendi sinifiyla
+   soyluyor.
+   ===================================================================== */
+@layer base {
+  .font-display,
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: -0.018em;
+  }
 }
 
 /* =====================================================================

@@ -136,7 +136,7 @@ export default function PassageCard({
         const status = progress.wordStatus[foundTerm] || 'unstudied';
 
         // Styling based on study status matching Editorial Aesthetic
-        let underlineStyle = 'border-b border-dashed border-editorial-text/60';
+        let underlineStyle = 'border-b border-dashed border-ink/60';
         if (status === 'studied') underlineStyle = 'border-b-2 border-amber-500';
         if (status === 'learned') underlineStyle = 'border-b-2 border-emerald-600';
 
@@ -146,8 +146,8 @@ export default function PassageCard({
             onClick={() => handleWordClick(chunk)}
             className={`passage-word cursor-pointer px-1 transition-all duration-150 ${underlineStyle} ${
               isSelected
-                ? 'bg-editorial-accent text-white border-none'
-                : 'text-editorial-text hover:bg-editorial-bg'
+                ? 'bg-accent text-white border-none'
+                : 'text-ink hover:bg-paper'
             }`}
           >
             {chunk}
@@ -246,43 +246,43 @@ export default function PassageCard({
     <div id="passage-card-container" className="space-y-6">
 
       {/* Passage Top Nav & Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-editorial-border/40 p-4 gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-hairline/40 p-4 gap-4 rounded-xl">
         <button
           onClick={onBackToList}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-editorial-text hover:bg-editorial-bg transition-colors py-2 px-4 border border-editorial-border/40 cursor-pointer uppercase tracking-wider font-mono"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-ink hover:bg-paper transition-colors py-2 px-4 border border-hairline/40 cursor-pointer uppercase tracking-wider font-mono rounded-lg"
         >
           <ChevronLeft className="h-4 w-4" /> Kütüphaneye Dön
         </button>
 
         <div className="flex flex-wrap gap-2.5 items-center font-mono">
-          <span className="inline-flex items-center gap-1 border border-editorial-border/40 px-2.5 py-1 text-xs font-bold text-editorial-text">
+          <span className="inline-flex items-center gap-1 border border-hairline/40 px-2.5 py-1 text-xs font-bold text-ink rounded-lg">
             CEFR: {passage.cefr}
           </span>
-          <span className="inline-flex items-center gap-1 border border-editorial-border/40 bg-editorial-bg px-2.5 py-1 text-xs font-bold text-editorial-text/70 uppercase">
+          <span className="inline-flex items-center gap-1 border border-hairline/40 bg-paper px-2.5 py-1 text-xs font-bold text-ink/70 uppercase rounded-lg">
             Tema: {passage.theme}
           </span>
           <button
             onClick={() => onToggleFavorite(passage.id)}
-            className="inline-flex items-center gap-1 text-xs font-bold text-editorial-text hover:bg-editorial-bg transition-colors p-2 border border-editorial-border/40 cursor-pointer"
+            className="inline-flex items-center gap-1 text-xs font-bold text-ink hover:bg-paper transition-colors p-2 border border-hairline/40 cursor-pointer rounded-lg"
           >
-            <Star className={`h-4.5 w-4.5 ${isFavorite ? 'text-amber-500 fill-amber-400' : 'text-editorial-text/30'}`} />
+            <Star className={`h-4.5 w-4.5 ${isFavorite ? 'text-amber-500 fill-amber-400' : 'text-ink/30'}`} />
             {isFavorite ? 'FAVORİLERİMDE' : 'FAVORİLERE EKLE'}
           </button>
         </div>
       </div>
 
       {/* Main Title Banner */}
-      <div className="bg-white border border-editorial-border/40 p-8 shadow-xs">
-        <h1 className="text-2xl sm:text-3xl font-serif font-extrabold text-editorial-text tracking-tight mb-2.5">
+      <div className="bg-white border border-hairline/40 p-8 shadow-xs rounded-xl">
+        <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-ink tracking-tight mb-2.5">
           {passage.title}
         </h1>
-        <p className="text-xs text-editorial-text/50 font-serif italic">
+        <p className="text-xs text-ink-3 font-display">
           Okurken kalın ve altı çizili kelimelerin üzerine tıklayarak Türkçe karşılıklarını ve açıklamalarını görebilirsiniz.
         </p>
       </div>
 
       {/* Navigation Sub-Tabs */}
-      <div className="flex border border-editorial-border/40 bg-editorial-bg p-1 gap-1">
+      <div className="flex border border-hairline/40 bg-paper p-1 gap-1 rounded-lg">
         {[
           { id: 'text', label: '📖 Okuma Metni & Sözlük' },
           { id: 'quiz', label: '📝 Okuduğunu Anlama Testi' },
@@ -293,8 +293,8 @@ export default function PassageCard({
             onClick={() => setActiveTab(tab.id as any)}
             className={`flex-1 py-3 text-center text-xs sm:text-sm font-bold uppercase tracking-wider transition-all cursor-pointer ${
               activeTab === tab.id
-                ? 'bg-editorial-accent text-white font-bold'
-                : 'text-editorial-text/60 hover:text-editorial-text hover:bg-white/50'
+                ? 'bg-accent text-white font-bold'
+                : 'text-ink/60 hover:text-ink hover:bg-white/50'
             }`}
           >
             {tab.label}
@@ -317,7 +317,7 @@ export default function PassageCard({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.2 }}
-                className="bg-white border border-editorial-border/40 p-4 sm:p-10 shadow-xs space-y-8"
+                className="bg-white border border-hairline/40 p-4 sm:p-10 shadow-xs space-y-8 rounded-2xl"
               >
                 {/* Paragraphs Panel */}
                 {/* Sesli okuma kumandasi */}
@@ -325,7 +325,7 @@ export default function PassageCard({
 
                 <div
                   ref={textRef}
-                  className="passage-body space-y-6 text-editorial-text/90"
+                  className="passage-body space-y-6 text-ink/90"
                 >
                   {passage.paragraphs.map((p, i) => (
                     <p
@@ -335,7 +335,7 @@ export default function PassageCard({
                          dinlemekten cok daha ogretici. */
                       className={
                         narration.currentIndex === i
-                          ? 'bg-amber-100/70 -mx-2 px-2 py-1 transition-colors'
+                          ? 'bg-amber-100/70 -mx-2 px-2 py-1 transition-colors rounded-lg'
                           : 'transition-colors'
                       }
                     >
@@ -353,48 +353,48 @@ export default function PassageCard({
                 />
 
                 {/* Subtitle / Note */}
-                <div className="flex gap-3 bg-editorial-bg p-5 text-xs text-editorial-text/80 border border-editorial-border/30">
-                  <AlertCircle className="h-5 w-5 shrink-0 text-editorial-accent" />
-                  <div className="font-serif leading-relaxed">
+                <div className="flex gap-3 bg-paper p-5 text-xs text-ink/80 border border-hairline/30 rounded-xl">
+                  <AlertCircle className="h-5 w-5 shrink-0 text-accent" />
+                  <div className="font-display leading-relaxed">
                     <span className="font-bold">Öğrenme İpucu:</span> Metni dikkatlice okuduktan sonra kelimelerin durumlarını aşağıdaki tablodan veya kelimelere tıklayarak güncelleyebilirsiniz. Ardından sağdaki testlere geçin.
                   </div>
                 </div>
 
                 {/* Inline Vocabulary Mastery Table */}
-                <div className="border-t border-editorial-border/20 pt-8">
-                  <h3 className="text-lg font-serif font-bold text-editorial-text mb-6">Parçanın Anahtar Kelimeleri ({passage.vocabulary.length} Kelime)</h3>
-                  <div className="divide-y divide-editorial-border/20">
+                <div className="border-t border-hairline/20 pt-8">
+                  <h3 className="text-lg font-display font-bold text-ink mb-6">Parçanın Anahtar Kelimeleri ({passage.vocabulary.length} Kelime)</h3>
+                  <div className="divide-y divide-hairline/20">
                     {passage.vocabulary.map(word => {
                       const status = progress.wordStatus[word.term] || 'unstudied';
                       return (
                         <div key={word.term} className="py-4.5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-sm">
                           <div className="space-y-1">
                             <div className="flex items-center gap-2">
-                              <span className="font-serif font-bold text-base text-editorial-text">{word.term}</span>
-                              <span className="text-[10px] bg-editorial-bg border border-editorial-border/30 text-editorial-text/60 px-1.5 py-0.5 font-bold uppercase font-mono">{word.partOfSpeech}</span>
-                              <button onClick={() => speakWord(word.term)} className="p-1 rounded-xs text-editorial-text/40 hover:text-editorial-accent hover:bg-editorial-bg transition-colors cursor-pointer">
+                              <span className="font-display font-bold text-base text-ink">{word.term}</span>
+                              <span className="text-[10px] bg-paper border border-hairline/30 text-ink/60 px-1.5 py-0.5 font-bold uppercase font-mono rounded-lg">{word.partOfSpeech}</span>
+                              <button onClick={() => speakWord(word.term)} className="p-1 rounded-xs text-ink-3 hover:text-accent hover:bg-paper transition-colors cursor-pointer">
                                 <Volume2 className="h-4 w-4" />
                               </button>
                             </div>
-                            <p className="text-xs text-editorial-text/60 font-serif">Anlamı: <span className="text-editorial-accent font-bold font-sans">{word.meaning}</span></p>
+                            <p className="text-xs text-ink/60 font-display">Anlamı: <span className="text-accent font-bold font-sans">{word.meaning}</span></p>
                           </div>
 
                           {/* Action Buttons to Master Word */}
                           <div className="flex flex-wrap gap-1">
                             {[
-                              { id: 'unstudied', label: 'ÇALIŞMADIM', color: 'text-editorial-text/60 bg-white border-editorial-border/40' },
+                              { id: 'unstudied', label: 'ÇALIŞMADIM', color: 'text-ink/60 bg-white border-hairline/40' },
                               { id: 'studied', label: 'ÇALIŞTIM', color: 'text-amber-800 bg-amber-50 border-amber-300' },
                               { id: 'learned', label: 'ÖĞRENDİM', color: 'text-emerald-800 bg-emerald-50 border-emerald-300' }
                             ].map(btn => (
                               <button
                                 key={btn.id}
                                 onClick={() => onWordStatusChange(word.term, btn.id as any)}
-                                className={`px-3 py-1.5 border text-[10px] font-bold tracking-wider transition-all cursor-pointer ${
+                                className={`px-3 py-1.5 border text-[10px] font-bold tracking-wider transition-all cursor-pointer rounded-lg ${
                                   status === btn.id
-                                    ? btn.id === 'unstudied' ? 'bg-editorial-text text-white border-editorial-text' :
+                                    ? btn.id === 'unstudied' ? 'bg-ink text-white border-ink' :
                                       btn.id === 'studied' ? 'bg-amber-500 text-white border-amber-500 font-black' :
                                       'bg-emerald-600 text-white border-emerald-600 font-black'
-                                    : 'bg-white hover:bg-editorial-bg text-editorial-text/50'
+                                    : 'bg-white hover:bg-paper text-ink-3'
                                   }`}
                               >
                                 {btn.label}
@@ -418,11 +418,11 @@ export default function PassageCard({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.2 }}
-                className="bg-white border border-editorial-border/40 p-6 sm:p-10 shadow-xs space-y-6"
+                className="bg-white border border-hairline/40 p-6 sm:p-10 shadow-xs space-y-6 rounded-2xl"
               >
-                <div className="flex justify-between items-center border-b border-editorial-border/20 pb-4">
-                  <h3 className="text-lg font-serif font-bold text-editorial-text">Okuduğunu Anlama Testi</h3>
-                  <span className="text-xs font-bold text-editorial-text/40 font-mono">{passage.questions.length} SORU</span>
+                <div className="flex justify-between items-center border-b border-hairline/20 pb-4">
+                  <h3 className="text-lg font-display font-bold text-ink">Okuduğunu Anlama Testi</h3>
+                  <span className="text-xs font-bold text-ink-3 font-mono">{passage.questions.length} SORU</span>
                 </div>
 
                 <div className="space-y-8">
@@ -431,12 +431,12 @@ export default function PassageCard({
                     const isCorrect = q.options.find(o => o.startsWith(selected))?.startsWith(q.answer);
 
                     return (
-                      <div key={q.id} className="space-y-4 p-6 bg-editorial-bg/30 border border-editorial-border/30">
+                      <div key={q.id} className="space-y-4 p-6 bg-paper/30 border border-hairline/30 rounded-xl">
                         <div className="flex gap-2.5 items-start">
-                          <span className="flex h-6 w-6 shrink-0 items-center justify-center bg-editorial-accent text-white text-xs font-bold font-mono">
+                          <span className="flex h-6 w-6 shrink-0 items-center justify-center bg-accent text-white text-xs font-bold font-mono">
                             {qIndex + 1}
                           </span>
-                          <h4 className="text-base font-serif font-bold text-editorial-text leading-relaxed">{q.question}</h4>
+                          <h4 className="text-base font-display font-bold text-ink leading-relaxed">{q.question}</h4>
                         </div>
 
                         {/* Options Grid */}
@@ -446,17 +446,17 @@ export default function PassageCard({
                             const isOptionSelected = selected === optionLetter;
                             const isOptionCorrect = option.startsWith(q.answer);
 
-                            let buttonStyle = 'bg-white border-editorial-border/30 text-editorial-text hover:bg-editorial-bg';
+                            let buttonStyle = 'bg-white border-hairline/30 text-ink hover:bg-paper';
 
                             if (isOptionSelected && !comprehensionSubmitted) {
-                              buttonStyle = 'bg-editorial-accent text-white border-editorial-accent font-bold';
+                              buttonStyle = 'bg-accent text-white border-accent font-bold';
                             } else if (comprehensionSubmitted) {
                               if (isOptionCorrect) {
                                 buttonStyle = 'bg-emerald-50 border-emerald-500 text-emerald-900 font-bold';
                               } else if (isOptionSelected) {
                                 buttonStyle = 'bg-rose-50 border-rose-500 text-rose-950';
                               } else {
-                                buttonStyle = 'bg-white border-editorial-border/20 text-editorial-text/30 opacity-60';
+                                buttonStyle = 'bg-white border-hairline/20 text-ink/30 opacity-60';
                               }
                             }
 
@@ -465,7 +465,7 @@ export default function PassageCard({
                                 key={option}
                                 disabled={comprehensionSubmitted}
                                 onClick={() => selectComprehensionOption(q.id, optionLetter)}
-                                className={`w-full text-left p-3.5 border text-xs sm:text-sm font-sans flex justify-between items-center transition-all cursor-pointer ${buttonStyle}`}
+                                className={`w-full text-left p-3.5 border text-xs sm:text-sm font-sans flex justify-between items-center transition-all cursor-pointer rounded-lg ${buttonStyle}`}
                               >
                                 <span>{option}</span>
                                 {comprehensionSubmitted && isOptionCorrect && (
@@ -484,17 +484,17 @@ export default function PassageCard({
                 </div>
 
                 {/* Score / Submit Footer */}
-                <div className="border-t border-editorial-border/20 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="border-t border-hairline/20 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
                   {comprehensionSubmitted ? (
                     <div className="flex items-center gap-3">
-                      <div className="flex h-12 w-12 items-center justify-center bg-editorial-bg border border-editorial-border/30 text-editorial-text">
+                      <div className="flex h-12 w-12 items-center justify-center bg-paper border border-hairline/30 text-ink rounded-lg">
                         <Award className="h-6 w-6" />
                       </div>
                       <div>
-                        <p className="text-[10px] text-editorial-text/40 font-bold tracking-wider uppercase font-mono">TEST SKORU</p>
-                        <p className="text-sm font-bold text-editorial-text">
+                        <p className="text-[10px] text-ink-3 font-bold tracking-wider uppercase font-mono">TEST SKORU</p>
+                        <p className="text-sm font-bold text-ink">
                           Doğruluk Derecesi:{' '}
-                          <span className="text-editorial-accent font-mono text-base font-extrabold">
+                          <span className="text-accent font-mono text-base font-extrabold">
                             {comprehensionScore} / {passage.questions.length}
                           </span>{' '}
                           ({Math.round((comprehensionScore / passage.questions.length) * 100)}%)
@@ -502,7 +502,7 @@ export default function PassageCard({
                       </div>
                     </div>
                   ) : (
-                    <span className="text-xs text-editorial-text/40 font-serif italic">
+                    <span className="text-xs text-ink-3 font-display">
                       Lütfen tüm soruları yanıtlayıp ardından testi gönderin.
                     </span>
                   )}
@@ -511,7 +511,7 @@ export default function PassageCard({
                     <button
                       onClick={submitComprehensionQuiz}
                       disabled={Object.keys(comprehensionAnswers).length < passage.questions.length}
-                      className="px-6 py-2.5 bg-editorial-accent hover:bg-white hover:text-editorial-text border border-editorial-accent text-white font-bold text-xs sm:text-sm disabled:bg-editorial-bg disabled:text-editorial-text/30 disabled:border-editorial-border/20 transition-all uppercase tracking-wider cursor-pointer w-full sm:w-auto"
+                      className="px-6 py-2.5 bg-accent hover:bg-white hover:text-ink border border-accent text-white font-bold text-xs sm:text-sm disabled:bg-paper disabled:text-ink/30 disabled:border-hairline/20 transition-all uppercase tracking-wider cursor-pointer w-full sm:w-auto rounded-lg"
                     >
                       Testi Gönder
                     </button>
@@ -522,7 +522,7 @@ export default function PassageCard({
                         setComprehensionSubmitted(false);
                         setComprehensionScore(0);
                       }}
-                      className="px-6 py-2.5 border border-editorial-border/40 bg-white hover:bg-editorial-bg text-editorial-text font-bold text-xs sm:text-sm transition-all uppercase tracking-wider cursor-pointer w-full sm:w-auto"
+                      className="px-6 py-2.5 border border-hairline/40 bg-white hover:bg-paper text-ink font-bold text-xs sm:text-sm transition-all uppercase tracking-wider cursor-pointer w-full sm:w-auto rounded-lg"
                     >
                       Yeniden Çöz
                     </button>
@@ -539,11 +539,11 @@ export default function PassageCard({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.2 }}
-                className="bg-white border border-editorial-border/40 p-6 sm:p-10 shadow-xs space-y-6"
+                className="bg-white border border-hairline/40 p-6 sm:p-10 shadow-xs space-y-6 rounded-2xl"
               >
-                <div className="flex justify-between items-center border-b border-editorial-border/20 pb-4">
-                  <h3 className="text-lg font-serif font-bold text-editorial-text">Kelime Alıştırmaları</h3>
-                  <span className="text-xs font-bold text-editorial-text/40 font-mono">{passage.exercises.length} ALIŞTIRMA</span>
+                <div className="flex justify-between items-center border-b border-hairline/20 pb-4">
+                  <h3 className="text-lg font-display font-bold text-ink">Kelime Alıştırmaları</h3>
+                  <span className="text-xs font-bold text-ink-3 font-mono">{passage.exercises.length} ALIŞTIRMA</span>
                 </div>
 
                 <div className="space-y-8">
@@ -552,12 +552,12 @@ export default function PassageCard({
                     const isCorrect = ex.options.find(o => o.startsWith(selected))?.startsWith(ex.answer);
 
                     return (
-                      <div key={ex.id} className="space-y-4 p-6 bg-editorial-bg/30 border border-editorial-border/30">
+                      <div key={ex.id} className="space-y-4 p-6 bg-paper/30 border border-hairline/30 rounded-xl">
                         <div className="flex gap-2.5 items-start">
                           <span className="flex h-6 w-6 shrink-0 items-center justify-center bg-amber-500 text-white text-xs font-bold font-mono">
                             {exIndex + 1}
                           </span>
-                          <h4 className="text-base font-serif font-bold text-editorial-text leading-relaxed">{ex.question}</h4>
+                          <h4 className="text-base font-display font-bold text-ink leading-relaxed">{ex.question}</h4>
                         </div>
 
                         {/* Options */}
@@ -567,7 +567,7 @@ export default function PassageCard({
                             const isOptionSelected = selected === optionLetter;
                             const isOptionCorrect = option.startsWith(ex.answer);
 
-                            let buttonStyle = 'bg-white border-editorial-border/30 text-editorial-text hover:bg-editorial-bg';
+                            let buttonStyle = 'bg-white border-hairline/30 text-ink hover:bg-paper';
 
                             if (isOptionSelected && !exercisesSubmitted) {
                               buttonStyle = 'bg-amber-500 text-white border-amber-500 font-bold';
@@ -577,7 +577,7 @@ export default function PassageCard({
                               } else if (isOptionSelected) {
                                 buttonStyle = 'bg-rose-50 border-rose-500 text-rose-950';
                               } else {
-                                buttonStyle = 'bg-white border-editorial-border/20 text-editorial-text/30 opacity-60';
+                                buttonStyle = 'bg-white border-hairline/20 text-ink/30 opacity-60';
                               }
                             }
 
@@ -586,7 +586,7 @@ export default function PassageCard({
                                 key={option}
                                 disabled={exercisesSubmitted}
                                 onClick={() => selectExerciseOption(ex.id, optionLetter)}
-                                className={`w-full text-left p-3.5 border text-xs sm:text-sm font-sans flex justify-between items-center transition-all cursor-pointer ${buttonStyle}`}
+                                className={`w-full text-left p-3.5 border text-xs sm:text-sm font-sans flex justify-between items-center transition-all cursor-pointer rounded-lg ${buttonStyle}`}
                               >
                                 <span>{option}</span>
                                 {exercisesSubmitted && isOptionCorrect && (
@@ -605,17 +605,17 @@ export default function PassageCard({
                 </div>
 
                 {/* Score Footer */}
-                <div className="border-t border-editorial-border/20 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="border-t border-hairline/20 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
                   {exercisesSubmitted ? (
                     <div className="flex items-center gap-3">
-                      <div className="flex h-12 w-12 items-center justify-center bg-editorial-bg border border-editorial-border/30 text-editorial-text">
-                        <Award className="h-6 w-6 text-amber-600" />
+                      <div className="flex h-12 w-12 items-center justify-center bg-paper border border-hairline/30 text-ink rounded-lg">
+                        <Award className="h-6 w-6 text-amber-700" />
                       </div>
                       <div>
-                        <p className="text-[10px] text-editorial-text/40 font-bold tracking-wider uppercase font-mono">ALIŞTIRMA SKORU</p>
-                        <p className="text-sm font-bold text-editorial-text">
+                        <p className="text-[10px] text-ink-3 font-bold tracking-wider uppercase font-mono">ALIŞTIRMA SKORU</p>
+                        <p className="text-sm font-bold text-ink">
                           Doğruluk Derecesi:{' '}
-                          <span className="text-amber-600 font-mono text-base font-extrabold">
+                          <span className="text-amber-700 font-mono text-base font-extrabold">
                             {exercisesScore} / {passage.exercises.length}
                           </span>{' '}
                           ({Math.round((exercisesScore / passage.exercises.length) * 100)}%)
@@ -623,7 +623,7 @@ export default function PassageCard({
                       </div>
                     </div>
                   ) : (
-                    <span className="text-xs text-editorial-text/40 font-serif italic">
+                    <span className="text-xs text-ink-3 font-display">
                       Lütfen tüm alıştırma sorularını yanıtlayıp testi gönderin.
                     </span>
                   )}
@@ -632,7 +632,7 @@ export default function PassageCard({
                     <button
                       onClick={submitExercisesQuiz}
                       disabled={Object.keys(exerciseAnswers).length < passage.exercises.length}
-                      className="px-6 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs sm:text-sm disabled:bg-editorial-bg disabled:text-editorial-text/30 disabled:border-editorial-border/20 transition-all uppercase tracking-wider cursor-pointer w-full sm:w-auto"
+                      className="px-6 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs sm:text-sm disabled:bg-paper disabled:text-ink/30 disabled:border-hairline/20 transition-all uppercase tracking-wider cursor-pointer w-full sm:w-auto rounded-lg"
                     >
                       Alıştırmayı Gönder
                     </button>
@@ -643,7 +643,7 @@ export default function PassageCard({
                         setExercisesSubmitted(false);
                         setExercisesScore(0);
                       }}
-                      className="px-6 py-2.5 border border-editorial-border/40 bg-white hover:bg-editorial-bg text-editorial-text font-bold text-xs sm:text-sm transition-all uppercase tracking-wider cursor-pointer w-full sm:w-auto"
+                      className="px-6 py-2.5 border border-hairline/40 bg-white hover:bg-paper text-ink font-bold text-xs sm:text-sm transition-all uppercase tracking-wider cursor-pointer w-full sm:w-auto rounded-lg"
                     >
                       Yeniden Çöz
                     </button>
@@ -659,26 +659,26 @@ export default function PassageCard({
         <div className="space-y-6 sticky top-6">
 
           {/* Word Dictionary Peek Card */}
-          <div className="bg-white border border-editorial-border/40 p-6 shadow-xs">
-            <h3 className="text-base font-serif font-bold text-editorial-text mb-4 pb-2 border-b border-editorial-border/20 flex items-center gap-2">
-              <Bookmark className="h-5 w-5 text-editorial-accent" /> İnteraktif Sözlük
+          <div className="bg-white border border-hairline/40 p-6 shadow-xs rounded-xl">
+            <h3 className="text-base font-display font-bold text-ink mb-4 pb-2 border-b border-hairline/20 flex items-center gap-2">
+              <Bookmark className="h-5 w-5 text-accent" /> İnteraktif Sözlük
             </h3>
 
             {activeWordDetail ? (
               <div className="space-y-4">
                 <div className="flex justify-between items-start gap-4">
                   <div className="space-y-1">
-                    <h4 className="text-xl font-serif font-extrabold text-editorial-text flex items-center gap-2">
+                    <h4 className="text-xl font-display font-extrabold text-ink flex items-center gap-2">
                       {activeWordDetail.term}
                       <button
                         onClick={() => speakWord(activeWordDetail.term)}
-                        className="p-1 rounded-xs text-editorial-text/40 hover:text-editorial-accent hover:bg-editorial-bg transition-colors cursor-pointer"
+                        className="p-1 rounded-xs text-ink-3 hover:text-accent hover:bg-paper transition-colors cursor-pointer"
                         title="Telaffuz Dinle"
                       >
                         <Volume2 className="h-4 w-4" />
                       </button>
                     </h4>
-                    <span className="inline-block text-[10px] font-bold font-mono text-editorial-text/70 bg-editorial-bg border border-editorial-border/30 px-2 py-0.5 rounded-xs uppercase">
+                    <span className="inline-block text-[10px] font-bold font-mono text-ink/70 bg-paper border border-hairline/30 px-2 py-0.5 rounded-xs uppercase">
                       {activeWordDetail.partOfSpeech === 'n' ? 'Noun (İsim)' :
                        activeWordDetail.partOfSpeech === 'v' ? 'Verb (Fiil)' :
                        activeWordDetail.partOfSpeech === 'adj' ? 'Adjective (Sıfat)' :
@@ -687,21 +687,21 @@ export default function PassageCard({
                   </div>
                 </div>
 
-                <div className="space-y-3 text-sm text-editorial-text">
-                  <div className="bg-editorial-bg p-4 border border-editorial-border/20">
-                    <p className="text-[10px] text-editorial-text/40 font-bold tracking-wider uppercase mb-1">Türkçe Anlamı</p>
-                    <p className="font-bold text-editorial-accent text-base">{activeWordDetail.meaning}</p>
+                <div className="space-y-3 text-sm text-ink">
+                  <div className="bg-paper p-4 border border-hairline/20 rounded-xl">
+                    <p className="text-[10px] text-ink-3 font-bold tracking-wider uppercase mb-1">Türkçe Anlamı</p>
+                    <p className="font-bold text-accent text-base">{activeWordDetail.meaning}</p>
                   </div>
 
                   <div className="space-y-1">
-                    <p className="text-[10px] text-editorial-text/40 font-bold tracking-wider uppercase">Tanımlama (Definition)</p>
-                    <p className="text-xs text-editorial-text/70 italic leading-relaxed font-serif">{activeWordDetail.definition || "İngilizce tanımı mevcut."}</p>
+                    <p className="text-[10px] text-ink-3 font-bold tracking-wider uppercase">Tanımlama (Definition)</p>
+                    <p className="text-xs text-ink/70 leading-relaxed font-display">{activeWordDetail.definition || "İngilizce tanımı mevcut."}</p>
                   </div>
 
                   {activeWordDetail.exampleSentence && (
-                    <div className="space-y-1 pt-3 border-t border-editorial-border/20">
-                      <p className="text-[10px] text-editorial-text/40 font-bold tracking-wider uppercase">Örnek Cümle (Example)</p>
-                      <p className="text-xs text-editorial-text/80 bg-editorial-bg p-3 border-l-2 border-editorial-accent font-mono leading-relaxed">
+                    <div className="space-y-1 pt-3 border-t border-hairline/20">
+                      <p className="text-[10px] text-ink-3 font-bold tracking-wider uppercase">Örnek Cümle (Example)</p>
+                      <p className="text-xs text-ink/80 bg-paper p-3 border-l-2 border-accent font-mono leading-relaxed">
                         "{activeWordDetail.exampleSentence}"
                       </p>
                     </div>
@@ -709,8 +709,8 @@ export default function PassageCard({
                 </div>
 
                 {/* Status Toggle Box inside panel */}
-                <div className="pt-4 border-t border-editorial-border/20 space-y-2">
-                  <p className="text-xs font-serif font-bold text-editorial-text/70">Bu kelimenin çalışma durumu:</p>
+                <div className="pt-4 border-t border-hairline/20 space-y-2">
+                  <p className="text-xs font-display font-bold text-ink/70">Bu kelimenin çalışma durumu:</p>
                   <div className="flex gap-1">
                     {[
                       { id: 'studied', label: 'ÇALIŞTIM', color: 'bg-amber-500 text-white border-amber-600' },
@@ -721,10 +721,10 @@ export default function PassageCard({
                         <button
                           key={btn.id}
                           onClick={() => onWordStatusChange(activeWordDetail.term, btn.id as any)}
-                          className={`flex-1 py-2 border text-[10px] font-bold tracking-wider transition-all flex items-center justify-center gap-1 cursor-pointer ${
+                          className={`flex-1 py-2 border text-[10px] font-bold tracking-wider transition-all flex items-center justify-center gap-1 cursor-pointer rounded-lg ${
                             isCurrent
                               ? btn.id === 'studied' ? 'bg-amber-500 text-white border-amber-500 font-bold' : 'bg-emerald-600 text-white border-emerald-600 font-bold'
-                              : 'bg-white hover:bg-editorial-bg text-editorial-text/50 border-editorial-border/30'
+                              : 'bg-white hover:bg-paper text-ink-3 border-hairline/30'
                           }`}
                         >
                           {isCurrent && <Check className="h-3 w-3 shrink-0" />}
@@ -739,10 +739,10 @@ export default function PassageCard({
                 <button
                   onClick={() => handleAddWordToBank(activeWordDetail)}
                   disabled={bankedTerms.has(activeWordDetail.term.toLowerCase()) || addingTerm === activeWordDetail.term}
-                  className={`w-full flex items-center justify-center gap-1.5 py-2.5 border text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer disabled:cursor-default ${
+                  className={`w-full flex items-center justify-center gap-1.5 py-2.5 border text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer disabled:cursor-default rounded-lg ${
                     bankedTerms.has(activeWordDetail.term.toLowerCase())
-                      ? 'bg-editorial-bg text-emerald-700 border-emerald-200'
-                      : 'bg-white text-editorial-text/60 border-editorial-border/30 hover:border-editorial-accent hover:text-editorial-accent'
+                      ? 'bg-paper text-emerald-700 border-emerald-200'
+                      : 'bg-white text-ink/60 border-hairline/30 hover:border-accent hover:text-accent'
                   }`}
                   title="Bu kelimeyi katmanlı'daki FSRS tekrar destesine ekle"
                 >
@@ -759,10 +759,10 @@ export default function PassageCard({
                 </button>
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center text-center p-8 bg-editorial-bg border border-editorial-border/20">
-                <HelpCircle className="h-10 w-10 text-editorial-text/20 mb-2" />
-                <p className="text-xs text-editorial-text font-bold">Kelimelere Tıklayın</p>
-                <p className="text-[10px] text-editorial-text/50 mt-1 max-w-[200px] font-serif italic leading-relaxed">
+              <div className="flex flex-col items-center justify-center text-center p-8 bg-paper border border-hairline/20 rounded-xl">
+                <HelpCircle className="h-10 w-10 text-ink/20 mb-2" />
+                <p className="text-xs text-ink font-bold">Kelimelere Tıklayın</p>
+                <p className="text-[10px] text-ink-3 mt-1 max-w-[200px] font-display leading-relaxed">
                   Metin içindeki kalın veya altı çizili kelimelerin üzerine tıklayarak anlamlarına hızlıca göz atabilirsiniz.
                 </p>
               </div>
@@ -770,27 +770,27 @@ export default function PassageCard({
           </div>
 
           {/* Quick Stats of Current Passage */}
-          <div className="bg-white border border-editorial-border/40 p-6 space-y-4">
-            <h4 className="text-xs font-bold tracking-wider uppercase text-editorial-text">PARÇA ÇALIŞMA İLERLEMESİ</h4>
+          <div className="bg-white border border-hairline/40 p-6 space-y-4 rounded-xl">
+            <h4 className="text-xs font-bold tracking-wider uppercase text-ink">PARÇA ÇALIŞMA İLERLEMESİ</h4>
 
             <div className="space-y-3.5 text-xs">
-              <div className="flex justify-between items-center text-editorial-text/70 border-b border-editorial-border/10 pb-2">
-                <span className="font-serif italic">Okuma Durumu</span>
-                <span className={`font-bold uppercase text-[10px] tracking-wider ${progress.completedPassages.includes(passage.id) ? 'text-emerald-700' : 'text-editorial-text/40'}`}>
+              <div className="flex justify-between items-center text-ink/70 border-b border-hairline/10 pb-2">
+                <span className="font-display">Okuma Durumu</span>
+                <span className={`font-bold uppercase text-[10px] tracking-wider ${progress.completedPassages.includes(passage.id) ? 'text-emerald-700' : 'text-ink-3'}`}>
                   {progress.completedPassages.includes(passage.id) ? '🏆 TAMAMLANDI' : '✍️ KALAN'}
                 </span>
               </div>
 
-              <div className="flex justify-between items-center text-editorial-text/70 border-b border-editorial-border/10 pb-2">
-                <span className="font-serif italic">Kelime Öğrenme Oranı</span>
-                <span className="font-bold text-editorial-text">
+              <div className="flex justify-between items-center text-ink/70 border-b border-hairline/10 pb-2">
+                <span className="font-display">Kelime Öğrenme Oranı</span>
+                <span className="font-bold text-ink">
                   {passage.vocabulary.filter(v => progress.wordStatus[v.term] === 'learned').length} / {passage.vocabulary.length}
                 </span>
               </div>
 
-              <div className="flex justify-between items-center text-editorial-text/70">
-                <span className="font-serif italic">Quiz Başarı Derecesi</span>
-                <span className="font-bold text-editorial-text font-mono">
+              <div className="flex justify-between items-center text-ink/70">
+                <span className="font-display">Quiz Başarı Derecesi</span>
+                <span className="font-bold text-ink font-mono">
                   {progress.scores[passage.id] ? `${progress.scores[passage.id].score} / ${progress.scores[passage.id].total}` : 'HAK YOK'}
                 </span>
               </div>

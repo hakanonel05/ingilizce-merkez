@@ -130,7 +130,7 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
     <div id="vocabulary-list-container" className="space-y-6">
       
       {/* List Source Tabs Selector */}
-      <div className="flex bg-white border border-editorial-border/40 p-1.5 shadow-xs font-mono text-xs justify-center sm:justify-start gap-2">
+      <div className="flex bg-white border border-hairline/40 p-1.5 shadow-xs font-mono text-xs justify-center sm:justify-start gap-2 rounded-lg">
         <button
           onClick={() => {
             setSourceType('passages');
@@ -140,8 +140,8 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
           }}
           className={`px-5 py-3 font-bold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
             sourceType === 'passages'
-              ? 'bg-editorial-accent text-white border border-editorial-accent shadow-xs font-bold'
-              : 'text-editorial-text/50 hover:text-editorial-text hover:bg-editorial-bg'
+              ? 'bg-accent text-white border border-accent shadow-xs font-bold rounded-lg'
+              : 'text-ink-3 hover:text-ink hover:bg-paper'
           }`}
         >
           <BookOpen className="h-4 w-4" />
@@ -157,8 +157,8 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
           }}
           className={`px-5 py-3 font-bold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
             sourceType === 'core'
-              ? 'bg-editorial-accent text-white border border-editorial-accent shadow-xs font-bold'
-              : 'text-editorial-text/50 hover:text-editorial-text hover:bg-editorial-bg'
+              ? 'bg-accent text-white border border-accent shadow-xs font-bold rounded-lg'
+              : 'text-ink-3 hover:text-ink hover:bg-paper'
           }`}
         >
           <Sparkles className="h-4 w-4" />
@@ -167,37 +167,37 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
       </div>
 
       {/* Top Metrics Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 bg-white border border-editorial-border/40 p-6 shadow-xs font-mono">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 bg-white border border-hairline/40 p-6 shadow-xs font-mono rounded-xl">
         <div className="space-y-1">
-          <p className="text-[10px] font-bold text-editorial-text/40 uppercase tracking-widest">LİSTE TOPLAMI</p>
-          <p className="text-3xl font-bold text-editorial-text">{totalCount}</p>
+          <p className="text-[10px] font-bold text-ink-3 uppercase tracking-widest">LİSTE TOPLAMI</p>
+          <p className="text-3xl font-bold text-ink">{totalCount}</p>
         </div>
-        <div className="space-y-1 border-t sm:border-t-0 sm:border-l border-editorial-border/20 pt-4 sm:pt-0 sm:pl-6">
+        <div className="space-y-1 border-t sm:border-t-0 sm:border-l border-hairline/20 pt-4 sm:pt-0 sm:pl-6">
           <p className="text-[10px] font-bold text-emerald-700 uppercase tracking-widest">ÖĞRENİLEN</p>
           <p className="text-3xl font-bold text-emerald-700">{learnedCount}</p>
         </div>
-        <div className="space-y-1 border-t sm:border-t-0 sm:border-l border-editorial-border/20 pt-4 sm:pt-0 sm:pl-6">
-          <p className="text-[10px] font-bold text-amber-600 uppercase tracking-widest">ÇALIŞILAN</p>
-          <p className="text-3xl font-bold text-amber-600">{studiedCount}</p>
+        <div className="space-y-1 border-t sm:border-t-0 sm:border-l border-hairline/20 pt-4 sm:pt-0 sm:pl-6">
+          <p className="text-[10px] font-bold text-amber-700 uppercase tracking-widest">ÇALIŞILAN</p>
+          <p className="text-3xl font-bold text-amber-700">{studiedCount}</p>
         </div>
-        <div className="space-y-1 border-t sm:border-t-0 sm:border-l border-editorial-border/20 pt-4 sm:pt-0 sm:pl-6">
-          <p className="text-[10px] font-bold text-editorial-text/40 uppercase tracking-widest">KALAN</p>
-          <p className="text-3xl font-bold text-editorial-text/50">{unstudiedCount}</p>
+        <div className="space-y-1 border-t sm:border-t-0 sm:border-l border-hairline/20 pt-4 sm:pt-0 sm:pl-6">
+          <p className="text-[10px] font-bold text-ink-3 uppercase tracking-widest">KALAN</p>
+          <p className="text-3xl font-bold text-ink-3">{unstudiedCount}</p>
         </div>
       </div>
 
       {/* Filters Toolbar */}
-      <div className="flex flex-col lg:flex-row gap-4 justify-between items-stretch lg:items-center bg-white border border-editorial-border/40 p-6 shadow-xs">
+      <div className="flex flex-col lg:flex-row gap-4 justify-between items-stretch lg:items-center bg-white border border-hairline/40 p-6 shadow-xs rounded-xl">
         
         {/* Search Input */}
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-editorial-text/40" />
+          <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-ink-3" />
           <input
             type="text"
             placeholder={sourceType === 'passages' ? "Kelime, Türkçe anlam veya açıklamalarda ara..." : "Temel listelerde kelime ara..."}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 border border-editorial-border/30 bg-editorial-bg focus:bg-white focus:outline-hidden focus:border-editorial-accent transition-all font-sans text-xs sm:text-sm text-editorial-text"
+            className="w-full pl-10 pr-4 py-2.5 border border-hairline/30 bg-paper focus:bg-white focus:outline-hidden focus:border-accent transition-all font-sans text-xs sm:text-sm text-ink rounded-lg"
           />
         </div>
 
@@ -206,12 +206,12 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
           
           {/* Core category filter (Only visible in 'core' source) */}
           {sourceType === 'core' && (
-            <div className="flex items-center gap-2 text-editorial-text/60 font-bold">
+            <div className="flex items-center gap-2 text-ink/60 font-bold">
               <span>GRUP:</span>
               <select
                 value={coreCategoryFilter}
                 onChange={(e) => setCoreCategoryFilter(e.target.value)}
-                className="px-3 py-2 border border-editorial-border/30 bg-white font-bold text-editorial-text focus:outline-hidden focus:border-editorial-accent text-xs cursor-pointer rounded-none uppercase"
+                className="px-3 py-2 border border-hairline/30 bg-white font-bold text-ink focus:outline-hidden focus:border-accent text-xs cursor-pointer rounded-lg uppercase"
               >
                 <option value="All">TÜMÜ</option>
                 {Object.entries(CORE_VOCABULARY_CATEGORIES).map(([key, value]) => (
@@ -222,12 +222,12 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
           )}
 
           {/* Status filter dropdown */}
-          <div className="flex items-center gap-2 text-editorial-text/60 font-bold">
+          <div className="flex items-center gap-2 text-ink/60 font-bold">
             <span>DURUM:</span>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 border border-editorial-border/30 bg-white font-bold text-editorial-text focus:outline-hidden focus:border-editorial-accent text-xs cursor-pointer rounded-none uppercase"
+              className="px-3 py-2 border border-hairline/30 bg-white font-bold text-ink focus:outline-hidden focus:border-accent text-xs cursor-pointer rounded-lg uppercase"
             >
               <option value="All">HEPSİ</option>
               <option value="unstudied">ÇALIŞILMADI</option>
@@ -237,12 +237,12 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
           </div>
 
           {/* Part of speech dropdown filter */}
-          <div className="flex items-center gap-2 text-editorial-text/60 font-bold">
+          <div className="flex items-center gap-2 text-ink/60 font-bold">
             <span>TÜR:</span>
             <select
               value={posFilter}
               onChange={(e) => setPartOfSpeechFilter(e.target.value)}
-              className="px-3 py-2 border border-editorial-border/30 bg-white font-bold text-editorial-text focus:outline-hidden focus:border-editorial-accent text-xs cursor-pointer rounded-none uppercase"
+              className="px-3 py-2 border border-hairline/30 bg-white font-bold text-ink focus:outline-hidden focus:border-accent text-xs cursor-pointer rounded-lg uppercase"
             >
               <option value="All">TÜMÜ</option>
               <option value="n">Noun (İsim)</option>
@@ -266,30 +266,30 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
 
             // Status Styling matching editorial styles
             let statusTag = '';
-            if (status === 'unstudied') statusTag = 'bg-editorial-bg text-editorial-text/40 border-editorial-border/20';
+            if (status === 'unstudied') statusTag = 'bg-paper text-ink-3 border-hairline/20';
             else if (status === 'studied') statusTag = 'bg-amber-50 text-amber-800 border-amber-200 font-bold';
             else if (status === 'learned') statusTag = 'bg-emerald-50 text-emerald-800 border-emerald-200 font-bold';
 
             return (
               <div 
                 key={item.term}
-                className="group relative border border-editorial-border/40 bg-white p-6 shadow-xs hover:shadow-md hover:border-editorial-accent transition-all duration-300 flex flex-col justify-between"
+                className="group relative border border-hairline/40 bg-white p-6 shadow-xs hover:shadow-md hover:border-accent transition-all duration-300 flex flex-col justify-between rounded-xl"
               >
                 <div>
                   {/* Top line Info */}
                   <div className="flex justify-between items-start gap-4 mb-3">
                     <div className="space-y-1">
-                      <h4 className="text-lg font-serif font-extrabold text-editorial-text flex items-center gap-2">
+                      <h4 className="text-lg font-display font-extrabold text-ink flex items-center gap-2">
                         {item.term}
                         <button
                           onClick={() => speakWord(item.term)}
-                          className="p-1 rounded-xs text-editorial-text/30 hover:text-editorial-accent hover:bg-editorial-bg transition-colors cursor-pointer"
+                          className="p-1 rounded-xs text-ink/30 hover:text-accent hover:bg-paper transition-colors cursor-pointer"
                           title="Telaffuz Dinle"
                         >
                           <Volume2 className="h-4 w-4" />
                         </button>
                       </h4>
-                      <span className="inline-block text-[9px] font-bold text-editorial-text/50 bg-editorial-bg border border-editorial-border/30 px-1.5 py-0.5 uppercase font-mono tracking-wider">
+                      <span className="inline-block text-[9px] font-bold text-ink-3 bg-paper border border-hairline/30 px-1.5 py-0.5 uppercase font-mono tracking-wider rounded-lg">
                         {item.partOfSpeech === 'n' ? 'Noun' :
                          item.partOfSpeech === 'v' ? 'Verb' :
                          item.partOfSpeech === 'adj' ? 'Adjective' :
@@ -305,13 +305,13 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
 
                   {/* Definition & Meaning info */}
                   <div className="space-y-3 mt-4">
-                    <div className="bg-editorial-bg p-3.5 border border-editorial-border/20">
-                      <span className="text-[9px] text-editorial-text/40 block font-bold tracking-wider uppercase font-mono mb-0.5">Anlamı</span>
-                      <p className="font-bold text-editorial-accent text-sm font-sans">{item.meaning}</p>
+                    <div className="bg-paper p-3.5 border border-hairline/20 rounded-lg">
+                      <span className="text-[9px] text-ink-3 block font-bold tracking-wider uppercase font-mono mb-0.5">Anlamı</span>
+                      <p className="font-bold text-accent text-sm font-sans">{item.meaning}</p>
                     </div>
 
                     {item.definition && (
-                      <p className="text-xs text-editorial-text/60 italic leading-relaxed font-serif line-clamp-2">
+                      <p className="text-xs text-ink/60 leading-relaxed font-display line-clamp-2">
                         {item.definition}
                       </p>
                     )}
@@ -319,17 +319,17 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
                 </div>
 
                 {/* Footer status buttons & Backlink to Passage */}
-                <div className="mt-6 pt-4 border-t border-editorial-border/20 flex items-center justify-between gap-3">
+                <div className="mt-6 pt-4 border-t border-hairline/20 flex items-center justify-between gap-3">
                   {!item.isCore && item.passageId && onSelectPassage ? (
                     <button
                       onClick={() => onSelectPassage(item.passageId!)}
-                      className="text-[10px] font-bold text-editorial-accent hover:underline transition-colors flex items-center gap-1 uppercase tracking-wide cursor-pointer font-mono"
+                      className="text-[10px] font-bold text-accent hover:underline transition-colors flex items-center gap-1 uppercase tracking-wide cursor-pointer font-mono"
                       title={`Parçayı Gör: ${item.passageTitle}`}
                     >
                       <Eye className="h-3.5 w-3.5" /> Parçayı Gör
                     </button>
                   ) : item.isCore && item.category ? (
-                    <span className="text-[10px] font-bold text-editorial-text/40 font-mono uppercase tracking-wider bg-editorial-bg border border-editorial-border/20 px-2 py-0.5">
+                    <span className="text-[10px] font-bold text-ink-3 font-mono uppercase tracking-wider bg-paper border border-hairline/20 px-2 py-0.5 rounded-lg">
                       🗂️ {CORE_VOCABULARY_CATEGORIES[item.category as keyof typeof CORE_VOCABULARY_CATEGORIES]?.title.split(' ')[0]}
                     </span>
                   ) : (
@@ -346,10 +346,10 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
                         <button
                           key={btn.id}
                           onClick={() => onWordStatusChange(item.term, btn.id as any)}
-                          className={`px-2.5 py-1.5 border text-[9px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                          className={`px-2.5 py-1.5 border text-[9px] font-bold uppercase tracking-wider transition-all cursor-pointer rounded-lg ${
                             isCurrent
                               ? btn.id === 'studied' ? 'bg-amber-500 text-white border-amber-500 font-bold' : 'bg-emerald-600 text-white border-emerald-600 font-bold'
-                              : 'bg-white hover:bg-editorial-bg text-editorial-text/40 border-editorial-border/30'
+                              : 'bg-white hover:bg-paper text-ink-3 border-hairline/30'
                           }`}
                         >
                           {btn.label}
@@ -363,10 +363,10 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
                 <button
                   onClick={() => handleAddToBank(item)}
                   disabled={bankedTerms.has(item.term.toLowerCase()) || addingTerm === item.term}
-                  className={`mt-3 w-full flex items-center justify-center gap-1.5 py-2 border text-[9px] font-bold uppercase tracking-wider transition-all cursor-pointer disabled:cursor-default ${
+                  className={`mt-3 w-full flex items-center justify-center gap-1.5 py-2 border text-[9px] font-bold uppercase tracking-wider transition-all cursor-pointer disabled:cursor-default rounded-lg ${
                     bankedTerms.has(item.term.toLowerCase())
-                      ? 'bg-editorial-bg text-emerald-700 border-emerald-200'
-                      : 'bg-white text-editorial-text/60 border-editorial-border/30 hover:border-editorial-accent hover:text-editorial-accent'
+                      ? 'bg-paper text-emerald-700 border-emerald-200'
+                      : 'bg-white text-ink/60 border-hairline/30 hover:border-accent hover:text-accent'
                   }`}
                   title="Bu kelimeyi katmanlı'daki FSRS tekrar destesine ekle"
                 >
@@ -387,10 +387,10 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
           })}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center p-16 bg-white border border-editorial-border/40 text-center">
-          <Bookmark className="h-12 w-12 text-editorial-text/20 mb-2" />
-          <p className="text-base font-serif font-bold text-editorial-text">Hiç kelime bulunamadı.</p>
-          <p className="text-xs text-editorial-text/50 mt-1 max-w-sm font-serif italic">
+        <div className="flex flex-col items-center justify-center p-16 bg-white border border-hairline/40 text-center rounded-2xl">
+          <Bookmark className="h-12 w-12 text-ink/20 mb-2" />
+          <p className="text-base font-display font-bold text-ink">Hiç kelime bulunamadı.</p>
+          <p className="text-xs text-ink-3 mt-1 max-w-sm font-display">
             Seçtiğiniz filtreleri veya arama kriterlerini değiştirerek tekrar aramayı deneyebilirsiniz.
           </p>
           <button
@@ -402,7 +402,7 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
                 setCoreCategoryFilter('All');
               }
             }}
-            className="mt-5 px-5 py-2 bg-editorial-accent text-white text-xs font-bold hover:bg-white hover:text-editorial-text border border-editorial-accent transition-colors cursor-pointer"
+            className="mt-5 px-5 py-2 bg-accent text-white text-xs font-bold hover:bg-white hover:text-ink border border-accent transition-colors cursor-pointer rounded-lg"
           >
             Filtreleri Temizle
           </button>

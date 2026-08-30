@@ -426,7 +426,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
       <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center space-x-2.5">
-            <span className="px-2.5 py-1 bg-teal-50 text-teal-700 border border-teal-200 text-xs font-bold rounded-md uppercase tracking-wider">
+            <span className="px-2.5 py-1 bg-accent-soft text-accent border border-accent/30 text-xs font-bold rounded-md uppercase tracking-wider">
               Kelime
             </span>
             <h2 className="text-base sm:text-lg font-bold text-slate-900">Kelime Kartları</h2>
@@ -469,7 +469,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
               onClick={() => setTab(value)}
               className={`px-3.5 py-2 text-xs font-bold rounded-t-lg transition cursor-pointer ${
                 tab === value
-                  ? 'bg-teal-600 text-white'
+                  ? 'bg-accent text-white'
                   : 'text-slate-600 hover:bg-slate-100'
               }`}
             >
@@ -492,7 +492,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
             <button
               type="button"
               onClick={() => setShowSettings(false)}
-              className="p-1 text-slate-400 hover:text-slate-700 cursor-pointer"
+              className="p-1 text-slate-500 hover:text-slate-700 cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -509,7 +509,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 max={500}
                 value={settings.newCardsPerDay}
                 onChange={(e) => updateSettings({ newCardsPerDay: Math.max(0, parseInt(e.target.value, 10) || 0) })}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-teal-500"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-accent"
               />
               <p className="text-[10px] text-slate-500">
                 Bugün {daily.newIntroduced} yeni kart gördünüz. 0 yazarsanız sınırsız olur.
@@ -526,7 +526,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 max={2000}
                 value={settings.reviewsPerDay}
                 onChange={(e) => updateSettings({ reviewsPerDay: Math.max(0, parseInt(e.target.value, 10) || 0) })}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-teal-500"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-accent"
               />
               <p className="text-[10px] text-slate-500">
                 Bugün {daily.reviewsDone} tekrar yaptınız. 0 = sınırsız (önerilen).
@@ -543,7 +543,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 max={180}
                 value={settings.sessionMinutes}
                 onChange={(e) => updateSettings({ sessionMinutes: Math.max(1, parseInt(e.target.value, 10) || 15) })}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-teal-500"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-accent"
               />
             </div>
 
@@ -557,7 +557,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 max={40}
                 value={settings.extractCount}
                 onChange={(e) => updateSettings({ extractCount: Math.min(40, Math.max(8, parseInt(e.target.value, 10) || 20)) })}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-teal-500"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-accent"
               />
               <p className="text-[10px] text-slate-500">
                 En fazla 40. Kısa videolarda model bu sayıya ulaşamayabilir.
@@ -617,7 +617,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 type="button"
                 onClick={handleReclassify}
                 disabled={reclassifyBusy || allCards.length === 0}
-                className="flex items-center space-x-1.5 px-3 py-1.5 bg-teal-600 hover:bg-teal-700 disabled:bg-slate-300 text-white text-[11px] font-bold rounded-lg cursor-pointer"
+                className="flex items-center space-x-1.5 px-3 py-1.5 bg-accent hover:bg-accent-700 disabled:bg-slate-300 text-white text-[11px] font-bold rounded-lg cursor-pointer"
               >
                 {reclassifyBusy ? (
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -675,7 +675,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
               <button
                 type="button"
                 onClick={() => setShowManualAdd(false)}
-                className="p-1 text-slate-400 hover:text-slate-700 cursor-pointer"
+                className="p-1 text-slate-500 hover:text-slate-700 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -689,13 +689,13 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                   value={manualFront}
                   onChange={(e) => setManualFront(e.target.value)}
                   placeholder="örn. come across"
-                  className="flex-1 min-w-0 px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm font-bold focus:outline-none focus:border-teal-500"
+                  className="flex-1 min-w-0 px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm font-bold focus:outline-none focus:border-accent"
                 />
                 <button
                   type="button"
                   onClick={() => void resolveManualCard(manualFront, true)}
                   disabled={!manualFront.trim() || manualBusy}
-                  className="flex items-center space-x-1.5 px-3 py-2 bg-teal-600 hover:bg-teal-700 disabled:bg-slate-300 text-white text-xs font-bold rounded-lg cursor-pointer"
+                  className="flex items-center space-x-1.5 px-3 py-2 bg-accent hover:bg-accent-700 disabled:bg-slate-300 text-white text-xs font-bold rounded-lg cursor-pointer"
                   title="Anlamı, örneği, seviyeyi ve söz türünü yeniden doldur"
                 >
                   {manualBusy ? (
@@ -721,7 +721,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 type="text"
                 value={manualBack}
                 onChange={(e) => setManualBack(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-teal-500"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-accent"
               />
             </div>
 
@@ -768,7 +768,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
             </div>
 
             {manualLevelSource && (
-              <p className="text-[10px] text-teal-800 bg-teal-50 border border-teal-100 rounded px-2 py-1.5">
+              <p className="text-[10px] text-accent bg-accent-soft border border-accent/20 rounded px-2 py-1.5">
                 Seviye otomatik: <strong>{manualLevel}</strong> (
                 {LEVEL_SOURCE_LABELS[manualLevelSource]}). Yanlışsa yukarıdan
                 değiştirebilirsiniz.
@@ -781,7 +781,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 type="text"
                 value={manualExample}
                 onChange={(e) => setManualExample(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:outline-none focus:border-teal-500"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:outline-none focus:border-accent"
               />
             </div>
 
@@ -800,7 +800,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 type="button"
                 onClick={saveManualCard}
                 disabled={!manualFront.trim() || !manualBack.trim()}
-                className="flex-1 flex items-center justify-center space-x-1.5 px-4 py-2.5 bg-teal-600 hover:bg-teal-700 disabled:bg-slate-300 text-white text-xs font-bold rounded-xl cursor-pointer"
+                className="flex-1 flex items-center justify-center space-x-1.5 px-4 py-2.5 bg-accent hover:bg-accent-700 disabled:bg-slate-300 text-white text-xs font-bold rounded-xl cursor-pointer"
               >
                 <Check className="w-4 h-4" />
                 <span>Ekle</span>
@@ -858,7 +858,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                       type="button"
                       onClick={handleExtract}
                       disabled={isExtracting}
-                      className="flex items-center space-x-2 px-4 py-2.5 bg-teal-600 hover:bg-teal-700 disabled:bg-teal-300 text-white text-xs font-bold rounded-xl transition cursor-pointer"
+                      className="flex items-center space-x-2 px-4 py-2.5 bg-accent hover:bg-accent-700 disabled:bg-accent/40 text-white text-xs font-bold rounded-xl transition cursor-pointer"
                     >
                       {isExtracting ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
@@ -935,13 +935,13 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
             </div>
 
             <div className="relative">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+              <Search className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Kelime veya anlam ara..."
-                className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-teal-500"
+                className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-accent"
               />
             </div>
 
@@ -1032,7 +1032,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 onClick={() => setStudyScope('all')}
                 className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
                   studyScope === 'all'
-                    ? 'bg-teal-600 text-white'
+                    ? 'bg-accent text-white'
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
@@ -1044,7 +1044,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 disabled={!lesson}
                 className={`px-3 py-1.5 text-xs font-bold rounded-lg transition disabled:opacity-40 cursor-pointer ${
                   studyScope === 'lesson'
-                    ? 'bg-teal-600 text-white'
+                    ? 'bg-accent text-white'
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
@@ -1154,7 +1154,7 @@ const CardTable: React.FC<{
                   <p className="text-[11px] text-slate-500 italic truncate">{c.exampleEn}</p>
                 )}
 
-                <div className="flex items-center flex-wrap gap-2 text-[10px] text-slate-400 pt-0.5">
+                <div className="flex items-center flex-wrap gap-2 text-[10px] text-slate-500 pt-0.5">
                   <span className={isDue ? 'text-rose-600 font-bold' : ''}>{dueLabel}</span>
                   <span>tekrar: {c.reps}</span>
                   {c.lapses > 0 && <span>unutma: {c.lapses}</span>}

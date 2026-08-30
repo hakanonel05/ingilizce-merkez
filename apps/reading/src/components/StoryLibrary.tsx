@@ -59,19 +59,19 @@ export default function StoryLibrary({
 
       <div>
         <div className="flex items-center gap-2.5 mb-4">
-          <Library className="h-4 w-4 text-editorial-accent" />
-          <h2 className="font-serif text-lg font-bold text-editorial-text">
+          <Library className="h-4 w-4 text-accent" />
+          <h2 className="font-display text-lg font-bold text-ink">
             Hikayelerim
           </h2>
-          <span className="font-mono text-[11px] text-editorial-text/40">
+          <span className="font-mono text-[11px] text-ink-3">
             {stories.length} HİKAYE
           </span>
         </div>
 
         {stories.length === 0 ? (
-          <div className="border border-dashed border-editorial-border/50 bg-white p-8 text-center">
-            <BookOpen className="mx-auto h-6 w-6 text-editorial-text/20" />
-            <p className="mt-3 text-xs leading-relaxed text-editorial-text/60">
+          <div className="border border-dashed border-hairline/50 bg-white p-8 text-center rounded-xl">
+            <BookOpen className="mx-auto h-6 w-6 text-ink/20" />
+            <p className="mt-3 text-xs leading-relaxed text-ink/60">
               Henüz hikaye üretmedin. Yukarıdaki kutudan seviyeni seç ve
               <strong className="font-bold"> Hikayeyi Oluştur</strong>'a bas;
               ürettiğin her hikaye burada kalır.
@@ -89,7 +89,7 @@ export default function StoryLibrary({
               return (
                 <article
                   key={story.id}
-                  className="flex flex-col border border-editorial-border/40 bg-white transition-colors hover:border-editorial-accent/40"
+                  className="flex flex-col border border-hairline/40 bg-white transition-colors hover:border-accent/40 rounded-lg"
                 >
                   <button
                     type="button"
@@ -97,16 +97,16 @@ export default function StoryLibrary({
                     className="flex-1 p-4 text-left cursor-pointer"
                   >
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="border border-editorial-accent/30 bg-editorial-bg px-1.5 py-0.5 font-mono text-[10px] font-bold text-editorial-text">
+                      <span className="border border-accent/30 bg-paper px-1.5 py-0.5 font-mono text-[10px] font-bold text-ink rounded-lg">
                         {story.cefr}
                       </span>
-                      <span className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-editorial-accent">
+                      <span className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-accent">
                         <Sparkles className="h-3 w-3" /> Sana özel
                       </span>
                       {/* Hangi model yazdi: acik kaynak modellerle
                           Gemini'yi karsilastirabilmek icin. */}
                       {story.generatedBy && (
-                        <span className="flex items-center gap-1 font-mono text-[10px] text-editorial-text/40">
+                        <span className="flex items-center gap-1 font-mono text-[10px] text-ink-3">
                           <Cpu className="h-3 w-3" /> {story.generatedBy}
                         </span>
                       )}
@@ -117,10 +117,10 @@ export default function StoryLibrary({
                       )}
                     </div>
 
-                    <h3 className="font-serif text-base font-bold leading-tight text-editorial-text break-words">
+                    <h3 className="font-display text-base font-bold leading-tight text-ink break-words">
                       {story.title}
                     </h3>
-                    <p className="mt-1 text-[11px] italic text-editorial-text/50 break-words">
+                    <p className="mt-1 text-[11px] text-ink-3 break-words">
                       {story.theme}
                     </p>
 
@@ -131,19 +131,19 @@ export default function StoryLibrary({
                         <span
                           key={w.term}
                           title={w.meaning}
-                          className="border border-editorial-border/40 bg-editorial-bg px-1.5 py-0.5 text-[10px] font-bold text-editorial-text/80"
+                          className="border border-hairline/40 bg-paper px-1.5 py-0.5 text-[10px] font-bold text-ink/80 rounded-lg"
                         >
                           {w.term}
                         </span>
                       ))}
                       {story.vocabulary.length > 8 && (
-                        <span className="px-1 py-0.5 text-[10px] text-editorial-text/40">
+                        <span className="px-1 py-0.5 text-[10px] text-ink-3">
                           +{story.vocabulary.length - 8}
                         </span>
                       )}
                     </div>
 
-                    <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[10px] text-editorial-text/45">
+                    <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[10px] text-ink-3">
                       <span className="flex items-center gap-1">
                         <Clock className="h-3 w-3" /> ~{Math.max(1, Math.round(words / 130))} dk
                       </span>
@@ -168,7 +168,7 @@ export default function StoryLibrary({
 
                   {/* Silme: hikayeler birikince raf dolar, ama tek
                       tıkla silmek çalışılmış bir metni kazara yok eder. */}
-                  <div className="border-t border-editorial-border/30 px-3 py-2">
+                  <div className="border-t border-hairline/30 px-3 py-2">
                     {isConfirming ? (
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="flex items-center gap-1 text-[10px] font-bold text-rose-800">
@@ -180,14 +180,14 @@ export default function StoryLibrary({
                             onDeleteStory(story.id);
                             setConfirmingDelete(null);
                           }}
-                          className="border border-rose-300 bg-rose-50 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-rose-900 hover:bg-rose-100 cursor-pointer"
+                          className="border border-rose-300 bg-rose-50 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-rose-900 hover:bg-rose-100 cursor-pointer rounded-lg"
                         >
                           Sil
                         </button>
                         <button
                           type="button"
                           onClick={() => setConfirmingDelete(null)}
-                          className="border border-editorial-border/40 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-editorial-text/60 hover:border-editorial-accent/40 cursor-pointer"
+                          className="border border-hairline/40 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-ink/60 hover:border-accent/40 cursor-pointer rounded-lg"
                         >
                           Vazgeç
                         </button>
@@ -196,7 +196,7 @@ export default function StoryLibrary({
                       <button
                         type="button"
                         onClick={() => setConfirmingDelete(story.id)}
-                        className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-editorial-text/40 hover:text-rose-700 transition-colors cursor-pointer"
+                        className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-ink-3 hover:text-rose-700 transition-colors cursor-pointer"
                       >
                         <Trash2 className="h-3 w-3" /> Hikayeyi sil
                       </button>

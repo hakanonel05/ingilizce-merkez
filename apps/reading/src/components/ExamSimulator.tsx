@@ -141,30 +141,30 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
   if (phase === 'setup') {
     return (
       <div className="space-y-8 max-w-2xl mx-auto">
-        <div className="border-b border-editorial-border/40 pb-6">
-          <div className="flex items-center gap-2 text-editorial-accent mb-2">
+        <div className="border-b border-hairline/40 pb-6">
+          <div className="flex items-center gap-2 text-accent mb-2">
             <Timer className="h-4 w-4" />
             <span className="text-[10px] font-bold tracking-[0.2em] uppercase">Sınav Simülasyonu</span>
           </div>
-          <h2 className="font-serif text-3xl font-bold text-editorial-text">YDS / YÖKDİL Deneme Sınavı</h2>
-          <p className="text-editorial-text/60 mt-2 text-sm leading-relaxed">
+          <h2 className="font-display text-3xl font-bold text-ink">YDS / YÖKDİL Deneme Sınavı</h2>
+          <p className="text-ink/60 mt-2 text-sm leading-relaxed">
             Gerçek sınav temposunu hissetmek için süreli bir okuma denemesi başlat. Bitince net sonucun ve
             yanlışların otomatik olarak Yanlışlar Defteri'ne eklenir.
           </p>
         </div>
 
-        <div className="bg-white border border-editorial-border/40 p-6 space-y-6">
+        <div className="bg-white border border-hairline/40 p-6 space-y-6 rounded-xl">
           <div>
-            <p className="text-[10px] font-bold tracking-[0.18em] uppercase text-editorial-text/50 mb-3">Kaç Parça?</p>
+            <p className="text-[10px] font-bold tracking-[0.18em] uppercase text-ink-3 mb-3">Kaç Parça?</p>
             <div className="flex gap-2">
               {PASSAGE_COUNT_OPTIONS.map(n => (
                 <button
                   key={n}
                   onClick={() => setCount(n)}
-                  className={`flex-1 py-3 text-sm font-bold border transition-all ${
+                  className={`flex-1 py-3 text-sm font-bold border transition-all rounded-lg ${
                     count === n
-                      ? 'bg-editorial-accent text-white border-editorial-accent'
-                      : 'bg-editorial-bg text-editorial-text/70 border-editorial-border/40 hover:border-editorial-accent/40'
+                      ? 'bg-accent text-white border-accent'
+                      : 'bg-paper text-ink/70 border-hairline/40 hover:border-accent/40'
                   }`}
                 >
                   {n} Parça
@@ -175,16 +175,16 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
           </div>
 
           <div>
-            <p className="text-[10px] font-bold tracking-[0.18em] uppercase text-editorial-text/50 mb-3">Seviye</p>
+            <p className="text-[10px] font-bold tracking-[0.18em] uppercase text-ink-3 mb-3">Seviye</p>
             <div className="flex flex-wrap gap-2">
               {(['ALL', 'A1', 'A2', 'B1', 'B2', 'C1'] as const).map(lvl => (
                 <button
                   key={lvl}
                   onClick={() => setCefr(lvl)}
-                  className={`px-3.5 py-1.5 text-xs font-bold border transition-all ${
+                  className={`px-3.5 py-1.5 text-xs font-bold border transition-all rounded-lg ${
                     cefr === lvl
-                      ? 'bg-editorial-text text-white border-editorial-text'
-                      : 'bg-white text-editorial-text/70 border-editorial-border/50 hover:border-editorial-accent/50'
+                      ? 'bg-ink text-white border-ink'
+                      : 'bg-white text-ink/70 border-hairline/50 hover:border-accent/50'
                   }`}
                 >
                   {lvl === 'ALL' ? 'Karışık' : lvl}
@@ -193,14 +193,14 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
             </div>
           </div>
 
-          <div className="pt-2 border-t border-editorial-border/20 flex items-center justify-between">
-            <p className="text-xs text-editorial-text/50">
+          <div className="pt-2 border-t border-hairline/20 flex items-center justify-between">
+            <p className="text-xs text-ink-3">
               Havuzda {eligiblePassages.length} uygun parça var.
             </p>
             <button
               onClick={startExam}
               disabled={eligiblePassages.length === 0}
-              className="flex items-center gap-2 px-6 py-3 text-sm font-bold bg-editorial-accent text-white hover:opacity-90 disabled:opacity-40"
+              className="flex items-center gap-2 px-6 py-3 text-sm font-bold bg-accent text-white hover:opacity-90 disabled:opacity-40 rounded-lg"
             >
               <Play className="h-4 w-4" /> Sınavı Başlat
             </button>
@@ -222,15 +222,15 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
     return (
       <div className="space-y-6">
         <div className={`sticky top-0 z-30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-3 border-b flex items-center justify-between gap-4 flex-wrap ${
-          isLowTime ? 'bg-rose-50 border-rose-300' : 'bg-white/95 backdrop-blur border-editorial-border/40'
+          isLowTime ? 'bg-rose-50 border-rose-300' : 'bg-white/95 backdrop-blur border-hairline/40'
         }`}>
           <div className="flex items-center gap-2">
-            <Timer className={`h-4 w-4 ${isLowTime ? 'text-rose-600' : 'text-editorial-accent'}`} />
-            <span className={`font-mono text-lg font-bold ${isLowTime ? 'text-rose-700' : 'text-editorial-text'}`}>
+            <Timer className={`h-4 w-4 ${isLowTime ? 'text-rose-600' : 'text-accent'}`} />
+            <span className={`font-mono text-lg font-bold ${isLowTime ? 'text-rose-700' : 'text-ink'}`}>
               {formatTime(remainingSeconds)}
             </span>
           </div>
-          <span className="text-xs text-editorial-text/50">
+          <span className="text-xs text-ink-3">
             {answeredCount} / {totalQ} soru cevaplandı
           </span>
           <div className="flex gap-1.5 flex-wrap">
@@ -238,7 +238,7 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
               <a
                 key={p.id}
                 href={`#exam-passage-${p.id}`}
-                className="w-7 h-7 flex items-center justify-center text-[11px] font-bold border border-editorial-border/40 bg-editorial-bg text-editorial-text/70 hover:border-editorial-accent"
+                className="w-7 h-7 flex items-center justify-center text-[11px] font-bold border border-hairline/40 bg-paper text-ink/70 hover:border-accent rounded-lg"
               >
                 {i + 1}
               </a>
@@ -246,7 +246,7 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
           </div>
           <button
             onClick={finishExam}
-            className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold bg-editorial-text text-white hover:opacity-90"
+            className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold bg-ink text-white hover:opacity-90 rounded-lg"
           >
             <Flag className="h-3.5 w-3.5" /> Sınavı Bitir
           </button>
@@ -254,18 +254,18 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
 
         <div className="space-y-10">
           {examPassages.map((p, pIndex) => (
-            <div key={p.id} id={`exam-passage-${p.id}`} className="bg-white border border-editorial-border/40 scroll-mt-24">
-              <div className="px-6 py-4 border-b border-editorial-border/30 flex items-center gap-3">
-                <span className="w-7 h-7 flex items-center justify-center bg-editorial-accent text-white text-xs font-bold shrink-0">
+            <div key={p.id} id={`exam-passage-${p.id}`} className="bg-white border border-hairline/40 scroll-mt-24 rounded-lg">
+              <div className="px-6 py-4 border-b border-hairline/30 flex items-center gap-3">
+                <span className="w-7 h-7 flex items-center justify-center bg-accent text-white text-xs font-bold shrink-0">
                   {pIndex + 1}
                 </span>
                 <div>
-                  <h3 className="font-serif text-lg font-bold text-editorial-text">{p.title}</h3>
-                  <span className="text-[10px] font-bold uppercase tracking-wide text-editorial-text/40">{p.cefr} · {p.theme}</span>
+                  <h3 className="font-display text-lg font-bold text-ink">{p.title}</h3>
+                  <span className="text-[10px] font-bold uppercase tracking-wide text-ink-3">{p.cefr} · {p.theme}</span>
                 </div>
               </div>
 
-              <div className="px-6 py-5 space-y-4 border-b border-editorial-border/20 font-serif text-sm leading-relaxed text-editorial-text/90">
+              <div className="px-6 py-5 space-y-4 border-b border-hairline/20 font-display text-sm leading-relaxed text-ink/90">
                 {p.paragraphs.map((para, i) => (
                   <p key={i}>{para}</p>
                 ))}
@@ -277,10 +277,10 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
                   return (
                     <div key={q.id} className="space-y-3">
                       <div className="flex gap-2.5 items-start">
-                        <span className="flex h-6 w-6 shrink-0 items-center justify-center bg-editorial-bg border border-editorial-border/40 text-editorial-text text-xs font-bold font-mono">
+                        <span className="flex h-6 w-6 shrink-0 items-center justify-center bg-paper border border-hairline/40 text-ink text-xs font-bold font-mono rounded-lg">
                           {qIndex + 1}
                         </span>
-                        <h4 className="text-sm font-serif font-bold text-editorial-text leading-relaxed">{q.question}</h4>
+                        <h4 className="text-sm font-display font-bold text-ink leading-relaxed">{q.question}</h4>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pl-8">
                         {q.options.map(option => {
@@ -290,10 +290,10 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
                             <button
                               key={option}
                               onClick={() => selectAnswer(p.id, q.id, optLetter)}
-                              className={`text-left p-2.5 border text-xs font-sans transition-all ${
+                              className={`text-left p-2.5 border text-xs font-sans transition-all rounded-lg ${
                                 isSelected
-                                  ? 'bg-editorial-accent text-white border-editorial-accent font-bold'
-                                  : 'bg-editorial-bg border-editorial-border/30 text-editorial-text hover:border-editorial-accent/40'
+                                  ? 'bg-accent text-white border-accent font-bold'
+                                  : 'bg-paper border-hairline/30 text-ink hover:border-accent/40'
                               }`}
                             >
                               {option}
@@ -312,7 +312,7 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
         <div className="flex justify-center pb-6">
           <button
             onClick={finishExam}
-            className="flex items-center gap-2 px-8 py-3.5 text-sm font-bold bg-editorial-text text-white hover:opacity-90"
+            className="flex items-center gap-2 px-8 py-3.5 text-sm font-bold bg-ink text-white hover:opacity-90 rounded-lg"
           >
             <Flag className="h-4 w-4" /> Sınavı Bitir ve Sonuçları Gör
           </button>
@@ -327,29 +327,29 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
 
     return (
       <div className="space-y-8">
-        <div className="border-b border-editorial-border/40 pb-6">
-          <div className="flex items-center gap-2 text-editorial-accent mb-2">
+        <div className="border-b border-hairline/40 pb-6">
+          <div className="flex items-center gap-2 text-accent mb-2">
             <ListChecks className="h-4 w-4" />
             <span className="text-[10px] font-bold tracking-[0.2em] uppercase">Sonuçlar</span>
           </div>
-          <h2 className="font-serif text-3xl font-bold text-editorial-text">Sınav Tamamlandı</h2>
+          <h2 className="font-display text-3xl font-bold text-ink">Sınav Tamamlandı</h2>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
             { label: 'Doğru', value: attempt.correctCount, color: 'text-emerald-700' },
             { label: 'Yanlış', value: attempt.wrongCount, color: 'text-rose-700' },
-            { label: 'Boş', value: attempt.blankCount, color: 'text-editorial-text/50' },
-            { label: 'Başarı', value: `%${percentage}`, color: 'text-editorial-accent' },
+            { label: 'Boş', value: attempt.blankCount, color: 'text-ink-3' },
+            { label: 'Başarı', value: `%${percentage}`, color: 'text-accent' },
           ].map(stat => (
-            <div key={stat.label} className="bg-white border border-editorial-border/40 p-5 text-center">
-              <p className={`font-serif text-3xl font-bold ${stat.color}`}>{stat.value}</p>
-              <p className="text-[10px] font-bold uppercase tracking-wide text-editorial-text/40 mt-1">{stat.label}</p>
+            <div key={stat.label} className="bg-white border border-hairline/40 p-5 text-center rounded-xl">
+              <p className={`font-display text-3xl font-bold ${stat.color}`}>{stat.value}</p>
+              <p className="text-[10px] font-bold uppercase tracking-wide text-ink-3 mt-1">{stat.label}</p>
             </div>
           ))}
         </div>
 
-        <p className="text-center text-xs text-editorial-text/50">
+        <p className="text-center text-xs text-ink-3">
           Süre: {formatTime(attempt.timeTakenSeconds)} / {formatTime(attempt.durationSeconds)} kullanıldı ·
           {attempt.wrongCount + attempt.blankCount > 0 ? ' Yanlış ve boş sorular Yanlışlar Defteri\'ne eklendi.' : ' Tebrikler, hiç yanlışın yok!'}
         </p>
@@ -358,31 +358,31 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
           {perPassageResults.map(({ passage, results }) => {
             const correct = results.filter(r => r.isCorrect).length;
             return (
-              <div key={passage.id} className="bg-white border border-editorial-border/40">
-                <div className="px-5 py-3 border-b border-editorial-border/30 flex items-center justify-between">
+              <div key={passage.id} className="bg-white border border-hairline/40 rounded-lg">
+                <div className="px-5 py-3 border-b border-hairline/30 flex items-center justify-between">
                   <div className="flex items-center gap-2 min-w-0">
-                    <span className="text-[10px] font-bold px-2 py-0.5 bg-editorial-bg border border-editorial-border/40 shrink-0">
+                    <span className="text-[10px] font-bold px-2 py-0.5 bg-paper border border-hairline/40 shrink-0 rounded-lg">
                       {passage.cefr}
                     </span>
-                    <p className="font-serif font-bold text-sm text-editorial-text truncate">{passage.title}</p>
+                    <p className="font-display font-bold text-sm text-ink truncate">{passage.title}</p>
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
-                    <span className="text-xs font-bold text-editorial-text/60">{correct} / {results.length}</span>
+                    <span className="text-xs font-bold text-ink/60">{correct} / {results.length}</span>
                     <button
                       onClick={() => onSelectPassage(passage.id)}
-                      className="flex items-center gap-1 text-xs font-bold text-editorial-accent hover:underline"
+                      className="flex items-center gap-1 text-xs font-bold text-accent hover:underline"
                     >
                       Parçaya Git <ExternalLink className="h-3 w-3" />
                     </button>
                   </div>
                 </div>
                 {results.some(r => !r.isCorrect) && (
-                  <div className="divide-y divide-editorial-border/20">
+                  <div className="divide-y divide-hairline/20">
                     {results.filter(r => !r.isCorrect).map(r => (
                       <div key={r.questionId} className="px-5 py-2.5 flex items-center gap-3 text-xs">
                         <XCircle className="h-3.5 w-3.5 text-rose-500 shrink-0" />
-                        <span className="text-editorial-text/80 truncate flex-1">{r.question}</span>
-                        <span className="text-editorial-text/40 shrink-0">
+                        <span className="text-ink/80 truncate flex-1">{r.question}</span>
+                        <span className="text-ink-3 shrink-0">
                           Doğru: {r.correctAnswer} · Sen: {r.yourAnswer || '—'}
                         </span>
                       </div>
@@ -402,7 +402,7 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
         <div className="flex justify-center pb-6">
           <button
             onClick={resetToSetup}
-            className="flex items-center gap-2 px-6 py-3 text-sm font-bold bg-editorial-accent text-white hover:opacity-90"
+            className="flex items-center gap-2 px-6 py-3 text-sm font-bold bg-accent text-white hover:opacity-90 rounded-lg"
           >
             <RotateCcw className="h-4 w-4" /> Yeni Sınav Başlat
           </button>

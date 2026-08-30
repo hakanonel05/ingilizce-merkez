@@ -699,12 +699,12 @@ export default function App() {
   }
 
   return (
-    <div id="app-root" className="min-h-screen bg-editorial-bg text-editorial-text font-sans flex flex-col justify-between">
+    <div id="app-root" className="min-h-screen bg-paper text-ink font-sans flex flex-col justify-between">
 
       <AppSwitcher active="reading" />
 
       {/* Top Banner Navigation Bar */}
-      <header className="sticky top-0 z-40 bg-white border-b border-editorial-border/40 backdrop-blur-md">
+      <header className="sticky top-0 z-40 bg-white border-b border-hairline/40 backdrop-blur-md">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Telefonda tek satira sigmiyordu: baslik ve arac dugmeleri yan yana
               zorlandigi icin sayfa yatay kayiyordu. Artik satir sarabiliyor ve
@@ -713,14 +713,14 @@ export default function App() {
 
             {/* Brand Logo & Slogan */}
             <div className="flex items-center gap-3 sm:gap-4 min-w-0">
-              <div className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center bg-editorial-accent text-white font-serif text-xl italic font-bold">
+              <div className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center bg-accent text-white font-display text-xl font-bold">
                 L
               </div>
               <div className="min-w-0">
-                <p className="font-serif text-2xl font-bold tracking-tight text-editorial-text leading-none flex items-center gap-1.5">
+                <p className="font-display text-2xl font-bold tracking-tight text-ink leading-none flex items-center gap-1.5">
                   Lexis <span className="text-xs font-sans font-normal tracking-widest uppercase opacity-40">Trainer</span>
                 </p>
-                <span className="text-[9px] text-editorial-text/50 font-bold tracking-widest uppercase block mt-1">
+                <span className="text-[9px] text-ink-3 font-bold tracking-widest uppercase block mt-1">
                   Okuma & Kelime Çalışması
                 </span>
               </div>
@@ -731,8 +731,8 @@ export default function App() {
 
               {/* Cloud Sync Status */}
               {session && (
-                <div className="flex items-center gap-1.5 border border-editorial-border/40 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-slate-50 text-slate-500">
-                  <CloudCog className={`h-3.5 w-3.5 ${isSyncing ? 'animate-spin text-editorial-accent' : ''}`} />
+                <div className="flex items-center gap-1.5 border border-hairline/40 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-slate-50 text-slate-500 rounded-lg">
+                  <CloudCog className={`h-3.5 w-3.5 ${isSyncing ? 'animate-spin text-accent' : ''}`} />
                   <span className="hidden sm:inline">{isSyncing ? 'Eşitleniyor...' : 'Eşitlendi'}</span>
                 </div>
               )}
@@ -742,7 +742,7 @@ export default function App() {
                 <button
                   onClick={() => supabase.auth.signOut()}
                   title="Çıkış Yap"
-                  className="flex items-center gap-1.5 border border-editorial-border/40 hover:bg-slate-50 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-600 transition-colors cursor-pointer"
+                  className="flex items-center gap-1.5 border border-hairline/40 hover:bg-slate-50 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-600 transition-colors cursor-pointer rounded-lg"
                 >
                   <LogOut className="h-3.5 w-3.5" />
                   <span className="hidden sm:inline">Çıkış</span>
@@ -750,7 +750,7 @@ export default function App() {
               ) : (
                 <button
                   onClick={() => setIsOfflineMode(false)}
-                  className="flex items-center gap-1.5 border border-editorial-accent bg-white text-editorial-accent hover:bg-editorial-accent hover:text-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                  className="flex items-center gap-1.5 border border-accent bg-white text-accent hover:bg-accent hover:text-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer rounded-lg"
                 >
                   Giriş Yap
                 </button>
@@ -761,7 +761,7 @@ export default function App() {
                 <button
                   onClick={handleInstallPWA}
                   title="Ana ekrana uygulama olarak ekle"
-                  className="flex items-center gap-1.5 border border-editorial-accent bg-editorial-accent text-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider hover:bg-white hover:text-editorial-accent transition-colors cursor-pointer"
+                  className="flex items-center gap-1.5 border border-accent bg-accent text-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider hover:bg-white hover:text-accent transition-colors cursor-pointer rounded-lg"
                 >
                   <Smartphone className="h-3.5 w-3.5" />
                   <span className="hidden sm:inline">Ekle</span>
@@ -776,7 +776,7 @@ export default function App() {
               <button
                 onClick={() => setIsSettingsOpen(true)}
                 title="API anahtarları"
-                className="flex items-center gap-1.5 border border-editorial-text/20 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-editorial-text/70 hover:border-editorial-accent hover:text-editorial-accent transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 border border-ink/20 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-ink/70 hover:border-accent hover:text-accent transition-colors cursor-pointer rounded-lg"
               >
                 <Settings2 className="h-3.5 w-3.5" />
                 <span className="hidden sm:inline">Ayarlar</span>
@@ -786,7 +786,7 @@ export default function App() {
               <button
                 onClick={handleBackupData}
                 title="Tüm çalışma verilerini JSON dosyası olarak indir"
-                className="flex items-center gap-1.5 border border-editorial-text/20 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-editorial-text/70 hover:border-editorial-accent hover:text-editorial-accent transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 border border-ink/20 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-ink/70 hover:border-accent hover:text-accent transition-colors cursor-pointer rounded-lg"
               >
                 <Download className="h-3.5 w-3.5" />
                 <span className="hidden sm:inline">Yedekle</span>
@@ -796,20 +796,20 @@ export default function App() {
               <button
                 onClick={handleRestoreData}
                 title="Yedek JSON dosyasından verileri geri yükle"
-                className="flex items-center gap-1.5 border border-editorial-text/20 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-editorial-text/70 hover:border-editorial-accent hover:text-editorial-accent transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 border border-ink/20 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-ink/70 hover:border-accent hover:text-accent transition-colors cursor-pointer rounded-lg"
               >
                 <Upload className="h-3.5 w-3.5" />
                 <span className="hidden sm:inline">Geri Yükle</span>
               </button>
 
               {/* Daily Streak Badge */}
-              <div className="flex items-center gap-1.5 border border-editorial-text/10 bg-[#FFF3E0] px-3.5 py-1.5 text-xs font-bold text-[#E65100]">
+              <div className="flex items-center gap-1.5 border border-amber-200 bg-amber-50 px-3.5 py-1.5 text-xs font-bold text-amber-800 rounded-lg">
                 <Zap className="h-3.5 w-3.5 fill-current" />
                 <span className="tracking-wide uppercase text-[10px]">{progress.dailyStreak} GÜN SERİ</span>
               </div>
 
               {/* Time Spent Badge */}
-              <div className="hidden md:flex items-center gap-1.5 border border-editorial-text/10 bg-editorial-bg px-3.5 py-1.5 text-xs font-bold text-editorial-text">
+              <div className="hidden md:flex items-center gap-1.5 border border-ink/10 bg-paper px-3.5 py-1.5 text-xs font-bold text-ink rounded-lg">
                 <Clock className="h-3.5 w-3.5 opacity-60" />
                 <span className="tracking-wide uppercase text-[10px]">
                   {Math.floor(progress.totalTimeSpent / 60)} DK ÇALIŞILDI
@@ -833,10 +833,10 @@ export default function App() {
           çalışmasının neden diğer bilgisayara gelmediğini anlamıyordu.
         */}
         {!session && (
-          <div className="mb-8 flex flex-wrap items-center justify-between gap-3 border border-editorial-accent/25 bg-white px-4 py-3">
+          <div className="mb-8 flex flex-wrap items-center justify-between gap-3 border border-accent/25 bg-white px-4 py-3 rounded-lg">
             <div className="flex items-start gap-2.5 min-w-0">
-              <CloudOff className="h-4 w-4 shrink-0 mt-0.5 text-editorial-accent" />
-              <p className="text-xs leading-relaxed text-editorial-text/80">
+              <CloudOff className="h-4 w-4 shrink-0 mt-0.5 text-accent" />
+              <p className="text-xs leading-relaxed text-ink/80">
                 <strong className="font-bold">Çevrimdışı moddasın.</strong>{' '}
                 Okuduğun parçalar, kelime durumların ve alıştırma cevapların
                 yalnızca <strong>bu bilgisayarda</strong> tutuluyor. Başka bir
@@ -846,7 +846,7 @@ export default function App() {
             </div>
             <button
               onClick={() => setIsOfflineMode(false)}
-              className="shrink-0 border border-editorial-accent bg-editorial-accent px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white transition-colors hover:bg-white hover:text-editorial-accent cursor-pointer"
+              className="shrink-0 border border-accent bg-accent px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white transition-colors hover:bg-white hover:text-accent cursor-pointer rounded-lg"
             >
               Giriş yap ve eşitle
             </button>
@@ -877,22 +877,22 @@ export default function App() {
                     setActiveTab(tab.id as any);
                     setSelectedPassageId(null);
                   }}
-                  className={`flex items-start gap-2.5 p-3 sm:p-4 border text-left transition-all duration-300 cursor-pointer ${
+                  className={`flex items-start gap-2.5 p-3 sm:p-4 border text-left transition-all duration-300 cursor-pointer rounded-xl ${
                     isActive
-                      ? 'bg-editorial-accent text-white border-editorial-accent shadow-md'
-                      : 'bg-white border-editorial-border/40 hover:border-editorial-accent/40'
+                      ? 'bg-accent text-white border-accent shadow-md'
+                      : 'bg-white border-hairline/40 hover:border-accent/40'
                   }`}
                 >
-                  <div className={`flex h-8 w-8 shrink-0 items-center justify-center border ${
+                  <div className={`flex h-8 w-8 shrink-0 items-center justify-center border rounded-lg ${
                     isActive
                       ? 'bg-white/10 text-white border-white/20'
-                      : 'bg-editorial-bg text-editorial-text/70 border-editorial-border/40'
+                      : 'bg-paper text-ink/70 border-hairline/40'
                   }`}>
                     <Icon className="h-4 w-4" />
                   </div>
                   <div className="min-w-0">
-                    <p className={`text-sm font-serif font-bold leading-tight break-words ${isActive ? 'text-white' : 'text-editorial-text'}`}>{tab.label}</p>
-                    <span className={`text-[9px] font-bold tracking-widest block mt-1.5 truncate ${isActive ? 'text-white/60' : 'text-editorial-text/40'}`}>{tab.subtitle}</span>
+                    <p className={`text-sm font-display font-bold leading-tight break-words ${isActive ? 'text-white' : 'text-ink'}`}>{tab.label}</p>
+                    <span className={`text-[9px] font-bold tracking-widest block mt-1.5 truncate ${isActive ? 'text-white/90' : 'text-ink-3'}`}>{tab.subtitle}</span>
                   </div>
                 </button>
               );
@@ -1010,13 +1010,13 @@ export default function App() {
       />
 
       {/* Footer Branding */}
-      <footer className="bg-white border-t border-editorial-border/30 py-8 mt-16 text-center text-editorial-text/50 text-xs">
+      <footer className="bg-white border-t border-hairline/30 py-8 mt-16 text-center text-ink-3 text-xs">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-2">
           <div className="flex justify-center items-center gap-1.5">
-            <BookOpenCheck className="h-4 w-4 text-editorial-accent opacity-60" />
-            <span className="font-serif font-bold text-editorial-text tracking-wide">Lexis • English Reading Trainer</span>
+            <BookOpenCheck className="h-4 w-4 text-accent opacity-60" />
+            <span className="font-display font-bold text-ink tracking-wide">Lexis • English Reading Trainer</span>
           </div>
-          <p className="text-[10px] text-editorial-text/40 font-mono">
+          <p className="text-[10px] text-ink-3 font-mono">
             &copy; {new Date().getFullYear()} — Tüm Hakları Saklıdır. Geliştirici Sürümü.
           </p>
         </div>
@@ -1025,29 +1025,29 @@ export default function App() {
       {/* Yapay Zeka Parça Oluşturma Yükleniyor Modalı */}
       {isGenerating && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-editorial-border max-w-lg w-full p-8 shadow-2xl text-center space-y-6 animate-fade-in">
+          <div className="bg-white border border-hairline max-w-lg w-full p-8 shadow-2xl text-center space-y-6 animate-fade-in rounded-xl">
             <div className="flex justify-center">
-              <div className="animate-spin rounded-none h-10 w-10 border-2 border-editorial-accent border-t-transparent"></div>
+              <div className="animate-spin rounded-full h-10 w-10 border-2 border-accent border-t-transparent"></div>
             </div>
 
             <div className="space-y-2">
-              <span className="text-[10px] font-bold text-editorial-accent font-mono uppercase tracking-widest block">AI Yapay Zeka Motoru Aktif</span>
-              <h3 className="text-xl font-serif font-extrabold text-editorial-text leading-tight">
+              <span className="text-[10px] font-bold text-accent font-mono uppercase tracking-widest block">AI Yapay Zeka Motoru Aktif</span>
+              <h3 className="text-xl font-display font-extrabold text-ink leading-tight">
                 {generatingMetadata?.title}
               </h3>
-              <p className="text-[10px] text-editorial-text/50 font-mono uppercase tracking-wider">
+              <p className="text-[10px] text-ink-3 font-mono uppercase tracking-wider">
                 Okuma Parçası #{generatingMetadata?.id} • CEFR: {generatingMetadata?.cefr}
               </p>
             </div>
 
-            <div className="bg-editorial-bg p-5 border border-editorial-border/20 text-left">
-              <span className="text-[9px] font-bold text-editorial-text/40 font-mono block mb-1.5 uppercase tracking-wider">💡 GÜNÜN ÇALIŞMA TAVSİYESİ</span>
-              <p className="text-xs text-editorial-text/70 font-serif leading-relaxed italic">
+            <div className="bg-paper p-5 border border-hairline/20 text-left rounded-xl">
+              <span className="text-[9px] font-bold text-ink-3 font-mono block mb-1.5 uppercase tracking-wider">💡 GÜNÜN ÇALIŞMA TAVSİYESİ</span>
+              <p className="text-xs text-ink/70 font-display leading-relaxed">
                 "{studyTips[tipIndex]}"
               </p>
             </div>
 
-            <p className="text-xs text-editorial-accent font-sans leading-relaxed font-bold bg-[#E1F5FE]/50 p-4 border border-[#B3E5FC]/40">
+            <p className="text-xs text-accent font-sans leading-relaxed font-bold bg-indigo-50/60 p-4 border border-indigo-100 rounded-xl">
               Yapay zeka, Google Search aracıyla interneti tarayarak Ahmet Akın ve İsmail Turasan'ın kaleme aldığı orijinal kitaptaki birebir aynı okuma parçasını, kelimeleri ve YDS tarzı soruları bulur ve saniyeler içinde kütüphanenize kalıcı olarak yükler.
             </p>
           </div>
@@ -1057,34 +1057,34 @@ export default function App() {
       {/* Yapay Zeka Hata Modalı */}
       {generationError && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border-2 border-rose-500 max-w-lg w-full p-8 shadow-2xl text-center space-y-6">
+          <div className="bg-white border-2 border-rose-500 max-w-lg w-full p-8 shadow-2xl text-center space-y-6 rounded-xl">
             <div className="flex justify-center">
-              <div className="h-10 w-10 rounded-none bg-rose-50 flex items-center justify-center text-rose-600 font-extrabold font-mono text-lg border border-rose-200">
+              <div className="h-10 w-10 rounded-xl bg-rose-50 flex items-center justify-center text-rose-600 font-extrabold font-mono text-lg border border-rose-200">
                 !
               </div>
             </div>
 
             <div className="space-y-2">
               <span className="text-[10px] font-bold text-rose-600 font-mono uppercase tracking-widest block">Yükleme Başarısız Oldu</span>
-              <h3 className="text-lg font-serif font-extrabold text-editorial-text">
+              <h3 className="text-lg font-display font-extrabold text-ink">
                 Bağlantı veya API Yetkilendirme Hatası
               </h3>
             </div>
 
-            <p className="text-xs text-editorial-text/70 leading-relaxed font-mono bg-rose-50 p-4 border border-rose-100 text-left">
+            <p className="text-xs text-ink/70 leading-relaxed font-mono bg-rose-50 p-4 border border-rose-100 text-left rounded-xl">
               {generationError}
             </p>
 
             <div className="flex gap-2 justify-center font-mono">
               <button
                 onClick={() => setGenerationError(null)}
-                className="px-4 py-2 border border-editorial-border/30 bg-white text-editorial-text/60 hover:bg-editorial-bg text-[10px] font-bold uppercase tracking-wider cursor-pointer"
+                className="px-4 py-2 border border-hairline/30 bg-white text-ink/60 hover:bg-paper text-[10px] font-bold uppercase tracking-wider cursor-pointer rounded-lg"
               >
                 Kapat
               </button>
               <button
                 onClick={() => handleSelectPassage(generatingMetadata?.id || 1)}
-                className="px-4 py-2 bg-editorial-accent text-white hover:bg-white hover:text-editorial-text border border-editorial-accent text-[10px] font-bold uppercase tracking-wider cursor-pointer"
+                className="px-4 py-2 bg-accent text-white hover:bg-white hover:text-ink border border-accent text-[10px] font-bold uppercase tracking-wider cursor-pointer rounded-lg"
               >
                 Tekrar Dene
               </button>

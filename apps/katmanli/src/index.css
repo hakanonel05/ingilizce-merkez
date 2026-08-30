@@ -32,6 +32,35 @@
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* =====================================================================
+     ORTAK RENK SOZLUGU
+
+     Bu token'lar asagidaki :root degiskenleriyle AYNI adi ve AYNI degeri
+     tasiyor, ve reading'in @theme blogunda da birebir ayni tanimlilar.
+     Amac: shared/ altindaki bir bilesenin `bg-accent` yazabilmesi ve bu
+     sinifin IKI uygulamada da uretilmesi.
+
+     Onceden ortak bilesenler vurgu icin `bg-teal-600` gibi sabit bir renk
+     yaziyordu: teal ne bu uygulamanin ne de reading'in paletinde vardi,
+     dolayisiyla kelime kartlari ekrani her iki tarafta da ucuncu bir
+     vurgu rengiyle duruyordu.
+
+     DIKKAT: bu bir "palet esleme katmani" DEGIL. Yukaridaki nottaki gibi
+     slate/indigo siniflarini yeniden tanimlamiyor - yalnizca yeni adlar
+     ekliyor. Bilesenlerdeki slate olcegi oldugu gibi duruyor, gorsel
+     hiyerarsi bozulmuyor.
+     ===================================================================== */
+  --color-paper:        #F8FAFC;
+  --color-paper-2:      #FFFFFF;
+  --color-paper-3:      #F1F5F9;
+  --color-ink:          #0F172A;
+  --color-ink-2:        #475569;
+  --color-ink-3:        #64748B;
+  --color-hairline:     #E2E8F0;
+  --color-accent:       #4F46E5;
+  --color-accent-700:   #4338CA;
+  --color-accent-soft:  #EEF2FF;
 }
 
 :root {

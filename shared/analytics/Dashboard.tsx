@@ -8,9 +8,14 @@
  * - Grafikler elle SVG. Hazır bir grafik kütüphanesi iki uygulamanın da
  *   paketine ~300 KB ekliyordu; buradaki üç grafik (ısı haritası, sütun,
  *   çizgi) birkaç düzine satırla çiziliyor.
- * - Renkler Tailwind'in nötr sınıfları. Katmanlı bunları kendi kağıt/mürekkep
- *   paletine index.css'te zaten eşliyor, reading'de olduğu gibi kalıyor;
- *   böylece tek bileşen iki tasarım dilinde de yabancı durmuyor.
+ * - Renkler Tailwind'in slate ölçeği; iki uygulamanın paleti de o ölçek
+ *   üzerine kurulu olduğu için ortak bileşen her iki tarafta da yerli
+ *   duruyor. VURGU rengi sabit yazılmaz: `accent` ailesi iki uygulamanın
+ *   da @theme bloğunda tanımlı (eskiden burada teal yazıyordu ve ikisinin
+ *   de paletinde yoktu).
+ * - Grafiklerdeki renkler CSS değişkeninden okunuyor (`var(--accent)`,
+ *   `var(--hairline)`); SVG sunum niteliği yerine `style` kullanılıyor
+ *   çünkü değişken desteği orada güvenilir.
  * - Zaman damgası olan veriyle olmayan veri ASLA karıştırılmıyor. Tarihsiz
  *   toplamlar ayrı bir bölümde ve neden tarihsiz oldukları yazıyor.
  */
@@ -178,7 +183,7 @@ export const Dashboard: React.FC = () => {
       <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center space-x-2.5">
-            <span className="px-2.5 py-1 bg-teal-50 text-teal-700 border border-teal-200 text-xs font-bold rounded-md uppercase tracking-wider">
+            <span className="px-2.5 py-1 bg-accent-soft text-accent border border-accent/30 text-xs font-bold rounded-md uppercase tracking-wider">
               Karne
             </span>
             <h2 className="text-base sm:text-lg font-bold text-slate-900">Çalışma Takvimi</h2>
@@ -280,7 +285,7 @@ export const Dashboard: React.FC = () => {
                         className="px-2 py-0.5 bg-slate-100 text-slate-700 text-[11px] font-semibold rounded"
                       >
                         {w.front}
-                        <span className="text-slate-400 ml-1">{w.level}</span>
+                        <span className="text-slate-500 ml-1">{w.level}</span>
                       </span>
                     ))}
                   </div>
@@ -419,7 +424,7 @@ export const Dashboard: React.FC = () => {
             value={wordSearch}
             onChange={(e) => { setWordSearch(e.target.value); setWordLimit(50); }}
             placeholder="Kelime, anlam veya ders ara..."
-            className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-teal-500 w-full sm:w-64"
+            className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-accent w-full sm:w-64"
           />
         </div>
 
@@ -513,7 +518,7 @@ const StatTile: React.FC<{ label: string; value: string; hint?: string }> = ({ l
   <div className="bg-white border border-slate-200 rounded-xl p-3">
     <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">{label}</p>
     <p className="text-lg font-bold text-slate-900 leading-tight mt-0.5">{value}</p>
-    {hint && <p className="text-[10px] text-slate-400 mt-0.5">{hint}</p>}
+    {hint && <p className="text-[10px] text-slate-500 mt-0.5">{hint}</p>}
   </div>
 );
 
@@ -645,7 +650,19 @@ const CalendarHeatmap: React.FC<{
     return 1;
   };
 
-  const FILLS = ['#EDECE8', '#CFD6D2', '#9DB3AA', '#5E8074', '#2E7D5B'];
+  /**
+   * Yogunluk rampasi (GitHub takvimi gibi): 0 = hic calisilmamis,
+   * 4 = en yogun gun.
+   *
+   * Burasi tek renge indirilemez, cunku renk BURADA VERI: bes basamagin
+   * birbirinden ayirt edilmesi gerekiyor. Rampa vurgu renginin (--accent,
+   * indigo-600) kendi olcegi uzerinde kuruldu; vurgu degisirse burasi da
+   * elle guncellenmeli.
+   *
+   * Eskiden krem-yesil bir editoryal rampaydi ve iki uygulamanin
+   * paletinde de karsiligi yoktu.
+   */
+  const FILLS = ['#F1F5F9', '#C7D2FE', '#A5B4FC', '#818CF8', '#4F46E5'];
 
   return (
     <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-2">
@@ -668,7 +685,7 @@ const CalendarHeatmap: React.FC<{
             {WEEKDAY_LABELS.map((label, i) => (
               <span
                 key={i}
-                className="text-[9px] text-slate-400 leading-none"
+                className="text-[9px] text-slate-500 leading-none"
                 style={{ height: CELL, lineHeight: `${CELL}px` }}
               >
                 {label}
@@ -683,7 +700,7 @@ const CalendarHeatmap: React.FC<{
                 x={mark.index * (CELL + GAP)}
                 y={9}
                 fontSize={9}
-                fill="#8B8D93"
+                style={{ fill: 'var(--ink-3)' }}
               >
                 {mark.label}
               </text>
@@ -701,7 +718,7 @@ const CalendarHeatmap: React.FC<{
                     height={CELL}
                     rx={3}
                     fill={FILLS[level(day)]}
-                    stroke={isSelected ? '#17181B' : 'transparent'}
+                    style={{ stroke: isSelected ? 'var(--ink)' : 'transparent' }}
                     strokeWidth={isSelected ? 2 : 0}
                     className="cursor-pointer"
                     onClick={() => onSelectDay(day.day)}
@@ -721,7 +738,7 @@ const CalendarHeatmap: React.FC<{
         </div>
       </div>
 
-      <p className="text-[10px] text-slate-400">
+      <p className="text-[10px] text-slate-500">
         Bir güne dokun, o gün ne yaptığını göster.
       </p>
     </div>
@@ -777,11 +794,11 @@ const LineChart: React.FC<{ points: { x: number; y: number; label: string }[] }>
     <div className="space-y-1">
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-28" preserveAspectRatio="none" role="img">
         {[0, 50, 100].map((tick) => (
-          <line key={tick} x1={PAD} y1={toY(tick)} x2={W - PAD} y2={toY(tick)} stroke="#E4E3DE" strokeWidth={1} />
+          <line key={tick} x1={PAD} y1={toY(tick)} x2={W - PAD} y2={toY(tick)} style={{ stroke: 'var(--hairline)' }} strokeWidth={1} />
         ))}
-        <path d={path} fill="none" stroke="#17181B" strokeWidth={2} vectorEffect="non-scaling-stroke" />
+        <path d={path} fill="none" style={{ stroke: 'var(--accent)' }} strokeWidth={2} vectorEffect="non-scaling-stroke" />
         {points.map((p) => (
-          <circle key={`${p.x}-${p.y}`} cx={toX(p.x)} cy={toY(p.y)} r={3} fill="#17181B">
+          <circle key={`${p.x}-${p.y}`} cx={toX(p.x)} cy={toY(p.y)} r={3} style={{ fill: 'var(--accent)' }}>
             <title>{p.label}</title>
           </circle>
         ))}

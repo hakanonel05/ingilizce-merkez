@@ -222,7 +222,7 @@ export const SelectionToCard: React.FC<Props> = ({
             transform: 'translateX(-50%)',
             zIndex: 60,
           }}
-          className="flex items-center space-x-1.5 px-3 py-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold rounded-lg shadow-lg transition cursor-pointer whitespace-nowrap"
+          className="flex items-center space-x-1.5 px-3 py-2 bg-accent hover:bg-accent-700 text-white text-xs font-bold rounded-lg shadow-lg transition cursor-pointer whitespace-nowrap"
         >
           {isLoading ? (
             <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -242,13 +242,13 @@ export const SelectionToCard: React.FC<Props> = ({
           >
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-bold text-slate-900 flex items-center space-x-2">
-                <Layers className="w-4 h-4 text-teal-600" />
+                <Layers className="w-4 h-4 text-accent" />
                 <span>Kelime Kartı Ekle</span>
               </h3>
               <button
                 type="button"
                 onClick={() => setDraft(null)}
-                className="p-1 text-slate-400 hover:text-slate-700 cursor-pointer"
+                className="p-1 text-slate-500 hover:text-slate-700 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -260,7 +260,7 @@ export const SelectionToCard: React.FC<Props> = ({
                 type="text"
                 value={draft.front}
                 onChange={(e) => setDraft({ ...draft, front: e.target.value })}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm font-bold text-slate-900 focus:outline-none focus:border-teal-500"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm font-bold text-slate-900 focus:outline-none focus:border-accent"
               />
             </div>
 
@@ -271,7 +271,7 @@ export const SelectionToCard: React.FC<Props> = ({
                 value={draft.back}
                 onChange={(e) => setDraft({ ...draft, back: e.target.value })}
                 placeholder="Anlamı"
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-teal-500"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-accent"
               />
             </div>
 
@@ -321,7 +321,7 @@ export const SelectionToCard: React.FC<Props> = ({
             </div>
 
             {/* Alanların elle doldurulması gerekmediğini gösterir */}
-            <p className="flex items-start space-x-1.5 text-[10px] text-teal-800 bg-teal-50 border border-teal-100 rounded px-2 py-1.5">
+            <p className="flex items-start space-x-1.5 text-[10px] text-accent bg-accent-soft border border-accent/20 rounded px-2 py-1.5">
               <Wand2 className="w-3 h-3 shrink-0 mt-0.5" />
               <span>
                 Seviye, söz türü ve tür otomatik belirlendi
@@ -353,7 +353,7 @@ export const SelectionToCard: React.FC<Props> = ({
                 type="button"
                 onClick={handleSave}
                 disabled={!draft.front.trim() || !draft.back.trim()}
-                className="flex-1 flex items-center justify-center space-x-1.5 px-4 py-2.5 bg-teal-600 hover:bg-teal-700 disabled:bg-slate-300 text-white text-xs font-bold rounded-xl transition cursor-pointer"
+                className="flex-1 flex items-center justify-center space-x-1.5 px-4 py-2.5 bg-accent hover:bg-accent-700 disabled:bg-slate-300 text-white text-xs font-bold rounded-xl transition cursor-pointer"
               >
                 <Check className="w-4 h-4" />
                 <span>Kartlarıma Ekle</span>

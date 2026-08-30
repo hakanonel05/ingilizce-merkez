@@ -5,7 +5,8 @@ edecek biri için yazıldı. Kodun ne yaptığı zaten kaynaktaki yorumlarda
 yazılı; burada olan şey, koda bakarak anlaşılmayan kararlar, tuzaklar ve
 açık kalan işler.
 
-Son güncelleme: 30 Ağustos 2026 · son commit `ea3a6af`
+Son güncelleme: 30 Ağustos 2026 · `ea3a6af` üzerine **commit edilmemiş**
+çalışma (bu kopyada git geçmişi yok)
 
 ---
 
@@ -58,6 +59,23 @@ Reading tarafında senkron kodu **yoktur**; oraya kod alanı arama.
 (`apps/<uygulama>`) başlıyor, `shared/` o ağacın dışında kalıyor. Bu satır
 olmazsa ortak bileşenler sessizce yarı stilsiz kalıyor.
 
+**TEK RENK SÖZLÜĞÜ: `paper` / `ink` / `hairline` / `accent`.** İki
+uygulamanın `index.css`'inde AYNI adlarla ve AYNI değerlerle tanımlı; hem
+`@theme` bloğunda (Tailwind sınıfı üretsin diye: `bg-paper`, `text-ink`,
+`border-hairline`, `bg-accent`) hem `:root`'ta (ortak bileşenler
+`var(--ink)` yazabilsin diye).
+
+Bunun pratik kuralı: **`shared/` altında vurgu rengini SABİT yazma.**
+Slate ölçeği serbest — iki uygulamanın paleti de o ölçeğe oturuyor ve
+katmanlının `index.css`'inde anlatıldığı gibi hepsini değişkene çevirmek
+görsel hiyerarşiyi düzleştiriyor. Ama vurgu ve durum renkleri uygulamaya
+göre değişebilecek şeyler; `accent` ailesini kullan.
+
+Tuzağa dikkat: Tailwind yalnızca kaynakta GEÇEN sınıfı üretir. `bg-accent`
+kaynakta yoksa `bg-accent` diye bir kural da yoktur — tarayıcıda çıplak
+sınıfı deneyip "üretilmemiş" diye karar verme, kod `hover:bg-accent-700`
+yazıyorsa üretilen `.hover\:bg-accent-700:hover` olur.
+
 ---
 
 ## 3. Zaman kaybettiren tuzaklar
@@ -79,8 +97,15 @@ ilerlemiyor (`CSSTransition` sonsuza kadar "running" kalıyor) ve
 
 ```js
 document.head.insertAdjacentHTML('beforeend',
-  '<style>*{transition:none !important}</style>');
+  '<style>*{transition:none !important;animation:none !important}</style>');
 ```
+
+Bu yalnızca görüntüyü değil ÖLÇÜMÜ de bozuyor, en sinsi tarafı bu:
+`getComputedStyle` geçişin BAŞLANGIÇ değerini döndürüyor. Aktif sekme
+kutucuğu `transition-all` ile beyazdan indigoya geçiyor; kontrast
+ölçümü zemini beyaz okuyup "beyaz üstüne beyaz yazı, kontrast 1.0"
+diye gerçek olmayan bir hata raporladı. Stil ölçmeden ÖNCE yukarıdaki
+satırı çalıştır.
 
 **`tsc` bellek yiyor.** JSON kelime listeleri tip çıkarımını şişiriyor:
 
@@ -126,44 +151,67 @@ düşüyor ve bunu kullanıcıya söylüyor.
 
 ## 5. Son oturumda yapılanlar
 
-- **Hikaye üreteci** (`StoryComposer`) — hâlâ öğrenilmemiş kelimelerden
-  seviyeye uygun hikaye. İki aşamalı: önce hikaye, arkadan soru/alıştırma.
-- **Hikayelerim sekmesi** (`StoryLibrary`) — üretilen hikayeler
-  "Okuma Parçaları" listesinde HİÇ görünmüyordu (o liste sabit
-  `PASSAGE_CATALOG`'dan kuruluyor), yani bir kez kapatılan hikaye bir daha
-  açılamıyordu. Ayrı raf bunu çözdü.
-- **Sesli okuma** (`narration.ts`, `NarrationBar`) — paragraf paragraf,
-  okunan paragraf metinde vurgulanıyor.
-- **Açık kaynak model seçimi** — yukarıda anlatıldı.
-- **Reading'e ayarlar ekranı** — o tarafta hiç yoktu; anahtarlar yalnızca
-  katmanlıdan girilebiliyordu, dolayısıyla reading tek başına
-  kullanılamıyordu. `shared/vocab/SettingsModal.tsx` artık ortak.
-- **Katmanlı arayüzü yeniden yapılandırıldı** — yatay katman şeridi yerine
-  sol dikey adım navigasyonu, ders seçici modala taşındı, alta sabit
-  "sonraki katman" barı. Bileşenler `apps/katmanli/src/components/shell/`.
+Önceki listedeki üç açık madde de kapatıldı.
+
+**Hikayede kelimenin YANLIŞ ANLAMDA kullanılması.** İstemci sunucuya
+yalnızca kelimenin yazılışını yolluyordu, anlamı model seçiyordu.
+Oysa söz türü ve Türkçe karşılık kullanıcının kartında ZATEN yazılı
+(`StrugglingWord.partOfSpeech` / `.meaning`). Artık ikisi de gidiyor
+ve istem şunları şart koşuyor: belirtilen söz türü ve anlam, doğal
+eşdizim, çekim serbest ama TÜR DEĞİŞTİRME yasak (`compelling` sıfatken
+`compel` diye fiil yapılamaz). Alıştırma üretecine de aynı bilgi
+gidiyor — yanlış anlamı ölçen bir alıştırma yanlış olanı pekiştirirdi.
+Sunucu eski biçimi (düz metin dizisi) hâlâ kabul ediyor.
+
+**Reading, katmanlının tasarım diline taşındı.** Krem/Playfair/keskin
+köşe gitti; slate + indigo, Inter, yuvarlak köşe geldi. Palet 6 adet
+`editorial-*` token'ından geçtiği için renk tek yerden değişti; token
+adları `paper`/`ink`/`hairline`/`accent` olarak yeniden adlandırıldı
+(786 kullanım). 93 `font-serif` → `font-display`, dekoratif italikler
+kaldırıldı, 180 öğeye rolüne göre köşe yarıçapı verildi.
+
+`.passage-body` KORUNDU — satır uzunluğu (48ch), satır aralığı ve
+rakam biçimi ölçerek seçilmiş okuma konforu ayarları; palet değil.
+
+**Ortak bileşenlerdeki üçüncü vurgu rengi.** `shared/` altında vurgu
+**teal** yazılıydı; teal iki uygulamanın da paletinde yoktu, yani
+kelime kartları ekranı her iki tarafta da yabancı bir renkle
+duruyordu. 40 sınıf `accent` ailesine geçti. Karne grafiklerindeki
+sabit hex'ler (`#17181B`, `#E4E3DE`) `var(--accent)` / `var(--hairline)`
+oldu; SVG'de sunum niteliği yerine `style` kullanıldı.
+
+**Kontrast.** Ölçüm 33 hata buldu; hepsi kapatıldı. En yaygını
+`text-ink/40` ve `/50` idi (beyaz üzerinde 2.55 ve 3.41, gereken 4.5)
+— bölüm başlığı ve kart etiketi taşıyorlardı, `text-ink-3`'e alındı
+(4.76). `shared/`'daki `text-slate-400` de aynı sebeple slate-500
+oldu; katmanlı bu kararı kendi `--ink-3`'ü için zaten vermişti, ortak
+bileşenlerde atlanmıştı. Son tarama: **10 ekran, 14.349 metin ögesi,
+0 hata**; katmanlıda 277 öge, 0 hata.
 
 ---
 
 ## 6. Açık kalan işler
 
-**1. Kelimeyi zorlama sorunu (kullanıcı biliyor, karar bekliyor).**
-Üretilen hikayelerde modeller hedef kelimeyi bazen yanlış anlamda
-kullanıyor — ölçümde `compelling` sıfat yerine fiil olarak geçti. Bu
-GEMINI DAHİL bütün modellerde var. Çözüm istem metnini sıkılaştırmak:
-her kelimenin en yaygın anlamında ve doğal eşdiziminde kullanılmasını
-şart koşmak. Kullanıcı modelleri karşılaştırdığı için ortak değişkeni
-değiştirmedim; onay bekliyor.
+**1. Hikaye istemi CANLI MODELLE ölçülmedi.** Kod ve derleme sağlam
+(`tsc` temiz, iki uygulama da derleniyor) ama bu makinede `.env` yok,
+yani Gemini/Groq anahtarı olmadan gerçek bir üretim denenemedi.
+Yapılması gereken ölçüm: söz türü belirtilmiş kelimelerle (örneğin
+`compelling` = adjective) birkaç hikaye üretip kelimenin gerçekten o
+türde geçip geçmediğine bakmak. Sorunun çıktığı yer buydu; düzeldiğini
+ancak aynı yerden ölçerek bilebiliriz.
 
-**2. İki uygulamanın tasarımı yeniden ayrıştı.** Bir ara ikisi de
-"editoryal" dile (krem zemin, Playfair, keskin köşe) getirilmişti;
-kullanıcı sonra katmanlı için modern SaaS görünümü istedi (slate/indigo,
-yuvarlak köşe, Inter). Reading hâlâ editoryal. **Bu bilinçli**, hata değil
-— ama reading de aynı dile taşınmak istenirse iş kalemi olarak durur.
+**2. `.env` ve `.claude/launch.json` yerel, ikisi de `.gitignore`'da.**
+`.env` yalnızca arayüzü açabilmek için SAHTE Supabase değerleri
+taşıyor (`supabase.ts` bu iki değişken yoksa modül yüklenirken hata
+fırlatıyor ve React hiç mount olmuyor). Gerçek değerler için
+`.env.example`'a bak. `launch.json` node'un tam yolunu yazıyor çünkü
+bu makinede PATH'te değildi.
 
-**3. Ortak bileşenler iki paleti de görüyor.** `shared/` altındakiler
-`--ink` / `--paper` değişkenlerini kullanıyor; iki uygulama bunları kendi
-`index.css`'inde farklı değerlerle tanımlıyor. Yeni ortak bileşen yazarken
-sabit renk yazma, değişken kullan.
+**3. Kelime kartı silinen kod yok ama bir süs kaldırıldı.** Gösterge
+panelindeki dev "L" filigranı silindi: Playfair'in serif harf biçimi
+köşe süsü olarak çalışıyordu, Inter'e geçince `overflow-hidden`
+tarafından kesilen anlamsız bir dikdörtgene döndü. Geri istenirse
+`Dashboard.tsx`'te yerinde bir yorum duruyor.
 
 ---
 
@@ -179,4 +227,11 @@ Yerleşik yöntemler:
 
 Kontrast ölçerken renkleri canvas ile gerçek RGB'ye çevir; `getComputedStyle`
 modern tarayıcılarda `oklch()` döndürüyor ve elle ayrıştırmak yanlış sonuç
-veriyor.
+veriyor. Canvas'a çizerken **önce `clearRect`, sonra doğrudan `fillRect`**:
+rengi siyah bir zemine çizip okursan saydam zeminler opak siyah görünür ve
+her şey "kontrast 1.18" çıkar. Yarı saydam metni de zemine kendin bindir
+(`fg*a + bg*(1-a)`); zemin için ata zincirinde ilk OPAK arka planı bul.
+
+Bir ölçüm inanılmaz bir sonuç veriyorsa (slate-900 beyaz üzerinde 1.18)
+kodda değil ÖLÇÜMDE hata ara. Bu oturumda ölçüm iki kez yanlış alarm
+verdi: biri yukarıdaki canvas hatası, diğeri geçiş tuzağı (bölüm 3).

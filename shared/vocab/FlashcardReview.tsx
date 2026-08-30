@@ -338,7 +338,7 @@ export const FlashcardReview: React.FC<Props> = ({
               onClick={() => setShowAnswer(true)}
               className="w-full px-4 py-3 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-xl transition cursor-pointer"
             >
-              Cevabı Göster <span className="text-slate-400 font-normal">(boşluk)</span>
+              Cevabı Göster <span className="text-slate-500 font-normal">(boşluk)</span>
             </button>
           ) : (
             <div className="grid grid-cols-2 gap-3">
@@ -368,7 +368,7 @@ export const FlashcardReview: React.FC<Props> = ({
             </div>
           )}
 
-          <p className="text-[10px] text-slate-400 text-center pt-2">
+          <p className="text-[10px] text-slate-500 text-center pt-2">
             Kısayollar: boşluk = göster / Good &nbsp;·&nbsp; 1 = Again &nbsp;·&nbsp; 2 = Good
           </p>
         </div>

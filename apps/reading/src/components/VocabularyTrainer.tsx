@@ -161,28 +161,28 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
     <div id="vocabulary-trainer-container" className="space-y-6">
       
       {/* Mode Switch Controls */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-editorial-border/40 p-6 shadow-xs gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-hairline/40 p-6 shadow-xs gap-4 rounded-xl">
         <div className="space-y-1">
-          <h2 className="text-xl font-serif font-extrabold text-editorial-text flex items-center gap-2">
-            <Sparkles className="h-5.5 w-5.5 text-editorial-accent" /> Pratik ve Gelişim Alanı
+          <h2 className="text-xl font-display font-extrabold text-ink flex items-center gap-2">
+            <Sparkles className="h-5.5 w-5.5 text-accent" /> Pratik ve Gelişim Alanı
           </h2>
-          <p className="text-xs text-editorial-text/50 font-serif italic">Kelime kartlarıyla çalışın ya da bilginizi ölçmek için test alanına geçin.</p>
+          <p className="text-xs text-ink-3 font-display">Kelime kartlarıyla çalışın ya da bilginizi ölçmek için test alanına geçin.</p>
         </div>
 
         {/* Tab Selection */}
-        <div className="flex bg-editorial-bg border border-editorial-border/20 p-1 rounded-none self-stretch sm:self-auto font-mono text-[10px]">
+        <div className="flex bg-paper border border-hairline/20 p-1 rounded-xl self-stretch sm:self-auto font-mono text-[10px]">
           <button
             onClick={() => { setMode('cards'); setTestActive(false); }}
-            className={`px-4 py-2.5 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer rounded-none uppercase tracking-wider ${
-              mode === 'cards' ? 'bg-white text-editorial-text border border-editorial-border/30 shadow-xs' : 'text-editorial-text/50 hover:text-editorial-text'
+            className={`px-4 py-2.5 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer rounded-lg uppercase tracking-wider ${
+              mode === 'cards' ? 'bg-white text-ink border border-hairline/30 shadow-xs rounded-lg' : 'text-ink-3 hover:text-ink'
             }`}
           >
             📇 KELİME KARTLARI
           </button>
           <button
             onClick={() => { setMode('test'); }}
-            className={`px-4 py-2.5 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer rounded-none uppercase tracking-wider ${
-              mode === 'test' ? 'bg-white text-editorial-text border border-editorial-border/30 shadow-xs' : 'text-editorial-text/50 hover:text-editorial-text'
+            className={`px-4 py-2.5 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer rounded-lg uppercase tracking-wider ${
+              mode === 'test' ? 'bg-white text-ink border border-hairline/30 shadow-xs rounded-lg' : 'text-ink-3 hover:text-ink'
             }`}
           >
             ⚡ HIZLI TEST
@@ -191,9 +191,9 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
       </div>
 
       {/* Kelime Kaynağı Seçici */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 bg-white border border-editorial-border/40 p-5 shadow-xs font-mono text-[10px]">
-        <span className="text-editorial-text/60 font-bold uppercase tracking-widest flex items-center gap-1.5">
-          <BookOpen className="h-3.5 w-3.5 text-editorial-accent" />
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 bg-white border border-hairline/40 p-5 shadow-xs font-mono text-[10px] rounded-xl">
+        <span className="text-ink/60 font-bold uppercase tracking-widest flex items-center gap-1.5">
+          <BookOpen className="h-3.5 w-3.5 text-accent" />
           KAYNAK GRUBU:
         </span>
         <div className="flex flex-wrap gap-1">
@@ -208,10 +208,10 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
                 setTrainerSource(src.id as any);
                 setTestActive(false); // Reset active tests to avoid out-of-sync states
               }}
-              className={`px-3 py-1.5 border text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer rounded-none ${
+              className={`px-3 py-1.5 border text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer rounded-full ${
                 trainerSource === src.id
-                  ? 'bg-editorial-accent text-white border-editorial-accent font-bold shadow-xs'
-                  : 'bg-white border-editorial-border/30 text-editorial-text/50 hover:bg-editorial-bg hover:text-editorial-text'
+                  ? 'bg-accent text-white border-accent font-bold shadow-xs'
+                  : 'bg-white border-hairline/30 text-ink-3 hover:bg-paper hover:text-ink'
               }`}
             >
               {src.label}
@@ -225,9 +225,9 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
         <div className="space-y-6">
           
           {/* Filter Controls Row */}
-          <div className="flex flex-wrap items-center justify-between gap-4 bg-editorial-bg border border-editorial-border/30 p-4 rounded-none font-mono text-[10px]">
+          <div className="flex flex-wrap items-center justify-between gap-4 bg-paper border border-hairline/30 p-4 rounded-xl font-mono text-[10px]">
             <div className="flex flex-wrap items-center gap-2 text-xs">
-              <span className="text-editorial-text/50 font-bold uppercase tracking-wider">Kart Filtresi:</span>
+              <span className="text-ink-3 font-bold uppercase tracking-wider">Kart Filtresi:</span>
               <div className="flex flex-wrap gap-1">
                 {[
                   { id: 'all', label: 'TÜMÜ' },
@@ -238,10 +238,10 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
                   <button
                     key={opt.id}
                     onClick={() => setCardFilter(opt.id as any)}
-                    className={`px-3 py-1.5 border text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer rounded-none ${
+                    className={`px-3 py-1.5 border text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer rounded-full ${
                       cardFilter === opt.id
-                        ? 'bg-editorial-text text-white border-editorial-text shadow-xs'
-                        : 'bg-white border-editorial-border/30 text-editorial-text/50 hover:bg-editorial-bg hover:text-editorial-text'
+                        ? 'bg-ink text-white border-ink shadow-xs'
+                        : 'bg-white border-hairline/30 text-ink-3 hover:bg-paper hover:text-ink'
                     }`}
                   >
                     {opt.label}
@@ -250,7 +250,7 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
               </div>
             </div>
 
-            <span className="text-xs font-bold text-editorial-text/60 font-mono uppercase tracking-wider">
+            <span className="text-xs font-bold text-ink/60 font-mono uppercase tracking-wider">
               KART: {filteredWords.length > 0 ? cardIndex + 1 : 0} / {filteredWords.length}
             </span>
           </div>
@@ -262,20 +262,20 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
               {/* Card Surface Frame */}
               <div 
                 onClick={() => setIsFlipped(!isFlipped)}
-                className={`relative w-full max-w-xl h-72 cursor-pointer shadow-xs transition-all duration-500 transform border border-editorial-border/40 bg-white rounded-none ${
-                  isFlipped ? 'rotate-y-180 bg-editorial-bg border-editorial-accent' : 'hover:shadow-md'
+                className={`relative w-full max-w-xl h-72 cursor-pointer shadow-xs transition-all duration-500 transform border border-hairline/40 bg-white rounded-2xl ${
+                  isFlipped ? 'rotate-y-180 bg-paper border-accent' : 'hover:shadow-md'
                 }`}
               >
                 {/* Front Side */}
                 <div className={`absolute inset-0 flex flex-col items-center justify-center p-8 space-y-4 ${
                   isFlipped ? 'opacity-0 pointer-events-none' : 'opacity-100 transition-opacity duration-300'
                 }`}>
-                  <span className="text-[9px] bg-editorial-bg border border-editorial-border/30 text-editorial-text/50 font-bold px-2 py-0.5 font-mono uppercase tracking-widest">{activeCardWord.partOfSpeech}</span>
-                  <h3 className="text-3xl font-serif font-extrabold text-editorial-text tracking-tight">{activeCardWord.term}</h3>
-                  <p className="text-[10px] text-editorial-text/40 font-serif italic">Çevirmek için karta dokunun</p>
+                  <span className="text-[9px] bg-paper border border-hairline/30 text-ink-3 font-bold px-2 py-0.5 font-mono uppercase tracking-widest rounded-lg">{activeCardWord.partOfSpeech}</span>
+                  <h3 className="text-3xl font-display font-extrabold text-ink tracking-tight">{activeCardWord.term}</h3>
+                  <p className="text-[10px] text-ink-3 font-display">Çevirmek için karta dokunun</p>
                   <button
                     onClick={(e) => { e.stopPropagation(); speakWord(activeCardWord.term); }}
-                    className="p-2.5 rounded-none bg-editorial-bg text-editorial-text/40 border border-editorial-border/30 hover:bg-editorial-text hover:text-white transition-colors cursor-pointer"
+                    className="p-2.5 rounded-lg bg-paper text-ink-3 border border-hairline/30 hover:bg-ink hover:text-white transition-colors cursor-pointer"
                   >
                     <Volume2 className="h-5 w-5" />
                   </button>
@@ -286,44 +286,44 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
                   isFlipped ? 'opacity-100 transition-opacity duration-300' : 'opacity-0 pointer-events-none'
                 }`}>
                   <div className="space-y-4 text-center">
-                    <span className="inline-block text-[9px] bg-editorial-bg text-editorial-accent border border-editorial-border/30 font-bold px-2 py-0.5 uppercase font-mono tracking-widest">{activeCardWord.partOfSpeech}</span>
-                    <h3 className="text-2xl font-serif font-extrabold text-editorial-accent">{activeCardWord.term}</h3>
+                    <span className="inline-block text-[9px] bg-paper text-accent border border-hairline/30 font-bold px-2 py-0.5 uppercase font-mono tracking-widest rounded-lg">{activeCardWord.partOfSpeech}</span>
+                    <h3 className="text-2xl font-display font-extrabold text-accent">{activeCardWord.term}</h3>
                     
                     <div className="space-y-2 max-w-md mx-auto">
-                      <p className="text-lg font-bold text-editorial-text bg-editorial-bg p-3.5 border border-editorial-border/20">{activeCardWord.meaning}</p>
+                      <p className="text-lg font-bold text-ink bg-paper p-3.5 border border-hairline/20 rounded-lg">{activeCardWord.meaning}</p>
                       {activeCardWord.definition && (
-                        <p className="text-xs text-editorial-text/60 italic font-serif leading-relaxed">{activeCardWord.definition}</p>
+                        <p className="text-xs text-ink/60 font-display leading-relaxed">{activeCardWord.definition}</p>
                       )}
                       {activeCardWord.exampleSentence && (
-                        <p className="text-xs text-editorial-text/40 font-mono italic pt-1">"{activeCardWord.exampleSentence}"</p>
+                        <p className="text-xs text-ink-3 font-mono italic pt-1">"{activeCardWord.exampleSentence}"</p>
                       )}
                     </div>
                   </div>
 
-                  <p className="text-[9px] text-editorial-text/30 font-mono tracking-wider uppercase text-center">Öğrenildi / Çalışıldı olarak işaretlemek için aşağıdaki butonları kullanabilirsiniz</p>
+                  <p className="text-[9px] text-ink-3 font-mono tracking-wider uppercase text-center">Öğrenildi / Çalışıldı olarak işaretlemek için aşağıdaki butonları kullanabilirsiniz</p>
                 </div>
 
               </div>
 
               {/* Navigation and State Toggle Toolbar */}
-              <div className="flex flex-col sm:flex-row items-center gap-4 w-full max-w-xl justify-between bg-white border border-editorial-border/40 p-4 rounded-none shadow-xs font-mono">
+              <div className="flex flex-col sm:flex-row items-center gap-4 w-full max-w-xl justify-between bg-white border border-hairline/40 p-4 rounded-xl shadow-xs font-mono">
                 
                 {/* Card navigation */}
                 <div className="flex items-center gap-2">
                   <button
                     disabled={cardIndex === 0}
                     onClick={() => { setCardIndex(prev => prev - 1); setIsFlipped(false); }}
-                    className="p-2 bg-white border border-editorial-border/30 hover:bg-editorial-bg text-editorial-text/60 disabled:opacity-30 cursor-pointer"
+                    className="p-2 bg-white border border-hairline/30 hover:bg-paper text-ink/60 disabled:opacity-30 cursor-pointer rounded-lg"
                   >
                     <ChevronLeft className="h-5 w-5" />
                   </button>
-                  <span className="text-xs font-bold text-editorial-text/50">
+                  <span className="text-xs font-bold text-ink-3">
                     {cardIndex + 1} / {filteredWords.length}
                   </span>
                   <button
                     disabled={cardIndex === filteredWords.length - 1}
                     onClick={() => { setCardIndex(prev => prev + 1); setIsFlipped(false); }}
-                    className="p-2 bg-white border border-editorial-border/30 hover:bg-editorial-bg text-editorial-text/60 disabled:opacity-30 cursor-pointer"
+                    className="p-2 bg-white border border-hairline/30 hover:bg-paper text-ink/60 disabled:opacity-30 cursor-pointer rounded-lg"
                   >
                     <ChevronRight className="h-5 w-5" />
                   </button>
@@ -342,10 +342,10 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
                       <button
                         key={btn.id}
                         onClick={() => onWordStatusChange(activeCardWord.term, btn.id as any)}
-                        className={`px-4 py-2 border text-[10px] uppercase tracking-wider font-bold transition-all flex items-center gap-1.5 cursor-pointer rounded-none ${
+                        className={`px-4 py-2 border text-[10px] uppercase tracking-wider font-bold transition-all flex items-center gap-1.5 cursor-pointer rounded-lg ${
                           isCurrent
                             ? btn.id === 'studied' ? 'bg-amber-500 text-white border-amber-500 font-bold' : 'bg-emerald-600 text-white border-emerald-700 font-bold shadow-xs'
-                            : 'bg-white hover:bg-editorial-bg text-editorial-text/40 border-editorial-border/30'
+                            : 'bg-white hover:bg-paper text-ink-3 border-hairline/30'
                         }`}
                       >
                         {isCurrent && <CheckCircle2 className="h-3.5 w-3.5" />}
@@ -359,10 +359,10 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
 
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center p-16 bg-white border border-editorial-border/40 text-center">
-              <BookOpen className="h-12 w-12 text-editorial-text/20 mb-2" />
-              <p className="text-base font-serif font-bold text-editorial-text">Bu çalışma durumuna uygun kelime bulunamadı.</p>
-              <p className="text-xs text-editorial-text/50 mt-1 max-w-sm font-serif italic">
+            <div className="flex flex-col items-center justify-center p-16 bg-white border border-hairline/40 text-center rounded-2xl">
+              <BookOpen className="h-12 w-12 text-ink/20 mb-2" />
+              <p className="text-base font-display font-bold text-ink">Bu çalışma durumuna uygun kelime bulunamadı.</p>
+              <p className="text-xs text-ink-3 mt-1 max-w-sm font-display">
                 Farklı bir filtre seçerek kelime kartlarını listeleyebilirsiniz.
               </p>
             </div>
@@ -371,21 +371,21 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
         </div>
       ) : (
         // Practice Test Mode
-        <div className="bg-white border border-editorial-border/40 p-6 shadow-xs space-y-6">
+        <div className="bg-white border border-hairline/40 p-6 shadow-xs space-y-6 rounded-xl">
           {!testActive ? (
             <div className="flex flex-col items-center justify-center text-center p-12 space-y-5">
-              <div className="flex h-16 w-14 items-center justify-center border border-editorial-border/30 bg-editorial-bg text-editorial-text/60">
+              <div className="flex h-16 w-14 items-center justify-center border border-hairline/30 bg-paper text-ink/60 rounded-lg">
                 <HelpCircle className="h-8 w-8" />
               </div>
               <div className="space-y-1">
-                <h3 className="text-lg font-serif font-extrabold text-editorial-text">Dynamic Vocabulary Challenge</h3>
-                <p className="text-xs text-editorial-text/50 font-serif italic max-w-md leading-relaxed">
+                <h3 className="text-lg font-display font-extrabold text-ink">Dynamic Vocabulary Challenge</h3>
+                <p className="text-xs text-ink-3 font-display max-w-md leading-relaxed">
                   Tüm okuma parçalarından rastgele seçilen 10 kelimelik bir pratik quizi oluşturun. Yanıtlarınız kelime durumunu doğrudan günceller!
                 </p>
               </div>
               <button
                 onClick={generateTest}
-                className="px-6 py-3 bg-editorial-accent hover:bg-white hover:text-editorial-text border border-editorial-accent text-white font-bold text-xs uppercase tracking-widest transition-all cursor-pointer font-mono"
+                className="px-6 py-3 bg-accent hover:bg-white hover:text-ink border border-accent text-white font-bold text-xs uppercase tracking-widest transition-all cursor-pointer font-mono rounded-lg"
               >
                 Testi Başlat
               </button>
@@ -394,15 +394,15 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
             <div className="space-y-6">
               
               {/* Test Header */}
-              <div className="flex justify-between items-center border-b border-editorial-border/20 pb-4">
-                <span className="text-[10px] font-bold text-editorial-text/40 uppercase tracking-widest font-mono">
+              <div className="flex justify-between items-center border-b border-hairline/20 pb-4">
+                <span className="text-[10px] font-bold text-ink-3 uppercase tracking-widest font-mono">
                   Soru {currentTestIndex + 1} / {testQuestions.length}
                 </span>
                 
                 {/* Progress Mini Bar */}
-                <div className="h-1.5 w-32 bg-editorial-bg border border-editorial-border/20 overflow-hidden">
+                <div className="h-1.5 w-32 bg-paper border border-hairline/20 overflow-hidden rounded-lg">
                   <div 
-                    className="h-full bg-editorial-accent transition-all" 
+                    className="h-full bg-accent transition-all" 
                     style={{ width: `${((currentTestIndex + (testSubmitted ? 1 : 0)) / testQuestions.length) * 100}%` }} 
                   />
                 </div>
@@ -410,7 +410,7 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
 
               {/* Single Question Frame */}
               <div className="space-y-4">
-                <h3 className="text-lg sm:text-xl font-serif font-extrabold text-editorial-text leading-relaxed">
+                <h3 className="text-lg sm:text-xl font-display font-extrabold text-ink leading-relaxed">
                   {testQuestions[currentTestIndex].questionText}
                 </h3>
 
@@ -420,17 +420,17 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
                     const isSelected = testAnswers[currentTestIndex] === option;
                     const isCorrectOption = option === testQuestions[currentTestIndex].correctAnswer;
 
-                    let buttonStyle = 'bg-white border-editorial-border/30 text-editorial-text hover:bg-editorial-bg hover:border-editorial-accent';
+                    let buttonStyle = 'bg-white border-hairline/30 text-ink hover:bg-paper hover:border-accent';
                     
                     if (isSelected && !testSubmitted) {
-                      buttonStyle = 'bg-editorial-bg border-editorial-accent text-editorial-text font-bold';
+                      buttonStyle = 'bg-paper border-accent text-ink font-bold';
                     } else if (testSubmitted) {
                       if (isCorrectOption) {
                         buttonStyle = 'bg-emerald-50 border-emerald-500 text-emerald-950 font-bold';
                       } else if (isSelected) {
                         buttonStyle = 'bg-rose-50 border-rose-500 text-rose-950';
                       } else {
-                        buttonStyle = 'bg-white border-editorial-border/20 text-editorial-text/30 opacity-60';
+                        buttonStyle = 'bg-white border-hairline/20 text-ink/30 opacity-60';
                       }
                     }
 
@@ -439,7 +439,7 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
                         key={option}
                         disabled={testSubmitted}
                         onClick={() => handleSelectTestOption(option)}
-                        className={`w-full text-left p-4 border text-xs sm:text-sm transition-all flex justify-between items-center cursor-pointer rounded-none ${buttonStyle}`}
+                        className={`w-full text-left p-4 border text-xs sm:text-sm transition-all flex justify-between items-center cursor-pointer rounded-xl ${buttonStyle}`}
                       >
                         <span>{option}</span>
                         {testSubmitted && isCorrectOption && (
@@ -452,17 +452,17 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
               </div>
 
               {/* Footer controls inside quiz */}
-              <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 border-t border-editorial-border/20">
+              <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 border-t border-hairline/20">
                 {testSubmitted ? (
                   <div className="text-xs">
-                    <p className="text-editorial-text/40 font-bold uppercase tracking-wider font-mono">Test Tamamlandı</p>
-                    <p className="text-sm font-bold text-editorial-text">
+                    <p className="text-ink-3 font-bold uppercase tracking-wider font-mono">Test Tamamlandı</p>
+                    <p className="text-sm font-bold text-ink">
                       Doğru Yanıt:{' '}
                       <span className="text-emerald-700 font-mono text-base font-extrabold">{testScore} / {testQuestions.length}</span>
                     </p>
                   </div>
                 ) : (
-                  <span className="text-xs text-editorial-text/50 font-serif italic">Doğru bilinen kelimeler otomatik olarak 'Öğrenildi' durumuna yükseltilir.</span>
+                  <span className="text-xs text-ink-3 font-display">Doğru bilinen kelimeler otomatik olarak 'Öğrenildi' durumuna yükseltilir.</span>
                 )}
 
                 <div className="flex gap-2 w-full sm:w-auto">
@@ -470,13 +470,13 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
                     <>
                       <button
                         onClick={() => setTestActive(false)}
-                        className="flex-1 sm:flex-none px-5 py-2.5 border border-editorial-border/30 bg-white hover:bg-editorial-bg text-editorial-text/60 font-bold text-xs rounded-none transition-colors uppercase font-mono tracking-wider cursor-pointer"
+                        className="flex-1 sm:flex-none px-5 py-2.5 border border-hairline/30 bg-white hover:bg-paper text-ink/60 font-bold text-xs rounded-lg transition-colors uppercase font-mono tracking-wider cursor-pointer"
                       >
                         Kapat
                       </button>
                       <button
                         onClick={generateTest}
-                        className="flex-1 sm:flex-none px-5 py-2.5 bg-editorial-accent hover:bg-white hover:text-editorial-text border border-editorial-accent text-white font-bold text-xs rounded-none transition-colors uppercase font-mono tracking-wider cursor-pointer"
+                        className="flex-1 sm:flex-none px-5 py-2.5 bg-accent hover:bg-white hover:text-ink border border-accent text-white font-bold text-xs rounded-lg transition-colors uppercase font-mono tracking-wider cursor-pointer"
                       >
                         Yeni Test
                       </button>
@@ -485,7 +485,7 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
                     <button
                       disabled={!testAnswers[currentTestIndex]}
                       onClick={nextTestQuestion}
-                      className="w-full sm:w-auto px-5 py-2.5 bg-editorial-accent hover:bg-white hover:text-editorial-text border border-editorial-accent text-white font-bold text-xs rounded-none disabled:bg-editorial-bg disabled:text-editorial-text/30 disabled:border-editorial-border/20 transition-colors shadow-xs flex items-center justify-center gap-1 font-mono uppercase tracking-wider cursor-pointer"
+                      className="w-full sm:w-auto px-5 py-2.5 bg-accent hover:bg-white hover:text-ink border border-accent text-white font-bold text-xs rounded-lg disabled:bg-paper disabled:text-ink/30 disabled:border-hairline/20 transition-colors shadow-xs flex items-center justify-center gap-1 font-mono uppercase tracking-wider cursor-pointer"
                     >
                       {currentTestIndex === testQuestions.length - 1 ? 'Testi Bitir' : 'Sonraki Soru'}
                       <ChevronRight className="h-4 w-4" />

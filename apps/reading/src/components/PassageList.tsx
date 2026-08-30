@@ -63,25 +63,25 @@ export default function PassageList({ passages, progress, onSelectPassage, onTog
     <div id="passage-list-container" className="space-y-8">
       
       {/* Header and Filter Controls */}
-      <div className="flex flex-col lg:flex-row gap-6 justify-between items-start lg:items-center bg-white border border-editorial-border/40 p-8 shadow-xs">
+      <div className="flex flex-col lg:flex-row gap-6 justify-between items-start lg:items-center bg-white border border-hairline/40 p-8 shadow-xs rounded-xl">
         <div className="space-y-1.5">
-          <h2 className="text-2xl font-serif font-extrabold text-editorial-text flex items-center gap-2">
+          <h2 className="text-2xl font-display font-extrabold text-ink flex items-center gap-2">
             Müfredat Okuma Parçaları Kütüphanesi
           </h2>
-          <p className="text-xs text-editorial-text/50 font-serif italic">
+          <p className="text-xs text-ink-3 font-display">
             YDS, YÖKDİL ve YKS-DİL çalışma programınızdaki orijinal okuma parçaları ve kelimeler.
           </p>
         </div>
         
         {/* Search Input */}
         <div className="relative w-full lg:w-80">
-          <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-editorial-text/40" />
+          <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-ink-3" />
           <input
             type="text"
             placeholder="Başlık, tema veya kelimelerde ara..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 border border-editorial-border/30 bg-editorial-bg focus:bg-white focus:outline-hidden focus:border-editorial-accent transition-all font-sans text-xs sm:text-sm text-editorial-text"
+            className="w-full pl-10 pr-4 py-2.5 border border-hairline/30 bg-paper focus:bg-white focus:outline-hidden focus:border-accent transition-all font-sans text-xs sm:text-sm text-ink rounded-lg"
           />
         </div>
       </div>
@@ -90,15 +90,15 @@ export default function PassageList({ passages, progress, onSelectPassage, onTog
       <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between">
         
         {/* CEFR Level Filters */}
-        <div className="flex flex-wrap gap-1 bg-editorial-bg p-1 border border-editorial-border/30">
+        <div className="flex flex-wrap gap-1 bg-paper p-1 border border-hairline/30 rounded-lg">
           {['All', 'A1', 'A2', 'B1', 'B2', 'C1'].map(level => (
             <button
               key={level}
               onClick={() => setLevelFilter(level)}
               className={`px-3.5 py-2 text-[10px] font-bold tracking-wide transition-all cursor-pointer font-mono ${
                 levelFilter === level
-                  ? 'bg-editorial-accent text-white font-bold'
-                  : 'text-editorial-text/60 hover:text-editorial-text hover:bg-white/50'
+                  ? 'bg-accent text-white font-bold'
+                  : 'text-ink/60 hover:text-ink hover:bg-white/50'
               }`}
             >
               {level === 'All' ? 'TÜM SEVİYELER' : level}
@@ -107,7 +107,7 @@ export default function PassageList({ passages, progress, onSelectPassage, onTog
         </div>
 
         {/* Completion Status Filters */}
-        <div className="flex flex-wrap gap-1 bg-editorial-bg p-1 border border-editorial-border/30">
+        <div className="flex flex-wrap gap-1 bg-paper p-1 border border-hairline/30 rounded-lg">
           {[
             { id: 'All', label: 'TÜM PARÇALAR' },
             { id: 'Remaining', label: 'ÇALIŞILACAKLAR' },
@@ -118,8 +118,8 @@ export default function PassageList({ passages, progress, onSelectPassage, onTog
               onClick={() => setStatusFilter(status.id)}
               className={`px-3.5 py-2 text-[10px] font-bold tracking-wide transition-all cursor-pointer font-mono ${
                 statusFilter === status.id
-                  ? 'bg-editorial-accent text-white font-bold'
-                  : 'text-editorial-text/60 hover:text-editorial-text hover:bg-white/50'
+                  ? 'bg-accent text-white font-bold'
+                  : 'text-ink/60 hover:text-ink hover:bg-white/50'
               }`}
             >
               {status.label}
@@ -155,27 +155,27 @@ export default function PassageList({ passages, progress, onSelectPassage, onTog
             // Badges color coding matching editorial styles
             let cefrBadgeStyle = '';
             if (p.cefr === 'A1' || p.cefr === 'A2') {
-              cefrBadgeStyle = 'bg-[#E1F5FE] text-[#01579B]';
+              cefrBadgeStyle = 'bg-sky-50 text-sky-700';
             } else if (p.cefr === 'B1' || p.cefr === 'B2') {
-              cefrBadgeStyle = 'bg-[#FFF3E0] text-[#E65100]';
+              cefrBadgeStyle = 'bg-amber-50 text-amber-800';
             } else {
-              cefrBadgeStyle = 'bg-[#F3E5F5] text-[#4A148C]';
+              cefrBadgeStyle = 'bg-violet-50 text-violet-800';
             }
 
             return (
               <div
                 key={p.id}
-                className={`group flex flex-col justify-between border p-6 transition-all duration-300 bg-white hover:shadow-md ${
+                className={`group flex flex-col justify-between border p-6 transition-all duration-300 bg-white hover:shadow-md rounded-xl ${
                   isCompleted 
                     ? 'border-emerald-600/40 bg-emerald-50/5 hover:border-emerald-600' 
-                    : 'border-editorial-border/40 hover:border-editorial-accent'
+                    : 'border-hairline/40 hover:border-accent'
                 }`}
               >
                 <div>
                   {/* Header Row */}
                   <div className="flex justify-between items-center mb-4">
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-extrabold font-mono text-editorial-text/40">
+                      <span className="text-[10px] font-extrabold font-mono text-ink-3">
                         #{String(p.id).padStart(3, '0')}
                       </span>
                       <span className={`px-2 py-0.5 text-[9px] font-bold font-mono tracking-wider uppercase rounded-xs ${cefrBadgeStyle}`}>
@@ -188,13 +188,13 @@ export default function PassageList({ passages, progress, onSelectPassage, onTog
                           e.stopPropagation();
                           onToggleFavorite(p.id);
                         }}
-                        className="p-1 rounded-xs hover:bg-editorial-bg transition-colors group/fav"
+                        className="p-1 rounded-xs hover:bg-paper transition-colors group/fav"
                         title={isFavorite ? "Favorilerden Çıkar" : "Favorilere Ekle"}
                       >
                         <Star className={`h-4.5 w-4.5 transition-all ${
                           isFavorite 
                             ? 'text-amber-500 fill-amber-400 scale-110' 
-                            : 'text-editorial-text/30 hover:text-amber-500 group-hover/fav:scale-110'
+                            : 'text-ink/30 hover:text-amber-500 group-hover/fav:scale-110'
                         }`} />
                       </button>
                       {isCompleted ? (
@@ -207,7 +207,7 @@ export default function PassageList({ passages, progress, onSelectPassage, onTog
                         </span>
                       ) : !p.isLoaded ? (
                         <span className="flex items-center gap-1 text-[8px] text-amber-800 bg-amber-50 border border-amber-200/50 font-bold px-1.5 py-0.5 uppercase tracking-wider rounded-xs" title="Google Search destekli Yapay Zeka ile orijinal kitaptan yüklenecektir">
-                          <Sparkles className="h-2.5 w-2.5 text-amber-600 animate-pulse" /> AI-YÜKLE
+                          <Sparkles className="h-2.5 w-2.5 text-amber-700 animate-pulse" /> AI-YÜKLE
                         </span>
                       ) : (
                         <span className="flex items-center gap-1 text-[8px] text-sky-800 bg-sky-50 border border-sky-200/50 font-bold px-1.5 py-0.5 uppercase tracking-wider rounded-xs">
@@ -219,21 +219,21 @@ export default function PassageList({ passages, progress, onSelectPassage, onTog
 
                   {/* Title & Theme */}
                   <div className="space-y-1">
-                    <h4 className="text-lg font-serif font-extrabold text-editorial-text leading-snug group-hover:text-editorial-accent transition-colors line-clamp-2 min-h-[3.5rem]">
+                    <h4 className="text-lg font-display font-extrabold text-ink leading-snug group-hover:text-accent transition-colors line-clamp-2 min-h-[3.5rem]">
                       {p.title}
                     </h4>
-                    <p className="text-[9px] text-editorial-accent/70 font-bold uppercase tracking-widest font-mono">
+                    <p className="text-[9px] text-accent font-bold uppercase tracking-widest font-mono">
                       📚 {p.theme}
                     </p>
                   </div>
 
                   {/* Snippet */}
-                  <p className="text-editorial-text/70 text-xs mt-3.5 line-clamp-2 leading-relaxed font-serif">
+                  <p className="text-ink/70 text-xs mt-3.5 line-clamp-2 leading-relaxed font-display">
                     {p.paragraphs[0]}
                   </p>
 
                   {/* Metrics Row */}
-                  <div className="grid grid-cols-2 gap-2 mt-4.5 pt-3.5 border-t border-editorial-border/20 text-[9px] text-editorial-text/40 font-bold tracking-wide uppercase">
+                  <div className="grid grid-cols-2 gap-2 mt-4.5 pt-3.5 border-t border-hairline/20 text-[9px] text-ink-3 font-bold tracking-wide uppercase">
                     <div className="flex items-center gap-1.5">
                       <BookOpen className="h-3.5 w-3.5 opacity-60" />
                       <span>{p.vocabulary.length} KELİME</span>
@@ -245,12 +245,12 @@ export default function PassageList({ passages, progress, onSelectPassage, onTog
                 </div>
 
                 {/* Bottom Action Section */}
-                <div className="mt-6 pt-4 border-t border-editorial-border/20 flex items-center justify-between">
+                <div className="mt-6 pt-4 border-t border-hairline/20 flex items-center justify-between">
                   {scoreDetail || exerciseDetail || hasActivity ? (
                     <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs">
                       {scoreDetail && (
                         <span>
-                          <span className="text-editorial-text/40 font-bold tracking-wider text-[8px] uppercase">TEST:</span>{' '}
+                          <span className="text-ink-3 font-bold tracking-wider text-[8px] uppercase">TEST:</span>{' '}
                           <span className="font-bold font-mono text-xs text-emerald-800">
                             {scoreDetail.score}/{scoreDetail.total}
                           </span>
@@ -258,7 +258,7 @@ export default function PassageList({ passages, progress, onSelectPassage, onTog
                       )}
                       {exerciseDetail && (
                         <span>
-                          <span className="text-editorial-text/40 font-bold tracking-wider text-[8px] uppercase">ALIŞTIRMA:</span>{' '}
+                          <span className="text-ink-3 font-bold tracking-wider text-[8px] uppercase">ALIŞTIRMA:</span>{' '}
                           <span className="font-bold font-mono text-xs text-amber-700">
                             {exerciseDetail.score}/{exerciseDetail.total}
                           </span>
@@ -271,14 +271,14 @@ export default function PassageList({ passages, progress, onSelectPassage, onTog
                       )}
                     </div>
                   ) : (
-                    <span className="text-[10px] text-editorial-text/40 font-mono uppercase tracking-wider">
+                    <span className="text-[10px] text-ink-3 font-mono uppercase tracking-wider">
                       ⏳ ÇALIŞILMADI
                     </span>
                   )}
 
                   <button
                     onClick={() => onSelectPassage(p.id)}
-                    className="px-4 py-2 text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer font-mono uppercase tracking-wider bg-editorial-accent text-white border border-editorial-accent hover:bg-white hover:text-editorial-text"
+                    className="px-4 py-2 text-xs font-bold transition-all duration-300 flex items-center gap-1.5 cursor-pointer font-mono uppercase tracking-wider bg-accent text-white border border-accent hover:bg-white hover:text-ink rounded-lg"
                   >
                     <FileText className="h-3.5 w-3.5" />
                     {isCompleted ? 'TEKRAR ÇALIŞ' : 'OKUMAYA BAŞLA'}
@@ -290,10 +290,10 @@ export default function PassageList({ passages, progress, onSelectPassage, onTog
           })}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center p-16 bg-white border border-editorial-border/40 text-center">
-          <BookOpen className="h-12 w-12 text-editorial-text/20 mb-3" />
-          <p className="text-base font-serif font-bold text-editorial-text">Hiç okuma parçası bulunamadı.</p>
-          <p className="text-xs text-editorial-text/50 max-w-sm mt-1 font-serif italic">
+        <div className="flex flex-col items-center justify-center p-16 bg-white border border-hairline/40 text-center rounded-2xl">
+          <BookOpen className="h-12 w-12 text-ink/20 mb-3" />
+          <p className="text-base font-display font-bold text-ink">Hiç okuma parçası bulunamadı.</p>
+          <p className="text-xs text-ink-3 max-w-sm mt-1 font-display">
             Seçtiğiniz filtreleri veya arama kriterlerini değiştirerek tekrar aramayı deneyebilirsiniz.
           </p>
           <button
@@ -302,7 +302,7 @@ export default function PassageList({ passages, progress, onSelectPassage, onTog
               setLevelFilter('All');
               setStatusFilter('All');
             }}
-            className="mt-5 px-5 py-2 bg-editorial-accent text-white text-xs font-bold hover:bg-white hover:text-editorial-text border border-editorial-accent transition-colors cursor-pointer"
+            className="mt-5 px-5 py-2 bg-accent text-white text-xs font-bold hover:bg-white hover:text-ink border border-accent transition-colors cursor-pointer rounded-lg"
           >
             Filtreleri Temizle
           </button>
