@@ -1,9 +1,14 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { PRESET_LESSONS } from './data/presetLessons';
 import { VideoLesson, UserProgress, VocabularyItem, GrammarRuleItem, QuizQuestion, MistakeEntry } from './types';
-import { Header } from './components/Header';
-import { LessonSelector } from './components/LessonSelector';
-import { LayerNavigation, LAYER_TABS, CORE_LAYER_COUNT } from './components/LayerNavigation';
+import { TopBar } from './components/shell/TopBar';
+import { GoalEditorModal } from './components/shell/GoalEditorModal';
+import { LessonPickerModal } from './components/shell/LessonPickerModal';
+import { LayerHeaderBar } from './components/shell/LayerHeaderBar';
+import { NextLayerBar } from './components/shell/NextLayerBar';
+import {
+  LayerSidebar, CORE_LAYERS, LAYER_TABS, CORE_LAYER_COUNT, findLayer,
+} from './components/shell/LayerSidebar';
 import { Layer1BilingualReading } from './components/layers/Layer1BilingualReading';
 import { Layer2ActiveListening } from './components/layers/Layer2ActiveListening';
 import { Layer3Shadowing } from './components/layers/Layer3Shadowing';
@@ -27,6 +32,7 @@ import { SettingsModal } from './components/SettingsModal';
 import { extractYouTubeId } from './lib/youtube';
 import { apiFetch } from './lib/userKeys';
 import { stampLocalChange, scheduleAutoSync, syncOnStartup, onSynced } from './lib/syncClient';
+import { PlayCircle } from 'lucide-react';
 import AppSwitcher from './AppSwitcher';
 
 // Sürüm anahtarı: eski kayıtlarda bozuk/eksik zaman damgaları vardı.
@@ -136,6 +142,12 @@ export default function App() {
   const [isGrammarCoachOpen, setIsGrammarCoachOpen] = useState<boolean>(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const [editingLesson, setEditingLesson] = useState<VideoLesson | null>(null);
+  /** Dar ekranda katman cekmecesi; genis ekranda sidebar zaten acik. */
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+  /** Ders listesi artik sayfada degil, bu pencerede. */
+  const [isLessonPickerOpen, setIsLessonPickerOpen] = useState<boolean>(false);
+  /** Hedef ve seri duzenleyicisi ust cubuktan aciliyor. */
+  const [isGoalEditorOpen, setIsGoalEditorOpen] = useState<boolean>(false);
 
   // Dersleri sakla ve degistiyse Supabase'e gonder
   usePersistedSync(LESSONS_STORAGE_KEY, lessons);
@@ -701,70 +713,102 @@ async function buildLessonData(
     setMistakes([]);
   };
 
+  /* --- Kabuk turetilmis degerleri ---
+     Aktif katmanin basligi, kacinci adim oldugu ve sirasindaki katman.
+     Ust bilgi bari ve alt aksiyon bari bunlari kullaniyor. */
+  const activeItem = findLayer(activeLayer);
+  const coreIndex = CORE_LAYERS.findIndex((l) => l.id === activeLayer);
+  const isCoreLayer = coreIndex >= 0;
+  const nextCore = isCoreLayer ? CORE_LAYERS[coreIndex + 1] : undefined;
+  const completedLayers = activeLesson ? activeLesson.completedLayers : [];
+  const isActiveLayerDone = completedLayers.includes(activeLayer);
+
   return (
     <div className="min-h-screen bg-[var(--paper)] text-[var(--ink)] flex flex-col">
 
       <AppSwitcher active="katmanli" />
 
-      {/* Top Header */}
-      <Header
+      <TopBar
         progress={displayProgress}
-        onUpdateProgress={handleUpdateProgress}
+        activeLesson={activeLesson ?? null}
+        onOpenSidebar={() => setIsSidebarOpen(true)}
+        onOpenLessonPicker={() => setIsLessonPickerOpen(true)}
         onOpenGuide={() => setIsGuideOpen(true)}
         onOpenGrammarCoach={() => setIsGrammarCoachOpen(true)}
         onOpenSettings={() => setIsSettingsOpen(true)}
         onOpenReport={() => setActiveLayer(12)}
         isReportActive={activeLayer === 12}
+        onEditGoals={() => setIsGoalEditorOpen(true)}
       />
 
-      {/* Main Content Workspace */}
-      <main className="flex-1 w-full">
-        <div className="max-w-[1400px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-5">
-        <LessonSelector
-          lessons={lessons}
-          activeLesson={activeLesson}
-          onSelectLesson={(lesson) => {
-            setActiveLessonId(lesson.id);
-            setActiveLayer(1);
-          }}
-          onImportCustomLesson={handleImportCustomLesson}
-          onDeleteLesson={handleDeleteLesson}
-          onEditLesson={(lesson) => setEditingLesson(lesson)}
-          onRestorePresetLessons={handleRestorePresetLessons}
-        />
-        </div>
+      {/* Calisma alani: solda dikey adim listesi, ortada tek odak.
+          Ders secici artik burada degil - ust cubuktaki hapin actigi
+          pencerede. */}
+      <div className="flex flex-1 w-full">
 
-        <LayerNavigation
+        <LayerSidebar
           activeLayer={activeLayer}
           onSelectLayer={setActiveLayer}
-          completedLayers={activeLesson ? activeLesson.completedLayers : []}
+          completedLayers={completedLayers}
+          hasLesson={!!activeLesson}
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
         />
 
-        <div className="min-h-[500px] max-w-[1400px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main className="min-w-0 flex-1">
+          <div className="min-h-[500px] max-w-[1180px] w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
           {!activeLesson &&
           activeLayer !== 9 &&
           activeLayer !== 10 &&
           activeLayer !== 11 &&
           activeLayer !== 12 ? (
-            <div className="max-w-md mx-auto my-16 text-center space-y-4">
-              <p className="eyebrow">Başlangıç</p>
-              <h3 className="font-display text-2xl text-[var(--ink)]">
-                Bir <em className="italic font-light">ders</em> ekleyin
+            <div className="max-w-md mx-auto my-20 text-center space-y-4">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-indigo-100 bg-indigo-50">
+                <PlayCircle className="h-5 w-5 text-indigo-600" />
+              </div>
+              <h3 className="text-xl font-semibold tracking-tight text-slate-900">
+                Bir ders seç ya da ekle
               </h3>
-              <p className="text-sm text-[var(--ink-2)] leading-relaxed">
-                Yukarıdan bir YouTube linki verin; altyazı çekilip cümlelere bölünür ve
-                yedi katmanlı çalışma başlar. Dilerseniz örnek derslerle de deneyebilirsiniz.
+              <p className="text-sm leading-relaxed text-slate-500">
+                Bir YouTube linki ver; altyazı çekilip cümlelere bölünür ve yedi
+                katmanlı çalışma başlar. Dilersen örnek derslerle de deneyebilirsin.
               </p>
-              <button
-                type="button"
-                onClick={handleRestorePresetLessons}
-                className="h-10 px-5 rounded-[10px] border border-[var(--hairline)] text-[var(--ink)] text-xs font-medium hover:border-[var(--ink)] transition-colors cursor-pointer inline-flex items-center justify-center"
-              >
-                Örnek dersleri yükle
-              </button>
+              <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setIsLessonPickerOpen(true)}
+                  className="inline-flex h-10 items-center gap-2 rounded-xl bg-indigo-600 px-4
+                    text-[13px] font-medium text-white shadow-sm
+                    transition-all duration-200 ease-in-out hover:bg-indigo-700 cursor-pointer"
+                >
+                  <PlayCircle className="h-4 w-4" />
+                  Ders seç veya ekle
+                </button>
+                <button
+                  type="button"
+                  onClick={handleRestorePresetLessons}
+                  className="inline-flex h-10 items-center rounded-xl border border-slate-200
+                    bg-white px-4 text-[13px] font-medium text-slate-700
+                    transition-colors hover:border-slate-300 hover:text-slate-900 cursor-pointer"
+                >
+                  Örnek dersleri yükle
+                </button>
+              </div>
             </div>
           ) : (
             <>
+              {/* Aktif katmanin basligi: sol liste dar ekranda gizli
+                  oldugu icin calisma alani kendini tanitmali. */}
+              {activeItem && (
+                <LayerHeaderBar
+                  step={isCoreLayer ? coreIndex + 1 : null}
+                  title={activeItem.label}
+                  subtitle={activeItem.subLabel}
+                  icon={activeItem.icon}
+                  isCompleted={isActiveLayerDone}
+                />
+              )}
+
               {activeLayer === 1 && activeLesson && (
                 <Layer1BilingualReading
                   lesson={activeLesson}
@@ -863,12 +907,30 @@ async function buildLessonData(
               {activeLayer === 12 && <Dashboard />}
             </>
           )}
-        </div>
-      </main>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-900 bg-slate-950 py-4 text-center text-xs text-slate-500">
-        <p>Katmanlı Çalışma (Layered Learning) Metodolojisi &bull; Gemini AI Studio Dil Koçu</p>
+          {/* Alt sabit aksiyon bari. Yalnizca cekirdek katmanlarda:
+              araclarin (kelime kartlari, pano) "tamamlanmasi" diye bir
+              sey yok, orada bar yaniltici olurdu. */}
+          {isCoreLayer && activeLesson && (
+            <NextLayerBar
+              step={coreIndex + 1}
+              totalSteps={CORE_LAYERS.length}
+              isCompleted={isActiveLayerDone}
+              nextLabel={nextCore ? nextCore.label : null}
+              onComplete={() => handleCompleteLayer(activeLayer)}
+              onGoNext={() => nextCore && setActiveLayer(nextCore.id)}
+            />
+          )}
+          </div>
+        </main>
+      </div>
+
+      {/* Alt bilgi. Eskiden koyu bir serit halindeydi ve uzerindeki
+          yazi ayni koyulukta oldugu icin okunmuyordu (kontrast orani
+          1.0). Ayrica sayfanin en dikkat cekici ogesi oydu; oysa
+          soyledigi sey bir imza. */}
+      <footer className="border-t border-slate-200 py-5 text-center text-[11px] text-slate-500">
+        <p>Katmanlı Çalışma (Layered Learning) Metodolojisi</p>
       </footer>
 
       {/* Modals & Drawers */}
@@ -893,6 +955,28 @@ async function buildLessonData(
       <SettingsModal
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
+      />
+
+      <LessonPickerModal
+        isOpen={isLessonPickerOpen}
+        onClose={() => setIsLessonPickerOpen(false)}
+        lessons={lessons}
+        activeLesson={activeLesson ?? null}
+        onSelectLesson={(lesson) => {
+          setActiveLessonId(lesson.id);
+          setActiveLayer(1);
+        }}
+        onImportCustomLesson={handleImportCustomLesson}
+        onDeleteLesson={handleDeleteLesson}
+        onEditLesson={(lesson) => setEditingLesson(lesson)}
+        onRestorePresetLessons={handleRestorePresetLessons}
+      />
+
+      <GoalEditorModal
+        isOpen={isGoalEditorOpen}
+        onClose={() => setIsGoalEditorOpen(false)}
+        progress={displayProgress}
+        onUpdateProgress={handleUpdateProgress}
       />
     </div>
   );

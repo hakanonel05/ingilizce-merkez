@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { VideoLesson } from '../../types';
 import { extractYouTubeId } from '../../lib/youtube';
 import { useYouTubePlayer, formatSeconds } from '../../lib/useYouTubePlayer';
-import { CheckCircle, Headphones, Play, Pause, Eye, EyeOff } from 'lucide-react';
+import { Headphones, Play, Pause, Eye, EyeOff } from 'lucide-react';
 
 interface Props {
   lesson: VideoLesson;
@@ -110,17 +110,6 @@ export const Layer5AudioOnly: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
           </div>
         </div>
       )}
-
-      <div className="flex justify-end pt-2">
-        <button
-          type="button"
-          onClick={onCompleteLayer}
-          className="flex items-center space-x-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-sm cursor-pointer"
-        >
-          <CheckCircle className="w-4 h-4" />
-          <span>5. Katmanı Tamamladım, 6. Katmana Geç</span>
-        </button>
-      </div>
     </div>
   );
 };

@@ -8,68 +8,71 @@
 @source "../../../shared";
 
 /* =====================================================================
-   KATMANLI İNGİLİZCE — EDİTORYAL TASARIM
+   KATMANLI İNGİLİZCE — TASARIM SİSTEMİ
 
-   Bu sayfa artık Reading tarafıyla AYNI tasarım dilini kullanıyor.
-   İki uygulama tek bir siteden açılıyor, aralarında sürekli geçiş
-   yapılıyor ve kelime kartları ortak; iki farklı görünüm olması
-   sitenin tek bir ürün olduğu hissini bozuyordu.
+   Yön: modern, sakin, yüksek kontrastlı bir çalışma arayüzü.
+   (Linear / Notion / Apple minimalizmi.)
 
-   ORTAK DİLİN KURALLARI:
+   ÖNEMLİ BİR KARAR: burada ~90 satırlık bir "palet eşleme" katmanı
+   vardı; kaynaktaki slate/indigo sınıflarını kağıt/mürekkep tonlarına
+   çeviriyordu. O katman KALDIRILDI.
 
-   1. KAĞIT VE MÜREKKEP. Zemin sıcak kırık beyaz (#F9F7F2), kartlar saf
-      beyaz, yazı neredeyse siyah. Renk bir süs değil, bir işaret.
-   2. VURGU RENK DEĞİL, SİYAHTIR. Birincil düğmeler dolu siyah, beyaz
-      yazılı. Indigo/teal gibi marka renkleri kaldırıldı; ekranda tek
-      bir "en koyu şey" olunca göz onu anında buluyor.
-   3. KESKİN KÖŞE. Yuvarlatma yok. Kenarlık, gölge yerine ayrım aracı:
-      saç teli inceliğinde tek bir çizgi.
-   4. TİPOGRAFİ ÜÇLÜSÜ. Playfair Display başlıklarda (editoryal serif),
-      Inter arayüzde, JetBrains Mono sayılarda — çünkü zaman damgası ve
-      sayaç metin değil veridir.
-   5. TEK RENKLİ AN. Renk yalnızca "şu an konuşulan cümle" için ayrıldı;
-      canlı altyazının sarısı korundu, çünkü gerçek bir iş yapıyor.
+   Sebebi şu: bileşenler ZATEN slate/indigo ile, doğru kontrast
+   ilişkileriyle yazılmış. Eşleme katmanı hepsini tek bir kreme ve
+   siyaha indirgeyince görsel hiyerarşi düzleşiyordu — birincil düğme
+   ile ikincil düğme aynı renge düşüyor, tamamlanmış adım ile pasif
+   adım ayırt edilemiyordu. Sınıfları kendi hallerinde bırakmak hem
+   90 satır CSS'ten kurtarıyor hem de hiyerarşiyi geri veriyor.
 
-   NASIL UYGULANDI: uygulama boyunca yüzlerce slate/indigo/amber sınıfı
-   var. Her bileşeni tek tek elden geçirmek yerine bu sınıflar aşağıda
-   yeni palete eşleniyor — tek noktadan tutarlılık, sıfır davranış riski.
-   Bu kurallar Tailwind'den sonra geldiği için kazanır.
+   Değişkenler (--ink, --paper …) duruyor: kabuk ve ortak bileşenler
+   bunları kullanıyor. Artık slate ölçeğinin birebir karşılığı olacak
+   şekilde tanımlılar, yani iki yazım biçimi de aynı paleti gösteriyor.
    ===================================================================== */
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
-
-  --color-editorial-bg: #F9F7F2;
-  --color-editorial-text: #1A1A1A;
-  --color-editorial-accent: #000000;
-  --color-editorial-border: rgba(26, 26, 26, 0.1);
-  --color-editorial-muted: rgba(26, 26, 26, 0.6);
-  --color-editorial-card: #FFFFFF;
 }
 
 :root {
-  /* Kağıt ve mürekkep — Reading'in editoryal paletiyle birebir */
-  --paper:      #F9F7F2;
-  --paper-2:    #FFFFFF;
-  --paper-3:    #F2EFE8;
-  --ink:        #1A1A1A;
-  --ink-2:      rgba(26, 26, 26, 0.62);
-  --ink-3:      rgba(26, 26, 26, 0.40);
-  --hairline:   rgba(26, 26, 26, 0.12);
-  --hairline-2: rgba(26, 26, 26, 0.22);
+  /* Zeminler — kirli krem yok; nötr, temiz gri-beyaz */
+  --paper:      #F8FAFC;   /* slate-50  — sayfa zemini */
+  --paper-2:    #FFFFFF;   /* saf beyaz — çalışma kartları */
+  --paper-3:    #F1F5F9;   /* slate-100 — ikincil yüzey */
 
-  /* Tek vurgu: canlı altyazı işareti */
-  --marker:     #F2C94C;
-  --marker-bg:  #FCF3D8;
-  --marker-ink: #5E4A10;
+  /* Metin — üçü de kendi zemininde net okunur */
+  --ink:        #0F172A;   /* slate-900 — ana metin */
+  --ink-2:      #475569;   /* slate-600 — ikincil */
+  /* "Pasif" diye slate-400 secilmisti; ama kullanildigi her yer acik
+     zeminde 10-11px ACIKLAMA metni ve olculen kontrast 2.56 idi
+     (gereken 4.5). Okunmasi gereken yazi icin fazla soluk. slate-500
+     ayni sakinlikte duruyor ama 4.76 ile okunuyor. */
+  --ink-3:      #64748B;   /* slate-500 — ikincil/pasif */
 
-  /* Durum renkleri — sade tutuldu */
-  --ok:         #2E7D5B;
-  --ok-bg:      #E9F3EE;
-  --danger:     #A33A32;
-  --danger-bg:  #F9EAE8;
+  /* Çizgiler */
+  --hairline:   #E2E8F0;   /* slate-200 */
+  --hairline-2: #CBD5E1;   /* slate-300 */
+
+  /* Vurgu — aktif adım ve birincil eylem */
+  --accent:      #4F46E5;  /* indigo-600 */
+  --accent-700:  #4338CA;  /* indigo-700 */
+  --accent-soft: #EEF2FF;  /* indigo-50  */
+  --accent-ring: rgba(79, 70, 229, 0.18);
+
+  /* Durumlar */
+  --ok:         #059669;   /* emerald-600 */
+  --ok-bg:      #ECFDF5;   /* emerald-50  */
+  --danger:     #DC2626;   /* red-600 */
+  --danger-bg:  #FEF2F2;   /* red-50 */
+
+  /* Canlı altyazı işareti — ekrandaki tek "sıcak" renk.
+     Süs değil: şu an konuşulan cümleyi gösteriyor. */
+  --marker:     #F59E0B;   /* amber-500 */
+  --marker-bg:  #FFFBEB;   /* amber-50  */
+  --marker-ink: #92400E;   /* amber-800 */
+
+  --radius:     12px;
+  --sidebar-w:  276px;
 }
 
 html { background: var(--paper); }
@@ -82,19 +85,15 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Secim, vurgunun SOLUK tonunu (--marker-bg) kullaniyordu; bu da "su an
-   konusulan cumle"nin arka planiyla birebir ayni renk. Vurgulu cumlenin
-   icinde kelime secince secim tamamen gorunmez oluyordu. Secim artik
-   vurgunun canli tonunu kullaniyor: kagit zeminde de, soluk vurgunun
-   uzerinde de, koyu panellerde de okunuyor. */
 ::selection {
-  background: var(--marker);
+  background: #C7D2FE;      /* indigo-200 */
   color: var(--ink);
 }
 
 :focus-visible {
-  outline: 2px solid var(--ink);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
+  border-radius: 6px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -112,50 +111,76 @@ body {
 }
 *::-webkit-scrollbar { width: 8px; height: 8px; }
 *::-webkit-scrollbar-track { background: transparent; }
-*::-webkit-scrollbar-thumb { background: var(--hairline-2); }
+*::-webkit-scrollbar-thumb {
+  background: var(--hairline-2);
+  border-radius: 999px;
+}
 
 /* =====================================================================
    TİPOGRAFİ
 
-   Playfair Display: başlıklar. Yüksek kontrastlı bir editoryal serif —
-   büyük puntoda karakterli, gövde metninde yorucu olduğu için oraya
-   sokulmuyor.
-   Inter: arayüz ve gövde.
-   JetBrains Mono: zaman damgaları, sayaçlar, istatistik.
+   Tek aile: Inter. Önceki sürümde başlıklar Playfair Display ile
+   diziliyordu; ekranda yan yana duran onlarca küçük başlıkta yüksek
+   kontrastlı bir serif dağınık ve eski duruyordu. Ayrım artık yazı
+   tipiyle değil AĞIRLIK ve HARF ARALIĞIYLA yapılıyor.
+
+   JetBrains Mono yalnızca sayılarda: zaman damgası ve sayaç metin
+   değil, veridir.
    ===================================================================== */
 
-.font-display,
-h1, h2, h3 {
-  font-family: var(--font-serif);
-  letter-spacing: -0.015em;
-}
+/* @layer base ŞART.
+   Tailwind v4 yardımcı sınıfları `utilities` katmanında yayımlıyor.
+   Katmansız (unlayered) bir kural, ÖZGÜLLÜĞÜNE BAKILMAKSIZIN katmanlı
+   olanı ezer. Bu blok başta katmansızdı ve `color` atıyordu; sonuç:
+   `text-slate-300` yazan bir başlık bile slate-900'e dönüyordu.
+   Koyu panellerdeki başlıklar (ör. transkript başlığı) koyu zemin
+   üstünde koyu kalıp tamamen görünmez oluyordu — ölçülen kontrast
+   oranı 1.0.
 
-/* Küçük punto başlıklarda serif okunaklılığı düşürüyor; arayüz
-   etiketleri sans kalsın. */
-h4, h5, h6 { font-family: var(--font-sans); }
+   İki düzeltme birden: kural `base` katmanına alındı, ve `color`
+   tamamen çıkarıldı. Başlıklar zaten body'den slate-900 miras alıyor,
+   yani varsayılan aynı; farklı bir renk isteyen başlık artık kendi
+   sınıfıyla söyleyebiliyor. */
+@layer base {
+  .font-display,
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: -0.018em;
+  }
+
+  /* Eski tasarımdan kalan italik başlık süsü: modern bir arayüzde
+     başlık içinde italik serif göz yorduğu için düz ağırlığa iniyor. */
+  .font-display em {
+    font-style: normal;
+    font-weight: 400;
+  }
+}
 
 .eyebrow {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--ink-3);
+  /* --ink-3 (slate-400) beyaz üzerinde 2.56 kontrast veriyor. Bölüm
+     başlıkları okunması GEREKEN metinler, dekoratif değil; slate-500
+     aynı sakinlikte ama 4.7 kontrastla okunuyor. */
+  color: #64748B;
 }
 
-/* Transkript gövdesi. Reading'deki .passage-body ile ayni olculer:
-   iki tarafta da uzun Ingilizce metin okunuyor, ikisi ayni rahatlikta
-   olmali. ABB Voice kuruluysa devreye girer; lisansli oldugu icin
-   siteye gomulmuyor, yalnizca yigina yaziliyor. */
+/* Transkript gövdesi. Uzun İngilizce metin okunuyor: rahat satır
+   aralığı ve 16px taban. ABB Voice kuruluysa devreye girer; lisanslı
+   olduğu için siteye gömülmüyor, yalnızca yığına yazılıyor. */
 .transcript-en {
   font-family: "ABB Voice", "Inter", "Segoe UI Variable Text", ui-sans-serif,
     system-ui, sans-serif;
-  font-size: 1.0625rem;
-  line-height: 1.8;
+  font-size: 1rem;
+  line-height: 1.7;
   letter-spacing: normal;
 }
 
 @media (min-width: 640px) {
-  .transcript-en { font-size: 1.125rem; line-height: 1.85; }
+  .transcript-en { font-size: 1.0625rem; line-height: 1.75; }
 }
 
 .timecode {
@@ -165,142 +190,53 @@ h4, h5, h6 { font-family: var(--font-sans); }
 }
 
 /* =====================================================================
-   ESKİ PALETİN YENİDEN EŞLENMESİ
+   KABUK YARDIMCILARI
+
+   Kart ve panel yüzeyleri tek yerde tanımlı; onlarca bileşende aynı
+   sınıf dizisini tekrarlamak yerine.
    ===================================================================== */
 
-/* --- Zeminler --- */
-.bg-slate-950, .bg-slate-900 { background-color: var(--ink) !important; }
-.bg-slate-800 { background-color: #2B2B2B !important; }
-.bg-slate-100, .bg-slate-50 { background-color: var(--paper-3) !important; }
-.bg-white { background-color: var(--paper-2) !important; }
-.bg-slate-200 { background-color: var(--paper-3) !important; }
-.bg-slate-700 { background-color: #3D3D3D !important; }
-
-/* --- Metin --- */
-.text-slate-900, .text-slate-950 { color: var(--ink) !important; }
-.text-slate-800, .text-slate-700, .text-slate-600, .text-slate-500 { color: var(--ink-2) !important; }
-.text-slate-400, .text-slate-300, .text-slate-200 { color: var(--ink-3) !important; }
-.text-white { color: var(--paper-2) !important; }
-
-/* --- Koyu panellerde soluk yazı ---
-
-   Soluk gri sınıflar (text-slate-400/500) yeni palette KAĞIT ÜZERİ
-   için tanımlı, yani koyu mürekkebin şeffaf hali. Koyu bir panelin
-   içinde kullanıldıklarında koyu üstünde koyu kalıyor ve yazı tamamen
-   kayboluyor — alt bilgi çubuğunda tam olarak bu oldu. Koyu zemin
-   içinde aynı sınıflar kağıt beyazının şeffaf haline döner.
-
-   Hem ata olarak hem de aynı öğe üzerinde eşleşme gerekiyor: alt bilgi
-   çubuğunda `bg-slate-950` ile `text-slate-500` AYNI etikette. */
-.bg-slate-950 .text-slate-500, .bg-slate-900 .text-slate-500, .bg-slate-800 .text-slate-500,
-.bg-slate-950 .text-slate-600, .bg-slate-900 .text-slate-600, .bg-slate-800 .text-slate-600,
-.bg-slate-950 .text-slate-700, .bg-slate-900 .text-slate-700, .bg-slate-800 .text-slate-700,
-.bg-slate-950.text-slate-500, .bg-slate-900.text-slate-500, .bg-slate-800.text-slate-500,
-.bg-slate-950.text-slate-600, .bg-slate-900.text-slate-600, .bg-slate-800.text-slate-600 {
-  color: rgba(255, 255, 255, 0.55) !important;
+.surface {
+  background: var(--paper-2);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
 }
 
-.bg-slate-950 .text-slate-400, .bg-slate-900 .text-slate-400, .bg-slate-800 .text-slate-400,
-.bg-slate-950 .text-slate-300, .bg-slate-900 .text-slate-300, .bg-slate-800 .text-slate-300,
-.bg-slate-950 .text-slate-200, .bg-slate-900 .text-slate-200, .bg-slate-800 .text-slate-200,
-.bg-slate-950.text-slate-400, .bg-slate-900.text-slate-400, .bg-slate-800.text-slate-400 {
-  color: rgba(255, 255, 255, 0.70) !important;
+.surface-soft {
+  background: var(--paper-3);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
 }
 
-/* Koyu panelde başlık ve gövde yazısı da okunur kalmalı. */
-.bg-slate-950 .text-slate-900, .bg-slate-900 .text-slate-900, .bg-slate-800 .text-slate-900,
-.bg-slate-950 .text-slate-800, .bg-slate-900 .text-slate-800, .bg-slate-800 .text-slate-800 {
-  color: var(--paper-2) !important;
+/* =====================================================================
+   KATMAN ÇEKMECESİ (dar ekran)
+
+   Açılıp kapanma Tailwind'in translate yardımcıları yerine burada,
+   tek yerde yazılı. Üç ayrı yardımcı sınıfı (kapalı hâl, açık hâl ve
+   `lg:` geçersiz kılması) bir ternary içinde taşımak yerine iki
+   satırlık açık bir kural, davranışı okumayı kolaylaştırıyor.
+   ===================================================================== */
+
+/* Çekmece davranışı YALNIZCA dar ekranda tanımlı.
+
+   Önce kurallar her genişlikte geçerliydi ve `lg:` için ayrı bir
+   `transform: none` ile geri alınıyordu. Bunun iki sakıncası vardı:
+   masaüstünde hiç gerekmeyen bir geçiş (transition) tanımlı kalıyor,
+   ve panel önce -100%'e konumlanıp sonra geri alınıyordu. Kuralları
+   media sorgusunun İÇİNE almak ikisini de ortadan kaldırıyor —
+   masaüstünde `.layer-drawer` hiçbir şey yapmayan bir sınıf. */
+@media (max-width: 1023.98px) {
+  .layer-drawer {
+    transform: translateX(-100%);
+    transition: transform 200ms ease-in-out;
+  }
+
+  .layer-drawer[data-open="true"] {
+    transform: translateX(0);
+  }
 }
 
-/* --- Çizgiler: hepsi tek bir saç teli --- */
-.border-slate-200, .border-slate-300, .border-slate-600, .border-slate-700,
-.border-slate-800, .border-indigo-100, .border-indigo-200, .border-teal-200,
-.border-emerald-200, .border-amber-200, .border-amber-300, .border-rose-200,
-.border-orange-200, .border-violet-200, .border-sky-200, .border-purple-200,
-.border-red-100 {
-  border-color: var(--hairline) !important;
-}
-
-/* Seçili öğenin kenarlığı: renkle değil, KOYULUKLA ayrılıyor —
-   editoryal dilde "seçili" demenin yolu bu. */
-.border-indigo-400, .border-indigo-500, .border-indigo-600,
-.border-indigo-500\/30 { border-color: var(--ink) !important; }
-.ring-indigo-500 { --tw-ring-color: var(--ink) !important; }
-.divide-slate-200 > * + * { border-color: var(--hairline) !important; }
-
-/* --- Birincil eylem: mürekkep, renk değil ---
-
-   Kaynakta indigo/teal/violet/sky/orange/purple tonlarının tamamı
-   geçiyor; hepsi tek bir mürekkebe iniyor. Şeffaflık ekli biçimler
-   (bg-indigo-50/50 gibi) ayrı birer sınıf ürettiği için tek tek
-   yazılmak zorunda — Tailwind bunları önceden birleştirmiyor. */
-.bg-indigo-600, .bg-indigo-700, .bg-teal-600, .bg-teal-700 {
-  background-color: var(--ink) !important;
-}
-.hover\:bg-indigo-700:hover, .hover\:bg-teal-700:hover,
-.hover\:bg-slate-800:hover { background-color: #000 !important; }
-.text-indigo-500, .text-indigo-600, .text-indigo-700, .text-indigo-800,
-.text-indigo-900, .text-indigo-950, .text-teal-600, .text-teal-700,
-.text-violet-700, .text-sky-700, .text-orange-700, .text-purple-800 {
-  color: var(--ink) !important;
-}
-/* Koyu zemin üzerindeki açık indigo tonları kağıt beyazına döner;
-   mürekkebe eşlenirse koyu üstünde koyu kalıp okunmaz oluyordu. */
-.text-indigo-100, .text-indigo-200, .text-indigo-300, .text-indigo-400,
-.text-sky-400 { color: rgba(255, 255, 255, 0.65) !important; }
-.bg-indigo-50, .bg-indigo-100, .bg-teal-50, .bg-teal-100,
-.bg-violet-50, .bg-sky-50, .bg-orange-50, .bg-purple-100,
-.bg-indigo-50\/50, .bg-indigo-50\/60, .bg-indigo-50\/80 {
-  background-color: var(--paper-3) !important;
-}
-.bg-indigo-400, .bg-indigo-500, .bg-sky-500, .bg-sky-600, .bg-sky-700,
-.bg-violet-600, .bg-violet-700, .bg-orange-600, .bg-orange-700 {
-  background-color: var(--ink) !important;
-}
-/* Koyu panel üzerindeki yarı saydam vurgular olduğu gibi kalır. */
-.bg-indigo-600\/30 { background-color: rgba(255, 255, 255, 0.14) !important; }
-
-/* --- Canlı altyazı: tek renkli an --- */
-.bg-amber-50, .bg-amber-100, .bg-amber-200, .bg-amber-50\/90, .bg-amber-50\/40 {
-  background-color: var(--marker-bg) !important;
-}
-.bg-amber-500, .bg-amber-600 { background-color: var(--marker) !important; }
-.text-amber-950, .text-amber-900, .text-amber-800 { color: var(--marker-ink) !important; }
-.text-amber-600, .text-amber-400 { color: #9C7A1C !important; }
-.border-amber-500 { border-color: var(--marker) !important; }
-
-/* --- Durumlar --- */
-.bg-emerald-50, .bg-emerald-100 { background-color: var(--ok-bg) !important; }
-.bg-emerald-500, .bg-emerald-600 { background-color: var(--ok) !important; }
-.text-emerald-700, .text-emerald-800, .text-emerald-900, .text-emerald-600,
-.text-emerald-400 { color: var(--ok) !important; }
-
-.bg-rose-50, .bg-rose-100, .bg-red-50 { background-color: var(--danger-bg) !important; }
-.bg-rose-500, .bg-rose-600 { background-color: var(--danger) !important; }
-.text-rose-600, .text-rose-700, .text-rose-800, .text-rose-900,
-.text-red-600 { color: var(--danger) !important; }
-.hover\:bg-rose-700:hover { background-color: #8C2F28 !important; }
-
-/* --- Köşeler: keskin ---
-   Reading tarafinin en belirgin imzasi yuvarlatma OLMAMASI. Kutular
-   kenarliklariyla ayriliyor. rounded-full disarida birakildi: nokta,
-   rozet ve ilerleme cubugu gibi gercekten dairesel ogeler var. */
-.rounded-2xl, .rounded-xl, .rounded-lg, .rounded-md, .rounded-sm, .rounded,
-.rounded-\[6px\], .rounded-\[8px\], .rounded-\[10px\], .rounded-\[14px\] {
-  border-radius: 0 !important;
-}
-
-/* --- Gölgeler: ayrım çizgiyle yapılır --- */
-.shadow-sm, .shadow, .shadow-md {
-  box-shadow: 0 1px 2px rgba(26, 26, 26, 0.04) !important;
-}
-.shadow-lg, .shadow-2xl {
-  box-shadow: 0 12px 32px rgba(26, 26, 26, 0.10) !important;
-}
-.shadow-inner { box-shadow: none !important; }
-
-/* Yatay kaydırma şeritlerinde çubuğu gizle (katman rayı, kart listeleri) */
+/* Yatay kaydırma şeritlerinde çubuğu gizle */
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 

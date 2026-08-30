@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { VideoLesson, VocabularyItem, GrammarRuleItem } from '../../types';
 import { apiFetch } from '../../lib/userKeys';
-import { Sparkles, Volume2, BookOpen, CheckCircle, Lightbulb, Loader2, RefreshCw, AlertCircle } from 'lucide-react';
+import { Sparkles, Volume2, BookOpen, Lightbulb, Loader2, RefreshCw, AlertCircle } from 'lucide-react';
 
 interface Layer2PhoneticsGrammarProps {
   lesson: VideoLesson;
@@ -273,17 +273,6 @@ export const Layer2PhoneticsGrammar: React.FC<Layer2PhoneticsGrammarProps> = ({
           )}
         </div>
       )}
-
-      {/* Layer Completion CTA */}
-      <div className="flex justify-end pt-2">
-        <button
-          onClick={onCompleteLayer}
-          className="flex items-center space-x-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-sm cursor-pointer"
-        >
-          <CheckCircle className="w-4 h-4" />
-          <span>Ekstra Çalışmayı Tamamladım</span>
-        </button>
-      </div>
     </div>
   );
 };

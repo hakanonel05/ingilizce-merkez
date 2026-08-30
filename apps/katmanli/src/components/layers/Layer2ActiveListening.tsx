@@ -2,7 +2,7 @@ import React, { useMemo, useEffect, useRef } from 'react';
 import { VideoLesson } from '../../types';
 import { extractYouTubeId } from '../../lib/youtube';
 import { useYouTubePlayer, formatSeconds, getSentenceStart } from '../../lib/useYouTubePlayer';
-import { CheckCircle, Ear, AlertTriangle } from 'lucide-react';
+import { Ear, AlertTriangle } from 'lucide-react';
 import { SelectionToCard } from '../vocab/SelectionToCard';
 
 interface Props {
@@ -144,17 +144,6 @@ export const Layer2ActiveListening: React.FC<Props> = ({ lesson, onCompleteLayer
           </div>
         </div>
       )}
-
-      <div className="flex justify-end pt-2">
-        <button
-          type="button"
-          onClick={onCompleteLayer}
-          className="flex items-center space-x-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-sm cursor-pointer"
-        >
-          <CheckCircle className="w-4 h-4" />
-          <span>2. Katmanı Tamamladım, 3. Katmana Geç</span>
-        </button>
-      </div>
     </div>
   );
 };

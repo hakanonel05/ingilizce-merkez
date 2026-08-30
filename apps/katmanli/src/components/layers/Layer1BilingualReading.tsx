@@ -6,7 +6,7 @@ import { LessonInsightPanel } from '../LessonInsightPanel';
 import { MarkedText } from '../MarkedText';
 import { useLessonInsight } from '../../lib/useLessonInsight';
 import { CefrLevel } from '../../../../../shared/vocab/cefr';
-import { Volume2, Bookmark, CheckCircle, Search, Eye, EyeOff, Youtube, Edit2, Check, X, LayoutGrid, List, Play, Sliders, AlertTriangle, RefreshCw, Pause } from 'lucide-react';
+import { Volume2, Bookmark, Search, Eye, EyeOff, Youtube, Edit2, Check, X, LayoutGrid, List, Play, Sliders, AlertTriangle, RefreshCw, Pause } from 'lucide-react';
 
 declare global {
   interface Window {
@@ -791,18 +791,6 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Layer Completion CTA */}
-      <div className="flex justify-end pt-2">
-        <button
-          type="button"
-          onClick={onCompleteLayer}
-          className="flex items-center space-x-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-sm cursor-pointer"
-        >
-          <CheckCircle className="w-4 h-4" />
-          <span>1. Katmanı Tamamladım, 2. Katmana Geç</span>
-        </button>
       </div>
     </div>
   );

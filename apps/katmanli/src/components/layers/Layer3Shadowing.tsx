@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { VideoLesson } from '../../types';
 import { extractYouTubeId } from '../../lib/youtube';
 import { useYouTubePlayer, getSentenceStart } from '../../lib/useYouTubePlayer';
-import { CheckCircle, Mic, Square, Play, RotateCcw, ChevronLeft, ChevronRight, Volume2, Trash2, Save, ListMusic } from 'lucide-react';
+import { Mic, Square, Play, RotateCcw, ChevronLeft, ChevronRight, Volume2, Trash2, Save, ListMusic } from 'lucide-react';
 import {
   saveRecording,
   getRecording,
@@ -450,17 +450,6 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
           </div>
         </div>
       )}
-
-      <div className="flex justify-end pt-2">
-        <button
-          type="button"
-          onClick={onCompleteLayer}
-          className="flex items-center space-x-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-sm cursor-pointer"
-        >
-          <CheckCircle className="w-4 h-4" />
-          <span>3. Katmanı Tamamladım, 4. Katmana Geç</span>
-        </button>
-      </div>
     </div>
   );
 };
