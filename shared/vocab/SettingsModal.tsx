@@ -98,7 +98,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-      <div className="w-full max-w-2xl my-8 rounded-[14px] border border-[var(--hairline-2)] bg-[var(--paper-2)] shadow-2xl overflow-hidden">
+      <div className="w-full max-w-2xl my-8 border border-[var(--hairline-2)] bg-[var(--paper-2)] shadow-2xl overflow-hidden">
         {/* Başlık */}
         <div className="flex items-center justify-between gap-4 px-6 py-4 border-b border-[var(--hairline)]">
           <div className="flex items-center gap-2.5 min-w-0">
@@ -113,7 +113,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-[8px] text-[var(--ink-3)] hover:text-[var(--ink)] hover:bg-[var(--paper-3)] transition-colors cursor-pointer shrink-0"
+            className="p-1.5 text-[var(--ink-3)] hover:text-[var(--ink)] hover:bg-[var(--paper-3)] transition-colors cursor-pointer shrink-0"
             aria-label="Kapat"
           >
             <X className="w-4 h-4" />
@@ -121,7 +121,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         </div>
 
         {/* Gizlilik notu */}
-        <div className="mx-6 mt-4 flex items-start gap-2.5 rounded-[10px] border border-[var(--hairline)] bg-[var(--paper-3)] p-3">
+        <div className="mx-6 mt-4 flex items-start gap-2.5 border border-[var(--hairline)] bg-[var(--paper-3)] p-3">
           <ShieldCheck className="w-4 h-4 shrink-0 mt-0.5 text-[var(--ink-2)]" />
           <p className="text-[11px] leading-relaxed text-[var(--ink-2)]">
             Anahtarlar <strong>yalnızca bu tarayıcıda</strong> saklanır ve her istekte
@@ -146,7 +146,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <label className="text-xs font-semibold text-[var(--ink)]">{label}</label>
                   {serverHas !== null && (
                     <span
-                      className={`text-[10px] px-1.5 py-0.5 rounded border ${
+                      className={`text-[10px] px-1.5 py-0.5 border ${
                         serverHas
                           ? 'border-[var(--hairline)] text-[var(--ink-3)]'
                           : 'border-[var(--marker)] bg-[var(--marker-bg)] text-[var(--marker-ink)]'
@@ -165,12 +165,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     placeholder="Anahtarı buraya yapıştırın"
                     autoComplete="off"
                     spellCheck={false}
-                    className="flex-1 min-w-0 px-3 py-2 rounded-[8px] border border-[var(--hairline)] bg-[var(--paper)] text-[var(--ink)] text-xs font-mono focus:outline-none focus:border-[var(--ink-3)]"
+                    className="flex-1 min-w-0 px-3 py-2 border border-[var(--hairline)] bg-[var(--paper)] text-[var(--ink)] text-xs font-mono focus:outline-none focus:border-[var(--ink-3)]"
                   />
                   <button
                     type="button"
                     onClick={() => setVisible((prev) => ({ ...prev, [field]: !prev[field] }))}
-                    className="p-2 rounded-[8px] border border-[var(--hairline)] text-[var(--ink-3)] hover:text-[var(--ink)] transition-colors cursor-pointer shrink-0"
+                    className="p-2 border border-[var(--hairline)] text-[var(--ink-3)] hover:text-[var(--ink)] transition-colors cursor-pointer shrink-0"
                     aria-label={isVisible ? 'Anahtarı gizle' : 'Anahtarı göster'}
                     title={isVisible ? 'Gizle' : 'Göster'}
                   >
@@ -212,7 +212,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <button
               type="button"
               onClick={handleClear}
-              className="inline-flex items-center gap-1.5 h-9 px-3 rounded-[8px] border border-[var(--hairline)] text-[var(--ink-2)] text-xs font-medium hover:border-[var(--hairline-2)] hover:text-[var(--ink)] transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 h-9 px-3 border border-[var(--hairline)] text-[var(--ink-2)] text-xs font-medium hover:border-[var(--hairline-2)] hover:text-[var(--ink)] transition-colors cursor-pointer"
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span>Tümünü Sil</span>
@@ -220,7 +220,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <button
               type="button"
               onClick={handleSave}
-              className="inline-flex items-center gap-1.5 h-9 px-4 rounded-[8px] bg-[var(--ink)] text-[var(--paper-2)] text-xs font-medium hover:opacity-90 transition-opacity cursor-pointer"
+              className="inline-flex items-center gap-1.5 h-9 px-4 bg-[var(--ink)] text-[var(--paper-2)] text-xs font-medium hover:opacity-90 transition-opacity cursor-pointer"
             >
               <Save className="w-3.5 h-3.5" />
               <span>Kaydet</span>
