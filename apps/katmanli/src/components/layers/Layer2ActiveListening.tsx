@@ -58,12 +58,9 @@ export const Layer2ActiveListening: React.FC<Props> = ({ lesson, onCompleteLayer
       />
 
       <div className="bg-paper-2 border border-hairline rounded-xl p-4">
-        <div className="flex items-center space-x-2.5 mb-2">
-          <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold rounded-md">
-            Layer 2
-          </span>
-          <h2 className="text-base sm:text-lg font-semibold text-ink">Aktif Dinleme</h2>
-        </div>
+        {/* Rozet ve baslik kalkti: ikisi de bu bilesenin ustundeki
+            LayerHeaderBar'da yaziyor (App.tsx). Ustelik rozet rengi her
+            katmanda farkliydi - yedi katman yedi renge gidiyordu. */}
         <p className="text-xs text-ink-2 leading-relaxed">
           Videoyu oynatın ve metni <strong>gözlerinizle</strong> takip edin. Bu katmanda Türkçe
           çeviri bilinçli olarak gösterilmiyor; amaç duyduğunuz sesi yazıyla eşleştirmek. Bu

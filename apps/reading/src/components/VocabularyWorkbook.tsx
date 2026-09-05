@@ -188,8 +188,8 @@ export default function VocabularyWorkbook({ workbookState, onWorkbookStateChang
                               const isCorrect = q.answers.includes(opt);
                               let cls = 'bg-paper border-hairline text-ink/80 hover:border-accent/50';
                               if (isChecked) {
-                                if (isCorrect) cls = 'bg-green-50 border-green-500 text-green-800';
-                                else if (selected) cls = 'bg-red-50 border-red-400 text-red-700';
+                                if (isCorrect) cls = 'border-emerald-500 bg-emerald-50 text-emerald-900';
+                                else if (selected) cls = 'border-rose-400 bg-rose-50 text-rose-900';
                                 else cls = 'bg-paper border-hairline text-ink-3';
                               } else if (selected) {
                                 cls = 'bg-accent text-white border-accent';

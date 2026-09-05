@@ -336,9 +336,14 @@ export const FlashcardReview: React.FC<Props> = ({
             <button
               type="button"
               onClick={() => setShowAnswer(true)}
-              className="w-full px-4 py-3 bg-ink hover:bg-ink-800 text-white text-sm font-semibold rounded-xl transition cursor-pointer"
+              /* Koyu dolgu yerine vurgu rengi: birincil eylem depoda her
+                 yerde accent. Ayrica ipucu `text-ink-3` idi ve `bg-ink`
+                 uzerinde 2.6 kontrast veriyordu - okunmasi gereken bir
+                 metin icin fazla soluk; beyazin saydami 4.5'i geciyor. */
+              className="w-full rounded-xl bg-accent px-4 py-3 text-[14px] font-medium text-white
+                transition-colors duration-150 hover:bg-accent-700 cursor-pointer"
             >
-              Cevabı Göster <span className="text-ink-3 font-normal">(boşluk)</span>
+              Cevabı göster <span className="font-normal text-white/70">(boşluk)</span>
             </button>
           ) : (
             <div className="grid grid-cols-2 gap-3">

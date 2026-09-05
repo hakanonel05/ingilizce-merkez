@@ -223,12 +223,9 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
   return (
     <div className="space-y-6">
       <div className="bg-paper-2 border border-hairline rounded-xl p-4">
-        <div className="flex items-center space-x-2.5 mb-2">
-          <span className="px-2.5 py-1 bg-accent-soft text-accent border border-accent/25 text-xs font-semibold rounded-md">
-            Layer 3
-          </span>
-          <h2 className="text-base sm:text-lg font-semibold text-ink">Sesli Okuma (Gölgeleme)</h2>
-        </div>
+        {/* Rozet ve baslik kalkti: ikisi de bu bilesenin ustundeki
+            LayerHeaderBar'da yaziyor (App.tsx). Ustelik rozet rengi her
+            katmanda farkliydi - yedi katman yedi renge gidiyordu. */}
         <p className="text-xs text-ink-2 leading-relaxed">
           Cümleyi dinleyin, ardından konuşmacıyla <strong>birlikte sesli okuyun</strong>. Dil bir
           kas grubudur; sesli okuma dil kaslarınızı esnetir ve ihlalları azaltır. İsterseniz kendi

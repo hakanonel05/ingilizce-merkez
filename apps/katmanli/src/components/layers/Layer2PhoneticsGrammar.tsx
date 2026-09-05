@@ -75,12 +75,9 @@ export const Layer2PhoneticsGrammar: React.FC<Layer2PhoneticsGrammarProps> = ({
       {/* Intro Header */}
       <div className="bg-paper-2 border border-hairline rounded-xl p-5 space-y-3">
         <div className="flex items-center justify-between flex-wrap gap-2">
-          <div className="flex items-center space-x-2.5">
-            <span className="px-2.5 py-1 bg-accent-soft text-accent-700 border border-accent/25 text-xs font-semibold rounded-md">
-              Ekstra
-            </span>
-            <h2 className="text-base sm:text-lg font-semibold text-ink">Fonetik ve Gramer Analizi (Genelden Özele)</h2>
-          </div>
+          {/* Rozet ve baslik kalkti: LayerHeaderBar zaten "Fonetik &
+              Gramer / Genelden ozele analiz" yaziyor. */}
+          <div />
 
           <button
             onClick={handleGenerateAnalysis}

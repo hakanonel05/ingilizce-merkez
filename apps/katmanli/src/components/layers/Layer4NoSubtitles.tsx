@@ -31,12 +31,9 @@ export const Layer4NoSubtitles: React.FC<Props> = ({
   return (
     <div className="space-y-6">
       <div className="bg-paper-2 border border-hairline rounded-xl p-4">
-        <div className="flex items-center space-x-2.5 mb-2">
-          <span className="px-2.5 py-1 bg-orange-50 text-orange-700 border border-orange-200 text-xs font-semibold rounded-md">
-            Layer 4
-          </span>
-          <h2 className="text-base sm:text-lg font-semibold text-ink">Altyazısız İzleme</h2>
-        </div>
+        {/* Rozet ve baslik kalkti: ikisi de bu bilesenin ustundeki
+            LayerHeaderBar'da yaziyor (App.tsx). Ustelik rozet rengi her
+            katmanda farkliydi - yedi katman yedi renge gidiyordu. */}
         <p className="text-xs text-ink-2 leading-relaxed">
           Altyazıyı tamamen kapatın ve videoyu izleyin. <strong>%100 anlamak zorunda
           değilsiniz</strong>; başlangıçta %60-70 yakalamak yeterlidir. İzledikten sonra
@@ -58,7 +55,7 @@ export const Layer4NoSubtitles: React.FC<Props> = ({
               <span className="text-[11px] font-mono text-ink-3">
                 {formatSeconds(currentTime)}
               </span>
-              <span className="inline-flex items-center space-x-1.5 text-[11px] font-semibold text-orange-700">
+              <span className="inline-flex items-center space-x-1.5 text-[11px] text-ink-3">
                 <EyeOff className="w-3.5 h-3.5" />
                 <span>Metin gösterilmiyor — bu katmanda kasıtlı</span>
               </span>
@@ -69,7 +66,7 @@ export const Layer4NoSubtitles: React.FC<Props> = ({
             <button
               type="button"
               onClick={() => setWatched(true)}
-              className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white text-xs font-semibold rounded-xl transition cursor-pointer"
+              className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-accent hover:bg-accent-700 text-white text-xs font-semibold rounded-xl transition cursor-pointer"
             >
               <Check className="w-4 h-4" />
               <span>Videoyu altyazısız izledim, teste geç</span>
