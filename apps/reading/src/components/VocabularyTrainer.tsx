@@ -230,7 +230,7 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
 
       {mode === 'cards' ? (
         filteredWords.length > 0 && activeCardWord ? (
-          <div className="mx-auto w-full max-w-xl space-y-4">
+          <div className="mx-auto w-full max-w-2xl space-y-4">
 
             {/* KART.
                 Önceki sürümde `rotate-y-180` ile 3B çevirme taklidi

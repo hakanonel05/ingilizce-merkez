@@ -46,7 +46,7 @@ export const Layer4NoSubtitles: React.FC<Props> = ({
           Bu derste gömülü video yok.
         </div>
       ) : (
-        <div className="max-w-3xl mx-auto space-y-3">
+        <div className="mx-auto max-w-5xl space-y-3">
           <div className="bg-paper-2 border border-hairline rounded-xl p-3">
             <div className="aspect-video w-full rounded-lg overflow-hidden bg-ink-950">
               <div ref={containerRef} className="w-full h-full" />
