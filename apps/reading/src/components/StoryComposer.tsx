@@ -218,7 +218,7 @@ export default function StoryComposer({ progress, passages, onStoryReady, onTask
 
   if (words.length === 0) {
     return (
-      <div className="mb-8 border border-hairline/40 bg-paper-2 p-4 rounded-xl">
+      <div className="mb-8 border border-hairline bg-paper-2 p-4 rounded-xl">
         <div className="flex items-start gap-2.5">
           <BookOpenCheck className="h-4 w-4 shrink-0 mt-0.5 text-accent" />
           <p className="text-xs leading-relaxed text-ink/70">
@@ -254,7 +254,7 @@ export default function StoryComposer({ progress, passages, onStoryReady, onTask
           type="button"
           onClick={refreshWords}
           title="Kelime listesini tazele"
-          className="shrink-0 border border-hairline/40 px-2.5 py-1.5 text-ink/60 hover:text-accent transition-colors cursor-pointer rounded-lg"
+          className="shrink-0 border border-hairline px-2.5 py-1.5 text-ink/60 hover:text-accent transition-colors cursor-pointer rounded-lg"
         >
           <RefreshCw className="h-3.5 w-3.5" />
         </button>
@@ -266,7 +266,7 @@ export default function StoryComposer({ progress, passages, onStoryReady, onTask
           <span
             key={w.term}
             title={w.meaning || undefined}
-            className="border border-hairline/40 bg-paper px-2 py-0.5 text-[11px] font-semibold text-ink rounded-lg"
+            className="border border-hairline bg-paper px-2 py-0.5 text-[11px] font-semibold text-ink rounded-lg"
           >
             {w.term}
             {w.lapses > 0 && (
@@ -290,7 +290,7 @@ export default function StoryComposer({ progress, passages, onStoryReady, onTask
                 className={`border px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer rounded-lg ${
                   level === l
                     ? 'border-accent bg-accent text-white'
-                    : 'border-hairline/40 bg-paper-2 text-ink/70 hover:border-accent/40'
+                    : 'border-hairline bg-paper-2 text-ink/70 hover:border-accent/40'
                 }`}
               >
                 {l}
@@ -308,7 +308,7 @@ export default function StoryComposer({ progress, passages, onStoryReady, onTask
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
             placeholder="boş bırakırsan güncel bir konu seçilir"
-            className="w-full border border-hairline/40 bg-paper-2 px-3 py-1.5 text-xs text-ink focus:outline-none focus:border-accent rounded-lg"
+            className="w-full border border-hairline bg-paper-2 px-3 py-1.5 text-xs text-ink focus:outline-none focus:border-accent rounded-lg"
           />
         </div>
 
@@ -325,7 +325,7 @@ export default function StoryComposer({ progress, passages, onStoryReady, onTask
               <select
                 value={model}
                 onChange={e => chooseModel(e.target.value)}
-                className="border border-hairline/40 bg-paper-2 px-2 py-1.5 text-xs text-ink focus:outline-none focus:border-accent cursor-pointer rounded-lg"
+                className="border border-hairline bg-paper-2 px-2 py-1.5 text-xs text-ink focus:outline-none focus:border-accent cursor-pointer rounded-lg"
               >
                 <option value="auto">Otomatik (Gemini)</option>
                 {models.map(m => (
@@ -353,7 +353,7 @@ export default function StoryComposer({ progress, passages, onStoryReady, onTask
       {note && <p className="text-[11px] text-ink/60">{note}</p>}
 
       {error && (
-        <p className="flex items-start gap-1.5 border border-rose-200 bg-rose-50 px-2.5 py-1.5 text-[11px] font-semibold text-rose-900 rounded-lg">
+        <p className="flex items-start gap-1.5 rounded-lg border border-rose-200 bg-rose-50 px-2.5 py-1.5 text-[12px] text-rose-800">
           <AlertTriangle className="h-3.5 w-3.5 shrink-0 mt-0.5" />
           <span>{error}</span>
         </p>
