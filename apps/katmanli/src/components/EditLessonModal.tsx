@@ -168,70 +168,73 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
     onClose();
   };
 
+  /* KOYU BASLIK KALKTI. Bu pencerenin basligi bg-ink uzerine beyaz
+     yaziydi; depodaki diger pencereler (ders secici, metot rehberi,
+     ayarlar) acik zemin + hairline kullaniyor. Tek koyu pencere olmasi
+     bir anlam tasimiyordu. */
   return (
-    <div className="fixed inset-0 z-50 bg-ink-950/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-paper-2 border border-hairline rounded-2xl w-full max-w-3xl overflow-hidden my-8 space-y-0 text-ink">
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-ink/40 p-4 backdrop-blur-sm sm:p-6">
+      <div className="my-8 w-full max-w-3xl overflow-hidden rounded-2xl border border-hairline bg-paper-2 text-ink">
         
-        {/* Header */}
-        <div className="bg-ink text-white px-6 py-4 flex items-center justify-between border-b border-ink-800">
-          <div className="flex items-center space-x-2.5">
-            <div className="p-2 bg-accent/30 text-accent rounded-lg border border-accent/30">
-              <Edit3 className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="text-base font-semibold">Çalışma İçeriğini Düzenle</h3>
-              <p className="text-xs text-ink-3 truncate max-w-md">{lesson.title}</p>
-            </div>
+        <div className="flex items-start justify-between gap-4 border-b border-hairline px-6 py-4">
+          <div className="min-w-0">
+            <h3 className="text-[17px] font-semibold tracking-tight text-ink">Dersi düzenle</h3>
+            <p className="mt-0.5 truncate text-[12px] text-ink-3">{lesson.title}</p>
           </div>
 
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 text-ink-3 hover:text-white rounded-lg transition hover:bg-ink-800 cursor-pointer"
+            aria-label="Kapat"
+            className="shrink-0 rounded-lg p-1.5 text-ink-3 transition-colors
+              hover:bg-paper-3 hover:text-ink cursor-pointer"
           >
-            <X className="w-5 h-5" />
+            <X className="h-4 w-4" />
           </button>
         </div>
 
-        {/* Navigation Tabs */}
-        <div className="flex items-center space-x-2 border-b border-hairline bg-paper px-6 py-2.5">
+        {/* Sekmeler — ucu de ayni dilde; ucuncusu kehribar temaliydi. */}
+        <div className="flex items-center gap-0.5 border-b border-hairline px-6 py-3">
           <button
             type="button"
             onClick={() => setActiveTab('details')}
-            className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold transition cursor-pointer ${
+            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px]
+              transition-colors duration-150 cursor-pointer ${
               activeTab === 'details'
-                ? 'bg-accent text-white'
-                : 'text-ink-2 hover:bg-hairline/70'
+                ? 'bg-paper-3 font-medium text-ink'
+                : 'text-ink-2 hover:text-ink'
             }`}
           >
-            <Youtube className="w-3.5 h-3.5" />
-            <span>Genel Bilgiler & Video</span>
+            <Youtube className="h-3.5 w-3.5" />
+            <span>Genel bilgiler</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('sentences')}
-            className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold transition cursor-pointer ${
+            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px]
+              transition-colors duration-150 cursor-pointer ${
               activeTab === 'sentences'
-                ? 'bg-accent text-white'
-                : 'text-ink-2 hover:bg-hairline/70'
+                ? 'bg-paper-3 font-medium text-ink'
+                : 'text-ink-2 hover:text-ink'
             }`}
           >
-            <FileText className="w-3.5 h-3.5" />
-            <span>Cümle Cümle Transkript ({sentences.length})</span>
+            <FileText className="h-3.5 w-3.5" />
+            <span>Transkript ({sentences.length})</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('ai_reanalyze')}
-            className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold transition cursor-pointer ${
+            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px]
+              transition-colors duration-150 cursor-pointer ${
               activeTab === 'ai_reanalyze'
-                ? 'bg-amber-600 text-white'
-                : 'text-ink-2 hover:bg-amber-100/70 text-amber-900'
+                ? 'bg-paper-3 font-medium text-ink'
+                : 'text-ink-2 hover:text-ink'
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>AI ile Ham Metni Yeniden Çevir</span>
+            <Sparkles className="h-3.5 w-3.5" />
+            <span>Ham metinden çevir</span>
           </button>
         </div>
 
@@ -383,8 +386,11 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
           {/* TAB 3: AI RAW TEXT RE-ANALYZE */}
           {activeTab === 'ai_reanalyze' && (
             <div className="space-y-4">
-              <div className="bg-amber-50 border border-amber-200 p-3 rounded-xl text-xs text-amber-900 space-y-1">
-                <strong className="block font-semibold">🤖 Gemini AI Yapay Zeka Çevirisi</strong>
+              {/* KEHRİBAR YOK. Bu sekme baştan sona kehribar temalıydı
+                  (kutu, dosya düğmesi, gönder düğmesi); kehribar bu depoda
+                  "şu an konuşulan cümle" işareti, sekme teması değil. */}
+              <div className="space-y-1 rounded-xl bg-paper-3 p-3 text-[12px] text-ink-2">
+                <strong className="block font-medium text-ink">Yapay zekâ ile çeviri</strong>
                 <p className="leading-relaxed">
                   İngilizce konuşma metnini aşağıya yapıştırın veya dosyadan yükleyin. Yapay zeka metni cümlelere böler ve Türkçe çevirileriyle transkripti yeniden oluşturur.
                 </p>
@@ -411,11 +417,13 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
                       disabled={isAnalyzing}
-                      className="inline-flex items-center space-x-1 px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 disabled:opacity-50 text-amber-800 border border-amber-200 text-[11px] font-semibold rounded-lg transition cursor-pointer"
+                      className="inline-flex items-center gap-1 rounded-lg border border-hairline px-2.5 py-1.5
+                        text-[12px] text-ink-2 transition-colors hover:bg-paper-3 hover:text-ink
+                        disabled:opacity-50 cursor-pointer"
                       title="Transkripti dosyadan yükle (.txt, .srt, .vtt)"
                     >
                       <UploadCloud className="w-3.5 h-3.5" />
-                      <span>Dosyadan Yükle</span>
+                      <span>Dosyadan yükle</span>
                     </button>
 
                     <button
@@ -439,7 +447,7 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
                   onChange={(e) => setRawText(e.target.value)}
                   rows={8}
                   placeholder="İngilizce transkript metnini buraya yapıştırın..."
-                  className="w-full px-3.5 py-2.5 bg-paper border border-hairline-2 rounded-lg text-xs text-ink placeholder-ink-3 focus:outline-none focus:border-amber-500"
+                  className="w-full px-3.5 py-2.5 bg-paper border border-hairline-2 rounded-lg text-xs text-ink placeholder-ink-3 focus:outline-none focus:border-accent"
                   disabled={isAnalyzing}
                 />
               </div>
@@ -449,17 +457,19 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
                   type="button"
                   onClick={handleAiReanalyze}
                   disabled={isAnalyzing || !rawText.trim()}
-                  className="px-4 py-2 bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white text-xs font-semibold rounded-lg transition flex items-center space-x-1.5 cursor-pointer"
+                  className="flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-[13px]
+                    font-medium text-white transition-colors duration-150 hover:bg-accent-700
+                    disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
                 >
                   {isAnalyzing ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Metin Analiz Ediliyor...</span>
+                      <span>Metin analiz ediliyor…</span>
                     </>
                   ) : (
                     <>
                       <Sparkles className="w-4 h-4" />
-                      <span>Yeniden Çevir ve Cümleleri Oluştur</span>
+                      <span>Çevir ve cümleleri oluştur</span>
                     </>
                   )}
                 </button>
@@ -482,20 +492,22 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
           )}
 
           {/* Modal Footer Buttons */}
-          <div className="pt-4 border-t border-hairline flex items-center justify-end space-x-3">
+          <div className="flex items-center justify-end gap-2 border-t border-hairline pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-paper-3 hover:bg-hairline text-ink-2 text-xs font-semibold rounded-lg transition cursor-pointer"
+              className="rounded-xl border border-hairline px-4 py-2 text-[13px] font-medium
+                text-ink-2 transition-colors duration-150 hover:bg-paper-3 hover:text-ink cursor-pointer"
             >
               İptal
             </button>
             <button
               type="submit"
-              className="flex items-center space-x-1.5 px-5 py-2 bg-accent hover:bg-accent-700 text-white text-xs font-semibold rounded-lg transition cursor-pointer"
+              className="flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-[13px]
+                font-medium text-white transition-colors duration-150 hover:bg-accent-700 cursor-pointer"
             >
-              <Save className="w-4 h-4" />
-              <span>Değişiklikleri Kaydet</span>
+              <Save className="h-4 w-4" />
+              <span>Kaydet</span>
             </button>
           </div>
         </form>
