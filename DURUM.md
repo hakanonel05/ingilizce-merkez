@@ -44,6 +44,40 @@ aynı veriyi görüyor. Bir uygulamada veri bozarsan diğeri de etkilenir.
 (örnek: `apps/katmanli/src/lib/userKeys.ts`). Böylece mevcut importlar
 kırılmıyor. Bu depoda yerleşik desen budur, yeni ortaklaştırmada da uygula.
 
+**TASARIM SİSTEMİ TEK YERDE, KURALLARI YAZILI.** Renk, tipografi ve
+yüzeyler `apps/*/src/index.css` içindeki `@theme` + `:root` bloklarında
+tanımlı; iki uygulamada **aynı adlarla** duruyor. JSX'te sabit renk
+yazılmaz — depoda tek bir `slate-*`, `indigo-*` ya da palet dışı
+Tailwind rengi kalmadı (ölçüldü: 0).
+
+Üç kural en çok karıştırılan yerler:
+
+| token | ne işe yarar | ne DEĞİLDİR |
+|---|---|---|
+| `--accent` (menekşe) | aktif ve tıklanabilir olan her şey | süs |
+| `--brand` (turuncu) | marka, bölüm başlığı, bir cümledeki tek anahtar kelime | düğme zemini |
+| `--marker` (kehribar) | **yalnızca** şu an konuşulan cümle | tema, uyarı, sekme rengi |
+
+Kehribar bir zamanlar senkron şeridinde, boş durum kutularında ve
+alakasız hover'larda da vardı; aktif cümle de kehribar olduğu için
+işaret işaret olmaktan çıkmıştı. Aynı şekilde her katman ekranı kendi
+rozet rengini seçmişti (2 yeşil, 4 turuncu, 3 ve 5 menekşe). Yeni bir
+ekran yazarken bu ikisini tekrarlama.
+
+**Kabuk iki uygulamada ortak biçimdedir:** 64px ikon şeridi + 260px menü
+paneli + üst çubuk. Bölüm başlığını **çağıran taraf** verir, bileşen
+kendi başlığını çizmez — katmanlıda `LayerHeaderBar`, reading'de
+`App.tsx`. Bu kural `VocabHub` ve karne gibi İKİ uygulamada birden
+görünen bileşenler yüzünden var; içlerine başlık koyulursa katmanlıda
+çift başlık çıkar.
+
+**Yerleşik biçimler:** liste > ızgara (uzun başlıklar kırpılmasın),
+kenarlık > gölge, kutu içinde kutu yok, aktif segment = açık gri hap,
+birincil eylem = dolu menekşe. Ayrıntılı gerekçeler ve "AI üretimi gibi
+durmasın" kuralları `.claude/skills/frontend-design/SKILL.md` içinde —
+UI'ye dokunmadan önce oku.
+
+
 **İKİ AYRI SENKRON MEKANİZMASI VAR** — en çok karıştıran nokta:
 
 | | Katmanlı | Reading |
@@ -190,44 +224,52 @@ düşüyor ve bunu kullanıcıya söylüyor.
 
 ## 5. Son oturumda yapılanlar
 
-Önceki listedeki üç açık madde de kapatıldı.
+**Arayüz baştan kuruldu.** İki uygulama tek kabuk ve tek palet altında
+birleşti: ikon şeridi + menü paneli + üst çubuk, katmanlıda yeni bir
+**Akış** giriş ekranı. Uygulama artık Katman 1 yerine Akış'ta açılıyor —
+dün 4. katmanda bırakan biri her seferinde başa dönüyordu.
 
-**Hikayede kelimenin YANLIŞ ANLAMDA kullanılması.** İstemci sunucuya
-yalnızca kelimenin yazılışını yolluyordu, anlamı model seçiyordu.
-Oysa söz türü ve Türkçe karşılık kullanıcının kartında ZATEN yazılı
-(`StrugglingWord.partOfSpeech` / `.meaning`). Artık ikisi de gidiyor
-ve istem şunları şart koşuyor: belirtilen söz türü ve anlam, doğal
-eşdizim, çekim serbest ama TÜR DEĞİŞTİRME yasak (`compelling` sıfatken
-`compel` diye fiil yapılamaz). Alıştırma üretecine de aynı bilgi
-gidiyor — yanlış anlamı ölçen bir alıştırma yanlış olanı pekiştirirdi.
-Sunucu eski biçimi (düz metin dizisi) hâlâ kabul ediyor.
+Ölçülebilir kısmı: 25 dosyada **1046 sabit renk sınıfı** token'a çevrildi,
+palet dışı 13 renk (turuncu, mor, gök mavisi, kırmızı, yeşil) tekilleşti,
+"AI izi" sayacı katmanlıda 235→0, reading'de 397→3 indi. Kalan eşleşmeler
+tek tek doğrulandı, hepsi yanlış pozitif.
 
-**Reading, katmanlının tasarım diline taşındı.** Krem/Playfair/keskin
-köşe gitti; slate + indigo, Inter, yuvarlak köşe geldi. Palet 6 adet
-`editorial-*` token'ından geçtiği için renk tek yerden değişti; token
-adları `paper`/`ink`/`hairline`/`accent` olarak yeniden adlandırıldı
-(786 kullanım). 93 `font-serif` → `font-display`, dekoratif italikler
-kaldırıldı, 180 öğeye rolüne göre köşe yarıçapı verildi.
+**Tasarımdan bağımsız BEŞ GERÇEK HATA çıktı:**
 
-`.passage-body` KORUNDU — satır uzunluğu (48ch), satır aralığı ve
-rakam biçimi ölçerek seçilmiş okuma konforu ayarları; palet değil.
+1. **Uydurma çalışma verisi.** Süreç panosundaki haftalık grafik
+   `progress.weeklyStudyMinutes` okuyordu; o alan depoda **hiçbir yerde
+   yazılmıyor**. Yani grafik herkeste, her zaman koddaki sabit
+   `[25, 40, 30, 55, 35, 60, 45]` dizisini gösteriyordu — üstüne
+   "Haftalık Toplam: 290 dk" ve "en yüksek performans" cümleleri de
+   ondan hesaplanıyordu. Gerçek kaynağa bağlandı: `getAllDayStats()`.
+2. **Gösterge çubuğunda iki aynı renk.** "Bugün" ve "Geçmiş günler"
+   noktalarının ikisi de `bg-accent` idi; gösterge, grafiğin çizmediği
+   bir ayrımı açıklıyordu.
+3. **Çalışmayan 3B kart çevirme.** Kelime kartı `rotate-y-180` yazıyordu
+   ama ne `preserve-3d` ne `backface-visibility` tanımlıydı — kart hiç
+   dönmüyor, yalnızca opaklık değişiyordu. Sahte dönüş kaldırıldı.
+4. **Dokunmatikte erişilemeyen düğmeler.** Satır eylemleri (düzenle, sil,
+   telaffuz) hover'a bağlıydı; telefonda hover yok. `pointer: coarse`
+   kuralıyla orada sürekli açık.
+5. **Kontrast.** Kelime kartındaki klavye ipucu `bg-ink` üstünde
+   `text-ink-3` idi — 2.6:1.
 
-**Ortak bileşenlerdeki üçüncü vurgu rengi.** `shared/` altında vurgu
-**teal** yazılıydı; teal iki uygulamanın da paletinde yoktu, yani
-kelime kartları ekranı her iki tarafta da yabancı bir renkle
-duruyordu. 40 sınıf `accent` ailesine geçti. Karne grafiklerindeki
-sabit hex'ler (`#17181B`, `#E4E3DE`) `var(--accent)` / `var(--hairline)`
-oldu; SVG'de sunum niteliği yerine `style` kullanıldı.
+Ayrıca mobilde 41px yatay taşma (üst çubuktaki serif kelime işareti
+`shrink-0` idi) ve kapalı menü çekmecesinin ekranda kalan 64px'i düzeldi.
 
-**Kontrast.** Ölçüm 33 hata buldu; hepsi kapatıldı. En yaygını
-`text-ink/40` ve `/50` idi (beyaz üzerinde 2.55 ve 3.41, gereken 4.5)
-— bölüm başlığı ve kart etiketi taşıyorlardı, `text-ink-3`'e alındı
-(4.76). `shared/`'daki `text-slate-400` de aynı sebeple slate-500
-oldu; katmanlı bu kararı kendi `--ink-3`'ü için zaten vermişti, ortak
-bileşenlerde atlanmıştı. Son tarama: **10 ekran, 14.349 metin ögesi,
-0 hata**; katmanlıda 277 öge, 0 hata.
+**Genişlik.** İçerik sütunu 1180px'de sabitti; 1900px'lik bir ekranda iki
+yanda ~350'şer piksel boşa gidiyordu. 1440 (xl) ve 1760 (2xl) kademeleri
+eklendi, Katman 1'in sütun oranı 5/7→4/8 oldu, Katman 4'ün videosu
+`max-w-3xl`→`max-w-5xl`. Ölçüm: Katman 1'in İngilizce transkript sütunu
+210→460px, Katman 4'ün videosu 768→998px.
 
----
+Metin ağırlıklı yerler bilerek dar bırakıldı: okuma parçası gövdesi 48ch,
+Katman 5 (görüntü kasıtlı kapalı), sınav kurulum formu.
+
+**CRLF TUZAĞI.** Bu depoda bazı dosyalar CRLF satır sonu kullanıyor. Çok
+satırlı bir arama/değiştirme dizesini LF ile yazarsan **sessizce**
+eşleşmez — hata vermez, sadece bulunamadı der. Bu oturumda üç düzenleme
+buna takıldı. Betiklerinde dosyanın kendi satır sonuna uyarlan.
 
 ## 6. Açık kalan işler
 
@@ -259,6 +301,10 @@ Gerçek anahtarlar Netlify'ın ortam değişkenlerinde; depoda hiçbir
 kopyası yok, `.env.example` yalnızca değişken adlarını listeliyor.
 `launch.json` node'un tam yolunu yazıyor çünkü bir makinede PATH'te
 değildi.
+
+`.claude/skills/` ise **istisna** ve depoya dahil: tasarım kuralları
+projeye ait bilgi, makineye değil. Yok sayılsaydı başka bir bilgisayarda
+açılan oturumda kurallar yüklenmez ve tasarım ortalamaya geri kayardı.
 
 **3. Açıklama sızıntısı düzeltmesi YETERİNCE ÖLÇÜLMEDİ.** Ölçüm
 sırasında model bir kez yönergeyi hikayenin içine yazdı:

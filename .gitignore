@@ -12,5 +12,13 @@ dist_electron
 # Yerel netlify dev / edge functions ortamı
 deno.lock
 
-# Claude Code oturum durumu
-.claude
+# Claude Code oturum durumu (launch.json makineye ozel mutlak yol yaziyor).
+# DIKKAT: ".claude" degil ".claude/*" yazilmali - git yok sayilan bir
+# KLASORUN icine hic bakmaz, o yuzden altina istisna acilamaz.
+.claude/*
+
+# ISTISNA: tasarim kurallari projeye ait bilgi, makineye degil.
+# Yok sayilsaydi baska bir bilgisayarda acilan oturumda yuklenmez ve
+# tasarim ortalamaya geri kayardi.
+!.claude/skills/
+!.claude/skills/**
