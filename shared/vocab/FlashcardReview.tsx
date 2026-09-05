@@ -223,12 +223,12 @@ export const FlashcardReview: React.FC<Props> = ({
             <span className="text-ink-3">kaldı</span>
           </div>
 
-          <div className="flex items-center space-x-2 text-[11px] font-semibold">
-            <span className="px-2 py-0.5 bg-paper-3 text-ink-2 rounded-full">
-              Kuyruk: {queue.length}
+          <div className="flex items-center gap-3 text-[11px]">
+            <span className="text-ink-3">
+              <span className="timecode text-ink">{queue.length}</span> kuyrukta
             </span>
-            <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full">
-              Tekrar: {reviewedCount}
+            <span className="text-ink-3">
+              <span className="timecode text-ink">{reviewedCount}</span> tekrar
             </span>
             <button
               type="button"
@@ -252,21 +252,18 @@ export const FlashcardReview: React.FC<Props> = ({
       {/* Kart */}
       <div className="bg-paper-2 border border-hairline rounded-2xl overflow-hidden">
         <div className="px-4 py-2 bg-paper border-b border-hairline flex items-center justify-between text-[11px]">
-          <div className="flex items-center gap-1.5">
-            <span className="px-2 py-0.5 bg-accent-soft text-accent-700 font-semibold rounded">
+          {/* DORT DOLGU ROZET YERINE AYRACLI SATIR. Ayni kartin kunyesi
+              VocabHub listesinde de goruluyor ve orasi zaten boyle;
+              ayni veriyi iki ekranda iki bicimde gostermenin sebebi yok. */}
+          <div className="flex flex-wrap items-baseline gap-x-2 text-ink-3">
+            <span className="rounded bg-paper-3 px-1.5 py-0.5 text-ink-2">
               {current.level}
             </span>
-            <span className="px-2 py-0.5 bg-hairline text-ink-2 font-semibold rounded">
-              {KIND_LABEL[current.kind] || current.kind}
-            </span>
-            {current.pos && (
-              <span className="px-2 py-0.5 bg-paper-3 text-ink-2 font-semibold rounded">
-                {POS_LABELS_TR[current.pos]}
-              </span>
-            )}
+            <span>{KIND_LABEL[current.kind] || current.kind}</span>
+            {current.pos && <span>· {POS_LABELS_TR[current.pos]}</span>}
             {current.state !== CardState.Review && (
-              <span className="rounded bg-paper-3 px-2 py-0.5 text-ink-2">
-                {current.state === CardState.Learning ? 'Öğreniliyor' : 'Yeniden'}
+              <span className="text-[var(--marker-ink)]">
+                · {current.state === CardState.Learning ? 'öğreniliyor' : 'yeniden'}
               </span>
             )}
           </div>
@@ -307,10 +304,10 @@ export const FlashcardReview: React.FC<Props> = ({
               <p className="text-lg sm:text-xl font-medium text-ink">{current.back}</p>
 
               {current.exampleEn && (
-                <div className="bg-paper border border-hairline rounded-lg p-3 text-left space-y-1">
-                  <p className="text-sm text-ink font-medium">{current.exampleEn}</p>
+                <div className="border-l-2 border-hairline-2 pl-3 text-left">
+                  <p className="text-[14px] leading-relaxed text-ink">{current.exampleEn}</p>
                   {current.exampleTr && (
-                    <p className="text-xs text-ink-2">{current.exampleTr}</p>
+                    <p className="mt-0.5 text-[13px] leading-relaxed text-ink-2">{current.exampleTr}</p>
                   )}
                 </div>
               )}

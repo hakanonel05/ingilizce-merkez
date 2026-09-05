@@ -339,7 +339,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                   <button
                     type="button"
                     onClick={stopRecording}
-                    className="flex items-center space-x-1.5 px-3.5 py-2 bg-ink hover:bg-ink-800 text-white text-xs font-semibold rounded-lg transition cursor-pointer"
+                    className="flex items-center space-x-1.5 px-3.5 py-2 bg-accent hover:bg-accent-700 text-white text-xs font-semibold rounded-lg transition cursor-pointer"
                   >
                     <Square className="w-3.5 h-3.5 fill-current" />
                     <span>Durdur</span>

@@ -149,7 +149,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
                 </div>
 
                 {mistake.explanationTr && (
-                  <div className="bg-paper border border-hairline rounded-lg p-3 text-xs text-ink-2 leading-relaxed">
+                  <div className="bg-paper-3 rounded-lg p-3 text-xs text-ink-2 leading-relaxed">
                     <strong className="text-ink block font-semibold mb-0.5">Çözüm Analizi:</strong>
                     {mistake.explanationTr}
                   </div>
