@@ -45,7 +45,7 @@ export const Layer4NoSubtitles: React.FC<Props> = ({
       </div>
 
       {!ytId ? (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-900">
+        <div className="rounded-xl border border-hairline p-4 text-[13px] text-ink-2">
           Bu derste gömülü video yok.
         </div>
       ) : (

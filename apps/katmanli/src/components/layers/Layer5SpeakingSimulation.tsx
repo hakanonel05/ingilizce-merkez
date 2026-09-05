@@ -208,43 +208,40 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
 
   return (
     <div className="space-y-6">
-      {/* Intro Header */}
-      <div className="bg-paper-2 border border-hairline rounded-xl p-5 space-y-3">
-        <div className="flex items-center space-x-2.5">
-          <span className="px-2.5 py-1 bg-accent-soft text-accent-700 border border-accent/25 text-xs font-semibold rounded-md">
-            Layer 7
-          </span>
-          <h2 className="text-base sm:text-lg font-semibold text-ink">Konuşma ve Sesli Anlatım Simülasyonu</h2>
-        </div>
-
-        <p className="text-xs text-ink-2 leading-relaxed">
+      {/* "Layer 7" rozeti ve baslik kalkti: LayerHeaderBar'da zaten var. */}
+      <div className="space-y-3 rounded-2xl border border-hairline bg-paper-2 p-5">
+        <p className="max-w-[62ch] text-[13px] leading-relaxed text-ink-2">
           Gemini AI Dil Koçunuz video konusu üzerinden size <strong className="text-ink">sırayla 3 soru</strong> soracak. 
           Her soruyu mikrofonunuzu kullanarak veya yazarak cevaplayabilirsiniz. Koçunuz konuşma dilinizin akıcılığına odaklanacak ve kısa geri bildirimlerle sizi destekleyecektir.
         </p>
 
         {/* Sesli Anlatım Tekrar Sayacı */}
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-3">
-          <div className="flex items-center justify-between flex-wrap gap-2">
-            <div className="flex items-center space-x-2">
-              <Repeat className="w-4 h-4 text-amber-600" />
-              <h3 className="text-sm font-semibold text-amber-950">Sesli Anlatım Tekrarı</h3>
+        {/* KEHRİBAR TEMA KALKTI. Bu sayaç baştan sona kehribardı — zemin,
+            kenarlık, başlık, sayı rozeti, ilerleme çubuğu ve iki düğme.
+            Kehribar bu depoda "şu an konuşulan cümle" işareti (index.css);
+            bir sayacın teması değil. */}
+        <div className="space-y-3 rounded-xl bg-paper-3 p-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Repeat className="h-4 w-4 text-ink-3" />
+              <h3 className="text-[14px] font-medium text-ink">Sesli anlatım tekrarı</h3>
             </div>
-            <span className="text-xs font-semibold text-amber-900 bg-amber-200/80 px-2.5 py-0.5 rounded-full font-mono">
-              {repCount} / {REP_TARGET}
+            <span className="timecode text-ink-2">
+              {repCount}/{REP_TARGET}
             </span>
           </div>
 
-          <p className="text-[11px] text-amber-900 leading-relaxed">
+          <p className="max-w-[62ch] text-[12px] leading-relaxed text-ink-2">
             Yazdığınız özet ve yorumu kendinize sesli anlatın. Metodoloji
             <strong> {REP_MINIMUM}-{REP_TARGET} tekrar</strong> öneriyor. Dışarıda kulaklıkla
             yürürken biriyle konuşuyormuş gibi pratik yapabilirsiniz. Her tekrardan sonra
             aşağıdaki düğmeye basın.
           </p>
 
-          <div className="w-full bg-amber-200 rounded-full h-2 overflow-hidden">
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-paper-2">
             <div
-              className={`h-2 rounded-full transition-all duration-500 ${
-                repCount >= REP_MINIMUM ? 'bg-emerald-500' : 'bg-amber-500'
+              className={`h-full rounded-full transition-all duration-500 ${
+                repCount >= REP_MINIMUM ? 'bg-emerald-500' : 'bg-accent'
               }`}
               style={{ width: `${Math.min(100, (repCount / REP_TARGET) * 100)}%` }}
             />
@@ -254,28 +251,31 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
             <button
               type="button"
               onClick={() => setRepCount((c) => c + 1)}
-              className="flex items-center space-x-1.5 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold rounded-lg transition cursor-pointer"
+              className="flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-[13px]
+                font-medium text-white transition-colors duration-150 hover:bg-accent-700 cursor-pointer"
             >
-              <Plus className="w-3.5 h-3.5" />
-              <span>Bir Tekrar Yaptım</span>
+              <Plus className="h-3.5 w-3.5" />
+              <span>Bir tekrar yaptım</span>
             </button>
 
             <button
               type="button"
               onClick={() => setRepCount((c) => Math.max(0, c - 1))}
               disabled={repCount === 0}
-              className="flex items-center space-x-1 px-3 py-2 bg-paper-2 hover:bg-amber-100 border border-amber-300 text-amber-900 text-xs font-semibold rounded-lg transition disabled:opacity-40 cursor-pointer"
-              title="Yanlışlıkla arttırdıysanız"
+              className="flex items-center gap-1 rounded-xl border border-hairline bg-paper-2 px-3 py-2
+                text-[13px] text-ink-2 transition-colors hover:text-ink
+                disabled:opacity-40 cursor-pointer"
+              title="Yanlışlıkla arttırdıysan"
             >
-              <Minus className="w-3.5 h-3.5" />
-              <span>Geri Al</span>
+              <Minus className="h-3.5 w-3.5" />
+              <span>Geri al</span>
             </button>
 
             <button
               type="button"
               onClick={() => setRepCount(0)}
               disabled={repCount === 0}
-              className="px-3 py-2 text-[11px] font-semibold text-amber-800 hover:text-amber-950 disabled:opacity-40 cursor-pointer"
+              className="rounded-lg px-3 py-2 text-[12px] text-ink-3 transition-colors hover:text-ink disabled:opacity-40 cursor-pointer"
             >
               Sıfırla
             </button>
@@ -312,14 +312,15 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
         </div>
 
         {errorMsg && (
-          <div className="flex items-center justify-between bg-rose-50 border border-rose-200 p-3 rounded-lg text-xs text-rose-800 mt-2">
+          <div className="mt-2 flex items-center justify-between rounded-xl border border-rose-200 bg-rose-50 p-3 text-[12px] text-rose-800">
             <div className="flex items-center space-x-2">
               <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
               <span>{errorMsg}</span>
             </div>
             <button
               onClick={startSimulation}
-              className="ml-3 px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-[11px] font-semibold shrink-0 cursor-pointer"
+              className="ml-3 shrink-0 rounded-lg bg-rose-600 px-2.5 py-1 text-[12px] font-medium
+                text-white transition-colors hover:bg-rose-700 cursor-pointer"
             >
               Tekrar Yenile
             </button>
@@ -370,7 +371,7 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
 
             {/* Coach Feedback for this answer */}
             {turn.coachFeedback && (
-              <div className="bg-emerald-50 border border-emerald-200 p-3 rounded-lg text-xs text-emerald-900 leading-relaxed font-medium">
+              <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-[13px] leading-relaxed text-emerald-900">
                 <strong className="text-emerald-800 block font-semibold">Geri Bildirim: </strong>
                 {turn.coachFeedback}
               </div>
@@ -423,7 +424,7 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
           </div>
         </form>
       ) : (
-        <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-xl text-center space-y-3">
+        <div className="space-y-3 rounded-2xl border border-hairline bg-paper-2 p-6 text-center">
           <Award className="w-10 h-10 text-emerald-600 mx-auto" />
           <h3 className="text-lg font-semibold text-ink">Tebrikler! 7. Katman Konuşma Simülasyonunu Tamamladınız!</h3>
           <p className="text-xs text-ink-2 max-w-xl mx-auto">

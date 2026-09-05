@@ -265,7 +265,7 @@ export const FlashcardReview: React.FC<Props> = ({
               </span>
             )}
             {current.state !== CardState.Review && (
-              <span className="px-2 py-0.5 bg-amber-100 text-amber-800 font-semibold rounded">
+              <span className="rounded bg-paper-3 px-2 py-0.5 text-ink-2">
                 {current.state === CardState.Learning ? 'Öğreniliyor' : 'Yeniden'}
               </span>
             )}

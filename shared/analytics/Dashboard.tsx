@@ -8,11 +8,9 @@
  * - Grafikler elle SVG. Hazır bir grafik kütüphanesi iki uygulamanın da
  *   paketine ~300 KB ekliyordu; buradaki üç grafik (ısı haritası, sütun,
  *   çizgi) birkaç düzine satırla çiziliyor.
- * - Renkler Tailwind'in slate ölçeği; iki uygulamanın paleti de o ölçek
- *   üzerine kurulu olduğu için ortak bileşen her iki tarafta da yerli
- *   duruyor. VURGU rengi sabit yazılmaz: `accent` ailesi iki uygulamanın
- *   da @theme bloğunda tanımlı (eskiden burada teal yazıyordu ve ikisinin
- *   de paletinde yoktu).
+ * - Renk YAZILMAZ, token okunur (paper/ink/hairline/accent). Bu dosya
+ *   iki uygulamada birden göründüğü için sabit bir ölçeğe bağlanamaz;
+ *   token'lar ikisinin de @theme bloğunda aynı adla tanımlı.
  * - Grafiklerdeki renkler CSS değişkeninden okunuyor (`var(--accent)`,
  *   `var(--hairline)`); SVG sunum niteliği yerine `style` kullanılıyor
  *   çünkü değişken desteği orada güvenilir.
@@ -263,7 +261,7 @@ export const Dashboard: React.FC = () => {
                   <Chip label="Yanlış" value={String(selected.mistakes)} tone="bg-rose-100 text-rose-800" />
                 )}
                 {selected.minutesTotal === 0 && selected.markedActive && (
-                  <Chip label="Çalışıldı" value="süre kaydı yok" tone="bg-amber-100 text-amber-800" />
+                  <Chip label="Çalışıldı" value="süre kaydı yok" />
                 )}
               </div>
 

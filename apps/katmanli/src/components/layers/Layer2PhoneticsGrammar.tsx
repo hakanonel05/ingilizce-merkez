@@ -202,8 +202,8 @@ export const Layer2PhoneticsGrammar: React.FC<Layer2PhoneticsGrammarProps> = ({
                   </div>
 
                   {item.pronunciationNote && (
-                    <div className="text-amber-900 bg-amber-50 border border-amber-200 p-2.5 rounded-lg text-[11px]">
-                      <strong className="text-amber-800">Telaffuz İpucu: </strong>
+                    <div className="rounded-lg bg-paper-3 p-2.5 text-[12px] text-ink-2">
+                      <strong className="font-medium text-ink">Telaffuz ipucu: </strong>
                       {item.pronunciationNote}
                     </div>
                   )}

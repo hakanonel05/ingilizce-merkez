@@ -836,7 +836,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
       {tab === 'lesson' && (
         <div className="space-y-4">
           {!lesson ? (
-            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-900">
+            <div className="rounded-xl border border-hairline p-4 text-[13px] text-ink-2">
               Önce bir ders seçin.
             </div>
           ) : (
@@ -850,17 +850,14 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                       <StatPill
                         label="Vadesi gelen"
                         value={lessonStats.due}
-                        tone="bg-rose-100 text-rose-800"
                       />
                       <StatPill
                         label="Öğreniliyor"
                         value={lessonStats.learning + lessonStats.relearning}
-                        tone="bg-amber-100 text-amber-800"
                       />
                       <StatPill
                         label="Tekrar"
                         value={lessonStats.review}
-                        tone="bg-emerald-100 text-emerald-800"
                       />
                     </div>
                   </div>
@@ -939,13 +936,12 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
           <div className="bg-paper-2 border border-hairline rounded-xl p-4 space-y-3">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
               <StatPill label="Toplam" value={globalStats.total} />
-              <StatPill label="Vadesi gelen" value={globalStats.due} tone="bg-rose-100 text-rose-800" />
+              <StatPill label="Vadesi gelen" value={globalStats.due} />
               <StatPill
                 label="Öğreniliyor"
                 value={globalStats.learning + globalStats.relearning}
-                tone="bg-amber-100 text-amber-800"
               />
-              <StatPill label="Tekrar" value={globalStats.review} tone="bg-emerald-100 text-emerald-800" />
+              <StatPill label="Tekrar" value={globalStats.review} />
               <StatPill label="Askıda" value={globalStats.suspended} />
             </div>
 
@@ -1073,7 +1069,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
           </div>
 
           {limitedPool.length === 0 && studyPool.some((c) => c.due <= Date.now()) ? (
-            <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 text-center space-y-2">
+            <div className="space-y-2 rounded-2xl border border-hairline p-6 text-center">
               <h3 className="text-sm font-semibold text-ink">Günlük sınıra ulaşıldı</h3>
               <p className="text-xs text-ink-2 max-w-md mx-auto">
                 Bugün için ayarladığınız yeni kart sınırına ({settings.newCardsPerDay})

@@ -72,7 +72,7 @@ export const Layer2ActiveListening: React.FC<Props> = ({ lesson, onCompleteLayer
       </div>
 
       {!ytId ? (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-900">
+        <div className="rounded-xl border border-hairline p-4 text-[13px] text-ink-2">
           Bu derste gömülü video yok. Katman 1'den video linki ekleyebilirsiniz.
         </div>
       ) : (
@@ -125,7 +125,7 @@ export const Layer2ActiveListening: React.FC<Props> = ({ lesson, onCompleteLayer
                       ref={isActive ? activeRef : null}
                       className={`p-4 border-l-4 transition-all ${
                         isActive
-                          ? 'bg-amber-50 border-amber-500'
+                          ? 'bg-[var(--marker-bg)] border-amber-500'
                           : 'border-transparent'
                       }`}
                     >

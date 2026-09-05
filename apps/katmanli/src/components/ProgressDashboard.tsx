@@ -196,9 +196,9 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({ progress }
           <>
             {/* Renkler CSS degiskenlerinden geliyor: SVG `fill`/`stroke`
                 var() kabul ediyor, boylece palet degisince grafik de
-                kendiliginden takip ediyor. Once bu degerler slate/indigo
-                hex'leri olarak sabitti ve palet isininca grafik tek basina
-                soguk kaliyordu. */}
+                kendiliginden takip ediyor. Once bu degerler soguk gri ve
+                indigo hex'leri olarak sabitti; palet isininca grafik tek
+                basina soguk kaliyordu. */}
             <div className="mt-5 h-56 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={chartData} margin={{ top: 8, right: 8, left: -22, bottom: 0 }}>
