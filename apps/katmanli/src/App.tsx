@@ -785,7 +785,7 @@ async function buildLessonData(
               onOpenGuide={() => setIsGuideOpen(true)}
             />
           ) : (
-          <div className="min-h-[500px] max-w-[1180px] w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+          <div className="min-h-[500px] w-full max-w-[1180px] xl:max-w-[1440px] 2xl:max-w-[1760px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           {!activeLesson &&
           activeLayer !== 9 &&
           activeLayer !== 10 &&

@@ -715,7 +715,7 @@ export default function App() {
 
       {/* Main Body Layout */}
         <main className="min-w-0 flex-1">
-          <div className="mx-auto w-full max-w-[1180px] px-4 py-6 sm:px-6 sm:py-8">
+          <div className="mx-auto w-full max-w-[1180px] px-4 py-6 sm:px-6 sm:py-8 xl:max-w-[1440px] 2xl:max-w-[1760px] lg:px-8">
 
         {/*
           ÇEVRİMDIŞI UYARISI.

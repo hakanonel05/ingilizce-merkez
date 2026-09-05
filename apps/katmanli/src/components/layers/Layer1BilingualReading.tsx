@@ -568,7 +568,7 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
       <div className={viewMode === 'split' ? 'grid grid-cols-1 lg:grid-cols-12 gap-6 items-start' : 'space-y-6'}>
 
         {/* Video Player Column */}
-        <div className={viewMode === 'split' ? 'lg:col-span-5 lg:sticky lg:top-4 space-y-3' : 'space-y-3'}>
+        <div className={viewMode === 'split' ? 'lg:col-span-4 lg:sticky lg:top-4 space-y-3' : 'space-y-3'}>
           {ytId ? (
             <div className="rounded-2xl border border-hairline bg-paper-2 p-3 space-y-2">
               <div className="aspect-video w-full rounded-lg overflow-hidden bg-ink-950 border border-hairline shadow-inner relative">
@@ -669,7 +669,7 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
         </div>
 
         {/* Transcript Column */}
-        <div ref={transcriptAreaRef} className={viewMode === 'split' ? 'lg:col-span-7' : 'w-full'}>
+        <div ref={transcriptAreaRef} className={viewMode === 'split' ? 'lg:col-span-8' : 'w-full'}>
           <div className="overflow-hidden rounded-2xl border border-hairline bg-paper-2">
 
             <div className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-hairline bg-paper-3 px-4 py-2.5">
