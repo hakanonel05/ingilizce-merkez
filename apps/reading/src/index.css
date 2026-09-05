@@ -45,8 +45,10 @@
   --color-paper-3:   #EDEBE8;   /* stone-150 — ikincil yuzey */
   --color-ink:       #1C1917;   /* stone-900 — ana metin */
   --color-ink-2:     #57534E;   /* stone-600 — ikincil metin */
-  --color-ink-3:     #78716C;   /* stone-500 — pasif (beyazda 4.8) */
+  --color-ink-3:     #6B6560;   /* pasif — uc zeminde de >=4.8 (olculdu) */
   --color-hairline:  #E7E5E4;   /* stone-200 — cizgi */
+  /* Katmanlidaki notun aynisi: 48 kullanim var, tanimsizsa sinif uretilmiyor. */
+  --color-hairline-2: #D6D3D1;
 
   /* Vurgu ucu da token: shared/ altindaki ortak bilesenler `bg-accent`,
      `bg-accent-700` (hover) ve `bg-accent-soft` yaziyor; ayni adlar
@@ -66,7 +68,12 @@
      --brand-strong 14px ve altindaki metin icin (5.6). */
   --color-paper-warm:   #F6F3EE;
 
-  --color-brand:        #E8590C;
+  /* DEGER OLCULEREK SECILDI. Onceki #E8590C 3.58/3.26/3.01 veriyordu
+     (paper-2/paper/paper-3). "Buyuk metinde AA yeter" varsayimi yanlisti:
+     AA >=24px YA DA >=18.66px VE KALIN ister; bolum basliklari 22px/600.
+     Bu deger kullanildigi her zeminde gecer (5.18 / 4.71 / 4.76) ve
+     uzerine yazilan beyaz rozet metni icin de 5.18. */
+  --color-brand:        #C2410C;
   --color-brand-strong: #C2410C;
   --color-brand-soft:   #FFF3EC;
 }
@@ -91,7 +98,7 @@
   --paper-3:    #EDEBE8;
   --ink:        #1C1917;
   --ink-2:      #57534E;
-  --ink-3:      #78716C;
+  --ink-3:      #6B6560;
   --ink-800:    #292524;   /* stone-800 — koyu panel */
   --ink-950:    #0C0A09;   /* stone-950 — en koyu yuzey */
   --hairline:   #E7E5E4;
@@ -105,8 +112,8 @@
   /* Marka — yukaridaki @theme notuna bak. */
   --paper-warm: #F6F3EE;   /* yalnizca hero seridi */
 
-  --brand:        #E8590C;
-  --brand-strong: #C2410C;
+  --brand:        #C2410C;
+  --brand-strong: #9A3412;
   --brand-soft:   #FFF3EC;
 
   --ok:         #059669;   /* emerald-600 */
@@ -219,7 +226,10 @@ html { -webkit-text-size-adjust: 100%; }
     touch-action: manipulation;
   }
 
-  button, select { min-height: 40px; }
+  /* Yukseklik VE genislik. Yalnizca min-height varken 40x32 ve 40x38
+     olcusunde iki dugme kaliyordu (marka rozeti ve gramer kocu): parmak
+     hedefi iki boyutlu, tek boyutu tutturmak yetmiyor. */
+  button, select { min-height: 40px; min-width: 40px; }
 
   /* Yalnızca simge taşıyan düğmeler kare bir hedefe çıkar */
   button:has(> svg:only-child) { min-width: 40px; }

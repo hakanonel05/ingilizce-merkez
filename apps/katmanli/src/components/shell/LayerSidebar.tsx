@@ -160,7 +160,7 @@ export const LayerSidebar: React.FC<Props> = ({
 
         <span className="min-w-0 flex-1 truncate">
           {index !== null && (
-            <span className={isActive ? 'text-white/70' : 'text-ink-3'}>
+            <span className={isActive ? 'text-white/80' : 'text-ink-3'}>
               Katman {index}:{' '}
             </span>
           )}

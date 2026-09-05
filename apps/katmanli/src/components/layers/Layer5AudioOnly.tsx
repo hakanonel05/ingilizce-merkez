@@ -51,9 +51,9 @@ export const Layer5AudioOnly: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
               <div ref={containerRef} className="w-full h-full" />
               {!peek && (
                 <div className="absolute inset-0 bg-ink flex flex-col items-center justify-center space-y-3">
-                  <Headphones className="w-14 h-14 text-ink-3" />
+                  <Headphones className="w-14 h-14 text-hairline-2" />
                   <p className="text-sm font-semibold text-hairline">Görüntü Kapalı</p>
-                  <p className="text-[11px] text-ink-3 px-8 text-center">
+                  <p className="text-[11px] text-hairline-2 px-8 text-center">
                     Sadece sese odaklanın. Anlamadığınız yerleri not edin.
                   </p>
                 </div>
@@ -68,7 +68,7 @@ export const Layer5AudioOnly: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                   style={{ width: `${progressPct}%` }}
                 />
               </div>
-              <div className="flex justify-between text-[11px] font-mono text-ink-3">
+              <div className="flex justify-between text-[11px] font-mono text-hairline-2">
                 <span>{formatSeconds(currentTime)}</span>
                 <span>{duration > 0 ? formatSeconds(duration) : '--:--'}</span>
               </div>

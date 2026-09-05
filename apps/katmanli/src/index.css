@@ -57,10 +57,19 @@
   --color-paper-3:      #EDEBE8;
   --color-ink:          #1C1917;
   --color-ink-2:        #57534E;
-  --color-ink-3:        #78716C;
+  /* Pasif metin. #78716C "beyazda 4.8" diye secilmisti ve o dogruydu,
+     ama sayfanin zemini beyaz DEGIL: govde #F5F4F2, kart ici #EDEBE8.
+     Gercek kullanimda 4.36 ve 4.03'e dusuyordu. Bu deger uc zeminde de
+     gecer: 5.74 / 5.23 / 4.83. */
+  --color-ink-3:        #6B6560;
   --color-ink-800:      #292524;
   --color-ink-950:      #0C0A09;
   --color-hairline:     #E7E5E4;
+  /* hairline-2 @theme'e EKLENMEK ZORUNDA: depoda 48 yerde
+     `border-hairline-2` / `text-hairline-2` yaziliyor ve token burada
+     tanimli degilse Tailwind o siniflari hic uretmez — hata da vermez,
+     sinif sessizce yok sayilir. */
+  --color-hairline-2:   #D6D3D1;
   --color-accent:       #4F46E5;
   --color-accent-700:   #4338CA;
   --color-accent-soft:  #EEF2FF;
@@ -75,7 +84,12 @@
      --brand-strong 14px ve altindaki metin icin (5.6). */
   --color-paper-warm:   #F6F3EE;
 
-  --color-brand:        #E8590C;
+  /* DEGER OLCULEREK SECILDI. Onceki #E8590C 3.58/3.26/3.01 veriyordu
+     (paper-2/paper/paper-3). "Buyuk metinde AA yeter" varsayimi yanlisti:
+     AA >=24px YA DA >=18.66px VE KALIN ister; bolum basliklari 22px/600.
+     Bu deger kullanildigi her zeminde gecer (5.18 / 4.71 / 4.76) ve
+     uzerine yazilan beyaz rozet metni icin de 5.18. */
+  --color-brand:        #C2410C;
   --color-brand-strong: #C2410C;
   --color-brand-soft:   #FFF3EC;
 }
@@ -97,7 +111,7 @@
      zeminde 10-11px ACIKLAMA metni ve olculen kontrast 2.56 idi
      (gereken 4.5). Okunmasi gereken yazi icin fazla soluk. stone-500
      ayni sakinlikte duruyor ama 4.83 ile okunuyor. */
-  --ink-3:      #78716C;   /* stone-500 — pasif (beyazda 4.8) */
+  --ink-3:      #6B6560;   /* pasif — uc zeminde de >=4.8 (olculdu) */
   --ink-800:    #292524;   /* stone-800 — koyu panel */
   --ink-950:    #0C0A09;   /* stone-950 — en koyu yuzey */
 
@@ -114,8 +128,8 @@
   /* Marka — yukaridaki @theme notuna bak. */
   --paper-warm: #F6F3EE;   /* yalnizca hero seridi */
 
-  --brand:        #E8590C;
-  --brand-strong: #C2410C;
+  --brand:        #C2410C;
+  --brand-strong: #9A3412;
   --brand-soft:   #FFF3EC;
 
   /* Durumlar */
@@ -225,7 +239,7 @@ body {
   /* Eski deger beyaz üzerinde 2.56 kontrast veriyordu. Bölüm
      başlıkları okunması GEREKEN metinler, dekoratif değil; stone-500
      aynı sakinlikte ama 4.7 kontrastla okunuyor. */
-  color: #78716C;
+  color: #6B6560;
 }
 
 /* Transkript gövdesi. Uzun İngilizce metin okunuyor: rahat satır
@@ -331,7 +345,10 @@ html { -webkit-text-size-adjust: 100%; }
     touch-action: manipulation;
   }
 
-  button, select { min-height: 40px; }
+  /* Yukseklik VE genislik. Yalnizca min-height varken 40x32 ve 40x38
+     olcusunde iki dugme kaliyordu (marka rozeti ve gramer kocu): parmak
+     hedefi iki boyutlu, tek boyutu tutturmak yetmiyor. */
+  button, select { min-height: 40px; min-width: 40px; }
 
   /* Yalnızca simge taşıyan düğmeler kare bir hedefe çıkar */
   button:has(> svg:only-child) { min-width: 40px; }
