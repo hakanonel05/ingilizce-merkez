@@ -95,7 +95,7 @@ export const GrammarCoachDrawer: React.FC<GrammarCoachDrawerProps> = ({
                   : 'bg-paper-2 text-ink-800 border border-hairline mr-4'
               }`}
             >
-              <div className={`flex items-center space-x-1 font-semibold text-[10px] ${msg.role === 'user' ? 'text-white/70' : 'text-accent-700'}`}>
+              <div className={`flex items-center space-x-1 font-semibold text-[10px] ${msg.role === 'user' ? 'text-white/70' : 'text-brand'}`}>
                 {msg.role === 'user' ? 'Siz' : 'Gemini Gramer Koçu'}
               </div>
               <p className="whitespace-pre-line">{msg.text}</p>
@@ -103,7 +103,7 @@ export const GrammarCoachDrawer: React.FC<GrammarCoachDrawerProps> = ({
           ))}
 
           {isLoading && (
-            <div className="flex items-center space-x-2 text-accent text-xs p-3">
+            <div className="flex items-center space-x-2 text-brand text-xs p-3">
               <Loader2 className="w-4 h-4 animate-spin" />
               <span>Gramer kuralı bağlam içinde inceleniyor...</span>
             </div>

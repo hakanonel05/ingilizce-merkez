@@ -285,7 +285,7 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
                         onClick={() => onSelectPassage(item.passageId!)}
                         title={item.passageTitle}
                         className="mt-1 inline-flex items-center gap-1 text-[11px] text-ink-3
-                          transition-colors hover:text-accent cursor-pointer"
+                          transition-colors hover:text-brand cursor-pointer"
                       >
                         <Eye className="h-3 w-3" />
                         {item.passageTitle}

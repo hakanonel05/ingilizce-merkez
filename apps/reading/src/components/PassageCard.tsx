@@ -723,7 +723,7 @@ export default function PassageCard({
                     Uc satirlik icerik icin uc kutu; hiyerarsi boyut ve
                     renkle zaten kuruluyor. */}
                 <div className="space-y-3">
-                  <p className="text-[17px] text-accent">{activeWordDetail.meaning}</p>
+                  <p className="text-[17px] text-brand">{activeWordDetail.meaning}</p>
 
                   {activeWordDetail.definition && (
                     <p className="text-[13px] leading-relaxed text-ink-2">

@@ -134,7 +134,7 @@ export default function VocabularyWorkbook({ workbookState, onWorkbookStateChang
             <div className="grid grid-cols-1 sm:grid-cols-2">
               {table.groups.map((g, gi) => (
                 <div key={gi} className="border-b border-r border-hairline p-3">
-                  <p className="text-[11px] font-semibold tracking-wide text-accent mb-1.5">
+                  <p className="text-[11px] font-semibold tracking-wide text-brand mb-1.5">
                     {gi + 1}. {g.theme}
                   </p>
                   <ol className="space-y-0.5">
@@ -157,7 +157,7 @@ export default function VocabularyWorkbook({ workbookState, onWorkbookStateChang
               return (
                 <div key={exIdx} className="bg-paper-2 border border-hairline rounded-lg">
                   <div className="px-4 py-3 border-b border-hairline flex items-center gap-2">
-                    <ListChecks className="h-4 w-4 text-accent" />
+                    <ListChecks className="h-4 w-4 text-brand" />
                     <div>
                       <p className="font-display font-semibold text-sm text-ink">{ex.title}</p>
                       <p className="text-[11px] text-ink-3 mt-0.5">{ex.instruction}</p>
@@ -221,7 +221,7 @@ export default function VocabularyWorkbook({ workbookState, onWorkbookStateChang
                         </span>
                         <button
                           onClick={() => setCheckedLocal(exIdx, false)}
-                          className="flex items-center gap-1.5 text-xs font-semibold text-accent hover:underline"
+                          className="flex items-center gap-1.5 text-xs font-semibold text-brand hover:underline"
                         >
                           <RotateCcw className="h-3.5 w-3.5" /> Tekrar Dene
                         </button>

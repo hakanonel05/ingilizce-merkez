@@ -35,8 +35,8 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
       <div className="bg-paper-2 border border-hairline rounded-xl p-6 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="space-y-1">
-            <span className="text-xs font-semibold text-accent-700 flex items-center space-x-1">
-              <ListX className="w-4 h-4 text-accent" />
+            <span className="text-xs font-semibold text-brand flex items-center space-x-1">
+              <ListX className="w-4 h-4 text-brand" />
               <span>Yanlışlar Defteri</span>
             </span>
             <h2 className="text-xl sm:text-2xl font-semibold text-ink">
@@ -110,7 +110,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
                     {lessonExists ? (
                       <button
                         onClick={() => onSelectLesson(mistake.lessonId)}
-                        className="flex items-center space-x-1.5 text-[11px] font-semibold text-accent-700 hover:text-accent-700 hover:underline cursor-pointer"
+                        className="flex items-center space-x-1.5 text-[11px] font-semibold text-brand hover:text-brand hover:underline cursor-pointer"
                       >
                         <Eye className="w-3.5 h-3.5" />
                         <span>{mistake.lessonTitle}</span>

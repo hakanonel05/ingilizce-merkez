@@ -1163,7 +1163,7 @@ const CardTable: React.FC<{
                 )}
 
                 <div className="flex items-center flex-wrap gap-2 text-[10px] text-ink-3 pt-0.5">
-                  <span className={isDue ? 'text-accent' : ''}>{dueLabel}</span>
+                  <span className={isDue ? 'text-brand' : ''}>{dueLabel}</span>
                   <span>tekrar: {c.reps}</span>
                   {c.lapses > 0 && <span>unutma: {c.lapses}</span>}
                   {c.stability !== null && <span>S: {c.stability.toFixed(1)}g</span>}

@@ -259,7 +259,7 @@ export const HomeFeed: React.FC<Props> = ({
               type="button"
               onClick={onOpenGuide}
               className="mt-4 inline-flex items-center gap-1.5 text-[12px] font-medium
-                text-accent transition-opacity hover:opacity-70 cursor-pointer"
+                text-brand transition-opacity hover:opacity-70 cursor-pointer"
             >
               <Sparkles className="h-3.5 w-3.5" />
               Metodun tamamını oku
@@ -346,7 +346,7 @@ export const HomeFeed: React.FC<Props> = ({
               type="button"
               onClick={() => onSelectLayer(10)}
               className="mt-4 inline-flex items-center gap-1.5 text-[12px] font-medium
-                text-accent transition-opacity hover:opacity-70 cursor-pointer"
+                text-brand transition-opacity hover:opacity-70 cursor-pointer"
             >
               <CalendarClock className="h-3.5 w-3.5" />
               Kelime bankasını aç

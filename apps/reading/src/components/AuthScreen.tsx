@@ -83,7 +83,7 @@ export default function AuthScreen({ onContinueOffline }: { onContinueOffline: (
           <button 
             type="button" 
             onClick={() => setIsLogin(!isLogin)}
-            className="text-sm text-accent hover:underline"
+            className="text-sm text-brand hover:underline"
           >
             {isLogin ? 'Hesabınız yok mu? Kayıt Olun' : 'Zaten hesabınız var mı? Giriş Yapın'}
           </button>

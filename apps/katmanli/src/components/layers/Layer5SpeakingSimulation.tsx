@@ -335,13 +335,13 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
             {/* Coach Question Bubble */}
             <div className="bg-paper p-4 rounded-xl border border-hairline space-y-2 max-w-3xl">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-semibold text-accent-700 tracking-wide flex items-center space-x-1">
-                  <Sparkles className="w-3.5 h-3.5 text-accent" />
+                <span className="text-[11px] font-semibold text-brand tracking-wide flex items-center space-x-1">
+                  <Sparkles className="w-3.5 h-3.5 text-brand" />
                   <span>Gemini Dil Koçu (Soru {turn.step}):</span>
                 </span>
                 <button
                   onClick={() => speakText(turn.coachQuestion)}
-                  className="p-1.5 text-ink-3 hover:text-accent transition cursor-pointer"
+                  className="p-1.5 text-ink-3 hover:text-brand transition cursor-pointer"
                   title="Soruyu Sesli Dinle"
                 >
                   <Volume2 className="w-4 h-4" />
@@ -363,7 +363,7 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
             {turn.userResponse && (
               <div className="flex justify-end">
                 <div className="bg-accent-soft p-4 rounded-xl border border-accent/25 text-xs sm:text-sm text-ink max-w-2xl space-y-1">
-                  <span className="text-[10px] text-accent-700 font-semibold block">Yanıtınız:</span>
+                  <span className="text-[10px] text-brand font-semibold block">Yanıtınız:</span>
                   <p className="leading-relaxed font-medium">"{turn.userResponse}"</p>
                 </div>
               </div>
@@ -380,7 +380,7 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
         ))}
 
         {isLoading && (
-          <div className="flex items-center space-x-2 text-accent text-xs p-3">
+          <div className="flex items-center space-x-2 text-brand text-xs p-3">
             <Loader2 className="w-4 h-4 animate-spin" />
             <span>Gemini koçunuz yanıtınızı dinliyor ve hazırlanıyor...</span>
           </div>
@@ -397,7 +397,7 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
               className={`p-3 rounded-lg border transition flex items-center justify-center cursor-pointer ${
                 isListening
                   ? 'bg-rose-600 text-white border-rose-600 animate-pulse'
-                  : 'bg-paper-3 hover:bg-hairline text-accent border-hairline'
+                  : 'bg-paper-3 hover:bg-hairline text-brand border-hairline'
               }`}
               title={isListening ? 'Konuşmayı durdur' : 'Mikrofonu açıp İngilizce konuşun'}
             >

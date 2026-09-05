@@ -376,7 +376,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                     <button
                       type="button"
                       onClick={() => setShowAllRecordings((v) => !v)}
-                      className="flex items-center space-x-1.5 text-xs font-semibold text-ink-2 hover:text-accent-700 cursor-pointer"
+                      className="flex items-center space-x-1.5 text-xs font-semibold text-ink-2 hover:text-brand cursor-pointer"
                     >
                       <ListMusic className="w-3.5 h-3.5" />
                       <span>
@@ -406,7 +406,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                             <button
                               type="button"
                               onClick={() => idx >= 0 && goTo(idx)}
-                              className="flex-1 text-left text-[11px] text-ink-2 hover:text-accent-700 truncate cursor-pointer"
+                              className="flex-1 text-left text-[11px] text-ink-2 hover:text-brand truncate cursor-pointer"
                               title={rec.sentenceText}
                             >
                               {idx >= 0 ? `${idx + 1}. ` : ''}

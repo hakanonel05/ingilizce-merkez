@@ -308,12 +308,12 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
                   <div className="min-w-0 flex-1">
                     <div className="flex items-baseline gap-2">
                       <h3 className={`min-w-0 flex-1 truncate text-[14px] font-medium ${
-                        isSelected ? 'text-accent-700' : 'text-ink'
+                        isSelected ? 'text-brand' : 'text-ink'
                       }`}>
                         {lesson.title}
                       </h3>
                       {isSelected && (
-                        <span className="flex shrink-0 items-center gap-1 text-[11px] font-medium text-accent">
+                        <span className="flex shrink-0 items-center gap-1 text-[11px] font-medium text-brand">
                           <Check className="h-3.5 w-3.5" strokeWidth={3} />
                           aktif
                         </span>

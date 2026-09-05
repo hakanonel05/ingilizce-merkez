@@ -71,7 +71,7 @@ export const GoalEditorModal: React.FC<Props> = ({
       >
         <div className="flex items-center justify-between gap-3 border-b border-hairline px-5 py-4">
           <div className="flex items-center gap-2">
-            <Target className="h-4 w-4 text-accent" />
+            <Target className="h-4 w-4 text-brand" />
             <h2 className="text-sm font-semibold tracking-tight text-ink">
               Hedef ve seri
             </h2>

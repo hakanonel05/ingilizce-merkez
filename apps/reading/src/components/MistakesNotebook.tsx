@@ -250,7 +250,7 @@ export default function MistakesNotebook({ mistakes, onReviewMistake, onRemoveMi
                   type="button"
                   onClick={() => onSelectPassage(group.passageId)}
                   className="flex items-center gap-1 text-[12px] text-ink-3
-                    transition-colors hover:text-accent cursor-pointer"
+                    transition-colors hover:text-brand cursor-pointer"
                 >
                   Parçaya git <ExternalLink className="h-3 w-3" />
                 </button>

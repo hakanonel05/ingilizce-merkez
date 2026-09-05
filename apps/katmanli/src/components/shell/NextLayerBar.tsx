@@ -74,7 +74,7 @@ export const NextLayerBar: React.FC<Props> = ({
               className="inline-flex h-10 items-center gap-2 rounded-xl border border-hairline
                 bg-paper-2 px-4 text-[13px] font-medium text-ink
                 transition-all duration-200 ease-in-out
-                hover:border-accent/40 hover:text-accent-700 cursor-pointer"
+                hover:border-accent/40 hover:text-brand cursor-pointer"
             >
               <span className="max-w-[10rem] truncate sm:max-w-none">{nextLabel}</span>
               <ArrowRight className="h-4 w-4" />

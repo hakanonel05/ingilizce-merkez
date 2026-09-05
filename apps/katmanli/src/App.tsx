@@ -793,7 +793,7 @@ async function buildLessonData(
           activeLayer !== 12 ? (
             <div className="max-w-md mx-auto my-20 text-center space-y-4">
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-accent/20 bg-accent-soft">
-                <PlayCircle className="h-5 w-5 text-accent" />
+                <PlayCircle className="h-5 w-5 text-brand" />
               </div>
               <h3 className="text-xl font-semibold tracking-tight text-ink">
                 Bir ders seç ya da ekle
@@ -840,7 +840,7 @@ async function buildLessonData(
                     border border-hairline bg-paper-2 px-3 py-2 text-left
                     transition-colors duration-150 hover:bg-paper-3 cursor-pointer"
                 >
-                  <PlayCircle className="h-4 w-4 shrink-0 text-ink-3 transition-colors group-hover:text-accent" />
+                  <PlayCircle className="h-4 w-4 shrink-0 text-ink-3 transition-colors group-hover:text-brand" />
                   <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-ink">
                     {activeLesson.title}
                   </span>

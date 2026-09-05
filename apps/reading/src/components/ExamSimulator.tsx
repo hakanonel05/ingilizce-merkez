@@ -226,7 +226,7 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
           isLowTime ? 'border-rose-300 bg-rose-50' : 'border-hairline bg-paper-2'
         }`}>
           <div className="flex items-center gap-2">
-            <Timer className={`h-4 w-4 ${isLowTime ? 'text-rose-600' : 'text-accent'}`} />
+            <Timer className={`h-4 w-4 ${isLowTime ? 'text-rose-600' : 'text-brand'}`} />
             <span className={`timecode text-[18px] font-semibold ${isLowTime ? 'text-rose-700' : 'text-ink'}`}>
               {formatTime(remainingSeconds)}
             </span>
@@ -375,7 +375,7 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
                       type="button"
                       onClick={() => onSelectPassage(passage.id)}
                       className="flex items-center gap-1 text-[12px] text-ink-3
-                        transition-colors hover:text-accent cursor-pointer"
+                        transition-colors hover:text-brand cursor-pointer"
                     >
                       Parçaya git <ExternalLink className="h-3 w-3" />
                     </button>

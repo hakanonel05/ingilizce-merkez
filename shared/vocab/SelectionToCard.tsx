@@ -242,7 +242,7 @@ export const SelectionToCard: React.FC<Props> = ({
           >
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-ink flex items-center space-x-2">
-                <Layers className="w-4 h-4 text-accent" />
+                <Layers className="w-4 h-4 text-brand" />
                 <span>Kelime Kartı Ekle</span>
               </h3>
               <button

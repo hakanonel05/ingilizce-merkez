@@ -13,8 +13,10 @@ Yeni renk/spacing oraya eklenir, JSX'e hardcode edilmez.
 
 Bunlar tek tek "kötü" değil; hepsi birden aynı sayfada olduğu için AI belli oluyor.
 
-1. **Mor/indigo gradient.** `from-purple-500 to-indigo-600`, gradient başlık
-   yazısı, mor glow. Bu projede gradient yok; düz renk var.
+1. **Mor/indigo.** `from-purple-500 to-indigo-600`, gradient başlık, mor glow —
+   ama tek başına düz `indigo-600` de aynı kapıya çıkıyor: AI arayüzlerinin
+   varsayılan rengi o. Bu depoda bir kez bu tuzağa düşüldü, bkz. aşağıdaki
+   renk bölümü. Gradient yok, mor/indigo yok.
 2. **Her şey `rounded-2xl shadow-lg border`.** Bir sayfada en fazla bir yükseklik
    seviyesi olsun. Kart içinde kart, gölge içinde gölge yok.
 3. **Simetrik 3'lü kart grid'i.** İçerik 3 tane olduğu için değil, "3 kart iyi
@@ -51,12 +53,18 @@ Bunlar tek tek "kötü" değil; hepsi birden aynı sayfada olduğu için AI bell
   arasındaki fark gölgeyle değil bu iki tonun farkıyla kuruluyor.
 - Kartlarda gölge yok; 1px açık gri kenarlık ve ~16px köşe var.
 - İki renk var ve işleri ayrı:
-  `--accent` (menekşe-mavi) yalnızca **aktif/etkileşimli** durum — seçili menü
-  öğesi, birincil düğme. `--brand` (turuncu) yalnızca **marka ve vurgu** —
-  logo, bölüm başlığı, bir cümledeki tek anahtar kelime ("Social **Space**",
-  "New **post**"). Turuncu asla düğme zemini olmaz, menekşe asla süs olmaz.
+  `--accent` (**koyu mürekkep**) yalnızca **aktif/etkileşimli** durum — seçili
+  menü öğesi, dolu birincil düğme. `--brand` (turuncu) marka, bölüm başlığı ve
+  **satır içi bağlantı**. `--marker` (kehribar) yalnızca konuşulan cümle.
+
+  Vurgu bir süre `#4F46E5` (Tailwind indigo-600) idi ve bu bir hataydı:
+  o renk yapay zekayla üretilmiş arayüzlerin fiilen varsayılanı — yukarıdaki
+  1. yasak maddesinin ta kendisi. Referans siteden kopyalanmıştı, projenin
+  markasından gelmiyordu. Mürekkebe geçince turuncu tek başına parlıyor ve
+  kehribarla da çakışmıyor. **Yeni bir ekranda birincil eylemi renkli yapma;
+  dolu mürekkep yeter.**
 - Sol kenarda dikey gezinme, üstte sade sekmeler. Aktif üst sekme = açık gri
-  hap; aktif kenar öğesi = dolu menekşe. İki farklı aktif dili olması sorun
+  hap; aktif kenar öğesi = dolu mürekkep. İki farklı aktif dili olması sorun
   değil, çünkü iki farklı gezinme seviyesi.
 - Kenar çubuğunda öğe başına emoji var ve **bu doğru**. Yasak listesindeki emoji
   kuralı başlığa süs olarak takılan emojiyi hedefler; burada emoji tutarlı bir

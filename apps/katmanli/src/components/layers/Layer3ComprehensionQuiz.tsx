@@ -172,7 +172,7 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
       <div className="space-y-4">
         {quizQuestions.length === 0 ? (
           <div className="bg-paper-2 border border-hairline p-8 rounded-xl text-center space-y-3">
-            <Loader2 className="w-8 h-8 text-accent animate-spin mx-auto" />
+            <Loader2 className="w-8 h-8 text-brand animate-spin mx-auto" />
             <h3 className="text-sm font-semibold text-ink-800">Anlama Testi Arka Planda Oluşturuluyor...</h3>
             <p className="text-xs text-ink-3 max-w-md mx-auto">
               Gemini AI transkript içeriğini analiz ederek 5 özel anlama sorusu hazırlıyor. Birkaç saniye içinde tamamlanacaktır.
@@ -261,7 +261,7 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
 
                     {isSubmitted && q.sampleAnswerEn && (
                       <div className="bg-accent-soft p-3 rounded-lg border border-accent/25 text-xs space-y-1">
-                        <strong className="text-accent-700 block font-semibold">Örnek Doğru Yanıt (İngilizce):</strong>
+                        <strong className="text-brand block font-semibold">Örnek Doğru Yanıt (İngilizce):</strong>
                         <p className="text-ink-800 font-mono text-[11px]">{q.sampleAnswerEn}</p>
                       </div>
                     )}

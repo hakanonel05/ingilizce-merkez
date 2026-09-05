@@ -607,7 +607,7 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                       <button
                         type="button"
                         onClick={() => { setShowVideoUrlInput(true); setNewVideoUrl(lesson.youtubeUrl || ''); }}
-                        className="text-[11px] font-semibold text-accent hover:text-accent-700 flex items-center space-x-1 transition cursor-pointer"
+                        className="text-[11px] font-semibold text-brand hover:text-brand flex items-center space-x-1 transition cursor-pointer"
                       >
                         <Edit2 className="w-3 h-3" />
                         <span>URL Değiştir</span>

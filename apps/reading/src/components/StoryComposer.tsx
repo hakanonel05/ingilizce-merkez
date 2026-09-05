@@ -220,7 +220,7 @@ export default function StoryComposer({ progress, passages, onStoryReady, onTask
     return (
       <div className="mb-8 border border-hairline bg-paper-2 p-4 rounded-xl">
         <div className="flex items-start gap-2.5">
-          <BookOpenCheck className="h-4 w-4 shrink-0 mt-0.5 text-accent" />
+          <BookOpenCheck className="h-4 w-4 shrink-0 mt-0.5 text-brand" />
           <p className="text-xs leading-relaxed text-ink/70">
             <strong className="font-semibold">Hikaye üreteci</strong> — hâlâ
             öğrenemediğin kelimelerden sana özel bir hikaye yazar. Şu an öyle
@@ -237,7 +237,7 @@ export default function StoryComposer({ progress, passages, onStoryReady, onTask
     <div className="mb-8 border border-accent/25 bg-paper-2 p-4 sm:p-5 space-y-4 rounded-xl">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex items-start gap-2.5 min-w-0">
-          <Sparkles className="h-4 w-4 shrink-0 mt-0.5 text-accent" />
+          <Sparkles className="h-4 w-4 shrink-0 mt-0.5 text-brand" />
           <div className="min-w-0">
             <p className="text-sm font-semibold text-ink">Sana özel hikaye</p>
             <p className="text-xs text-ink/70 leading-relaxed mt-0.5">
@@ -254,7 +254,7 @@ export default function StoryComposer({ progress, passages, onStoryReady, onTask
           type="button"
           onClick={refreshWords}
           title="Kelime listesini tazele"
-          className="shrink-0 border border-hairline px-2.5 py-1.5 text-ink/60 hover:text-accent transition-colors cursor-pointer rounded-lg"
+          className="shrink-0 border border-hairline px-2.5 py-1.5 text-ink/60 hover:text-brand transition-colors cursor-pointer rounded-lg"
         >
           <RefreshCw className="h-3.5 w-3.5" />
         </button>

@@ -149,7 +149,7 @@ export const Layer2PhoneticsGrammar: React.FC<Layer2PhoneticsGrammarProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {vocabularyList.length === 0 ? (
             <div className="col-span-1 md:col-span-2 bg-paper-2 border border-hairline p-8 rounded-xl text-center space-y-3">
-              <Loader2 className="w-8 h-8 text-accent animate-spin mx-auto" />
+              <Loader2 className="w-8 h-8 text-brand animate-spin mx-auto" />
               <h3 className="text-sm font-semibold text-ink-800">2. Katman Analizi Arka Planda Oluşturuluyor...</h3>
               <p className="text-xs text-ink-3 max-w-md mx-auto">
                 Gemini AI transkriptteki B2/C1 kelimeleri, IPA okunuşlarını ve gramer kurallarını analiz ediyor. Birkaç saniye içinde hazır olur.
@@ -180,7 +180,7 @@ export const Layer2PhoneticsGrammar: React.FC<Layer2PhoneticsGrammarProps> = ({
                         </span>
                       )}
                     </div>
-                    {item.ipa && <p className="text-xs text-accent font-mono mt-0.5">{item.ipa}</p>}
+                    {item.ipa && <p className="text-xs text-brand font-mono mt-0.5">{item.ipa}</p>}
                   </div>
 
                   <button
@@ -219,7 +219,7 @@ export const Layer2PhoneticsGrammar: React.FC<Layer2PhoneticsGrammarProps> = ({
         <div className="space-y-4">
           {grammarList.length === 0 ? (
             <div className="bg-paper-2 border border-hairline p-8 rounded-xl text-center space-y-3">
-              <Sparkles className="w-8 h-8 text-accent mx-auto animate-bounce" />
+              <Sparkles className="w-8 h-8 text-brand mx-auto animate-bounce" />
               <p className="text-xs text-ink-2">
                 Gramer analizi için butonla Gemini AI koçunuzu tetikleyebilirsiniz.
               </p>
@@ -251,7 +251,7 @@ export const Layer2PhoneticsGrammar: React.FC<Layer2PhoneticsGrammarProps> = ({
                             <span>{eIdx + 1}. {ex.en}</span>
                             <button
                               onClick={() => speakWord(ex.en)}
-                              className="p-1 text-ink-3 hover:text-accent transition cursor-pointer shrink-0 ml-2"
+                              className="p-1 text-ink-3 hover:text-brand transition cursor-pointer shrink-0 ml-2"
                               title="Sesli Dinle"
                             >
                               <Volume2 className="w-4 h-4" />

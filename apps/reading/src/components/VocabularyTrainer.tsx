@@ -277,7 +277,7 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
                   <span className="text-[22px] font-semibold tracking-tight text-ink">
                     {activeCardWord.term}
                   </span>
-                  <span className="text-[18px] text-accent">{activeCardWord.meaning}</span>
+                  <span className="text-[18px] text-brand">{activeCardWord.meaning}</span>
 
                   {activeCardWord.definition && (
                     <span className="max-w-[46ch] text-[13px] leading-relaxed text-ink-2">

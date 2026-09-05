@@ -297,7 +297,7 @@ export default function Dashboard({ progress, passages, onSelectPassage, onReset
                     transition-colors hover:bg-paper-3 cursor-pointer"
                 >
                   <span className="w-40 shrink-0 truncate text-[14px] font-medium text-ink
-                    transition-colors group-hover:text-accent">
+                    transition-colors group-hover:text-brand">
                     {w.term}
                   </span>
                   <span className="min-w-0 flex-1 truncate text-[13px] text-ink-2">

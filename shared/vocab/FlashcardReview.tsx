@@ -177,7 +177,7 @@ export const FlashcardReview: React.FC<Props> = ({
   if (timeUp) {
     return (
       <div className="bg-accent-soft border border-accent/25 rounded-xl p-8 text-center space-y-3">
-        <Clock className="w-10 h-10 text-accent mx-auto" />
+        <Clock className="w-10 h-10 text-brand mx-auto" />
         <h3 className="text-base font-semibold text-ink">
           {sessionMinutes} dakikalık çalışma tamamlandı
         </h3>
@@ -216,7 +216,7 @@ export const FlashcardReview: React.FC<Props> = ({
       <div className="bg-paper-2 border border-hairline rounded-xl p-3 space-y-2">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center space-x-2 text-xs">
-            <Clock className="w-4 h-4 text-accent" />
+            <Clock className="w-4 h-4 text-brand" />
             <span className="timecode text-ink font-medium">
               {mm}:{ss}
             </span>

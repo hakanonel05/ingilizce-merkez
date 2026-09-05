@@ -144,7 +144,7 @@ export const ReadingTopBar: React.FC<Props> = ({
               title={isSyncing ? 'Eşitleniyor' : 'Eşitlendi'}
               className="flex h-9 w-9 items-center justify-center text-ink-3"
             >
-              <CloudCog className={`h-4 w-4 ${isSyncing ? 'animate-spin text-accent' : ''}`} />
+              <CloudCog className={`h-4 w-4 ${isSyncing ? 'animate-spin text-brand' : ''}`} />
             </span>
           ) : (
             <button
