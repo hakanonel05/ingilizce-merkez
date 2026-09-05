@@ -1,33 +1,38 @@
 /**
  * ÜST ÇUBUK
  *
- * Yapışkan, yarı saydam ve tek satır. İçinde yalnızca her ekranda
- * gereken şeyler var:
+ * Üç bölge, üç ayrı soru:
  *
- *   SOL   marka + AKTİF DERS. Ders adı burada duruyor çünkü çalışırken
- *         "hangi ders üzerindeyim" sorusu sürekli sorulan bir soru;
- *         eskiden bunu görmek için sayfanın başına dönmek gerekiyordu.
- *   SAĞ   sayaçlar ve araçlar.
+ *   SOL    marka.
+ *   ORTA   üst seviye gezinme — hangi BÖLÜMDEYİM.
+ *   SAĞ    her ekranda elimin altında olması gereken araçlar ve sayaçlar.
  *
- * DERS SEÇİMİ NEDEN BURADA: eskiden "Çalışma İçeriği Seçimi" paneli
- * sayfanın en üstünde sabit yer kaplıyordu ve her ders kartı ekranın
- * üçte birini yiyordu. Oysa ders seçmek nadir bir iş — bir kere seçilip
- * saatlerce çalışılıyor. Sürekli görünen bir panel yerine tek bir
- * hapa dönüştü; tıklayınca modal açılıyor.
+ * AKTİF DERS ARTIK BURADA DEĞİL. Eskiden ders adı ortada bir hap olarak
+ * duruyordu; orta bölge üst seviye gezinmeye ayrılınca ders bilgisi bir
+ * seviye aşağı, içerik sütununa indi (Akış ekranındaki "Aktif Çalışma"
+ * kartı ve katman ekranlarındaki ders şeridi). Ders seçmek nadir bir iş —
+ * bir kere seçilip saatlerce çalışılıyor — ama hangi derste olduğunu
+ * görmek sık, ve o bilgi artık çalıştığın sütunun kendi içinde duruyor.
+ *
+ * "ETKİNLİKLER" VE "SIRALAMA" KAPALI: ikisinin de arkasında veri yok
+ * (uygulamada ne etkinlik takvimi ne de kullanıcılar arası bir sıralama
+ * var). Tasarımdaki yerlerini koruyorlar ama tıklanmıyorlar; çalışıyormuş
+ * gibi görünüp boş bir ekrana götürmeleri daha kötü olurdu.
  */
 
 import React from 'react';
 import {
-  Menu, ChevronDown, Flame, Video, Sparkles, HelpCircle,
-  CalendarRange, KeyRound, PlayCircle,
+  Menu, Flame, Video, Sparkles, HelpCircle, CalendarRange, KeyRound,
 } from 'lucide-react';
-import { UserProgress, VideoLesson } from '../../types';
+import { UserProgress } from '../../types';
+import { HOME_LAYER } from './LayerSidebar';
 
 interface Props {
   progress: UserProgress;
-  activeLesson: VideoLesson | null;
-  /** Dar ekranda katman çekmecesini açar. */
+  activeLayer: number;
+  /** Dar ekranda menü panelini açar. */
   onOpenSidebar: () => void;
+  onGoHome: () => void;
   onOpenLessonPicker: () => void;
   onOpenGuide: () => void;
   onOpenGrammarCoach: () => void;
@@ -39,13 +44,44 @@ interface Props {
 }
 
 export const TopBar: React.FC<Props> = ({
-  progress, activeLesson, onOpenSidebar, onOpenLessonPicker,
+  progress, activeLayer, onOpenSidebar, onGoHome, onOpenLessonPicker,
   onOpenGuide, onOpenGrammarCoach, onOpenSettings, onOpenReport,
   isReportActive, onEditGoals,
 }) => {
   const goalPercentage = Math.min(
     100,
     Math.round((progress.completedVideoCount / Math.max(1, progress.goalVideoCount)) * 100)
+  );
+
+  /**
+   * Orta gezinme sekmesi. Aktif olan açık gri bir hap — menü panelindeki
+   * dolu menekşeden bilerek FARKLI: iki ayrı gezinme seviyesi, iki ayrı
+   * aktiflik dili. Aynı olsalardı hangisinin hangisini kapsadığı
+   * okunmazdı.
+   *
+   * `onClick` verilmeyen sekme kapalıdır (bkz. dosya başındaki not).
+   */
+  const navTab = (
+    label: string,
+    isActive: boolean,
+    onClick?: () => void
+  ) => (
+    <button
+      key={label}
+      type="button"
+      onClick={onClick}
+      disabled={!onClick}
+      title={onClick ? undefined : 'Bu bölüm henüz açılmadı'}
+      aria-current={isActive ? 'page' : undefined}
+      className={`rounded-lg px-3 py-1.5 text-[13px] transition-colors duration-150
+        ${!onClick
+          ? 'cursor-not-allowed text-ink-3 opacity-50'
+          : isActive
+            ? 'bg-paper-3 font-medium text-ink cursor-pointer'
+            : 'text-ink-2 hover:text-ink cursor-pointer'}`}
+    >
+      {label}
+    </button>
   );
 
   /** İkon düğmeleri: aynı ölçü ve aynı geçiş. */
@@ -60,127 +96,131 @@ export const TopBar: React.FC<Props> = ({
       onClick={onClick}
       title={title}
       aria-label={title}
-      className={`flex h-9 w-9 items-center justify-center rounded-lg border
-        transition-all duration-200 ease-in-out cursor-pointer
+      className={`flex h-9 w-9 items-center justify-center rounded-xl
+        transition-colors duration-150 cursor-pointer
         ${active
-          ? 'border-indigo-200 bg-indigo-50 text-indigo-600'
-          : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:text-slate-900'}`}
+          ? 'bg-accent-soft text-accent'
+          : 'text-ink-3 hover:bg-paper-3 hover:text-ink'}`}
     >
       {icon}
     </button>
   );
 
   return (
-    <header
-      className="sticky top-0 z-30 border-b border-slate-200
-        bg-white/80 backdrop-blur-md supports-[backdrop-filter]:bg-white/70"
-    >
+    <header className="sticky top-0 z-30 border-b border-hairline bg-paper-2">
       <div className="flex h-16 items-center gap-3 px-3 sm:px-5">
 
-        {/* Dar ekranda katman çekmecesi */}
+        {/* Dar ekranda menü paneli */}
         <button
           type="button"
           onClick={onOpenSidebar}
-          aria-label="Katmanları aç"
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg
-            border border-slate-200 bg-white text-slate-600
-            transition-colors hover:text-slate-900 cursor-pointer lg:hidden"
+          aria-label="Menüyü aç"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl
+            text-ink-2 transition-colors hover:bg-paper-3 hover:text-ink
+            cursor-pointer lg:hidden"
         >
-          <Menu className="w-4 h-4" />
+          <Menu className="h-4 w-4" />
         </button>
 
-        {/* Marka.
-            Telefonda GIZLI: 375px'te marka + ders hapi + dort dugme
-            yan yana sigmiyor ve sag taraf 36px tasip sayfayi yatay
-            kaydiriyordu (olculdu). Dar ekranda uygulamayi zaten
-            cekmece dugmesi ve ders hapi tanitiyor. */}
-        <div className="hidden shrink-0 items-baseline gap-2 sm:flex">
-          <span className="text-[15px] font-semibold tracking-tight text-slate-900 whitespace-nowrap">
-            Katmanlı İngilizce
-          </span>
-        </div>
+        {/* MARKA.
+            Serif YALNIZCA burada. Başlıklarda serif denenmiş ve
+            bırakılmıştı (bkz. index.css tipografi notu): yan yana duran
+            onlarca küçük başlıkta dağınık duruyordu. Tek bir kelime
+            işaretinde ise tam tersi işe yarıyor — arayüzün geri kalanı
+            sans olduğu için marka kendiliğinden ayrışıyor.
 
-        {/* Aktif ders — tıklanınca seçici açılır */}
+            Turuncu ikinci kelimede: bir ifadenin tek kelimesini marka
+            rengine ayırma hareketi. Ekrandaki tek turuncu bu. */}
         <button
           type="button"
-          onClick={onOpenLessonPicker}
-          title="Ders değiştir veya yeni ders ekle"
-          className="group ml-1 flex min-w-0 flex-1 items-center gap-2 rounded-lg
-            border border-slate-200 bg-white px-2.5 py-1.5 text-left
-            transition-all duration-200 ease-in-out
-            hover:border-indigo-300 hover:ring-2 hover:ring-indigo-500/10
-            cursor-pointer sm:max-w-md"
+          onClick={onGoHome}
+          className="shrink-0 cursor-pointer whitespace-nowrap"
+          aria-label="Akışa dön"
         >
-          <PlayCircle className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-indigo-600 transition-colors" />
-          <span className="min-w-0 flex-1">
-            <span className="block truncate text-[13px] font-medium leading-tight text-slate-900">
-              {activeLesson ? activeLesson.title : 'Ders seç veya ekle'}
-            </span>
-            {activeLesson && (
-              <span className="block truncate text-[11px] leading-tight text-slate-500">
-                {[
-                  activeLesson.cefrLevel,
-                  `${activeLesson.sentences.length} cümle`,
-                ].filter(Boolean).join(' · ')}
-              </span>
-            )}
+          {/* DAR EKRANDA ROZET, GENİŞ EKRANDA TAM AD.
+              Tam ad 19px serif ve ~150px yer kaplıyor; 375px'te menü
+              düğmesi + ad + sağdaki araçlar yan yana sığmıyor ve sağ grup
+              41px taşıp sayfayı yatay kaydırıyordu (ölçüldü: 417/375).
+              Rozet, geniş ekranda ikon şeridinin taşıdığı işaretin
+              aynısı — marka mobilde kaybolmuyor, yalnızca kısalıyor. */}
+          <span
+            aria-hidden="true"
+            className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand
+              font-display text-[15px] font-semibold text-white sm:hidden"
+          >
+            K
           </span>
-          <ChevronDown className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-indigo-600 transition-colors" />
+          <span className="wordmark hidden text-[19px] text-ink sm:inline">
+            Katmanlı <span className="text-brand">İngilizce</span>
+          </span>
         </button>
 
-        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+        {/* ORTA GEZİNME */}
+        <nav
+          aria-label="Bölümler"
+          className="ml-2 hidden min-w-0 flex-1 items-center gap-1 md:flex"
+        >
+          {navTab('Akış', activeLayer === HOME_LAYER, onGoHome)}
+          {navTab('Dersler', false, onOpenLessonPicker)}
+          {navTab('Etkinlikler', false)}
+          {navTab('Sıralama', false)}
+        </nav>
+
+        {/* Orta gezinme gizliyken sağ grup sağa yaslansın */}
+        <div className="flex-1 md:hidden" />
+
+        <div className="flex shrink-0 items-center gap-1 sm:gap-2">
 
           {/* Seri ve hedef — tek bir sayı şeridi */}
           <button
             type="button"
             onClick={onEditGoals}
             title="Hedefi ve seriyi düzenle"
-            className="hidden items-center gap-3 rounded-lg border border-slate-200 bg-white
-              px-3 py-1.5 transition-all duration-200 ease-in-out
-              hover:border-slate-300 cursor-pointer md:flex"
+            className="hidden items-center gap-3 rounded-xl border border-hairline
+              px-3 py-1.5 transition-colors duration-150
+              hover:bg-paper-3 cursor-pointer md:flex"
           >
             <span className="flex items-center gap-1.5">
               <Flame className="h-3.5 w-3.5 text-amber-500" />
-              <span className="timecode font-semibold text-slate-900">
+              <span className="timecode font-semibold text-ink">
                 {progress.studyStreakDays}
               </span>
-              <span className="text-[10px] text-slate-500">gün</span>
+              <span className="text-[10px] text-ink-3">gün</span>
             </span>
 
-            <span className="h-4 w-px bg-slate-200" />
+            <span className="h-4 w-px bg-hairline" />
 
             <span className="flex items-center gap-1.5">
-              <Video className="h-3.5 w-3.5 text-slate-400" />
-              <span className="timecode font-semibold text-slate-900">
+              <Video className="h-3.5 w-3.5 text-ink-3" />
+              <span className="timecode font-semibold text-ink">
                 {progress.completedVideoCount}
-                <span className="text-slate-500">/{progress.goalVideoCount}</span>
+                <span className="text-ink-3">/{progress.goalVideoCount}</span>
               </span>
             </span>
 
-            <span className="hidden h-1 w-12 overflow-hidden rounded-full bg-slate-100 lg:block">
+            <span className="hidden h-1 w-12 overflow-hidden rounded-full bg-paper-3 lg:block">
               <span
-                className="block h-full rounded-full bg-indigo-600 transition-all duration-500"
+                className="block h-full rounded-full bg-accent transition-all duration-500"
                 style={{ width: `${goalPercentage}%` }}
               />
             </span>
           </button>
 
-          {/* Gramer koçu: birincil araç, dolgulu */}
+          {/* Gramer koçu: birincil araç, dolgulu ve düz */}
           <button
             type="button"
             onClick={onOpenGrammarCoach}
-            className="flex h-9 items-center gap-1.5 rounded-lg bg-indigo-600 px-3
-              text-[12px] font-medium text-white shadow-sm
-              transition-all duration-200 ease-in-out
-              hover:bg-indigo-700 hover:shadow-md cursor-pointer"
+            className="flex h-9 items-center gap-1.5 rounded-xl bg-accent px-3
+              text-[12px] font-medium text-white
+              transition-colors duration-150 hover:bg-accent-700 cursor-pointer"
           >
             <Sparkles className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">Gramer Koçu</span>
           </button>
 
-          {iconButton(onOpenReport, 'Karne', <CalendarRange className="w-4 h-4" />, isReportActive)}
-          {iconButton(onOpenGuide, 'Metot rehberi', <HelpCircle className="w-4 h-4" />)}
-          {iconButton(onOpenSettings, 'API anahtarları', <KeyRound className="w-4 h-4" />)}
+          {iconButton(onOpenReport, 'Karne', <CalendarRange className="h-4 w-4" />, isReportActive)}
+          {iconButton(onOpenGuide, 'Metot rehberi', <HelpCircle className="h-4 w-4" />)}
+          {iconButton(onOpenSettings, 'API anahtarları', <KeyRound className="h-4 w-4" />)}
         </div>
       </div>
     </header>

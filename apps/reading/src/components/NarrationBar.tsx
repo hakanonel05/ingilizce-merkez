@@ -9,6 +9,7 @@
  * ekrana da takılabilir.
  */
 
+import type { ReactNode } from 'react';
 import { Narration, NARRATION_VOICES, NarrationVoice } from '../lib/narration';
 import { Play, Pause, Square, SkipBack, SkipForward, Loader2, Volume2, Info } from 'lucide-react';
 
@@ -31,7 +32,7 @@ export default function NarrationBar({ narration, total }: Props) {
   const isActive = status !== 'idle';
 
   return (
-    <div className="border border-hairline/40 bg-paper rounded-lg">
+    <div className="rounded-xl border border-hairline bg-paper-3">
       <div className="flex flex-wrap items-center gap-2 p-2.5">
 
         {/* Ana denetim */}
@@ -39,7 +40,9 @@ export default function NarrationBar({ narration, total }: Props) {
           type="button"
           onClick={() => (isPlaying ? pause() : play())}
           disabled={isBusy}
-          className="flex items-center gap-2 border border-accent bg-accent px-3.5 py-2 text-[11px] font-bold uppercase tracking-wider text-white transition-colors hover:bg-white hover:text-accent disabled:opacity-50 cursor-pointer rounded-lg"
+          className="flex items-center gap-1.5 rounded-lg bg-accent px-3 py-2 text-[12px]
+            font-medium text-white transition-colors duration-150
+            hover:bg-accent-700 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
         >
           {isBusy ? (
             <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -52,36 +55,29 @@ export default function NarrationBar({ narration, total }: Props) {
         </button>
 
         {isActive && (
-          <div className="flex">
-            <button
-              type="button"
-              onClick={previous}
-              title="Önceki paragraf"
-              className="border border-hairline/40 bg-white px-2.5 py-2 text-ink/60 hover:text-accent transition-colors cursor-pointer rounded-lg"
-            >
-              <SkipBack className="h-3.5 w-3.5" />
-            </button>
-            <button
-              type="button"
-              onClick={next}
-              title="Sonraki paragraf"
-              className="border border-l-0 border-hairline/40 bg-white px-2.5 py-2 text-ink/60 hover:text-accent transition-colors cursor-pointer rounded-lg"
-            >
-              <SkipForward className="h-3.5 w-3.5" />
-            </button>
-            <button
-              type="button"
-              onClick={stop}
-              title="Durdur"
-              className="border border-l-0 border-hairline/40 bg-white px-2.5 py-2 text-ink/60 hover:text-accent transition-colors cursor-pointer rounded-lg"
-            >
-              <Square className="h-3.5 w-3.5" />
-            </button>
+          <div className="flex items-center gap-0.5">
+            {([
+              [previous, 'Önceki paragraf', <SkipBack key="b" className="h-3.5 w-3.5" />],
+              [next, 'Sonraki paragraf', <SkipForward key="f" className="h-3.5 w-3.5" />],
+              [stop, 'Durdur', <Square key="s" className="h-3.5 w-3.5" />],
+            ] as [() => void, string, ReactNode][]).map(([fn, label, icon]) => (
+              <button
+                key={label}
+                type="button"
+                onClick={fn}
+                title={label}
+                aria-label={label}
+                className="rounded-lg p-2 text-ink-3 transition-colors
+                  hover:bg-paper-2 hover:text-ink cursor-pointer"
+              >
+                {icon}
+              </button>
+            ))}
           </div>
         )}
 
         {isActive && currentIndex !== null && (
-          <span className="font-mono text-[11px] text-ink-3 tabular-nums">
+          <span className="timecode text-ink-3">
             {currentIndex + 1} / {total}
           </span>
         )}
@@ -89,16 +85,14 @@ export default function NarrationBar({ narration, total }: Props) {
         <div className="flex-1" />
 
         {/* Hız */}
-        <div className="flex">
-          {SPEEDS.map((s, i) => (
+        <div className="flex items-center gap-0.5 rounded-lg bg-paper-2 p-0.5">
+          {SPEEDS.map(s => (
             <button
               key={s}
               type="button"
               onClick={() => setSpeed(s)}
-              className={`border px-2 py-1.5 text-[11px] font-bold transition-colors cursor-pointer rounded-lg ${i > 0 ? 'border-l-0' : ''} ${
-                speed === s
-                  ? 'border-accent bg-accent text-white'
-                  : 'border-hairline/40 bg-white text-ink/60 hover:border-accent/40'
+              className={`timecode rounded px-2 py-1 transition-colors cursor-pointer ${
+                speed === s ? 'bg-accent text-white' : 'text-ink-3 hover:text-ink'
               }`}
             >
               {s}×
@@ -113,7 +107,8 @@ export default function NarrationBar({ narration, total }: Props) {
           <select
             value={voice}
             onChange={e => setVoice(e.target.value as NarrationVoice)}
-            className="border border-hairline/40 bg-white px-2 py-1.5 text-[11px] text-ink focus:outline-none focus:border-accent cursor-pointer rounded-lg"
+            className="rounded-lg border border-hairline bg-paper-2 px-2 py-1.5 text-[12px]
+              text-ink transition-colors focus:border-accent focus:outline-none cursor-pointer"
           >
             {NARRATION_VOICES.map(v => (
               <option key={v.id} value={v.id}>{v.label}</option>
@@ -125,14 +120,14 @@ export default function NarrationBar({ narration, total }: Props) {
       {/* Doğal ses yerine cihaz sesine düşüldüyse sebebini söyle:
           kullanıcı sesin neden değiştiğini merak etmesin. */}
       {(notice || source === 'device') && isActive && (
-        <p className="flex items-start gap-1.5 border-t border-hairline/30 px-3 py-2 text-[11px] leading-relaxed text-ink/60">
+        <p className="flex items-start gap-1.5 border-t border-hairline px-3 py-2 text-[11px] leading-relaxed text-ink-2">
           <Info className="h-3.5 w-3.5 shrink-0 mt-0.5" />
           <span>{notice || 'Cihazının kendi sesiyle okunuyor.'}</span>
         </p>
       )}
 
       {error && (
-        <p className="border-t border-rose-200 bg-rose-50 px-3 py-2 text-[11px] font-semibold text-rose-900">
+        <p className="border-t border-rose-200 bg-rose-50 px-3 py-2 text-[12px] text-rose-800">
           {error}
         </p>
       )}

@@ -14,10 +14,7 @@
 import { useMemo, useState } from 'react';
 import { Passage, UserProgress } from '../types';
 import StoryComposer from './StoryComposer';
-import {
-  Sparkles, BookOpen, Trash2, CheckCircle2, Clock, HelpCircle,
-  BrainCircuit, Library, AlertTriangle, Cpu,
-} from 'lucide-react';
+import { CheckCircle2, Trash2 } from 'lucide-react';
 
 interface Props {
   passages: Passage[];
@@ -57,28 +54,28 @@ export default function StoryLibrary({
         onTasksReady={onTasksReady}
       />
 
+      {/* IZGARA DEGIL LISTE. Hikayeler iki sutunlu kartlardaydi ve her
+          kart bes rozete kadar tasiyabiliyordu (seviye, "Sana ozel",
+          hangi model yazdi, "Okundu"), altinda sekiz kelime cipi, sonra
+          uc olcu ve bir silme satiri. Yedi kati bir kutu. Baslik zaten
+          ayirt edici olan sey; gerisi tek bir kunye satirina sigiyor. */}
       <div>
-        <div className="flex items-center gap-2.5 mb-4">
-          <Library className="h-4 w-4 text-accent" />
-          <h2 className="font-display text-lg font-bold text-ink">
-            Hikayelerim
-          </h2>
-          <span className="font-mono text-[11px] text-ink-3">
-            {stories.length} HİKAYE
+        <div className="mb-3 flex items-baseline justify-between gap-3">
+          <h2 className="text-[15px] font-semibold text-ink">Hikayelerim</h2>
+          <span className="text-[12px] text-ink-3">
+            <span className="timecode text-ink">{stories.length}</span> hikaye
           </span>
         </div>
 
         {stories.length === 0 ? (
-          <div className="border border-dashed border-hairline/50 bg-white p-8 text-center rounded-xl">
-            <BookOpen className="mx-auto h-6 w-6 text-ink/20" />
-            <p className="mt-3 text-xs leading-relaxed text-ink/60">
+          <div className="rounded-2xl border border-hairline p-10 text-center">
+            <p className="mx-auto max-w-[52ch] text-[13px] leading-relaxed text-ink-2">
               Henüz hikaye üretmedin. Yukarıdaki kutudan seviyeni seç ve
-              <strong className="font-bold"> Hikayeyi Oluştur</strong>'a bas;
-              ürettiğin her hikaye burada kalır.
+              hikayeyi oluştur; ürettiğin her hikaye burada kalır.
             </p>
           </div>
         ) : (
-          <div className="grid gap-3 sm:grid-cols-2">
+          <ul className="divide-y divide-hairline border-y border-hairline">
             {stories.map(story => {
               const score = progress.scores[story.id];
               const exScore = progress.exerciseScores?.[story.id];
@@ -87,125 +84,101 @@ export default function StoryLibrary({
               const isConfirming = confirmingDelete === story.id;
 
               return (
-                <article
-                  key={story.id}
-                  className="flex flex-col border border-hairline/40 bg-white transition-colors hover:border-accent/40 rounded-lg"
-                >
-                  <button
-                    type="button"
-                    onClick={() => onSelectPassage(story.id)}
-                    className="flex-1 p-4 text-left cursor-pointer"
-                  >
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="border border-accent/30 bg-paper px-1.5 py-0.5 font-mono text-[10px] font-bold text-ink rounded-lg">
-                        {story.cefr}
-                      </span>
-                      <span className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-accent">
-                        <Sparkles className="h-3 w-3" /> Sana özel
-                      </span>
-                      {/* Hangi model yazdi: acik kaynak modellerle
-                          Gemini'yi karsilastirabilmek icin. */}
-                      {story.generatedBy && (
-                        <span className="flex items-center gap-1 font-mono text-[10px] text-ink-3">
-                          <Cpu className="h-3 w-3" /> {story.generatedBy}
-                        </span>
-                      )}
-                      {isRead && (
-                        <span className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-emerald-700">
-                          <CheckCircle2 className="h-3 w-3" /> Okundu
-                        </span>
-                      )}
-                    </div>
-
-                    <h3 className="font-display text-base font-bold leading-tight text-ink break-words">
-                      {story.title}
-                    </h3>
-                    <p className="mt-1 text-[11px] text-ink-3 break-words">
-                      {story.theme}
-                    </p>
-
-                    {/* Hikayenin hedef kelimeleri: neden bu hikayeyi
-                        okuduğunu tek bakışta görmek için. */}
-                    <div className="mt-3 flex flex-wrap gap-1">
-                      {story.vocabulary.slice(0, 8).map(w => (
-                        <span
-                          key={w.term}
-                          title={w.meaning}
-                          className="border border-hairline/40 bg-paper px-1.5 py-0.5 text-[10px] font-bold text-ink/80 rounded-lg"
-                        >
-                          {w.term}
-                        </span>
-                      ))}
-                      {story.vocabulary.length > 8 && (
-                        <span className="px-1 py-0.5 text-[10px] text-ink-3">
-                          +{story.vocabulary.length - 8}
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[10px] text-ink-3">
-                      <span className="flex items-center gap-1">
-                        <Clock className="h-3 w-3" /> ~{Math.max(1, Math.round(words / 130))} dk
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <HelpCircle className="h-3 w-3" />
-                        {story.questions.length
-                          ? score
-                            ? `${score.score}/${score.total}`
-                            : `${story.questions.length} soru`
-                          : 'hazırlanıyor'}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <BrainCircuit className="h-3 w-3" />
-                        {story.exercises.length
-                          ? exScore
-                            ? `${exScore.score}/${exScore.total}`
-                            : `${story.exercises.length} alıştırma`
-                          : 'hazırlanıyor'}
-                      </span>
-                    </div>
-                  </button>
-
-                  {/* Silme: hikayeler birikince raf dolar, ama tek
-                      tıkla silmek çalışılmış bir metni kazara yok eder. */}
-                  <div className="border-t border-hairline/30 px-3 py-2">
-                    {isConfirming ? (
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="flex items-center gap-1 text-[10px] font-bold text-rose-800">
-                          <AlertTriangle className="h-3 w-3" /> Silinsin mi?
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            onDeleteStory(story.id);
-                            setConfirmingDelete(null);
-                          }}
-                          className="border border-rose-300 bg-rose-50 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-rose-900 hover:bg-rose-100 cursor-pointer rounded-lg"
-                        >
-                          Sil
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setConfirmingDelete(null)}
-                          className="border border-hairline/40 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-ink/60 hover:border-accent/40 cursor-pointer rounded-lg"
-                        >
-                          Vazgeç
-                        </button>
+                <li key={story.id} className="group">
+                  <div className="flex items-start gap-3 px-3 py-3.5 transition-colors hover:bg-paper-3">
+                    <button
+                      type="button"
+                      onClick={() => onSelectPassage(story.id)}
+                      className="min-w-0 flex-1 text-left cursor-pointer"
+                    >
+                      <div className="flex items-baseline gap-2">
+                        <h3 className="min-w-0 flex-1 truncate text-[14px] font-medium text-ink">
+                          {story.title}
+                        </h3>
+                        {isRead && (
+                          <span className="flex shrink-0 items-center gap-1 text-[11px] text-emerald-700">
+                            <CheckCircle2 className="h-3.5 w-3.5" /> okundu
+                          </span>
+                        )}
                       </div>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => setConfirmingDelete(story.id)}
-                        className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-ink-3 hover:text-rose-700 transition-colors cursor-pointer"
-                      >
-                        <Trash2 className="h-3 w-3" /> Hikayeyi sil
-                      </button>
-                    )}
+
+                      <p className="mt-0.5 line-clamp-1 text-[12px] text-ink-3">{story.theme}</p>
+
+                      {/* Tek kunye satiri. Rozetler yerine ayracli metin. */}
+                      <p className="mt-1.5 flex flex-wrap items-center gap-x-2 text-[11px] text-ink-3">
+                        <span className="rounded bg-paper-3 px-1.5 py-0.5 text-ink-2 group-hover:bg-paper-2">
+                          {story.cefr}
+                        </span>
+                        <span className="timecode">~{Math.max(1, Math.round(words / 130))} dk</span>
+                        <span>·</span>
+                        <span className="timecode">
+                          {story.questions.length
+                            ? score ? `${score.score}/${score.total} soru` : `${story.questions.length} soru`
+                            : 'sorular hazırlanıyor'}
+                        </span>
+                        <span>·</span>
+                        <span className="timecode">
+                          {story.exercises.length
+                            ? exScore ? `${exScore.score}/${exScore.total} alıştırma` : `${story.exercises.length} alıştırma`
+                            : 'alıştırmalar hazırlanıyor'}
+                        </span>
+                        {story.generatedBy && (
+                          <>
+                            <span>·</span>
+                            <span>{story.generatedBy}</span>
+                          </>
+                        )}
+                      </p>
+
+                      {/* Hedef kelimeler: neden bu hikayeyi okudugun. */}
+                      <p className="mt-1.5 line-clamp-1 text-[11px] text-ink-3">
+                        {story.vocabulary.slice(0, 8).map(w => w.term).join(' · ')}
+                        {story.vocabulary.length > 8 && ` +${story.vocabulary.length - 8}`}
+                      </p>
+                    </button>
+
+                    {/* Silme: cift adim, cunku calisilmis bir metni kazara
+                        yok etmek geri alinamiyor. */}
+                    <div className="shrink-0">
+                      {isConfirming ? (
+                        <span className="flex items-center gap-1.5 text-[11px]">
+                          <span className="text-ink-2">Silinsin mi?</span>
+                          <button
+                            type="button"
+                            onClick={() => { onDeleteStory(story.id); setConfirmingDelete(null); }}
+                            className="rounded-lg bg-rose-600 px-2 py-1 font-medium text-white
+                              transition-colors hover:bg-rose-700 cursor-pointer"
+                          >
+                            Evet
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setConfirmingDelete(null)}
+                            className="rounded-lg px-2 py-1 text-ink-2 transition-colors
+                              hover:bg-hairline hover:text-ink cursor-pointer"
+                          >
+                            İptal
+                          </button>
+                        </span>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => setConfirmingDelete(story.id)}
+                          title="Hikayeyi sil"
+                          aria-label="Hikayeyi sil"
+                          className="row-actions rounded-lg p-1.5 text-ink-3 opacity-0
+                            transition-all hover:bg-paper-2 hover:text-rose-600
+                            focus:opacity-100 group-hover:opacity-100 cursor-pointer"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      )}
+                    </div>
                   </div>
-                </article>
+                </li>
               );
             })}
-          </div>
+          </ul>
         )}
       </div>
     </div>

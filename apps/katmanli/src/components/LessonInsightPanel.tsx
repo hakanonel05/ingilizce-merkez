@@ -124,17 +124,23 @@ export const LessonInsightPanel: React.FC<Props> = ({
         </div>
       )}
 
-      {/* Sayimlar */}
-      <div className="grid grid-cols-3 gap-2 text-center">
-        {[
-          { label: 'biliyorsun', value: insight.knownTokens },
-          { label: 'öğreniyorsun', value: insight.learningTokens },
-          { label: 'bilmiyorsun', value: insight.unknownTokens },
-        ].map(({ label, value }) => (
-          <div key={label} className="rounded-[8px] border border-[var(--hairline)] py-1.5">
-            <div className="text-sm font-medium text-[var(--ink)]">{value}</div>
-            <div className="text-[10px] text-[var(--ink-3)]">{label}</div>
-          </div>
+      {/* Sayimlar.
+          Uc esit kutulu izgaraydi. Bunlar birbirinin alternatifi degil,
+          AYNI butunun uc parcasi (metindeki toplam kelime); kutulara
+          bolmek onlari ayri olculer gibi gosteriyordu. Tek satirda,
+          renk noktalariyla — reading tarafindaki kelime dagarcigi
+          gostergesiyle ayni bicim. */}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px]">
+        {([
+          ['biliyorsun', insight.knownTokens, 'bg-emerald-600'],
+          ['öğreniyorsun', insight.learningTokens, 'bg-amber-500'],
+          ['bilmiyorsun', insight.unknownTokens, 'bg-[var(--hairline-2)]'],
+        ] as [string, number, string][]).map(([label, value, dot]) => (
+          <span key={label} className="flex items-center gap-1.5 text-[var(--ink-3)]">
+            <span className={`inline-block h-2 w-2 shrink-0 rounded-full ${dot}`} />
+            <span className="timecode font-medium text-[var(--ink)]">{value}</span>
+            {label}
+          </span>
         ))}
       </div>
 

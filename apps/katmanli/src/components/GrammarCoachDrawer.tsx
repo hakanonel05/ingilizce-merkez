@@ -62,40 +62,40 @@ export const GrammarCoachDrawer: React.FC<GrammarCoachDrawerProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-slate-900/60 backdrop-blur-sm">
-      <div className="bg-white border-l border-slate-200 w-full max-w-md h-full flex flex-col shadow-2xl text-slate-800">
+    <div className="fixed inset-0 z-50 flex justify-end bg-ink/60 backdrop-blur-sm">
+      <div className="bg-paper-2 border-l border-hairline w-full max-w-md h-full flex flex-col text-ink-800">
         
         {/* Drawer Header */}
-        <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div className="p-4 border-b border-hairline flex items-center justify-between bg-paper">
           <div className="flex items-center space-x-2.5">
-            <div className="p-2 bg-indigo-50 text-indigo-700 rounded-lg border border-indigo-200">
+            <div className="p-2 bg-accent-soft text-accent-700 rounded-lg border border-accent/25">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-900">Genelden Özele Gramer Koçu</h3>
-              <p className="text-[11px] text-slate-500 font-medium">Context-Driven Grammar Assistant</p>
+              <h3 className="text-sm font-semibold text-ink">Genelden Özele Gramer Koçu</h3>
+              <p className="text-[11px] text-ink-3 font-medium">Context-Driven Grammar Assistant</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition cursor-pointer"
+            className="p-1.5 text-ink-3 hover:text-ink-2 rounded-lg hover:bg-paper-3 transition cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Message Thread */}
-        <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50/50">
+        <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-paper/50">
           {messages.map((msg, idx) => (
             <div
               key={idx}
               className={`p-3.5 rounded-xl text-xs leading-relaxed space-y-1 ${
                 msg.role === 'user'
-                  ? 'bg-indigo-600 text-white font-medium ml-8 shadow-sm'
-                  : 'bg-white text-slate-800 border border-slate-200 shadow-sm mr-4'
+                  ? 'bg-accent text-white font-medium ml-8'
+                  : 'bg-paper-2 text-ink-800 border border-hairline mr-4'
               }`}
             >
-              <div className={`flex items-center space-x-1 font-bold text-[10px] ${msg.role === 'user' ? 'text-indigo-100' : 'text-indigo-700'}`}>
+              <div className={`flex items-center space-x-1 font-semibold text-[10px] ${msg.role === 'user' ? 'text-white/70' : 'text-accent-700'}`}>
                 {msg.role === 'user' ? 'Siz' : 'Gemini Gramer Koçu'}
               </div>
               <p className="whitespace-pre-line">{msg.text}</p>
@@ -103,7 +103,7 @@ export const GrammarCoachDrawer: React.FC<GrammarCoachDrawerProps> = ({
           ))}
 
           {isLoading && (
-            <div className="flex items-center space-x-2 text-indigo-600 text-xs p-3">
+            <div className="flex items-center space-x-2 text-accent text-xs p-3">
               <Loader2 className="w-4 h-4 animate-spin" />
               <span>Gramer kuralı bağlam içinde inceleniyor...</span>
             </div>
@@ -111,19 +111,19 @@ export const GrammarCoachDrawer: React.FC<GrammarCoachDrawerProps> = ({
         </div>
 
         {/* Question Form */}
-        <form onSubmit={handleAsk} className="p-3 border-t border-slate-200 bg-white flex space-x-2">
+        <form onSubmit={handleAsk} className="p-3 border-t border-hairline bg-paper-2 flex space-x-2">
           <input
             type="text"
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
             placeholder="Örn: 'Would' ne zaman kullanılır? veya 'Relative clauses' yapısı nedir?"
-            className="flex-1 min-w-0 px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+            className="flex-1 min-w-0 px-3.5 py-2.5 bg-paper border border-hairline rounded-lg text-xs text-ink placeholder-ink-3 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent"
             disabled={isLoading}
           />
           <button
             type="submit"
             disabled={isLoading || !question.trim()}
-            className="p-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-lg transition cursor-pointer shadow-sm"
+            className="p-2.5 bg-accent hover:bg-accent-700 disabled:opacity-50 text-white rounded-lg transition cursor-pointer"
           >
             <Send className="w-4 h-4" />
           </button>

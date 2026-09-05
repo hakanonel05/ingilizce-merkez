@@ -377,24 +377,22 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
       />
 
       {/* Control Header */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
-        <div className="flex items-center justify-between flex-wrap gap-2">
-          <div className="flex items-center space-x-2.5">
-            <span className="px-2.5 py-1 bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-bold rounded-md uppercase tracking-wider">
-              Layer 1
-            </span>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900">
-              Çift Dilli Okuma & Canlı Senkronizasyon
-            </h2>
-          </div>
-
+      {/* KATMAN BAŞLIĞI BURADA TEKRARLANMIYOR.
+          Burada "LAYER 1" rozeti ve "Çift Dilli Okuma & Canlı
+          Senkronizasyon" başlığı vardı; ikisi de bu bileşenin hemen
+          üstünde duran LayerHeaderBar'da zaten yazıyor (App.tsx).
+          Aynı başlığı iki kez göstermek yer harcamaktan başka bir şey
+          yapmıyordu. */}
+      <div className="rounded-2xl border border-hairline bg-paper-2 p-4 space-y-3">
+        <div className="flex items-center justify-end flex-wrap gap-2">
           <div className="flex items-center space-x-2 flex-wrap gap-1">
-            <div className="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+            <div className="flex items-center gap-0.5 rounded-lg bg-paper-3 p-1">
               <button
                 type="button"
                 onClick={() => setViewMode('split')}
-                className={`flex items-center space-x-1 px-2.5 py-1 rounded-md text-xs font-bold transition cursor-pointer ${
-                  viewMode === 'split' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[12px]
+                  transition-colors duration-150 cursor-pointer ${
+                  viewMode === 'split' ? 'bg-paper-2 font-medium text-ink' : 'text-ink-2 hover:text-ink'
                 }`}
                 title="TED Stili Yan Yana Video ve Transkript Görünümü"
               >
@@ -405,8 +403,9 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
               <button
                 type="button"
                 onClick={() => setViewMode('stacked')}
-                className={`flex items-center space-x-1 px-2.5 py-1 rounded-md text-xs font-bold transition cursor-pointer ${
-                  viewMode === 'stacked' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[12px]
+                  transition-colors duration-150 cursor-pointer ${
+                  viewMode === 'stacked' ? 'bg-paper-2 font-medium text-ink' : 'text-ink-2 hover:text-ink'
                 }`}
                 title="Tek Sütun Liste Görünümü"
               >
@@ -418,10 +417,12 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
             <button
               type="button"
               onClick={() => setHideTurkish(!hideTurkish)}
-              className="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-lg transition border border-slate-200 cursor-pointer"
+              className="flex items-center gap-1.5 rounded-lg border border-hairline px-3 py-1.5
+                text-[12px] text-ink-2 transition-colors duration-150
+                hover:bg-paper-3 hover:text-ink cursor-pointer"
             >
-              {hideTurkish ? <Eye className="w-4 h-4 text-emerald-600" /> : <EyeOff className="w-4 h-4 text-indigo-600" />}
-              <span>{hideTurkish ? 'Türkçe Çeviriyi Göster' : 'Türkçe Çeviriyi Gizle'}</span>
+              {hideTurkish ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+              <span>{hideTurkish ? 'Türkçeyi göster' : 'Türkçeyi gizle'}</span>
             </button>
           </div>
         </div>
@@ -445,7 +446,9 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                 type="button"
                 onClick={handleResync}
                 disabled={isResyncing}
-                className="flex items-center space-x-2 px-3.5 py-2 bg-rose-600 hover:bg-rose-700 disabled:bg-rose-300 disabled:cursor-wait text-white font-bold rounded-lg transition shadow-sm cursor-pointer"
+                className="flex items-center gap-2 rounded-xl bg-rose-600 px-3.5 py-2 text-[13px]
+                  font-medium text-white transition-colors duration-150 hover:bg-rose-700
+                  disabled:cursor-wait disabled:opacity-60 cursor-pointer"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${isResyncing ? 'animate-spin' : ''}`} />
                 <span>
@@ -464,23 +467,29 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
             )}
 
             {resyncError && (
-              <p className="text-[11px] font-semibold text-rose-800 bg-rose-100 border border-rose-300 rounded px-2.5 py-1.5">
+              <p className="rounded-lg border border-rose-300 bg-rose-100 px-2.5 py-1.5 text-[12px] text-rose-800">
                 {resyncError}
               </p>
             )}
           </div>
         )}
 
-        {/* Sync & Offset Settings Bar */}
+          {/* KEHRİBAR BURADAN ÇIKTI.
+              index.css kehribarı "ekrandaki tek sıcak renk — süs değil,
+              şu an konuşulan cümleyi gösteriyor" diye tanımlıyor. Bu
+              ayar şeridi kehribar zeminli, kehribar kenarlıklı ve
+              kehribar yazılıydı; aşağıdaki aktif cümle de kehribardı.
+              İkisi aynı renkte olunca işaret işaret olmaktan çıkıyordu.
+              Şerit nötr; kehribar yalnızca transkriptte. */}
         {hasTimings && (
-          <div className="flex items-center justify-between bg-amber-50/90 border border-amber-200 p-3 rounded-lg flex-wrap gap-2">
-            <div className="flex items-center space-x-2 text-amber-950 font-bold text-xs">
-              <Sliders className="w-4 h-4 text-amber-600 shrink-0" />
-              <span>Senkronizasyon İnce Ayarı:</span>
-              <span className="font-mono text-amber-900 font-bold bg-amber-200/90 px-2 py-0.5 rounded text-[11px]">
-                {offsetSeconds === 0 ? '0s (Birebir)' : offsetSeconds > 0 ? `+${offsetSeconds}s` : `${offsetSeconds}s`}
+          <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-paper-3 p-3">
+            <div className="flex items-center gap-2 text-[12px] text-ink-2">
+              <Sliders className="w-4 h-4 shrink-0 text-ink-3" />
+              <span>Senkron ince ayarı</span>
+              <span className="timecode rounded bg-paper-2 px-2 py-0.5 text-ink">
+                {offsetSeconds === 0 ? '0s' : offsetSeconds > 0 ? `+${offsetSeconds}s` : `${offsetSeconds}s`}
               </span>
-              <span className="hidden md:inline font-normal text-amber-800">
+              <span className="hidden text-ink-3 md:inline">
                 Gerçek altyazı zamanları kullanılıyor, normalde 0 kalmalı.
               </span>
             </div>
@@ -489,10 +498,10 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
               <button
                 type="button"
                 onClick={() => setOffsetSeconds(0)}
-                className={`px-2.5 py-1 rounded text-[11px] font-bold transition cursor-pointer ${
+                className={`rounded-lg px-2.5 py-1 text-[12px] transition-colors duration-150 cursor-pointer ${
                   offsetSeconds === 0
-                    ? 'bg-amber-600 text-white shadow-sm'
-                    : 'bg-white hover:bg-amber-100 text-amber-900 border border-amber-300'
+                    ? 'bg-paper-2 font-medium text-ink'
+                    : 'text-ink-2 hover:text-ink'
                 }`}
                 title="Tam zamanında senkronizasyon (0s)"
               >
@@ -504,7 +513,9 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                   type="button"
                   onClick={handleResync}
                   disabled={isResyncing}
-                  className="flex items-center space-x-1 px-2.5 py-1 rounded text-[11px] font-bold bg-white hover:bg-amber-100 text-amber-900 border border-amber-300 disabled:opacity-60 disabled:cursor-wait cursor-pointer"
+                  className="flex items-center gap-1 rounded-lg border border-hairline bg-paper-2 px-2.5 py-1
+                    text-[12px] text-ink-2 transition-colors hover:text-ink
+                    disabled:cursor-wait disabled:opacity-50 cursor-pointer"
                   title="Dersi videonun gerçek altyazısından yeniden üret"
                 >
                   <RefreshCw className={`w-3 h-3 ${isResyncing ? 'animate-spin' : ''}`} />
@@ -512,13 +523,14 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                 </button>
               )}
 
-              <div className="flex items-center space-x-1 border-l border-amber-300 pl-2">
+              <div className="flex items-center gap-1 border-l border-hairline-2 pl-2">
                 {[-1, -0.5, 0.5, 1].map((delta) => (
                   <button
                     key={delta}
                     type="button"
                     onClick={() => setOffsetSeconds((prev) => parseFloat((prev + delta).toFixed(1)))}
-                    className="px-2 py-0.5 bg-white hover:bg-amber-200 border border-amber-300 text-amber-950 rounded text-xs font-bold cursor-pointer"
+                    className="timecode rounded-lg border border-hairline bg-paper-2 px-2 py-1
+                      text-ink-2 transition-colors hover:text-ink cursor-pointer"
                     title={`${delta} saniye kaydır`}
                   >
                     {delta > 0 ? `+${delta}s` : `${delta}s`}
@@ -539,13 +551,15 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
 
         {/* Search Bar */}
         <div className="relative">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-3" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Cümle veya kelime ara..."
-            className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+            className="w-full rounded-xl border border-hairline bg-paper-2 py-2.5 pl-9 pr-3 text-[13px]
+              text-ink placeholder-ink-3 transition-colors focus:border-accent focus:outline-none
+              focus:ring-2 focus:ring-accent/15"
           />
         </div>
       </div>
@@ -556,8 +570,8 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
         {/* Video Player Column */}
         <div className={viewMode === 'split' ? 'lg:col-span-5 lg:sticky lg:top-4 space-y-3' : 'space-y-3'}>
           {ytId ? (
-            <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-sm space-y-2">
-              <div className="aspect-video w-full rounded-lg overflow-hidden bg-slate-950 border border-slate-200 shadow-inner relative">
+            <div className="rounded-2xl border border-hairline bg-paper-2 p-3 space-y-2">
+              <div className="aspect-video w-full rounded-lg overflow-hidden bg-ink-950 border border-hairline shadow-inner relative">
                 <div ref={playerContainerRef} className="w-full h-full" />
               </div>
 
@@ -576,13 +590,13 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                     )}
                   </button>
                   {isVideoPlaying ? (
-                    <span className="inline-flex items-center space-x-1 px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded-full">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
-                      <span>Canlı ({formatSeconds(currentVideoTime)})</span>
+                    <span className="inline-flex items-center gap-1.5 text-[12px] text-ink-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
+                      <span className="timecode">{formatSeconds(currentVideoTime)}</span>
                     </span>
                   ) : (
-                    <span className="text-[11px] font-semibold text-slate-500 truncate" title={lesson.title}>
-                      🎬 {lesson.title}
+                    <span className="truncate text-[12px] text-ink-3" title={lesson.title}>
+                      {lesson.title}
                     </span>
                   )}
                 </div>
@@ -593,27 +607,27 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                       <button
                         type="button"
                         onClick={() => { setShowVideoUrlInput(true); setNewVideoUrl(lesson.youtubeUrl || ''); }}
-                        className="text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 flex items-center space-x-1 transition cursor-pointer"
+                        className="text-[11px] font-semibold text-accent hover:text-accent-700 flex items-center space-x-1 transition cursor-pointer"
                       >
                         <Edit2 className="w-3 h-3" />
                         <span>URL Değiştir</span>
                       </button>
                     ) : (
-                      <form onSubmit={handleSaveVideoUrl} className="flex items-center space-x-1.5 bg-slate-50 p-1.5 rounded-lg border border-slate-200">
+                      <form onSubmit={handleSaveVideoUrl} className="flex items-center space-x-1.5 bg-paper p-1.5 rounded-lg border border-hairline">
                         <input
                           type="text"
                           value={newVideoUrl}
                           onChange={(e) => setNewVideoUrl(e.target.value)}
                           placeholder="YouTube URL..."
-                          className="px-2 py-1 text-xs bg-white border border-slate-300 rounded focus:outline-none w-36"
+                          className="px-2 py-1 text-xs bg-paper-2 border border-hairline-2 rounded focus:outline-none w-36"
                         />
-                        <button type="submit" className="px-2 py-1 bg-indigo-600 text-white text-[11px] font-bold rounded cursor-pointer">
+                        <button type="submit" className="rounded-lg bg-accent px-2 py-1 text-white transition-colors hover:bg-accent-700 cursor-pointer">
                           <Check className="w-3 h-3" />
                         </button>
                         <button
                           type="button"
                           onClick={() => setShowVideoUrlInput(false)}
-                          className="p-1 text-slate-400 hover:text-slate-600 cursor-pointer"
+                          className="p-1 text-ink-3 hover:text-ink-2 cursor-pointer"
                         >
                           <X className="w-3 h-3" />
                         </button>
@@ -624,13 +638,13 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
               </div>
             </div>
           ) : (
-            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-900 space-y-2">
-              <div className="flex items-center space-x-2 font-bold text-amber-950">
-                <Youtube className="w-4 h-4 text-red-600" />
-                <span>Gömülü YouTube Videosu Ekle</span>
+            <div className="space-y-2 rounded-2xl border border-hairline bg-paper-2 p-4">
+              <div className="flex items-center gap-2 text-[14px] font-medium text-ink">
+                <Youtube className="h-4 w-4 text-ink-3" />
+                <span>Video ekle</span>
               </div>
-              <p className="text-[11px] text-amber-800">
-                Görsel ve işitsel takibi senkronize yapmak için YouTube video linkini yapıştırabilirsiniz:
+              <p className="max-w-[52ch] text-[12px] leading-relaxed text-ink-2">
+                Cümleleri videoyla senkron takip edebilmek için YouTube linkini yapıştır.
               </p>
               <form onSubmit={handleSaveVideoUrl} className="flex gap-2 pt-1">
                 <input
@@ -638,12 +652,14 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                   value={newVideoUrl}
                   onChange={(e) => setNewVideoUrl(e.target.value)}
                   placeholder="https://www.youtube.com/watch?v=..."
-                  className="px-3 py-1.5 text-xs bg-white border border-amber-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-500 flex-1"
+                  className="flex-1 rounded-xl border border-hairline bg-paper-2 px-3 py-2 text-[13px]
+                    text-ink placeholder-ink-3 transition-colors focus:border-accent focus:outline-none"
                 />
                 <button
                   type="submit"
                   disabled={!newVideoUrl.trim()}
-                  className="px-3 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg cursor-pointer"
+                  className="rounded-xl bg-accent px-4 py-2 text-[13px] font-medium text-white
+                    transition-colors hover:bg-accent-700 disabled:opacity-40 cursor-pointer"
                 >
                   Göm
                 </button>
@@ -654,16 +670,17 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
 
         {/* Transcript Column */}
         <div ref={transcriptAreaRef} className={viewMode === 'split' ? 'lg:col-span-7' : 'w-full'}>
-          <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+          <div className="overflow-hidden rounded-2xl border border-hairline bg-paper-2">
 
-            <div className="bg-slate-900 text-white px-4 py-2.5 border-b border-slate-800 flex items-center justify-between gap-3 sticky top-0 z-10">
+            <div className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-hairline bg-paper-3 px-4 py-2.5">
               <div className="flex items-center gap-2.5 min-w-0">
                 {ytId && (
                   <button
                     type="button"
                     onClick={togglePlayback}
                     title={isVideoPlaying ? 'Duraklat (boşluk)' : 'Oynat (boşluk)'}
-                    className="flex items-center gap-1.5 h-8 px-3 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-medium transition-colors cursor-pointer shrink-0"
+                    className="flex h-8 shrink-0 items-center gap-1.5 rounded-lg bg-accent px-3 text-[12px]
+                      font-medium text-white transition-colors hover:bg-accent-700 cursor-pointer"
                   >
                     {isVideoPlaying ? (
                       <Pause className="w-3.5 h-3.5 fill-current" />
@@ -673,16 +690,14 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                     <span>{isVideoPlaying ? 'Duraklat' : 'Oynat'}</span>
                   </button>
                 )}
-                <h3 className="text-xs font-medium tracking-wide text-slate-300 truncate">
-                  Transkript
-                </h3>
+                <h3 className="truncate text-[13px] font-medium text-ink">Transkript</h3>
               </div>
-              <span className="timecode text-slate-400 shrink-0">
+              <span className="timecode text-ink-3 shrink-0">
                 {isVideoPlaying ? formatSeconds(currentVideoTime) : `${filteredSentences.length} cümle`}
               </span>
             </div>
 
-            <div className={`divide-y divide-slate-200 ${viewMode === 'split' ? 'max-h-[75vh] overflow-y-auto' : ''}`}>
+            <div className={`divide-y divide-hairline ${viewMode === 'split' ? 'max-h-[75vh] overflow-y-auto' : ''}`}>
               {filteredSentences.map(({ pair }) => {
                 const isActive = activeSentenceId === pair.id;
                 const start = getStartSeconds(pair);
@@ -692,10 +707,10 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                   <div
                     key={pair.id}
                     ref={isActive ? activeSentenceRef : null}
-                    className={`p-4 sm:p-5 transition-all duration-200 border-l-4 select-text ${
+                    className={`select-text border-l-4 p-4 transition-colors duration-200 sm:p-5 ${
                       isActive
-                        ? 'bg-amber-50/95 border-amber-500 shadow-sm'
-                        : 'border-slate-200'
+                        ? 'border-[var(--marker)] bg-[var(--marker-bg)]'
+                        : 'border-transparent'
                     }`}
                   >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 items-start">
@@ -708,8 +723,11 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                               e.stopPropagation();
                               jumpToSentenceInVideo(pair);
                             }}
-                            className={`timecode inline-flex items-center space-x-1 px-2 py-1 rounded transition cursor-pointer shrink-0 mt-0.5 ${
-                              isActive ? 'bg-amber-600 text-white shadow-sm' : 'bg-slate-100 hover:bg-amber-200 text-slate-800'
+                            className={`timecode mt-0.5 inline-flex shrink-0 items-center gap-1 rounded px-2 py-1
+                              transition-colors duration-150 cursor-pointer ${
+                              isActive
+                                ? 'text-[var(--marker-ink)]'
+                                : 'bg-paper-3 text-ink-2 hover:text-ink'
                             }`}
                             title="Videoda bu saniyeye atla"
                           >
@@ -719,34 +737,35 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                         )}
 
                         <div className="flex-1">
-                          {isActive ? (
-                            <div className="bg-amber-100/90 text-amber-950 font-bold p-3.5 rounded-lg border border-amber-300 shadow-sm leading-relaxed">
-                              <p className="transcript-en text-amber-950 font-medium">
-                                <MarkedText text={pair.en} unknown={unknownSet} phrases={phraseSet} />
-                              </p>
-                              <div className="mt-2 inline-flex items-center space-x-1.5 px-2.5 py-0.5 bg-amber-600 text-white text-xs font-bold rounded-full uppercase tracking-wider shadow-sm">
-                                <Volume2 className="w-3.5 h-3.5" />
-                                <span>Canlı Konuşuluyor{timeTag ? ` (${timeTag})` : ''}</span>
-                              </div>
-                            </div>
-                          ) : (
-                            <p className="transcript-en text-slate-900">
-                              <MarkedText text={pair.en} unknown={unknownSet} phrases={phraseSet} />
-                            </p>
+                          {/* AKTİF CÜMLE ARTIK ALTI KEZ İŞARETLENMİYOR.
+                              Önce aynı anda: satır zemini, sol kenarlık,
+                              iç kutu, kalın yazı, kehribar zaman etiketi,
+                              kalın Türkçe ve "CANLI KONUŞULUYOR" hapı
+                              vardı. Yedi sinyal tek bir durum için. Geriye
+                              satır zemini + sol kenarlık + küçük bir
+                              "konuşuluyor" işareti kaldı. */}
+                          <p className={`transcript-en ${isActive ? 'text-[var(--marker-ink)]' : 'text-ink'}`}>
+                            <MarkedText text={pair.en} unknown={unknownSet} phrases={phraseSet} />
+                          </p>
+                          {isActive && (
+                            <span className="mt-1.5 inline-flex items-center gap-1.5 text-[11px] text-[var(--marker-ink)]">
+                              <Volume2 className="h-3.5 w-3.5" />
+                              konuşuluyor
+                            </span>
                           )}
                         </div>
                       </div>
 
                       {/* Turkish + actions */}
-                      <div className="flex items-start justify-between gap-3 border-t md:border-t-0 md:border-l border-slate-200 pt-2.5 md:pt-0 md:pl-4">
+                      <div className="flex items-start justify-between gap-3 border-t md:border-t-0 md:border-l border-hairline pt-2.5 md:pt-0 md:pl-4">
                         {!hideTurkish ? (
-                          <p className={`flex-1 text-sm sm:text-base leading-relaxed ${
-                            isActive ? 'text-amber-950 font-bold' : 'text-slate-700 font-medium'
+                          <p className={`flex-1 text-sm leading-relaxed sm:text-base ${
+                            isActive ? 'text-[var(--marker-ink)]' : 'text-ink-2'
                           }`}>
                             {pair.tr}
                           </p>
                         ) : (
-                          <span className="text-xs text-slate-400 italic flex-1">Türkçe çeviri gizlendi</span>
+                          <span className="text-xs text-ink-3 italic flex-1">Türkçe çeviri gizlendi</span>
                         )}
 
                         <div className="flex items-center space-x-1 shrink-0 ml-2">
@@ -754,10 +773,10 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                             <button
                               type="button"
                               onClick={() => jumpToSentenceInVideo(pair)}
-                              className={`p-2 rounded-lg transition cursor-pointer ${
+                              className={`rounded-lg p-2 transition-colors duration-150 cursor-pointer ${
                                 isActive
-                                  ? 'bg-amber-600 text-white font-bold shadow-sm'
-                                  : 'bg-slate-100 hover:bg-amber-100 text-slate-700 hover:text-amber-900'
+                                  ? 'text-[var(--marker-ink)] hover:bg-paper-2'
+                                  : 'bg-paper-3 text-ink-2 hover:text-ink'
                               }`}
                               title="Videoda Oynat"
                             >
@@ -768,8 +787,8 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                           <button
                             type="button"
                             onClick={() => speakText(pair.id, pair.en)}
-                            className="p-2 rounded-lg bg-slate-100 hover:bg-indigo-100 text-slate-700 hover:text-indigo-700 transition cursor-pointer"
-                            title="Sesli Okunuşu Dinle"
+                            className="rounded-lg bg-paper-3 p-2 text-ink-2 transition-colors hover:text-ink cursor-pointer"
+                            title="Sesli okunuşu dinle"
                           >
                             <Volume2 className="w-4 h-4" />
                           </button>
@@ -777,8 +796,8 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                           <button
                             type="button"
                             onClick={() => onBookmarkWord(pair.en.split(' ')[0], pair.en, pair.tr)}
-                            className="p-2 rounded-lg bg-slate-100 hover:bg-indigo-100 text-slate-700 hover:text-indigo-700 transition cursor-pointer"
-                            title="Notlarıma Ekle"
+                            className="rounded-lg bg-paper-3 p-2 text-ink-2 transition-colors hover:text-ink cursor-pointer"
+                            title="Notlarıma ekle"
                           >
                             <Bookmark className="w-4 h-4" />
                           </button>

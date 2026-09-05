@@ -1,8 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Passage, VocabularyWord, UserProgress } from '../types';
 import { CORE_VOCABULARY_DATA, CORE_VOCABULARY_CATEGORIES } from '../data/coreVocabulary';
-import { CheckCircle2, ChevronLeft, ChevronRight, HelpCircle, RefreshCw, Volume2, Award, BookOpen, Star, Sparkles } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { CheckCircle2, ChevronLeft, ChevronRight, Volume2 } from 'lucide-react';
 
 interface VocabularyTrainerProps {
   passages: Passage[];
@@ -157,293 +156,266 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
 
   const activeCardWord = filteredWords[cardIndex];
 
+  const cardStatus = activeCardWord
+    ? (progress.wordStatus[activeCardWord.term] || 'unstudied')
+    : 'unstudied';
+
+  /** Segment düğmesi — bu depodaki tüm filtre/sekme denetimleriyle aynı. */
+  const segment = (label: string, isActive: boolean, onClick: () => void) => (
+    <button
+      key={label}
+      type="button"
+      onClick={onClick}
+      className={`rounded-lg px-3 py-1.5 text-[12px] transition-colors duration-150 cursor-pointer ${
+        isActive ? 'bg-paper-2 font-medium text-ink' : 'text-ink-2 hover:text-ink'
+      }`}
+    >
+      {label}
+    </button>
+  );
+
+  const selectClass =
+    'rounded-xl border border-hairline bg-paper-2 px-2.5 py-2 text-[12px] text-ink ' +
+    'transition-colors focus:border-accent focus:outline-none cursor-pointer';
+
   return (
-    <div id="vocabulary-trainer-container" className="space-y-6">
-      
-      {/* Mode Switch Controls */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-hairline/40 p-6 shadow-xs gap-4 rounded-xl">
-        <div className="space-y-1">
-          <h2 className="text-xl font-display font-extrabold text-ink flex items-center gap-2">
-            <Sparkles className="h-5.5 w-5.5 text-accent" /> Pratik ve Gelişim Alanı
-          </h2>
-          <p className="text-xs text-ink-3 font-display">Kelime kartlarıyla çalışın ya da bilginizi ölçmek için test alanına geçin.</p>
-        </div>
+    <div id="vocabulary-trainer-container" className="space-y-5">
 
-        {/* Tab Selection */}
-        <div className="flex bg-paper border border-hairline/20 p-1 rounded-xl self-stretch sm:self-auto font-mono text-[10px]">
-          <button
-            onClick={() => { setMode('cards'); setTestActive(false); }}
-            className={`px-4 py-2.5 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer rounded-lg uppercase tracking-wider ${
-              mode === 'cards' ? 'bg-white text-ink border border-hairline/30 shadow-xs rounded-lg' : 'text-ink-3 hover:text-ink'
-            }`}
-          >
-            📇 KELİME KARTLARI
-          </button>
-          <button
-            onClick={() => { setMode('test'); }}
-            className={`px-4 py-2.5 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer rounded-lg uppercase tracking-wider ${
-              mode === 'test' ? 'bg-white text-ink border border-hairline/30 shadow-xs rounded-lg' : 'text-ink-3 hover:text-ink'
-            }`}
-          >
-            ⚡ HIZLI TEST
-          </button>
-        </div>
+      <div className="flex items-baseline justify-between gap-3">
+        <h1 className="text-[22px] font-semibold tracking-tight text-brand">Kelime Çalışma</h1>
+        {mode === 'cards' && filteredWords.length > 0 && (
+          <span className="text-[12px] text-ink-3">
+            <span className="timecode text-ink">{cardIndex + 1}</span> / {filteredWords.length} kart
+          </span>
+        )}
       </div>
 
-      {/* Kelime Kaynağı Seçici */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 bg-white border border-hairline/40 p-5 shadow-xs font-mono text-[10px] rounded-xl">
-        <span className="text-ink/60 font-bold uppercase tracking-widest flex items-center gap-1.5">
-          <BookOpen className="h-3.5 w-3.5 text-accent" />
-          KAYNAK GRUBU:
-        </span>
-        <div className="flex flex-wrap gap-1">
-          {[
-            { id: 'all', label: 'KARIŞIK (HEPSİ)' },
-            { id: 'passages', label: 'SADECE OKUMA PARÇALARI' },
-            { id: 'core', label: 'SADECE TEMEL WORKBOOK KELİMELERİ' }
-          ].map(src => (
-            <button
-              key={src.id}
-              onClick={() => {
-                setTrainerSource(src.id as any);
-                setTestActive(false); // Reset active tests to avoid out-of-sync states
-              }}
-              className={`px-3 py-1.5 border text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer rounded-full ${
-                trainerSource === src.id
-                  ? 'bg-accent text-white border-accent font-bold shadow-xs'
-                  : 'bg-white border-hairline/30 text-ink-3 hover:bg-paper hover:text-ink'
-              }`}
+      {/* ÜÇ AYRI KUTU TEK SATIRA İNDİ.
+          Önce başlık kartı ("Pratik ve Gelişim Alanı" + emoji'li sekmeler),
+          kaynak kartı ve filtre kartı üst üste duruyordu; üçü birlikte
+          ekranın yarısını kaplıyor ve asıl kart aşağıda kalıyordu. */}
+      <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
+        <div className="flex w-fit gap-0.5 rounded-xl bg-paper-3 p-1">
+          {segment('Kelime kartları', mode === 'cards', () => { setMode('cards'); setTestActive(false); })}
+          {segment('Hızlı test', mode === 'test', () => setMode('test'))}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <select
+            value={trainerSource}
+            onChange={(e) => { setTrainerSource(e.target.value as any); setTestActive(false); }}
+            aria-label="Kelime kaynağı"
+            className={selectClass}
+          >
+            <option value="all">Karışık</option>
+            <option value="passages">Okuma parçaları</option>
+            <option value="core">Temel liste</option>
+          </select>
+
+          {mode === 'cards' && (
+            <select
+              value={cardFilter}
+              onChange={(e) => setCardFilter(e.target.value as any)}
+              aria-label="Kart filtresi"
+              className={selectClass}
             >
-              {src.label}
-            </button>
-          ))}
+              <option value="all">Tüm kartlar</option>
+              <option value="unstudied">Çalışılmayan</option>
+              <option value="studied">Çalışılan</option>
+              <option value="learned">Öğrenilen</option>
+            </select>
+          )}
         </div>
       </div>
 
-      {/* Mode Panel Switch Rendering */}
       {mode === 'cards' ? (
-        <div className="space-y-6">
-          
-          {/* Filter Controls Row */}
-          <div className="flex flex-wrap items-center justify-between gap-4 bg-paper border border-hairline/30 p-4 rounded-xl font-mono text-[10px]">
-            <div className="flex flex-wrap items-center gap-2 text-xs">
-              <span className="text-ink-3 font-bold uppercase tracking-wider">Kart Filtresi:</span>
-              <div className="flex flex-wrap gap-1">
-                {[
-                  { id: 'all', label: 'TÜMÜ' },
-                  { id: 'unstudied', label: 'ÇALIŞILMAYAN' },
-                  { id: 'studied', label: 'ÇALIŞILAN' },
-                  { id: 'learned', label: 'ÖĞRENİLEN' }
-                ].map(opt => (
+        filteredWords.length > 0 && activeCardWord ? (
+          <div className="mx-auto w-full max-w-xl space-y-4">
+
+            {/* KART.
+                Önceki sürümde `rotate-y-180` ile 3B çevirme taklidi
+                vardı ama ne `transform-style: preserve-3d` ne de
+                `backface-visibility` tanımlıydı; sonuç dönmüyor,
+                yalnızca opaklık değişiyordu. Sahte dönüş kaldırıldı:
+                iki yüz sönerek yer değiştiriyor, yani ekranda görünen
+                davranış koddaki davranışla aynı. */}
+            <button
+              type="button"
+              onClick={() => setIsFlipped(!isFlipped)}
+              aria-label={isFlipped ? 'Ön yüzü göster' : 'Arka yüzü göster'}
+              className="flex min-h-72 w-full flex-col items-center justify-center gap-3
+                rounded-2xl border border-hairline bg-paper-2 p-8 text-center
+                transition-colors duration-150 hover:bg-paper-3/40 cursor-pointer"
+            >
+              <span className="text-[11px] text-ink-3">{activeCardWord.partOfSpeech}</span>
+
+              {!isFlipped ? (
+                <>
+                  <span className="text-[30px] font-semibold tracking-tight text-ink">
+                    {activeCardWord.term}
+                  </span>
+                  <span className="text-[12px] text-ink-3">Çevirmek için dokun</span>
+                  <span
+                    role="button"
+                    tabIndex={0}
+                    onClick={(e) => { e.stopPropagation(); speakWord(activeCardWord.term); }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault(); e.stopPropagation();
+                        speakWord(activeCardWord.term);
+                      }
+                    }}
+                    title="Telaffuzu dinle"
+                    className="mt-2 rounded-lg p-2 text-ink-3 transition-colors
+                      hover:bg-paper-3 hover:text-ink cursor-pointer"
+                  >
+                    <Volume2 className="h-5 w-5" />
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="text-[22px] font-semibold tracking-tight text-ink">
+                    {activeCardWord.term}
+                  </span>
+                  <span className="text-[18px] text-accent">{activeCardWord.meaning}</span>
+
+                  {activeCardWord.definition && (
+                    <span className="max-w-[46ch] text-[13px] leading-relaxed text-ink-2">
+                      {activeCardWord.definition}
+                    </span>
+                  )}
+                  {activeCardWord.exampleSentence && (
+                    <span className="max-w-[46ch] text-[12px] italic leading-relaxed text-ink-3">
+                      {activeCardWord.exampleSentence}
+                    </span>
+                  )}
+                </>
+              )}
+            </button>
+
+            {/* Gezinme ve durum — kutu değil, tek satır */}
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  disabled={cardIndex === 0}
+                  onClick={() => { setCardIndex(prev => prev - 1); setIsFlipped(false); }}
+                  aria-label="Önceki kart"
+                  className="rounded-lg p-2 text-ink-3 transition-colors hover:bg-paper-3
+                    hover:text-ink disabled:cursor-not-allowed disabled:opacity-30 cursor-pointer"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  disabled={cardIndex === filteredWords.length - 1}
+                  onClick={() => { setCardIndex(prev => prev + 1); setIsFlipped(false); }}
+                  aria-label="Sonraki kart"
+                  className="rounded-lg p-2 text-ink-3 transition-colors hover:bg-paper-3
+                    hover:text-ink disabled:cursor-not-allowed disabled:opacity-30 cursor-pointer"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
+
+              <div className="flex gap-0.5 rounded-lg bg-paper-3 p-0.5">
+                {([
+                  ['studied', 'Çalışıyorum'],
+                  ['learned', 'Öğrendim'],
+                ] as [string, string][]).map(([id, label]) => (
                   <button
-                    key={opt.id}
-                    onClick={() => setCardFilter(opt.id as any)}
-                    className={`px-3 py-1.5 border text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer rounded-full ${
-                      cardFilter === opt.id
-                        ? 'bg-ink text-white border-ink shadow-xs'
-                        : 'bg-white border-hairline/30 text-ink-3 hover:bg-paper hover:text-ink'
+                    key={id}
+                    type="button"
+                    onClick={() => onWordStatusChange(activeCardWord.term, id as any)}
+                    aria-pressed={cardStatus === id}
+                    className={`rounded px-3 py-1.5 text-[12px] transition-colors cursor-pointer ${
+                      cardStatus === id
+                        ? id === 'studied'
+                          ? 'bg-amber-500 font-medium text-white'
+                          : 'bg-emerald-600 font-medium text-white'
+                        : 'text-ink-3 hover:text-ink'
                     }`}
                   >
-                    {opt.label}
+                    {label}
                   </button>
                 ))}
               </div>
             </div>
-
-            <span className="text-xs font-bold text-ink/60 font-mono uppercase tracking-wider">
-              KART: {filteredWords.length > 0 ? cardIndex + 1 : 0} / {filteredWords.length}
-            </span>
           </div>
-
-          {/* Flashcard Area */}
-          {filteredWords.length > 0 ? (
-            <div className="flex flex-col items-center justify-center space-y-6">
-              
-              {/* Card Surface Frame */}
-              <div 
-                onClick={() => setIsFlipped(!isFlipped)}
-                className={`relative w-full max-w-xl h-72 cursor-pointer shadow-xs transition-all duration-500 transform border border-hairline/40 bg-white rounded-2xl ${
-                  isFlipped ? 'rotate-y-180 bg-paper border-accent' : 'hover:shadow-md'
-                }`}
-              >
-                {/* Front Side */}
-                <div className={`absolute inset-0 flex flex-col items-center justify-center p-8 space-y-4 ${
-                  isFlipped ? 'opacity-0 pointer-events-none' : 'opacity-100 transition-opacity duration-300'
-                }`}>
-                  <span className="text-[9px] bg-paper border border-hairline/30 text-ink-3 font-bold px-2 py-0.5 font-mono uppercase tracking-widest rounded-lg">{activeCardWord.partOfSpeech}</span>
-                  <h3 className="text-3xl font-display font-extrabold text-ink tracking-tight">{activeCardWord.term}</h3>
-                  <p className="text-[10px] text-ink-3 font-display">Çevirmek için karta dokunun</p>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); speakWord(activeCardWord.term); }}
-                    className="p-2.5 rounded-lg bg-paper text-ink-3 border border-hairline/30 hover:bg-ink hover:text-white transition-colors cursor-pointer"
-                  >
-                    <Volume2 className="h-5 w-5" />
-                  </button>
-                </div>
-
-                {/* Back Side */}
-                <div className={`absolute inset-0 flex flex-col justify-between p-6 rotate-y-180 ${
-                  isFlipped ? 'opacity-100 transition-opacity duration-300' : 'opacity-0 pointer-events-none'
-                }`}>
-                  <div className="space-y-4 text-center">
-                    <span className="inline-block text-[9px] bg-paper text-accent border border-hairline/30 font-bold px-2 py-0.5 uppercase font-mono tracking-widest rounded-lg">{activeCardWord.partOfSpeech}</span>
-                    <h3 className="text-2xl font-display font-extrabold text-accent">{activeCardWord.term}</h3>
-                    
-                    <div className="space-y-2 max-w-md mx-auto">
-                      <p className="text-lg font-bold text-ink bg-paper p-3.5 border border-hairline/20 rounded-lg">{activeCardWord.meaning}</p>
-                      {activeCardWord.definition && (
-                        <p className="text-xs text-ink/60 font-display leading-relaxed">{activeCardWord.definition}</p>
-                      )}
-                      {activeCardWord.exampleSentence && (
-                        <p className="text-xs text-ink-3 font-mono italic pt-1">"{activeCardWord.exampleSentence}"</p>
-                      )}
-                    </div>
-                  </div>
-
-                  <p className="text-[9px] text-ink-3 font-mono tracking-wider uppercase text-center">Öğrenildi / Çalışıldı olarak işaretlemek için aşağıdaki butonları kullanabilirsiniz</p>
-                </div>
-
-              </div>
-
-              {/* Navigation and State Toggle Toolbar */}
-              <div className="flex flex-col sm:flex-row items-center gap-4 w-full max-w-xl justify-between bg-white border border-hairline/40 p-4 rounded-xl shadow-xs font-mono">
-                
-                {/* Card navigation */}
-                <div className="flex items-center gap-2">
-                  <button
-                    disabled={cardIndex === 0}
-                    onClick={() => { setCardIndex(prev => prev - 1); setIsFlipped(false); }}
-                    className="p-2 bg-white border border-hairline/30 hover:bg-paper text-ink/60 disabled:opacity-30 cursor-pointer rounded-lg"
-                  >
-                    <ChevronLeft className="h-5 w-5" />
-                  </button>
-                  <span className="text-xs font-bold text-ink-3">
-                    {cardIndex + 1} / {filteredWords.length}
-                  </span>
-                  <button
-                    disabled={cardIndex === filteredWords.length - 1}
-                    onClick={() => { setCardIndex(prev => prev + 1); setIsFlipped(false); }}
-                    className="p-2 bg-white border border-hairline/30 hover:bg-paper text-ink/60 disabled:opacity-30 cursor-pointer rounded-lg"
-                  >
-                    <ChevronRight className="h-5 w-5" />
-                  </button>
-                </div>
-
-                {/* Mark status of card */}
-                <div className="flex gap-2">
-                  {[
-                    { id: 'studied', label: 'ÇALIŞTIM', color: 'bg-amber-500 text-white border-amber-600 font-bold' },
-                    { id: 'learned', label: 'ÖĞRENDİM', color: 'bg-emerald-600 text-white border-emerald-700' }
-                  ].map(btn => {
-                    const status = progress.wordStatus[activeCardWord.term] || 'unstudied';
-                    const isCurrent = status === btn.id;
-
-                    return (
-                      <button
-                        key={btn.id}
-                        onClick={() => onWordStatusChange(activeCardWord.term, btn.id as any)}
-                        className={`px-4 py-2 border text-[10px] uppercase tracking-wider font-bold transition-all flex items-center gap-1.5 cursor-pointer rounded-lg ${
-                          isCurrent
-                            ? btn.id === 'studied' ? 'bg-amber-500 text-white border-amber-500 font-bold' : 'bg-emerald-600 text-white border-emerald-700 font-bold shadow-xs'
-                            : 'bg-white hover:bg-paper text-ink-3 border-hairline/30'
-                        }`}
-                      >
-                        {isCurrent && <CheckCircle2 className="h-3.5 w-3.5" />}
-                        {btn.label}
-                      </button>
-                    );
-                  })}
-                </div>
-
-              </div>
-
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center p-16 bg-white border border-hairline/40 text-center rounded-2xl">
-              <BookOpen className="h-12 w-12 text-ink/20 mb-2" />
-              <p className="text-base font-display font-bold text-ink">Bu çalışma durumuna uygun kelime bulunamadı.</p>
-              <p className="text-xs text-ink-3 mt-1 max-w-sm font-display">
-                Farklı bir filtre seçerek kelime kartlarını listeleyebilirsiniz.
-              </p>
-            </div>
-          )}
-
-        </div>
+        ) : (
+          <div className="rounded-2xl border border-hairline p-10 text-center">
+            <p className="text-[14px] font-medium text-ink">Bu filtreye uyan kelime yok.</p>
+            <p className="mx-auto mt-1 max-w-[46ch] text-[13px] leading-relaxed text-ink-2">
+              Başka bir kart filtresi ya da kaynak seçmeyi dene.
+            </p>
+          </div>
+        )
       ) : (
-        // Practice Test Mode
-        <div className="bg-white border border-hairline/40 p-6 shadow-xs space-y-6 rounded-xl">
+        <div className="rounded-2xl border border-hairline bg-paper-2 p-5 sm:p-6">
           {!testActive ? (
-            <div className="flex flex-col items-center justify-center text-center p-12 space-y-5">
-              <div className="flex h-16 w-14 items-center justify-center border border-hairline/30 bg-paper text-ink/60 rounded-lg">
-                <HelpCircle className="h-8 w-8" />
-              </div>
-              <div className="space-y-1">
-                <h3 className="text-lg font-display font-extrabold text-ink">Dynamic Vocabulary Challenge</h3>
-                <p className="text-xs text-ink-3 font-display max-w-md leading-relaxed">
-                  Tüm okuma parçalarından rastgele seçilen 10 kelimelik bir pratik quizi oluşturun. Yanıtlarınız kelime durumunu doğrudan günceller!
-                </p>
-              </div>
+            <div className="py-8 text-center">
+              {/* Baslik Turkce oldu: "Dynamic Vocabulary Challenge" arayuzun
+                  geri kalani Turkceyken yer tutucu gibi duruyordu. */}
+              <h2 className="text-[17px] font-semibold text-ink">Hızlı test</h2>
+              <p className="mx-auto mt-2 max-w-[52ch] text-[13px] leading-relaxed text-ink-2">
+                Seçili kaynaktan rastgele on kelime sorulur. Doğru bildiklerin
+                otomatik olarak "öğrenildi" durumuna geçer.
+              </p>
               <button
+                type="button"
                 onClick={generateTest}
-                className="px-6 py-3 bg-accent hover:bg-white hover:text-ink border border-accent text-white font-bold text-xs uppercase tracking-widest transition-all cursor-pointer font-mono rounded-lg"
+                className="mt-6 rounded-xl bg-accent px-5 py-2.5 text-[13px] font-medium text-white
+                  transition-colors duration-150 hover:bg-accent-700 cursor-pointer"
               >
-                Testi Başlat
+                Testi başlat
               </button>
             </div>
           ) : (
-            <div className="space-y-6">
-              
-              {/* Test Header */}
-              <div className="flex justify-between items-center border-b border-hairline/20 pb-4">
-                <span className="text-[10px] font-bold text-ink-3 uppercase tracking-widest font-mono">
-                  Soru {currentTestIndex + 1} / {testQuestions.length}
+            <div className="space-y-5">
+              <div className="flex items-center justify-between gap-3 border-b border-hairline pb-4">
+                <span className="text-[12px] text-ink-3">
+                  Soru <span className="timecode text-ink">{currentTestIndex + 1}</span> / {testQuestions.length}
                 </span>
-                
-                {/* Progress Mini Bar */}
-                <div className="h-1.5 w-32 bg-paper border border-hairline/20 overflow-hidden rounded-lg">
-                  <div 
-                    className="h-full bg-accent transition-all" 
-                    style={{ width: `${((currentTestIndex + (testSubmitted ? 1 : 0)) / testQuestions.length) * 100}%` }} 
+                <div className="h-1 w-32 overflow-hidden rounded-full bg-paper-3">
+                  <div
+                    className="h-full rounded-full bg-accent transition-all duration-300"
+                    style={{ width: `${((currentTestIndex + (testSubmitted ? 1 : 0)) / testQuestions.length) * 100}%` }}
                   />
                 </div>
               </div>
 
-              {/* Single Question Frame */}
-              <div className="space-y-4">
-                <h3 className="text-lg sm:text-xl font-display font-extrabold text-ink leading-relaxed">
+              <div className="space-y-3">
+                <h2 className="text-[17px] font-medium leading-relaxed text-ink">
                   {testQuestions[currentTestIndex].questionText}
-                </h3>
+                </h2>
 
-                {/* Question options */}
-                <div className="grid grid-cols-1 gap-2.5">
+                <div className="space-y-2">
                   {testQuestions[currentTestIndex].options.map(option => {
                     const isSelected = testAnswers[currentTestIndex] === option;
                     const isCorrectOption = option === testQuestions[currentTestIndex].correctAnswer;
 
-                    let buttonStyle = 'bg-white border-hairline/30 text-ink hover:bg-paper hover:border-accent';
-                    
+                    let style = 'border-hairline text-ink hover:bg-paper-3';
                     if (isSelected && !testSubmitted) {
-                      buttonStyle = 'bg-paper border-accent text-ink font-bold';
+                      style = 'border-accent bg-accent-soft text-ink';
                     } else if (testSubmitted) {
-                      if (isCorrectOption) {
-                        buttonStyle = 'bg-emerald-50 border-emerald-500 text-emerald-950 font-bold';
-                      } else if (isSelected) {
-                        buttonStyle = 'bg-rose-50 border-rose-500 text-rose-950';
-                      } else {
-                        buttonStyle = 'bg-white border-hairline/20 text-ink/30 opacity-60';
-                      }
+                      if (isCorrectOption) style = 'border-emerald-500 bg-emerald-50 text-emerald-900';
+                      else if (isSelected) style = 'border-rose-400 bg-rose-50 text-rose-900';
+                      else style = 'border-hairline text-ink-3';
                     }
 
                     return (
                       <button
                         key={option}
+                        type="button"
                         disabled={testSubmitted}
                         onClick={() => handleSelectTestOption(option)}
-                        className={`w-full text-left p-4 border text-xs sm:text-sm transition-all flex justify-between items-center cursor-pointer rounded-xl ${buttonStyle}`}
+                        className={`flex w-full items-center justify-between gap-3 rounded-xl border
+                          px-4 py-3 text-left text-[13px] transition-colors duration-150
+                          disabled:cursor-default cursor-pointer ${style}`}
                       >
                         <span>{option}</span>
                         {testSubmitted && isCorrectOption && (
-                          <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                          <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
                         )}
                       </button>
                     );
@@ -451,54 +423,61 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
                 </div>
               </div>
 
-              {/* Footer controls inside quiz */}
-              <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 border-t border-hairline/20">
+              <div className="flex flex-col items-start justify-between gap-3 border-t border-hairline pt-4 sm:flex-row sm:items-center">
                 {testSubmitted ? (
-                  <div className="text-xs">
-                    <p className="text-ink-3 font-bold uppercase tracking-wider font-mono">Test Tamamlandı</p>
-                    <p className="text-sm font-bold text-ink">
-                      Doğru Yanıt:{' '}
-                      <span className="text-emerald-700 font-mono text-base font-extrabold">{testScore} / {testQuestions.length}</span>
-                    </p>
-                  </div>
+                  <p className="text-[13px] text-ink-2">
+                    Doğru yanıt{' '}
+                    <span className="timecode font-semibold text-ink">
+                      {testScore}/{testQuestions.length}
+                    </span>
+                  </p>
                 ) : (
-                  <span className="text-xs text-ink-3 font-display">Doğru bilinen kelimeler otomatik olarak 'Öğrenildi' durumuna yükseltilir.</span>
+                  <p className="text-[12px] text-ink-3">
+                    Doğru bilinen kelimeler "öğrenildi" durumuna yükseltilir.
+                  </p>
                 )}
 
-                <div className="flex gap-2 w-full sm:w-auto">
+                <div className="flex w-full gap-2 sm:w-auto">
                   {testSubmitted ? (
                     <>
                       <button
+                        type="button"
                         onClick={() => setTestActive(false)}
-                        className="flex-1 sm:flex-none px-5 py-2.5 border border-hairline/30 bg-white hover:bg-paper text-ink/60 font-bold text-xs rounded-lg transition-colors uppercase font-mono tracking-wider cursor-pointer"
+                        className="flex-1 rounded-xl border border-hairline px-4 py-2 text-[13px]
+                          font-medium text-ink-2 transition-colors hover:bg-paper-3 hover:text-ink
+                          cursor-pointer sm:flex-none"
                       >
                         Kapat
                       </button>
                       <button
+                        type="button"
                         onClick={generateTest}
-                        className="flex-1 sm:flex-none px-5 py-2.5 bg-accent hover:bg-white hover:text-ink border border-accent text-white font-bold text-xs rounded-lg transition-colors uppercase font-mono tracking-wider cursor-pointer"
+                        className="flex-1 rounded-xl bg-accent px-4 py-2 text-[13px] font-medium
+                          text-white transition-colors hover:bg-accent-700 cursor-pointer sm:flex-none"
                       >
-                        Yeni Test
+                        Yeni test
                       </button>
                     </>
                   ) : (
                     <button
+                      type="button"
                       disabled={!testAnswers[currentTestIndex]}
                       onClick={nextTestQuestion}
-                      className="w-full sm:w-auto px-5 py-2.5 bg-accent hover:bg-white hover:text-ink border border-accent text-white font-bold text-xs rounded-lg disabled:bg-paper disabled:text-ink/30 disabled:border-hairline/20 transition-colors shadow-xs flex items-center justify-center gap-1 font-mono uppercase tracking-wider cursor-pointer"
+                      className="flex w-full items-center justify-center gap-1 rounded-xl bg-accent
+                        px-4 py-2 text-[13px] font-medium text-white transition-colors
+                        hover:bg-accent-700 disabled:cursor-not-allowed disabled:opacity-40
+                        cursor-pointer sm:w-auto"
                     >
-                      {currentTestIndex === testQuestions.length - 1 ? 'Testi Bitir' : 'Sonraki Soru'}
+                      {currentTestIndex === testQuestions.length - 1 ? 'Testi bitir' : 'Sonraki soru'}
                       <ChevronRight className="h-4 w-4" />
                     </button>
                   )}
                 </div>
               </div>
-
             </div>
           )}
         </div>
       )}
-
     </div>
   );
 }

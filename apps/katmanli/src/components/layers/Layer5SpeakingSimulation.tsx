@@ -208,43 +208,40 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
 
   return (
     <div className="space-y-6">
-      {/* Intro Header */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3">
-        <div className="flex items-center space-x-2.5">
-          <span className="px-2.5 py-1 bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-bold rounded-md uppercase tracking-wider">
-            Layer 7
-          </span>
-          <h2 className="text-base sm:text-lg font-bold text-slate-900">Konuşma ve Sesli Anlatım Simülasyonu</h2>
-        </div>
-
-        <p className="text-xs text-slate-600 leading-relaxed">
-          Gemini AI Dil Koçunuz video konusu üzerinden size <strong className="text-slate-900">sırayla 3 soru</strong> soracak. 
+      {/* "Layer 7" rozeti ve baslik kalkti: LayerHeaderBar'da zaten var. */}
+      <div className="space-y-3 rounded-2xl border border-hairline bg-paper-2 p-5">
+        <p className="max-w-[62ch] text-[13px] leading-relaxed text-ink-2">
+          Gemini AI Dil Koçunuz video konusu üzerinden size <strong className="text-ink">sırayla 3 soru</strong> soracak. 
           Her soruyu mikrofonunuzu kullanarak veya yazarak cevaplayabilirsiniz. Koçunuz konuşma dilinizin akıcılığına odaklanacak ve kısa geri bildirimlerle sizi destekleyecektir.
         </p>
 
         {/* Sesli Anlatım Tekrar Sayacı */}
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-3">
-          <div className="flex items-center justify-between flex-wrap gap-2">
-            <div className="flex items-center space-x-2">
-              <Repeat className="w-4 h-4 text-amber-600" />
-              <h3 className="text-sm font-bold text-amber-950">Sesli Anlatım Tekrarı</h3>
+        {/* KEHRİBAR TEMA KALKTI. Bu sayaç baştan sona kehribardı — zemin,
+            kenarlık, başlık, sayı rozeti, ilerleme çubuğu ve iki düğme.
+            Kehribar bu depoda "şu an konuşulan cümle" işareti (index.css);
+            bir sayacın teması değil. */}
+        <div className="space-y-3 rounded-xl bg-paper-3 p-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Repeat className="h-4 w-4 text-ink-3" />
+              <h3 className="text-[14px] font-medium text-ink">Sesli anlatım tekrarı</h3>
             </div>
-            <span className="text-xs font-bold text-amber-900 bg-amber-200/80 px-2.5 py-0.5 rounded-full font-mono">
-              {repCount} / {REP_TARGET}
+            <span className="timecode text-ink-2">
+              {repCount}/{REP_TARGET}
             </span>
           </div>
 
-          <p className="text-[11px] text-amber-900 leading-relaxed">
+          <p className="max-w-[62ch] text-[12px] leading-relaxed text-ink-2">
             Yazdığınız özet ve yorumu kendinize sesli anlatın. Metodoloji
             <strong> {REP_MINIMUM}-{REP_TARGET} tekrar</strong> öneriyor. Dışarıda kulaklıkla
             yürürken biriyle konuşuyormuş gibi pratik yapabilirsiniz. Her tekrardan sonra
             aşağıdaki düğmeye basın.
           </p>
 
-          <div className="w-full bg-amber-200 rounded-full h-2 overflow-hidden">
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-paper-2">
             <div
-              className={`h-2 rounded-full transition-all duration-500 ${
-                repCount >= REP_MINIMUM ? 'bg-emerald-500' : 'bg-amber-500'
+              className={`h-full rounded-full transition-all duration-500 ${
+                repCount >= REP_MINIMUM ? 'bg-emerald-500' : 'bg-accent'
               }`}
               style={{ width: `${Math.min(100, (repCount / REP_TARGET) * 100)}%` }}
             />
@@ -254,34 +251,37 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
             <button
               type="button"
               onClick={() => setRepCount((c) => c + 1)}
-              className="flex items-center space-x-1.5 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-lg transition cursor-pointer"
+              className="flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-[13px]
+                font-medium text-white transition-colors duration-150 hover:bg-accent-700 cursor-pointer"
             >
-              <Plus className="w-3.5 h-3.5" />
-              <span>Bir Tekrar Yaptım</span>
+              <Plus className="h-3.5 w-3.5" />
+              <span>Bir tekrar yaptım</span>
             </button>
 
             <button
               type="button"
               onClick={() => setRepCount((c) => Math.max(0, c - 1))}
               disabled={repCount === 0}
-              className="flex items-center space-x-1 px-3 py-2 bg-white hover:bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold rounded-lg transition disabled:opacity-40 cursor-pointer"
-              title="Yanlışlıkla arttırdıysanız"
+              className="flex items-center gap-1 rounded-xl border border-hairline bg-paper-2 px-3 py-2
+                text-[13px] text-ink-2 transition-colors hover:text-ink
+                disabled:opacity-40 cursor-pointer"
+              title="Yanlışlıkla arttırdıysan"
             >
-              <Minus className="w-3.5 h-3.5" />
-              <span>Geri Al</span>
+              <Minus className="h-3.5 w-3.5" />
+              <span>Geri al</span>
             </button>
 
             <button
               type="button"
               onClick={() => setRepCount(0)}
               disabled={repCount === 0}
-              className="px-3 py-2 text-[11px] font-bold text-amber-800 hover:text-amber-950 disabled:opacity-40 cursor-pointer"
+              className="rounded-lg px-3 py-2 text-[12px] text-ink-3 transition-colors hover:text-ink disabled:opacity-40 cursor-pointer"
             >
               Sıfırla
             </button>
 
             {repCount >= REP_MINIMUM && (
-              <span className="inline-flex items-center space-x-1.5 text-[11px] font-bold text-emerald-700">
+              <span className="inline-flex items-center space-x-1.5 text-[11px] font-semibold text-emerald-700">
                 <CheckCircle className="w-3.5 h-3.5" />
                 <span>
                   {repCount >= REP_TARGET
@@ -294,16 +294,16 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
         </div>
 
         {/* Step Progress Pills */}
-        <div className="flex items-center space-x-2 pt-2 border-t border-slate-100">
+        <div className="flex items-center space-x-2 pt-2 border-t border-paper-3">
           {[1, 2, 3].map((stepNum) => (
             <div
               key={stepNum}
-              className={`flex-1 p-2 rounded-lg text-center text-xs font-bold border transition ${
+              className={`flex-1 p-2 rounded-lg text-center text-xs font-semibold border transition ${
                 currentStep === stepNum && !isCompleted
-                  ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+                  ? 'bg-accent text-white border-accent'
                   : currentStep > stepNum || isCompleted
                   ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                  : 'bg-slate-50 text-slate-400 border-slate-200'
+                  : 'bg-paper text-ink-3 border-hairline'
               }`}
             >
               Soru {stepNum} / 3
@@ -312,14 +312,15 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
         </div>
 
         {errorMsg && (
-          <div className="flex items-center justify-between bg-rose-50 border border-rose-200 p-3 rounded-lg text-xs text-rose-800 mt-2">
+          <div className="mt-2 flex items-center justify-between rounded-xl border border-rose-200 bg-rose-50 p-3 text-[12px] text-rose-800">
             <div className="flex items-center space-x-2">
               <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
               <span>{errorMsg}</span>
             </div>
             <button
               onClick={startSimulation}
-              className="ml-3 px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-[11px] font-bold shrink-0 cursor-pointer"
+              className="ml-3 shrink-0 rounded-lg bg-rose-600 px-2.5 py-1 text-[12px] font-medium
+                text-white transition-colors hover:bg-rose-700 cursor-pointer"
             >
               Tekrar Yenile
             </button>
@@ -328,31 +329,31 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
       </div>
 
       {/* Conversation Thread Container */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 space-y-4 shadow-sm min-h-[300px]">
+      <div className="bg-paper-2 border border-hairline rounded-xl p-4 sm:p-5 space-y-4 min-h-[300px]">
         {history.map((turn, index) => (
           <div key={index} className="space-y-3">
             {/* Coach Question Bubble */}
-            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2 max-w-3xl">
+            <div className="bg-paper p-4 rounded-xl border border-hairline space-y-2 max-w-3xl">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-indigo-700 uppercase tracking-wide flex items-center space-x-1">
-                  <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                <span className="text-[11px] font-semibold text-accent-700 tracking-wide flex items-center space-x-1">
+                  <Sparkles className="w-3.5 h-3.5 text-accent" />
                   <span>Gemini Dil Koçu (Soru {turn.step}):</span>
                 </span>
                 <button
                   onClick={() => speakText(turn.coachQuestion)}
-                  className="p-1.5 text-slate-500 hover:text-indigo-600 transition cursor-pointer"
+                  className="p-1.5 text-ink-3 hover:text-accent transition cursor-pointer"
                   title="Soruyu Sesli Dinle"
                 >
                   <Volume2 className="w-4 h-4" />
                 </button>
               </div>
 
-              <p className="text-xs sm:text-sm font-bold text-slate-900 leading-relaxed">
+              <p className="text-xs sm:text-sm font-semibold text-ink leading-relaxed">
                 "{turn.coachQuestion}"
               </p>
 
               {turn.coachQuestionTr && (
-                <p className="text-[11px] text-slate-500 italic">
+                <p className="text-[11px] text-ink-3 italic">
                   İpucu / Türkçe: {turn.coachQuestionTr}
                 </p>
               )}
@@ -361,8 +362,8 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
             {/* User Response Bubble */}
             {turn.userResponse && (
               <div className="flex justify-end">
-                <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-200 text-xs sm:text-sm text-slate-900 max-w-2xl space-y-1">
-                  <span className="text-[10px] text-indigo-700 font-bold block uppercase">Yanıtınız:</span>
+                <div className="bg-accent-soft p-4 rounded-xl border border-accent/25 text-xs sm:text-sm text-ink max-w-2xl space-y-1">
+                  <span className="text-[10px] text-accent-700 font-semibold block">Yanıtınız:</span>
                   <p className="leading-relaxed font-medium">"{turn.userResponse}"</p>
                 </div>
               </div>
@@ -370,8 +371,8 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
 
             {/* Coach Feedback for this answer */}
             {turn.coachFeedback && (
-              <div className="bg-emerald-50 border border-emerald-200 p-3 rounded-lg text-xs text-emerald-900 leading-relaxed font-medium">
-                <strong className="text-emerald-800 block font-bold">Geri Bildirim: </strong>
+              <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-[13px] leading-relaxed text-emerald-900">
+                <strong className="text-emerald-800 block font-semibold">Geri Bildirim: </strong>
                 {turn.coachFeedback}
               </div>
             )}
@@ -379,7 +380,7 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
         ))}
 
         {isLoading && (
-          <div className="flex items-center space-x-2 text-indigo-600 text-xs p-3">
+          <div className="flex items-center space-x-2 text-accent text-xs p-3">
             <Loader2 className="w-4 h-4 animate-spin" />
             <span>Gemini koçunuz yanıtınızı dinliyor ve hazırlanıyor...</span>
           </div>
@@ -388,7 +389,7 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
 
       {/* Mic / Text Input Controls */}
       {!isCompleted ? (
-        <form onSubmit={handleSubmitResponse} className="bg-white border border-slate-200 p-3 sm:p-4 rounded-xl space-y-3 shadow-sm">
+        <form onSubmit={handleSubmitResponse} className="bg-paper-2 border border-hairline p-3 sm:p-4 rounded-xl space-y-3">
           <div className="flex items-center space-x-2">
             <button
               type="button"
@@ -396,7 +397,7 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
               className={`p-3 rounded-lg border transition flex items-center justify-center cursor-pointer ${
                 isListening
                   ? 'bg-rose-600 text-white border-rose-600 animate-pulse'
-                  : 'bg-slate-100 hover:bg-slate-200 text-indigo-600 border-slate-200'
+                  : 'bg-paper-3 hover:bg-hairline text-accent border-hairline'
               }`}
               title={isListening ? 'Konuşmayı durdur' : 'Mikrofonu açıp İngilizce konuşun'}
             >
@@ -408,14 +409,14 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
               value={userSpeechInput}
               onChange={(e) => setUserSpeechInput(e.target.value)}
               placeholder={isListening ? 'Mikrofon dinliyor... İngilizce konuşun...' : 'Sesinizi veya metninizi buraya yazın...'}
-              className="flex-1 min-w-0 px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+              className="flex-1 min-w-0 px-4 py-3 bg-paper border border-hairline rounded-lg text-xs sm:text-sm text-ink placeholder-ink-3 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent"
               disabled={isLoading}
             />
 
             <button
               type="submit"
               disabled={isLoading || !userSpeechInput.trim()}
-              className="px-5 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-bold text-xs sm:text-sm rounded-lg transition flex items-center space-x-1.5 cursor-pointer shadow-sm"
+              className="px-5 py-3 bg-accent hover:bg-accent-700 disabled:opacity-50 text-white font-semibold text-xs sm:text-sm rounded-lg transition flex items-center space-x-1.5 cursor-pointer"
             >
               <span>Gönder</span>
               <Send className="w-4 h-4" />
@@ -423,16 +424,16 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
           </div>
         </form>
       ) : (
-        <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-xl text-center space-y-3 shadow-sm">
+        <div className="space-y-3 rounded-2xl border border-hairline bg-paper-2 p-6 text-center">
           <Award className="w-10 h-10 text-emerald-600 mx-auto" />
-          <h3 className="text-lg font-bold text-slate-900">Tebrikler! 7. Katman Konuşma Simülasyonunu Tamamladınız!</h3>
-          <p className="text-xs text-slate-600 max-w-xl mx-auto">
+          <h3 className="text-lg font-semibold text-ink">Tebrikler! 7. Katman Konuşma Simülasyonunu Tamamladınız!</h3>
+          <p className="text-xs text-ink-2 max-w-xl mx-auto">
             3 soruluk karşılıklı konuşma pratiğini başarıyla gerçekleştirdiniz. Kendi kendinize 10-15 kez sesli anlatım tekrarı yapmayı unutmayın!
           </p>
           <div className="pt-2 flex justify-center">
             <button
               onClick={onCompleteLayer}
-              className="flex items-center space-x-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-sm cursor-pointer"
+              className="flex items-center space-x-2 px-6 py-2.5 bg-accent hover:bg-accent-700 text-white font-semibold text-xs sm:text-sm rounded-xl transition cursor-pointer"
             >
               <CheckCircle className="w-4 h-4" />
               <span>Ders Katmanlarını Tamamla</span>

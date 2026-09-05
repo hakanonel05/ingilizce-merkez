@@ -8,11 +8,9 @@
  * - Grafikler elle SVG. Hazır bir grafik kütüphanesi iki uygulamanın da
  *   paketine ~300 KB ekliyordu; buradaki üç grafik (ısı haritası, sütun,
  *   çizgi) birkaç düzine satırla çiziliyor.
- * - Renkler Tailwind'in slate ölçeği; iki uygulamanın paleti de o ölçek
- *   üzerine kurulu olduğu için ortak bileşen her iki tarafta da yerli
- *   duruyor. VURGU rengi sabit yazılmaz: `accent` ailesi iki uygulamanın
- *   da @theme bloğunda tanımlı (eskiden burada teal yazıyordu ve ikisinin
- *   de paletinde yoktu).
+ * - Renk YAZILMAZ, token okunur (paper/ink/hairline/accent). Bu dosya
+ *   iki uygulamada birden göründüğü için sabit bir ölçeğe bağlanamaz;
+ *   token'lar ikisinin de @theme bloğunda aynı adla tanımlı.
  * - Grafiklerdeki renkler CSS değişkeninden okunuyor (`var(--accent)`,
  *   `var(--hairline)`); SVG sunum niteliği yerine `style` kullanılıyor
  *   çünkü değişken desteği orada güvenilir.
@@ -155,17 +153,17 @@ export const Dashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="bg-white border border-slate-200 rounded-xl p-8 text-center">
-        <p className="text-xs text-slate-500">Karne hazırlanıyor...</p>
+      <div className="bg-paper-2 border border-hairline rounded-xl p-8 text-center">
+        <p className="text-xs text-ink-3">Karne hazırlanıyor...</p>
       </div>
     );
   }
 
   if (!snapshot || snapshot.days.length === 0) {
     return (
-      <div className="bg-white border border-slate-200 rounded-xl p-8 text-center space-y-2">
-        <p className="text-sm font-bold text-slate-900">Henüz ölçülecek bir çalışma yok</p>
-        <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
+      <div className="bg-paper-2 border border-hairline rounded-xl p-8 text-center space-y-2">
+        <p className="text-sm font-semibold text-ink">Henüz ölçülecek bir çalışma yok</p>
+        <p className="text-xs text-ink-3 max-w-md mx-auto leading-relaxed">
           Bir ders çalıştığında, kelime kartı eklediğinde veya bir quiz
           çözdüğünde bu sayfa dolmaya başlar. Süre ölçümü bu sürümle
           başladığı için geçmiş çalışmaların süresi görünmez; tarihi bilinen
@@ -179,42 +177,41 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="space-y-5">
-      {/* ---------------- Başlık ---------------- */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
-        <div className="flex items-center justify-between flex-wrap gap-2">
-          <div className="flex items-center space-x-2.5">
-            <span className="px-2.5 py-1 bg-accent-soft text-accent border border-accent/30 text-xs font-bold rounded-md uppercase tracking-wider">
-              Karne
-            </span>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900">Çalışma Takvimi</h2>
-          </div>
-
-          <div className="flex items-center gap-1">
-            {RANGES.map((r) => (
-              <button
-                key={r.key}
-                type="button"
-                onClick={() => setRange(r.key)}
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
-                  range === r.key ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
-              >
-                {r.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <p className="text-xs text-slate-600 leading-relaxed">
-          İki uygulamanın verisi birlikte. <strong>Süre ölçümü</strong> bu
-          sürümle başladı; ondan önceki günlerde eklenen kelimeler, quiz
-          sonuçları ve çalışılan gün işaretleri görünür ama dakika bilgisi
-          yoktur.
+      {/* BAŞLIK BURADA YOK — VocabHub'daki gerekçenin aynısı: katmanlıda
+          üstteki LayerHeaderBar zaten "Karne" yazıyordu, iki başlık üst
+          üste geliyordu. Reading tarafında başlık App.tsx'te. */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="max-w-[62ch] text-[12px] leading-relaxed text-ink-2">
+          İki uygulamanın verisi birlikte.{' '}
+          <strong className="font-medium text-ink">Süre ölçümü</strong> bu sürümle
+          başladı; öncesinde eklenen kelimeler ve quiz sonuçları görünür ama
+          dakika bilgisi yoktur.
         </p>
+
+        <div className="flex items-center gap-0.5 rounded-xl bg-paper-3 p-1">
+          {RANGES.map((r) => (
+            <button
+              key={r.key}
+              type="button"
+              onClick={() => setRange(r.key)}
+              className={`rounded-lg px-3 py-1.5 text-[12px] transition-colors duration-150 cursor-pointer ${
+                range === r.key ? 'bg-paper-2 font-medium text-ink' : 'text-ink-2 hover:text-ink'
+              }`}
+            >
+              {r.label}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* ---------------- Özet kutucukları ---------------- */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+      {/* ---------------- Özet ----------------
+          ALTI AYRI KUTU DEĞİL. Her metrik kendi kenarlıklı kartındaydı;
+          aşağıdaki "tarihsiz toplamlar" sekiz tane daha ekliyordu. On dört
+          kutu, hepsi aynı ağırlıkta — skill'in "her metrik için bir kart"
+          diye tarif ettiği SaaS panosu hissi tam olarak buydu. Şimdi tek
+          yüzey, içinde ayraçla bölünmüş sayılar. */}
+      <div className="grid grid-cols-2 divide-x divide-y divide-hairline overflow-hidden
+        rounded-2xl border border-hairline bg-paper-2 sm:grid-cols-3 lg:grid-cols-6 lg:divide-y-0">
         <StatTile label="Güncel seri" value={`${totals.currentStreak} gün`} hint={`en uzun ${totals.longestStreak}`} />
         <StatTile label="Çalışılan gün" value={String(rangeTotals.activeDays)} hint="seçili aralıkta" />
         <StatTile label="Ölçülen süre" value={formatMinutes(rangeTotals.minutes)} hint="aralık toplamı" />
@@ -236,25 +233,25 @@ export const Dashboard: React.FC = () => {
 
       {/* Seçili günün dökümü */}
       {selected && (
-        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
+        <div className="space-y-3 rounded-2xl border border-hairline bg-paper-2 p-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-slate-900">{formatDay(selected.day)}</h3>
+            <h3 className="text-[15px] font-semibold text-ink">{formatDay(selected.day)}</h3>
             <button
               type="button"
               onClick={() => setSelectedDay(null)}
-              className="text-[11px] font-bold text-slate-500 hover:text-slate-800 cursor-pointer"
+              className="text-[11px] font-semibold text-ink-3 hover:text-ink-800 cursor-pointer"
             >
               Kapat
             </button>
           </div>
 
           {!selected.active ? (
-            <p className="text-xs text-slate-500">Bu gün kayıtlı bir çalışma yok.</p>
+            <p className="text-xs text-ink-3">Bu gün kayıtlı bir çalışma yok.</p>
           ) : (
             <div className="space-y-3">
               <div className="flex flex-wrap gap-1.5">
                 {selected.minutesTotal > 0 && (
-                  <Chip label="Süre" value={formatMinutes(selected.minutesTotal)} tone="bg-slate-900 text-white" />
+                  <Chip label="Süre" value={formatMinutes(selected.minutesTotal)} tone="bg-ink text-white" />
                 )}
                 {selected.wordsAdded > 0 && <Chip label="Yeni kelime" value={String(selected.wordsAdded)} />}
                 {selected.reviews > 0 && <Chip label="Tekrar" value={String(selected.reviews)} />}
@@ -264,7 +261,7 @@ export const Dashboard: React.FC = () => {
                   <Chip label="Yanlış" value={String(selected.mistakes)} tone="bg-rose-100 text-rose-800" />
                 )}
                 {selected.minutesTotal === 0 && selected.markedActive && (
-                  <Chip label="Çalışıldı" value="süre kaydı yok" tone="bg-amber-100 text-amber-800" />
+                  <Chip label="Çalışıldı" value="süre kaydı yok" />
                 )}
               </div>
 
@@ -274,7 +271,7 @@ export const Dashboard: React.FC = () => {
 
               {selectedWords.length > 0 && (
                 <div className="space-y-1">
-                  <h4 className="text-[11px] font-bold text-slate-700">
+                  <h4 className="text-[11px] font-semibold text-ink-2">
                     O gün eklenen kelimeler ({selectedWords.length})
                   </h4>
                   <div className="flex flex-wrap gap-1">
@@ -282,10 +279,10 @@ export const Dashboard: React.FC = () => {
                       <span
                         key={w.front + w.createdAt}
                         title={w.back}
-                        className="px-2 py-0.5 bg-slate-100 text-slate-700 text-[11px] font-semibold rounded"
+                        className="px-2 py-0.5 bg-paper-3 text-ink-2 text-[11px] font-semibold rounded"
                       >
                         {w.front}
-                        <span className="text-slate-500 ml-1">{w.level}</span>
+                        <span className="text-ink-3 ml-1">{w.level}</span>
                       </span>
                     ))}
                   </div>
@@ -297,10 +294,10 @@ export const Dashboard: React.FC = () => {
       )}
 
       {/* ---------------- Beceri dağılımı ---------------- */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
-        <h3 className="text-sm font-bold text-slate-900">Beceriye göre süre</h3>
+      <div className="bg-paper-2 border border-hairline rounded-xl p-4 space-y-3">
+        <h3 className="text-sm font-semibold text-ink">Beceriye göre süre</h3>
         {rangeTotals.minutes === 0 ? (
-          <p className="text-xs text-slate-500 leading-relaxed">
+          <p className="text-xs text-ink-3 leading-relaxed">
             Bu aralıkta ölçülmüş süre yok. Süre ölçümü ekranda geçirdiğin
             zamanı sayar ve bu sürümle başladı; birkaç ders çalıştıktan sonra
             burada okuma / dinleme / konuşma dağılımını göreceksin.
@@ -311,8 +308,8 @@ export const Dashboard: React.FC = () => {
 
         {/* Tamamlanan katmanlar: tarih yok ama beceri kırılımı var */}
         {undated.katmanli.completedLayers > 0 && (
-          <div className="pt-3 border-t border-slate-200 space-y-1.5">
-            <h4 className="text-[11px] font-bold text-slate-700">
+          <div className="pt-3 border-t border-hairline space-y-1.5">
+            <h4 className="text-[11px] font-semibold text-ink-2">
               Tamamlanan katmanlar (tarihsiz — eski kayıtlarda gün bilgisi yok)
             </h4>
             <div className="flex flex-wrap gap-1.5">
@@ -321,7 +318,7 @@ export const Dashboard: React.FC = () => {
                 .map(([layer, count]) => (
                   <span
                     key={layer}
-                    className="px-2 py-1 bg-slate-100 text-slate-700 text-[11px] font-semibold rounded"
+                    className="px-2 py-1 bg-paper-3 text-ink-2 text-[11px] font-semibold rounded"
                   >
                     {LAYER_NAMES[Number(layer)] || `Katman ${layer}`}: <strong>{count}</strong>
                   </span>
@@ -333,8 +330,8 @@ export const Dashboard: React.FC = () => {
 
       {/* ---------------- Kelime bankası ---------------- */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
-          <h3 className="text-sm font-bold text-slate-900">Kelime bankası</h3>
+        <div className="bg-paper-2 border border-hairline rounded-xl p-4 space-y-3">
+          <h3 className="text-sm font-semibold text-ink">Kelime bankası</h3>
           <div className="flex flex-wrap gap-1.5">
             <Chip label="Toplam" value={String(vocab.total)} />
             <Chip label="Hiç çalışılmamış" value={String(vocab.fresh)} />
@@ -358,16 +355,16 @@ export const Dashboard: React.FC = () => {
           />
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
-          <h3 className="text-sm font-bold text-slate-900">Kelimeler nereden geldi</h3>
+        <div className="bg-paper-2 border border-hairline rounded-xl p-4 space-y-3">
+          <h3 className="text-sm font-semibold text-ink">Kelimeler nereden geldi</h3>
           <Distribution
             title="Ders / parça başına"
             rows={vocab.bySource.slice(0, 8).map((s) => ({ label: s.title, count: s.count }))}
           />
 
           {vocab.hardest.length > 0 && (
-            <div className="pt-2 border-t border-slate-200 space-y-1.5">
-              <h4 className="text-[11px] font-bold text-slate-700">
+            <div className="pt-2 border-t border-hairline space-y-1.5">
+              <h4 className="text-[11px] font-semibold text-ink-2">
                 En çok unutulanlar (tekrarda hata sayısı)
               </h4>
               <div className="flex flex-wrap gap-1">
@@ -387,10 +384,10 @@ export const Dashboard: React.FC = () => {
       </div>
 
       {/* ---------------- Tekrar yükü ---------------- */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
+      <div className="bg-paper-2 border border-hairline rounded-xl p-4 space-y-3">
         <div>
-          <h3 className="text-sm font-bold text-slate-900">Önümüzdeki 30 günün tekrar yükü</h3>
-          <p className="text-[11px] text-slate-500">
+          <h3 className="text-sm font-semibold text-ink">Önümüzdeki 30 günün tekrar yükü</h3>
+          <p className="text-[11px] text-ink-3">
             FSRS her kartı ne zaman soracağını biliyor; bu, planlanmış iş yükün.
           </p>
         </div>
@@ -402,10 +399,10 @@ export const Dashboard: React.FC = () => {
 
       {/* ---------------- Başarı seyri ---------------- */}
       {snapshot.scoreTrend.length > 1 && (
-        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
+        <div className="bg-paper-2 border border-hairline rounded-xl p-4 space-y-3">
           <div>
-            <h3 className="text-sm font-bold text-slate-900">Quiz ve sınav başarısı</h3>
-            <p className="text-[11px] text-slate-500">
+            <h3 className="text-sm font-semibold text-ink">Quiz ve sınav başarısı</h3>
+            <p className="text-[11px] text-ink-3">
               Okuma testleri ve deneme sınavlarının doğru yüzdesi, zaman sırasıyla.
             </p>
           </div>
@@ -414,9 +411,9 @@ export const Dashboard: React.FC = () => {
       )}
 
       {/* ---------------- Eklenen kelimeler ---------------- */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
+      <div className="bg-paper-2 border border-hairline rounded-xl p-4 space-y-3">
         <div className="flex items-center justify-between flex-wrap gap-2">
-          <h3 className="text-sm font-bold text-slate-900">
+          <h3 className="text-sm font-semibold text-ink">
             Eklediğin kelimeler ({filteredWords.length})
           </h3>
           <input
@@ -424,49 +421,49 @@ export const Dashboard: React.FC = () => {
             value={wordSearch}
             onChange={(e) => { setWordSearch(e.target.value); setWordLimit(50); }}
             placeholder="Kelime, anlam veya ders ara..."
-            className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-accent w-full sm:w-64"
+            className="px-3 py-2 bg-paper border border-hairline rounded-lg text-xs text-ink focus:outline-none focus:border-accent w-full sm:w-64"
           />
         </div>
 
         {filteredWords.length === 0 ? (
-          <p className="text-xs text-slate-500">Aramaya uyan kelime yok.</p>
+          <p className="text-xs text-ink-3">Aramaya uyan kelime yok.</p>
         ) : (
           <>
-            <div className="border border-slate-200 rounded-lg overflow-hidden">
+            <div className="border border-hairline rounded-lg overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
-                  <thead className="bg-slate-50">
-                    <tr className="text-[10px] uppercase tracking-wider text-slate-500">
-                      <th className="px-3 py-2 font-bold">Kelime</th>
-                      <th className="px-3 py-2 font-bold">Anlam</th>
-                      <th className="px-3 py-2 font-bold">Seviye</th>
-                      <th className="px-3 py-2 font-bold hidden sm:table-cell">Tür</th>
-                      <th className="px-3 py-2 font-bold hidden md:table-cell">Kaynak</th>
-                      <th className="px-3 py-2 font-bold">Eklendi</th>
+                  <thead className="bg-paper">
+                    <tr className="text-[10px] text-ink-3">
+                      <th className="px-3 py-2 font-semibold">Kelime</th>
+                      <th className="px-3 py-2 font-semibold">Anlam</th>
+                      <th className="px-3 py-2 font-semibold">Seviye</th>
+                      <th className="px-3 py-2 font-semibold hidden sm:table-cell">Tür</th>
+                      <th className="px-3 py-2 font-semibold hidden md:table-cell">Kaynak</th>
+                      <th className="px-3 py-2 font-semibold">Eklendi</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-200">
+                  <tbody className="divide-y divide-hairline">
                     {filteredWords.slice(0, wordLimit).map((w) => (
                       <tr key={w.front + w.createdAt} className="text-xs">
-                        <td className="px-3 py-2 font-bold text-slate-900 whitespace-nowrap">{w.front}</td>
-                        <td className="px-3 py-2 text-slate-600">{w.back}</td>
+                        <td className="px-3 py-2 font-semibold text-ink whitespace-nowrap">{w.front}</td>
+                        <td className="px-3 py-2 text-ink-2">{w.back}</td>
                         <td className="px-3 py-2">
-                          <span className="px-1.5 py-0.5 bg-indigo-100 text-indigo-800 text-[10px] font-bold rounded">
+                          <span className="px-1.5 py-0.5 bg-accent-soft text-accent-700 text-[10px] font-semibold rounded">
                             {w.level}
                           </span>
                         </td>
-                        <td className="px-3 py-2 text-slate-500 hidden sm:table-cell">
+                        <td className="px-3 py-2 text-ink-3 hidden sm:table-cell">
                           {w.pos ? POS_LABELS_TR[w.pos] : '—'}
                         </td>
                         <td
-                          className="px-3 py-2 text-slate-500 hidden md:table-cell max-w-[220px] truncate"
+                          className="px-3 py-2 text-ink-3 hidden md:table-cell max-w-[220px] truncate"
                           title={w.sources
                             .map((s) => (s.contextEn ? `${s.lessonTitle}: "${s.contextEn}"` : s.lessonTitle))
                             .join(' · ')}
                         >
                           {w.sources.map((s) => s.lessonTitle).join(', ')}
                         </td>
-                        <td className="px-3 py-2 text-slate-500 whitespace-nowrap">{formatDay(w.day)}</td>
+                        <td className="px-3 py-2 text-ink-3 whitespace-nowrap">{formatDay(w.day)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -478,7 +475,7 @@ export const Dashboard: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setWordLimit((n) => n + 100)}
-                className="w-full px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg cursor-pointer"
+                className="w-full px-4 py-2 bg-paper-3 hover:bg-hairline text-ink-2 text-xs font-semibold rounded-lg cursor-pointer"
               >
                 Daha fazla göster ({filteredWords.length - wordLimit} kaldı)
               </button>
@@ -488,16 +485,17 @@ export const Dashboard: React.FC = () => {
       </div>
 
       {/* ---------------- Tarihsiz toplamlar ---------------- */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
+      <div className="space-y-3 overflow-hidden rounded-2xl border border-hairline bg-paper-2 p-4">
         <div>
-          <h3 className="text-sm font-bold text-slate-900">Tarihsiz toplamlar</h3>
-          <p className="text-[11px] text-slate-500 leading-relaxed">
+          <h3 className="text-[15px] font-semibold text-ink">Tarihsiz toplamlar</h3>
+          <p className="text-[11px] text-ink-3 leading-relaxed">
             Bu sayılar kaydedilirken tarih tutulmamıştı, o yüzden takvime
             düşemiyorlar. Bundan sonra yapacakların takvimde de görünecek.
           </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+        <div className="-mx-4 -mb-4 grid grid-cols-2 divide-x divide-y divide-hairline
+          border-t border-hairline sm:grid-cols-3 lg:grid-cols-4">
           <StatTile label="Ders" value={String(undated.katmanli.lessons)} hint="katmanlı" />
           <StatTile label="Tamamlanan katman" value={String(undated.katmanli.completedLayers)} hint="katmanlı" />
           <StatTile label="Ses kaydı" value={String(undated.katmanli.recordings)} hint="gölgeleme" />
@@ -514,21 +512,26 @@ export const Dashboard: React.FC = () => {
 
 /* ================= Alt bileşenler ================= */
 
+/**
+ * Tek bir sayi.
+ *
+ * KENDI KENARLIGI YOK: cagiran taraf hepsini tek bir yuzeyde toplayip
+ * aralarina ayrac koyuyor. Boylece on dort kenarlik yerine iki tane
+ * kaliyor ve sayilar birbiriyle kiyaslanabilir duruyor.
+ */
 const StatTile: React.FC<{ label: string; value: string; hint?: string }> = ({ label, value, hint }) => (
-  <div className="bg-white border border-slate-200 rounded-xl p-3">
-    <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">{label}</p>
-    <p className="text-lg font-bold text-slate-900 leading-tight mt-0.5">{value}</p>
-    {hint && <p className="text-[10px] text-slate-500 mt-0.5">{hint}</p>}
+  <div className="min-w-0 px-4 py-3">
+    <p className="truncate text-[11px] text-ink-3">{label}</p>
+    <p className="timecode mt-1 truncate text-[18px] font-semibold leading-tight text-ink">{value}</p>
+    {hint && <p className="mt-0.5 truncate text-[11px] text-ink-3">{hint}</p>}
   </div>
 );
 
-const Chip: React.FC<{ label: string; value: string; tone?: string }> = ({
-  label,
-  value,
-  tone = 'bg-slate-100 text-slate-700',
-}) => (
-  <span className={`px-2.5 py-1 rounded-lg text-[11px] font-bold ${tone}`}>
-    {label}: {value}
+/** `tone` kabul ediliyor ama yok sayiliyor — bkz. VocabHub/StatPill. */
+const Chip: React.FC<{ label: string; value: string; tone?: string }> = ({ label, value }) => (
+  <span className="flex items-baseline gap-1 text-[11px] text-ink-3">
+    <span className="timecode font-medium text-ink">{value}</span>
+    {label.toLocaleLowerCase('tr')}
   </span>
 );
 
@@ -548,13 +551,13 @@ const SkillBars: React.FC<{ minutes: Record<Skill, number>; total: number }> = (
         return (
           <div key={skill} className="space-y-0.5">
             <div className="flex items-center justify-between text-[11px]">
-              <span className="font-bold text-slate-700">{SKILL_LABELS_TR[skill]}</span>
-              <span className="text-slate-500">
+              <span className="text-ink-2">{SKILL_LABELS_TR[skill]}</span>
+              <span className="text-ink-3">
                 {formatMinutes(value)} · %{Math.round(percent)}
               </span>
             </div>
-            <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-              <div className="h-full bg-slate-900 rounded-full" style={{ width: `${percent}%` }} />
+            <div className="h-2 bg-paper-3 rounded-full overflow-hidden">
+              <div className="h-full rounded-full bg-accent" style={{ width: `${percent}%` }} />
             </div>
           </div>
         );
@@ -571,17 +574,17 @@ const Distribution: React.FC<{ title: string; rows: { label: string; count: numb
 
   return (
     <div className="space-y-1.5">
-      <h4 className="text-[11px] font-bold text-slate-700">{title}</h4>
+      <h4 className="text-[11px] font-semibold text-ink-2">{title}</h4>
       <div className="space-y-1">
         {visible.map((row) => (
           <div key={row.label} className="flex items-center gap-2">
-            <span className="text-[11px] text-slate-600 w-24 shrink-0 truncate" title={row.label}>
+            <span className="text-[11px] text-ink-2 w-24 shrink-0 truncate" title={row.label}>
               {row.label}
             </span>
-            <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
-              <div className="h-full bg-slate-400 rounded-full" style={{ width: `${(row.count / max) * 100}%` }} />
+            <div className="flex-1 h-2 bg-paper-3 rounded-full overflow-hidden">
+              <div className="h-full bg-ink-3 rounded-full" style={{ width: `${(row.count / max) * 100}%` }} />
             </div>
-            <span className="text-[11px] font-bold text-slate-700 w-8 text-right shrink-0">{row.count}</span>
+            <span className="text-[11px] font-semibold text-ink-2 w-8 text-right shrink-0">{row.count}</span>
           </div>
         ))}
       </div>
@@ -656,19 +659,19 @@ const CalendarHeatmap: React.FC<{
    *
    * Burasi tek renge indirilemez, cunku renk BURADA VERI: bes basamagin
    * birbirinden ayirt edilmesi gerekiyor. Rampa vurgu renginin (--accent,
-   * indigo-600) kendi olcegi uzerinde kuruldu; vurgu degisirse burasi da
+   * accent) kendi olcegi uzerinde kuruldu; vurgu degisirse burasi da
    * elle guncellenmeli.
    *
    * Eskiden krem-yesil bir editoryal rampaydi ve iki uygulamanin
    * paletinde de karsiligi yoktu.
    */
-  const FILLS = ['#F1F5F9', '#C7D2FE', '#A5B4FC', '#818CF8', '#4F46E5'];
+  const FILLS = ['#EDEBE8', '#C7D2FE', '#A5B4FC', '#818CF8', '#4F46E5'];
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-2">
+    <div className="bg-paper-2 border border-hairline rounded-xl p-4 space-y-2">
       <div className="flex items-center justify-between flex-wrap gap-2">
-        <h3 className="text-sm font-bold text-slate-900">Çalışma takvimi</h3>
-        <div className="flex items-center gap-1.5 text-[10px] text-slate-500">
+        <h3 className="text-sm font-semibold text-ink">Çalışma takvimi</h3>
+        <div className="flex items-center gap-1.5 text-[10px] text-ink-3">
           <span>az</span>
           {FILLS.map((fill) => (
             <span key={fill} className="inline-block w-3 h-3 rounded-sm" style={{ backgroundColor: fill }} />
@@ -685,7 +688,7 @@ const CalendarHeatmap: React.FC<{
             {WEEKDAY_LABELS.map((label, i) => (
               <span
                 key={i}
-                className="text-[9px] text-slate-500 leading-none"
+                className="text-[9px] text-ink-3 leading-none"
                 style={{ height: CELL, lineHeight: `${CELL}px` }}
               >
                 {label}
@@ -738,7 +741,7 @@ const CalendarHeatmap: React.FC<{
         </div>
       </div>
 
-      <p className="text-[10px] text-slate-500">
+      <p className="text-[10px] text-ink-3">
         Bir güne dokun, o gün ne yaptığını göster.
       </p>
     </div>
@@ -754,7 +757,7 @@ const BarChart: React.FC<{
   const total = data.reduce((sum, d) => sum + d.value, 0);
 
   if (total === 0) {
-    return <p className="text-xs text-slate-500">Planlanmış tekrar yok.</p>;
+    return <p className="text-xs text-ink-3">Planlanmış tekrar yok.</p>;
   }
 
   return (
@@ -762,7 +765,7 @@ const BarChart: React.FC<{
       {data.map((d) => (
         <div key={d.label} className="flex-1 flex flex-col justify-end h-full group relative">
           <div
-            className="w-full bg-slate-300 group-hover:bg-slate-900 rounded-sm transition-colors"
+            className="w-full bg-hairline-2 group-hover:bg-ink rounded-sm transition-colors"
             style={{ height: `${Math.max(2, (d.value / max) * 100)}%` }}
             title={`${formatDay(d.label)}: ${formatValue ? formatValue(d.value) : d.value}`}
           />
@@ -803,8 +806,8 @@ const LineChart: React.FC<{ points: { x: number; y: number; label: string }[] }>
           </circle>
         ))}
       </svg>
-      <p className="text-[11px] text-slate-500">
-        Ortalama <strong className="text-slate-800">%{average}</strong> · {points.length} sonuç
+      <p className="text-[11px] text-ink-3">
+        Ortalama <strong className="text-ink-800">%{average}</strong> · {points.length} sonuç
       </p>
     </div>
   );

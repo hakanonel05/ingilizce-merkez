@@ -222,14 +222,14 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
 
   return (
     <div className="space-y-6">
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+      <div className="bg-paper-2 border border-hairline rounded-xl p-4">
         <div className="flex items-center space-x-2.5 mb-2">
-          <span className="px-2.5 py-1 bg-violet-50 text-violet-700 border border-violet-200 text-xs font-bold rounded-md uppercase tracking-wider">
+          <span className="px-2.5 py-1 bg-accent-soft text-accent border border-accent/25 text-xs font-semibold rounded-md">
             Layer 3
           </span>
-          <h2 className="text-base sm:text-lg font-bold text-slate-900">Sesli Okuma (Gölgeleme)</h2>
+          <h2 className="text-base sm:text-lg font-semibold text-ink">Sesli Okuma (Gölgeleme)</h2>
         </div>
-        <p className="text-xs text-slate-600 leading-relaxed">
+        <p className="text-xs text-ink-2 leading-relaxed">
           Cümleyi dinleyin, ardından konuşmacıyla <strong>birlikte sesli okuyun</strong>. Dil bir
           kas grubudur; sesli okuma dil kaslarınızı esnetir ve ihlalları azaltır. İsterseniz kendi
           sesinizi kaydedip karşılaştırın.
@@ -237,14 +237,14 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
       </div>
 
       {sentences.length === 0 ? (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-900">
+        <div className="rounded-xl border border-hairline p-4 text-[13px] text-ink-2">
           Bu derste cümle bulunmuyor.
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           <div className="lg:col-span-5">
-            <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-sm">
-              <div className="aspect-video w-full rounded-lg overflow-hidden bg-slate-950">
+            <div className="bg-paper-2 border border-hairline rounded-xl p-3">
+              <div className="aspect-video w-full rounded-lg overflow-hidden bg-ink-950">
                 <div ref={containerRef} className="w-full h-full" />
               </div>
             </div>
@@ -252,9 +252,9 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
 
           <div className="lg:col-span-7 space-y-4">
             {/* Cümle kartı */}
-            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
+            <div className="bg-paper-2 border border-hairline rounded-xl p-5 space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                <span className="text-xs font-semibold text-ink-3">
                   Cümle {index + 1} / {sentences.length}
                 </span>
                 <div className="flex items-center space-x-1">
@@ -262,7 +262,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                     type="button"
                     onClick={() => goTo(index - 1)}
                     disabled={index === 0}
-                    className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 disabled:opacity-40 text-slate-700 cursor-pointer"
+                    className="p-1.5 rounded-lg bg-paper-3 hover:bg-hairline disabled:opacity-40 text-ink-2 cursor-pointer"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
@@ -270,14 +270,14 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                     type="button"
                     onClick={() => goTo(index + 1)}
                     disabled={index === sentences.length - 1}
-                    className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 disabled:opacity-40 text-slate-700 cursor-pointer"
+                    className="p-1.5 rounded-lg bg-paper-3 hover:bg-hairline disabled:opacity-40 text-ink-2 cursor-pointer"
                   >
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
               </div>
 
-              <p className="transcript-en text-xl sm:text-2xl text-slate-900">
+              <p className="transcript-en text-xl sm:text-2xl text-ink">
                 {current?.en}
               </p>
 
@@ -286,13 +286,13 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                   <button
                     type="button"
                     onClick={playSentence}
-                    className="flex items-center space-x-1.5 px-3.5 py-2 bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold rounded-lg transition cursor-pointer"
+                    className="flex items-center space-x-1.5 px-3.5 py-2 bg-accent hover:bg-accent-700 text-white text-xs font-semibold rounded-lg transition cursor-pointer"
                   >
                     <Play className="w-3.5 h-3.5 fill-current" />
                     <span>Cümleyi Oynat</span>
                   </button>
                 ) : (
-                  <span className="text-[11px] text-slate-500">
+                  <span className="text-[11px] text-ink-3">
                     Bu cümlede zaman bilgisi yok, video oynatılamıyor.
                   </span>
                 )}
@@ -300,7 +300,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                 <button
                   type="button"
                   onClick={speakSentence}
-                  className="flex items-center space-x-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-lg transition cursor-pointer"
+                  className="flex items-center space-x-1.5 px-3.5 py-2 bg-paper-3 hover:bg-hairline text-ink-800 text-xs font-semibold rounded-lg transition cursor-pointer"
                   title="Bilgisayar sesiyle yavaş okut"
                 >
                   <Volume2 className="w-3.5 h-3.5" />
@@ -311,7 +311,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                   <button
                     type="button"
                     onClick={playSentence}
-                    className="flex items-center space-x-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-lg transition cursor-pointer"
+                    className="flex items-center space-x-1.5 px-3.5 py-2 bg-paper-3 hover:bg-hairline text-ink-800 text-xs font-semibold rounded-lg transition cursor-pointer"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                     <span>Tekrarla</span>
@@ -321,9 +321,9 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
             </div>
 
             {/* Kayıt paneli */}
-            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3">
-              <h3 className="text-sm font-bold text-slate-900">Kendi Sesini Kaydet</h3>
-              <p className="text-[11px] text-slate-600">
+            <div className="bg-paper-2 border border-hairline rounded-xl p-5 space-y-3">
+              <h3 className="text-sm font-semibold text-ink">Kendi Sesini Kaydet</h3>
+              <p className="text-[11px] text-ink-2">
                 Cümleyi sesli okuyun, sonra kaydınızı dinleyip orijinalle karşılaştırın.
                 Kayıt tarayıcıda kalır, hiçbir yere gönderilmez.
               </p>
@@ -333,7 +333,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                   <button
                     type="button"
                     onClick={startRecording}
-                    className="flex items-center space-x-1.5 px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-lg transition cursor-pointer"
+                    className="flex items-center space-x-1.5 px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-lg transition cursor-pointer"
                   >
                     <Mic className="w-3.5 h-3.5" />
                     <span>{hasSavedForCurrent ? 'Yeniden Kaydet' : 'Kaydı Başlat'}</span>
@@ -342,7 +342,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                   <button
                     type="button"
                     onClick={stopRecording}
-                    className="flex items-center space-x-1.5 px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg transition cursor-pointer"
+                    className="flex items-center space-x-1.5 px-3.5 py-2 bg-ink hover:bg-ink-800 text-white text-xs font-semibold rounded-lg transition cursor-pointer"
                   >
                     <Square className="w-3.5 h-3.5 fill-current" />
                     <span>Durdur</span>
@@ -355,7 +355,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                     <button
                       type="button"
                       onClick={handleDeleteCurrent}
-                      className="flex items-center space-x-1.5 px-3 py-2 bg-slate-100 hover:bg-rose-100 text-slate-700 hover:text-rose-700 text-xs font-bold rounded-lg transition cursor-pointer"
+                      className="flex items-center space-x-1.5 px-3 py-2 bg-paper-3 hover:bg-rose-100 text-ink-2 hover:text-rose-700 text-xs font-semibold rounded-lg transition cursor-pointer"
                       title="Bu cümlenin kaydını sil"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -374,12 +374,12 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
 
               {/* Kayıtlı cümleler listesi */}
               {savedList.length > 0 && (
-                <div className="pt-3 border-t border-slate-200 space-y-2">
+                <div className="pt-3 border-t border-hairline space-y-2">
                   <div className="flex items-center justify-between">
                     <button
                       type="button"
                       onClick={() => setShowAllRecordings((v) => !v)}
-                      className="flex items-center space-x-1.5 text-xs font-bold text-slate-700 hover:text-indigo-700 cursor-pointer"
+                      className="flex items-center space-x-1.5 text-xs font-semibold text-ink-2 hover:text-accent-700 cursor-pointer"
                     >
                       <ListMusic className="w-3.5 h-3.5" />
                       <span>
@@ -390,7 +390,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                     <button
                       type="button"
                       onClick={handleDeleteAll}
-                      className="flex items-center space-x-1 text-[11px] font-bold text-slate-500 hover:text-rose-700 cursor-pointer"
+                      className="flex items-center space-x-1 text-[11px] font-semibold text-ink-3 hover:text-rose-700 cursor-pointer"
                     >
                       <Trash2 className="w-3 h-3" />
                       <span>Tümünü Sil</span>
@@ -404,12 +404,12 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                         return (
                           <div
                             key={rec.key}
-                            className="flex items-center justify-between gap-2 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5"
+                            className="flex items-center justify-between gap-2 bg-paper border border-hairline rounded-lg px-2.5 py-1.5"
                           >
                             <button
                               type="button"
                               onClick={() => idx >= 0 && goTo(idx)}
-                              className="flex-1 text-left text-[11px] text-slate-700 hover:text-indigo-700 truncate cursor-pointer"
+                              className="flex-1 text-left text-[11px] text-ink-2 hover:text-accent-700 truncate cursor-pointer"
                               title={rec.sentenceText}
                             >
                               {idx >= 0 ? `${idx + 1}. ` : ''}
@@ -428,7 +428,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                                 }
                                 await refreshList();
                               }}
-                              className="p-1 text-slate-400 hover:text-rose-600 shrink-0 cursor-pointer"
+                              className="p-1 text-ink-3 hover:text-rose-600 shrink-0 cursor-pointer"
                               title="Bu kaydı sil"
                             >
                               <Trash2 className="w-3.5 h-3.5" />

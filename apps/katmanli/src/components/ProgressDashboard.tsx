@@ -1,16 +1,35 @@
-import React from 'react';
+/**
+ * SÜREÇ & HEDEFLER
+ *
+ * UYDURMA VERİ KALDIRILDI. Haftalık grafik `progress.weeklyStudyMinutes`
+ * alanını okuyor, o alan 7 kayıt değilse de `[25, 40, 30, 55, 35, 60, 45]`
+ * diye sabit bir diziye düşüyordu. Alan depoda HİÇBİR YERDE yazılmıyor
+ * (yalnızca types.ts'te tanımlı ve burada okunuyor), yani grafik herkeste
+ * her zaman bu uydurma diziyi gösteriyordu — üstüne "Haftalık Toplam:
+ * 290 dk" ve "En yüksek performans: Cuma" gibi ondan hesaplanan cümleler
+ * de vardı.
+ *
+ * Yerine gerçek kaynak bağlandı: activityLog'daki günlük toplamlar
+ * (`getAllDayStats`). Aynı gün iki cihazda çalışılmışsa satırlar
+ * toplanıyor. Hiç kayıt yoksa grafik yerine bunu SÖYLEYEN bir metin
+ * çıkıyor; sıfırlarla dolu bir grafik "çalışmadın" değil "bozuk" gibi
+ * duruyordu.
+ *
+ * TASARIM: kartlar gölgesiz, tek kenarlıklı ve her biri tek bir işi
+ * anlatıyor. Önceki sürümde her kartın tepesinde büyük harfli, ikonlu,
+ * vurgu renginde bir üst başlık vardı; beşi arka arkaya gelince vurgu
+ * olmaktan çıkıp desen haline geliyordu.
+ */
+
+import React, { useEffect, useMemo, useState } from 'react';
 import { UserProgress, VideoLesson } from '../types';
-import { Award, Flame, Calendar, BookMarked, CheckCircle2, Trophy, Clock, ArrowRight, TrendingUp, BarChart2 } from 'lucide-react';
+import { BookMarked } from 'lucide-react';
 import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  Cell,
+  ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Cell,
 } from 'recharts';
+import {
+  getAllDayStats, dayKey, ACTIVITY_CHANGED_EVENT, DayStatRow, Skill,
+} from '../../../../shared/analytics/activityLog';
 
 interface ProgressDashboardProps {
   progress: UserProgress;
@@ -18,268 +37,296 @@ interface ProgressDashboardProps {
   onSelectLesson: (lesson: VideoLesson) => void;
 }
 
-export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
-  progress,
-  lessons,
-  onSelectLesson,
-}) => {
-  const goalPercentage = Math.min(
-    100,
-    Math.round((progress.completedVideoCount / progress.goalVideoCount) * 100)
-  );
+const GUN_KISA = ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'];
+const GUN_UZUN = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
+const AY_KISA = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'];
 
-  // Generate 7-day daily study time data
-  const getLast7DaysData = () => {
-    if (progress.weeklyStudyMinutes && progress.weeklyStudyMinutes.length === 7) {
-      return progress.weeklyStudyMinutes.map((item, i) => ({
-        ...item,
-        isToday: i === 6,
-      }));
+/** Kart yüzeyi — gölge yok, 1px çizgi, yumuşak köşe. */
+const Card: React.FC<{ children: React.ReactNode; className?: string }> = ({
+  children, className = '',
+}) => (
+  <section className={`rounded-2xl border border-hairline bg-paper-2 p-5 sm:p-6 ${className}`}>
+    {children}
+  </section>
+);
+
+export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({ progress }) => {
+  const [stats, setStats] = useState<DayStatRow[] | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const refresh = () => {
+      getAllDayStats()
+        .then((rows) => { if (!cancelled) setStats(rows); })
+        // Kayit deposu IndexedDB'de; acilmadiysa ekranin geri kalani
+        // calismali, grafik "kayit yok" durumuna dusmeli.
+        .catch(() => { if (!cancelled) setStats([]); });
+    };
+    refresh();
+    window.addEventListener(ACTIVITY_CHANGED_EVENT, refresh);
+    return () => {
+      cancelled = true;
+      window.removeEventListener(ACTIVITY_CHANGED_EVENT, refresh);
+    };
+  }, []);
+
+  const goal = Math.max(1, progress.goalVideoCount);
+  const done = progress.completedVideoCount;
+  const goalPercentage = Math.min(100, Math.round((done / goal) * 100));
+
+  /**
+   * Son yedi gün. Gün başına TÜM becerilerin saniyeleri toplanıp dakikaya
+   * çevriliyor; aynı güne ait birden fazla cihaz satırı varsa üst üste
+   * ekleniyor (satır anahtarı `gün|cihaz`).
+   */
+  const chartData = useMemo(() => {
+    const minutesByDay = new Map<string, number>();
+    for (const row of stats ?? []) {
+      // Tur acikca yaziliyor: yalnizca `?? {}` yazildiginda bos nesne
+      // degerleri `unknown`a genisletip toplamayi derlenmez kiliyor.
+      const bySkill: Partial<Record<Skill, number>> = row.secondsBySkill ?? {};
+      const seconds = Object.values(bySkill)
+        .reduce<number>((sum, s) => sum + (s ?? 0), 0);
+      minutesByDay.set(row.day, (minutesByDay.get(row.day) ?? 0) + seconds / 60);
     }
 
-    const dayShorts = ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'];
-    const dayFulls = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
-    const sampleMinutes = [25, 40, 30, 55, 35, 60, 45]; // realistic values in minutes
-
-    const today = new Date();
-    const result = [];
-
-    for (let i = 6; i >= 0; i--) {
+    return Array.from({ length: 7 }, (_, i) => {
       const d = new Date();
-      d.setDate(today.getDate() - i);
-      const dayIndex = d.getDay();
-      const dayName = dayShorts[dayIndex];
-      const fullDay = dayFulls[dayIndex];
-      const dateStr = `${d.getDate()} ${['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'][d.getMonth()]}`;
+      d.setDate(d.getDate() - (6 - i));
+      const key = dayKey(d);
+      return {
+        day: GUN_KISA[d.getDay()],
+        fullDay: GUN_UZUN[d.getDay()],
+        date: `${d.getDate()} ${AY_KISA[d.getMonth()]}`,
+        minutes: Math.round(minutesByDay.get(key) ?? 0),
+        isToday: i === 6,
+      };
+    });
+  }, [stats]);
 
-      result.push({
-        day: dayName,
-        date: dateStr,
-        fullDay,
-        minutes: sampleMinutes[6 - i] || 30,
-        isToday: i === 0,
-      });
-    }
+  const totalMinutes = chartData.reduce((acc, c) => acc + c.minutes, 0);
+  const avgMinutes = Math.round(totalMinutes / 7);
+  const bestDay = [...chartData].sort((a, b) => b.minutes - a.minutes)[0];
+  const hasActivity = totalMinutes > 0;
 
-    return result;
-  };
-
-  const chartData = getLast7DaysData();
-  const totalMinutes = chartData.reduce((acc, curr) => acc + curr.minutes, 0);
-  const avgMinutes = Math.round(totalMinutes / chartData.length);
-  const maxMinutesItem = [...chartData].sort((a, b) => b.minutes - a.minutes)[0];
+  /** Kilometre taşları: ayrı kartlar değil, tek bir yolun üstündeki noktalar. */
+  const milestones = [
+    { at: 3,    label: 'İlk görünür ilerleme' },
+    { at: 10,   label: 'Altyazısız %70+ anlama' },
+    { at: goal, label: 'Akıcılık hedefi' },
+  ].filter((m, i, arr) => arr.findIndex((o) => o.at === m.at) === i && m.at <= goal);
 
   return (
-    <div className="space-y-6">
-      {/* 20 Video Goal Overview Banner */}
-      <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="space-y-1">
-            <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider flex items-center space-x-1">
-              <Trophy className="w-4 h-4 text-indigo-600" />
-              <span>Süreç Yönetimi & Somut İlerleme Hedefi</span>
-            </span>
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
-              20 Video Tamamlama Hedefi ({progress.completedVideoCount} / {progress.goalVideoCount})
+    <div className="space-y-5">
+
+      {/* ---------- HEDEF ---------- */}
+      <Card>
+        <div className="flex flex-wrap items-start justify-between gap-6">
+          <div className="min-w-0">
+            <span className="eyebrow">Hedef</span>
+            <h2 className="mt-1.5 text-[22px] font-semibold tracking-tight text-ink">
+              {goal} videoluk tamamlama hedefi
             </h2>
-            <p className="text-xs text-slate-600 max-w-2xl leading-relaxed">
-              Katmanlı Çalışma metodunda gelişim 3. veya 4. videodan itibaren hissedilir hale gelir. 
-              Günde 1 katman ilerleyerek 7-10 günde 1 videoyu tamamlayabilir ve 20 videoda konuşma hakimiyeti kazanabilirsiniz.
+            <p className="mt-2 max-w-[58ch] text-[13px] leading-relaxed text-ink-2">
+              Katmanlı çalışmada gelişim üçüncü veya dördüncü videodan sonra
+              hissedilir hale gelir. Günde bir katman ilerlersen bir video
+              7-10 günde biter.
             </p>
           </div>
 
-          <div className="bg-indigo-50/80 p-4 rounded-xl border border-indigo-100 text-center min-w-[140px]">
-            <span className="text-3xl font-bold text-indigo-700">{goalPercentage}%</span>
-            <span className="block text-[11px] text-slate-600 mt-0.5 font-medium">Hedef İlerlemesi</span>
-          </div>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden p-0.5 border border-slate-200">
-          <div
-            className="bg-indigo-600 h-full rounded-full transition-all duration-700"
-            style={{ width: `${goalPercentage}%` }}
-          />
-        </div>
-
-        {/* Milestones badges */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-          <div className={`p-3.5 rounded-xl border text-xs space-y-1 ${
-            progress.completedVideoCount >= 3 ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-slate-50 border-slate-200 text-slate-600'
-          }`}>
-            <div className="flex items-center space-x-1.5 font-bold">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span>Milestone 1: 3-4 Video</span>
-            </div>
-            <p className="text-[11px] text-slate-600">İlk görünür ilerleme ve konuşma reflekslerinin uyanışı.</p>
-          </div>
-
-          <div className={`p-3.5 rounded-xl border text-xs space-y-1 ${
-            progress.completedVideoCount >= 10 ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-slate-50 border-slate-200 text-slate-600'
-          }`}>
-            <div className="flex items-center space-x-1.5 font-bold">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span>Milestone 2: 10 Video</span>
-            </div>
-            <p className="text-[11px] text-slate-600">Altyazısız %70+ anlama ve hızlı cümle kurma yetisi.</p>
-          </div>
-
-          <div className={`p-3.5 rounded-xl border text-xs space-y-1 ${
-            progress.completedVideoCount >= 20 ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-slate-50 border-slate-200 text-slate-600'
-          }`}>
-            <div className="flex items-center space-x-1.5 font-bold">
-              <Trophy className="w-4 h-4 text-indigo-600" />
-              <span>Milestone 3: 20 Video</span>
-            </div>
-            <p className="text-[11px] text-slate-600">Akıcı dil hakimiyeti ve uzun vadeli hafıza dönüşümü.</p>
-          </div>
-        </div>
-      </div>
-
-      {/* 7-Day Daily Study Time Bar Chart */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-4 shadow-sm">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="space-y-1">
-            <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider flex items-center space-x-1.5">
-              <TrendingUp className="w-4 h-4 text-indigo-600" />
-              <span>Gelişim Grafiği</span>
+          {/* Sayı, kutusuz. Kendi büyüklüğü zaten vurgusu. */}
+          <div className="shrink-0 text-right">
+            <span className="timecode text-[38px] font-semibold leading-none text-ink">
+              {done}
+              <span className="text-ink-3">/{goal}</span>
             </span>
-            <h3 className="text-base font-bold text-slate-900">
-              Son 7 Günlük Çalışma Süresi Gelişimi
-            </h3>
-          </div>
-
-          <div className="flex items-center space-x-3 text-xs">
-            <div className="bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg flex items-center space-x-1.5">
-              <Clock className="w-3.5 h-3.5 text-indigo-600" />
-              <span className="text-slate-600 font-medium">Haftalık Toplam:</span>
-              <span className="font-bold text-slate-900">{totalMinutes} dk ({Math.floor(totalMinutes / 60)}s {totalMinutes % 60}dk)</span>
-            </div>
-            <div className="bg-indigo-50 border border-indigo-100 px-3 py-1.5 rounded-lg flex items-center space-x-1.5">
-              <Flame className="w-3.5 h-3.5 text-indigo-600" />
-              <span className="text-indigo-800 font-medium">Ortalama:</span>
-              <span className="font-bold text-indigo-900">{avgMinutes} dk/gün</span>
-            </div>
+            <span className="mt-1 block text-[11px] text-ink-3">%{goalPercentage} tamamlandı</span>
           </div>
         </div>
 
-        {/* Recharts Bar Chart */}
-        <div className="w-full h-60 pt-2">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-              <XAxis
-                dataKey="day"
-                axisLine={false}
-                tickLine={false}
-                tick={{ fill: '#64748B', fontSize: 12, fontWeight: 600 }}
+        {/* Yol ve üstündeki kilometre taşları */}
+        <div className="mt-7">
+          <div className="relative h-1.5 rounded-full bg-paper-3">
+            <div
+              className="h-full rounded-full bg-accent transition-all duration-700"
+              style={{ width: `${goalPercentage}%` }}
+            />
+            {milestones.map((m) => (
+              <span
+                key={m.at}
+                title={`${m.at} video — ${m.label}`}
+                className={`absolute top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2
+                  rounded-full border-2 border-paper-2 ${
+                    done >= m.at ? 'bg-emerald-500' : 'bg-hairline-2'
+                  }`}
+                style={{ left: `${Math.min(100, (m.at / goal) * 100)}%` }}
               />
-              <YAxis
-                axisLine={false}
-                tickLine={false}
-                tick={{ fill: '#94A3B8', fontSize: 11 }}
-                unit=" dk"
-              />
-              <Tooltip
-                content={({ active, payload }) => {
-                  if (active && payload && payload.length) {
-                    const data = payload[0].payload;
-                    return (
-                      <div className="bg-slate-900 text-white p-2.5 rounded-lg shadow-lg text-xs space-y-0.5 border border-slate-800">
-                        <p className="font-bold text-slate-200">{data.fullDay || data.day} {data.date ? `(${data.date})` : ''}</p>
-                        <p className="text-indigo-300 font-semibold">
-                          Çalışma Süresi: <span className="text-white font-bold">{data.minutes} Dakika</span>
-                        </p>
-                      </div>
-                    );
-                  }
-                  return null;
-                }}
-              />
-              <Bar dataKey="minutes" radius={[6, 6, 0, 0]}>
-                {chartData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={entry.isToday ? '#4F46E5' : '#818CF8'}
-                    className="transition-all hover:opacity-80"
-                  />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="flex flex-wrap items-center justify-between text-xs text-slate-600 border-t border-slate-100 pt-3 gap-2">
-          <div className="flex items-center space-x-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-indigo-600 inline-block"></span>
-            <span>Bugün ({chartData.find((d) => d.isToday)?.minutes || 0} dk)</span>
-            <span className="w-2.5 h-2.5 rounded-full bg-indigo-400 inline-block ml-3"></span>
-            <span>Geçmiş Günler</span>
+            ))}
           </div>
 
-          {maxMinutesItem && (
-            <p className="text-slate-500 font-medium">
-              En yüksek performans: <strong className="text-slate-800">{maxMinutesItem.fullDay || maxMinutesItem.day} ({maxMinutesItem.minutes} dk)</strong>
+          <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-1">
+            {milestones.map((m) => (
+              <li
+                key={m.at}
+                className={`text-[12px] ${done >= m.at ? 'text-ink' : 'text-ink-3'}`}
+              >
+                <span className="timecode font-semibold">{m.at}</span>{' '}
+                <span>video · {m.label}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Card>
+
+      {/* ---------- SON 7 GÜN ---------- */}
+      <Card>
+        <div className="flex flex-wrap items-baseline justify-between gap-3">
+          <h3 className="text-[15px] font-semibold text-ink">Son 7 gün</h3>
+          {hasActivity && (
+            <p className="text-[12px] text-ink-3">
+              toplam{' '}
+              <span className="timecode font-semibold text-ink">{totalMinutes} dk</span>
+              {' · '}günde ortalama{' '}
+              <span className="timecode font-semibold text-ink">{avgMinutes} dk</span>
             </p>
           )}
         </div>
-      </div>
 
-      {/* Suggested 7-Day Study Schedule */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-3 shadow-sm">
-        <h3 className="text-sm font-bold text-slate-900 flex items-center space-x-2">
-          <Calendar className="w-4 h-4 text-indigo-600" />
-          <span>7-10 Günlük Örnek Çalışma Planı (Sürdürülebilir Rutin)</span>
+        {hasActivity ? (
+          <>
+            {/* Renkler CSS degiskenlerinden geliyor: SVG `fill`/`stroke`
+                var() kabul ediyor, boylece palet degisince grafik de
+                kendiliginden takip ediyor. Once bu degerler soguk gri ve
+                indigo hex'leri olarak sabitti; palet isininca grafik tek
+                basina soguk kaliyordu. */}
+            <div className="mt-5 h-56 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData} margin={{ top: 8, right: 8, left: -22, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--hairline)" />
+                  <XAxis
+                    dataKey="day"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: 'var(--ink-3)', fontSize: 12 }}
+                  />
+                  {/* Dakika tam sayi: `allowDecimals` acikken kisa bir
+                      gunde eksen "0.5 dk / 1.5 dk" diye bolunuyordu. */}
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    allowDecimals={false}
+                    tick={{ fill: 'var(--ink-3)', fontSize: 11 }}
+                    unit=" dk"
+                  />
+                  <Tooltip
+                    cursor={{ fill: 'var(--paper-3)' }}
+                    content={({ active, payload }) => {
+                      if (!active || !payload?.length) return null;
+                      const d = payload[0].payload;
+                      return (
+                        <div className="rounded-lg border border-ink-800 bg-ink px-2.5 py-2 text-xs text-white">
+                          <p className="font-medium">{d.fullDay} ({d.date})</p>
+                          <p className="mt-0.5 text-hairline-2">
+                            <span className="timecode font-semibold text-white">{d.minutes}</span> dakika
+                          </p>
+                        </div>
+                      );
+                    }}
+                  />
+                  <Bar dataKey="minutes" radius={[6, 6, 0, 0]}>
+                    {chartData.map((entry, i) => (
+                      <Cell
+                        key={i}
+                        fill={entry.isToday ? 'var(--accent)' : 'var(--hairline-2)'}
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Gosterge. Onceki surumde iki nokta da `bg-accent` idi, yani
+                "Bugun" ile "Gecmis Gunler" ayni renkte gorunuyordu. */}
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-hairline pt-3 text-[12px] text-ink-3">
+              <span className="flex items-center gap-4">
+                <span className="flex items-center gap-1.5">
+                  <span className="inline-block h-2.5 w-2.5 rounded-full bg-accent" />
+                  Bugün
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="inline-block h-2.5 w-2.5 rounded-full bg-hairline-2" />
+                  Geçmiş günler
+                </span>
+              </span>
+              {bestDay.minutes > 0 && (
+                <span>
+                  En uzun gün:{' '}
+                  <span className="text-ink">{bestDay.fullDay}</span>{' '}
+                  <span className="timecode">({bestDay.minutes} dk)</span>
+                </span>
+              )}
+            </div>
+          </>
+        ) : (
+          <p className="mt-3 max-w-[58ch] text-[13px] leading-relaxed text-ink-2">
+            {stats === null
+              ? 'Çalışma kayıtları okunuyor…'
+              : 'Son yedi günde kayıtlı çalışma yok. Bir katmanda çalışmaya başladığında süre otomatik olarak buraya işlenir.'}
+          </p>
+        )}
+      </Card>
+
+      {/* ---------- ÖRNEK RUTİN ---------- */}
+      <Card>
+        <h3 className="text-[15px] font-semibold text-ink">Örnek rutin</h3>
+        <p className="mt-1 text-[12px] text-ink-3">
+          Bir videoyu 7-10 günde bitiren sürdürülebilir bir dağılım.
+        </p>
+
+        {/* Dort esit kutu yerine tanim listesi: bunlar birbirinin
+            alternatifi degil, ayni haftanin sirali gunleri. */}
+        <dl className="mt-4 space-y-2.5">
+          {[
+            ['Gün 1-2', 'Katman 1 — Metin okuma & anlama'],
+            ['Gün 3',   'Katman 2 ve 3 — Aktif dinleme, shadowing'],
+            ['Gün 4-5', 'Katman 4 ve 5 — Altyazısız izleme, sadece dinleme'],
+            ['Gün 6-7', 'Katman 6 ve 7 — Yazma, sesli anlatım'],
+          ].map(([gun, is]) => (
+            <div key={gun} className="flex gap-4 text-[13px]">
+              <dt className="w-20 shrink-0 font-medium text-ink">{gun}</dt>
+              <dd className="min-w-0 text-ink-2">{is}</dd>
+            </div>
+          ))}
+        </dl>
+      </Card>
+
+      {/* ---------- KAYDEDİLEN KELİMELER ---------- */}
+      <Card>
+        <h3 className="flex items-center gap-2 text-[15px] font-semibold text-ink">
+          <BookMarked className="h-4 w-4 text-ink-3" />
+          Kaydedilen kelimeler
+          <span className="timecode font-normal text-ink-3">
+            {progress.bookmarkedWords.length}
+          </span>
         </h3>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5 text-xs">
-          <div className="bg-slate-50 p-3 rounded-lg border border-slate-200">
-            <span className="font-bold text-indigo-700 block">Gün 1-2:</span>
-            <span className="text-slate-700">1. Katman (Çift Dilli Okuma)</span>
-          </div>
-
-          <div className="bg-slate-50 p-3 rounded-lg border border-slate-200">
-            <span className="font-bold text-indigo-700 block">Gün 3:</span>
-            <span className="text-slate-700">2 &amp; 3. Katman (Aktif Dinleme &amp; Gölgeleme)</span>
-          </div>
-
-          <div className="bg-slate-50 p-3 rounded-lg border border-slate-200">
-            <span className="font-bold text-indigo-700 block">Gün 4-5:</span>
-            <span className="text-slate-700">4 & 5. Katman (Altyazısız İzleme & Sadece Dinleme)</span>
-          </div>
-
-          <div className="bg-slate-50 p-3 rounded-lg border border-slate-200">
-            <span className="font-bold text-indigo-700 block">Gün 6-7:</span>
-            <span className="text-slate-700">6 & 7. Katman (Özet, Yorum Yazma & Sesli Anlatım)</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Bookmarked Vocabulary List */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-3 shadow-sm">
-        <div className="flex items-center justify-between">
-          <h3 className="text-sm font-bold text-slate-900 flex items-center space-x-2">
-            <BookMarked className="w-4 h-4 text-indigo-600" />
-            <span>Kaydedilen Kelimelerim & Cümlelerim ({progress.bookmarkedWords.length})</span>
-          </h3>
-        </div>
-
         {progress.bookmarkedWords.length === 0 ? (
-          <p className="text-xs text-slate-500 bg-slate-50 p-4 rounded-lg text-center border border-slate-200">
-            Henüz kaydedilmiş kelimeniz bulunmuyor. Okuma esnasında "Kaydet" butonuna basarak ekleyebilirsiniz.
+          <p className="mt-3 max-w-[58ch] text-[13px] leading-relaxed text-ink-2">
+            Henüz kaydedilmiş kelime yok. Okuma sırasında bir kelimeye
+            dokunup kaydettiğinde burada listelenir.
           </p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <ul className="mt-4 divide-y divide-hairline">
             {progress.bookmarkedWords.map((item, idx) => (
-              <div key={idx} className="bg-slate-50 p-3.5 rounded-lg border border-slate-200 text-xs space-y-1">
-                <span className="font-bold text-indigo-900 text-sm block">{item.word}</span>
-                <p className="text-slate-800 font-medium">{item.enContext}</p>
-                <p className="text-slate-500 text-[11px]">{item.trContext}</p>
-              </div>
+              <li key={idx} className="py-3 first:pt-0 last:pb-0">
+                <span className="text-[14px] font-medium text-ink">{item.word}</span>
+                <p className="mt-1 text-[13px] leading-relaxed text-ink-2">{item.enContext}</p>
+                <p className="mt-0.5 text-[12px] leading-relaxed text-ink-3">{item.trContext}</p>
+              </li>
             ))}
-          </div>
+          </ul>
         )}
-      </div>
+      </Card>
     </div>
   );
 };

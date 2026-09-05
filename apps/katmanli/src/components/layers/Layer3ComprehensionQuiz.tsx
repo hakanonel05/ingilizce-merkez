@@ -107,19 +107,19 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
   return (
     <div className="space-y-6">
       {/* Intro Header */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3">
+      <div className="bg-paper-2 border border-hairline rounded-xl p-5 space-y-3">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center space-x-2.5">
-            <span className="px-2.5 py-1 bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-bold rounded-md uppercase tracking-wider">
+            <span className="px-2.5 py-1 bg-accent-soft text-accent-700 border border-accent/25 text-xs font-semibold rounded-md">
               Layer 4
             </span>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900">Anlama Kontrolü (Altyazısız İzleme & Dinleme)</h2>
+            <h2 className="text-base sm:text-lg font-semibold text-ink">Anlama Kontrolü (Altyazısız İzleme & Dinleme)</h2>
           </div>
 
           <button
             onClick={handleGenerateQuiz}
             disabled={isGenerating}
-            className="flex items-center space-x-1.5 px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-xs font-semibold rounded-lg transition shadow-sm cursor-pointer"
+            className="flex items-center space-x-1.5 px-3.5 py-2 bg-accent hover:bg-accent-700 disabled:opacity-50 text-white text-xs font-semibold rounded-lg transition cursor-pointer"
           >
             {isGenerating ? (
               <>
@@ -128,14 +128,14 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
               </>
             ) : (
               <>
-                <Sparkles className="w-3.5 h-3.5 text-indigo-200" />
+                <Sparkles className="w-3.5 h-3.5 text-white/70" />
                 <span>{quizQuestions.length > 0 ? 'Soruları Yenile' : 'AI Testi Oluştur'}</span>
               </>
             )}
           </button>
         </div>
 
-        <p className="text-xs text-slate-600 leading-relaxed">
+        <p className="text-xs text-ink-2 leading-relaxed">
           Videoyu altyazısız izledikten ve kulaklıkla dinledikten sonra kavrayışınızı test etmek için 5 soru hazırlanmıştır. 
           Yanıtlarınızı girdikten sonra cevap anahtarını ve analizini inceleyebilirsiniz.
         </p>
@@ -148,7 +148,7 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
             </div>
             <button
               onClick={handleGenerateQuiz}
-              className="ml-3 px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-[11px] font-bold shrink-0 cursor-pointer"
+              className="ml-3 px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-[11px] font-semibold shrink-0 cursor-pointer"
             >
               Tekrar Dene
             </button>
@@ -163,7 +163,7 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
             </div>
             <button
               onClick={() => setIsSubmitted(false)}
-              className="text-xs font-bold text-emerald-700 hover:text-emerald-900 underline cursor-pointer"
+              className="text-xs font-semibold text-emerald-700 hover:text-emerald-900 underline cursor-pointer"
             >
               Yeniden Çöz
             </button>
@@ -174,17 +174,17 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
       {/* Quiz Questions List */}
       <div className="space-y-4">
         {quizQuestions.length === 0 ? (
-          <div className="bg-white border border-slate-200 p-8 rounded-xl text-center space-y-3 shadow-sm">
-            <Loader2 className="w-8 h-8 text-indigo-600 animate-spin mx-auto" />
-            <h3 className="text-sm font-bold text-slate-800">Anlama Testi Arka Planda Oluşturuluyor...</h3>
-            <p className="text-xs text-slate-500 max-w-md mx-auto">
+          <div className="bg-paper-2 border border-hairline p-8 rounded-xl text-center space-y-3">
+            <Loader2 className="w-8 h-8 text-accent animate-spin mx-auto" />
+            <h3 className="text-sm font-semibold text-ink-800">Anlama Testi Arka Planda Oluşturuluyor...</h3>
+            <p className="text-xs text-ink-3 max-w-md mx-auto">
               Gemini AI transkript içeriğini analiz ederek 5 özel anlama sorusu hazırlıyor. Birkaç saniye içinde tamamlanacaktır.
             </p>
             <button
               type="button"
               onClick={handleGenerateQuiz}
               disabled={isGenerating}
-              className="mt-2 inline-flex items-center space-x-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition shadow-sm cursor-pointer disabled:opacity-50"
+              className="mt-2 inline-flex items-center space-x-2 px-4 py-2 bg-accent hover:bg-accent-700 text-white text-xs font-semibold rounded-lg transition cursor-pointer disabled:opacity-50"
             >
               <HelpCircle className={`w-3.5 h-3.5 ${isGenerating ? 'animate-spin' : ''}`} />
               <span>Tekrar Soru Üret</span>
@@ -198,21 +198,21 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
             return (
               <div
                 key={q.id || qIdx}
-                className={`bg-white border rounded-xl p-5 space-y-3 transition shadow-sm ${
+                className={`bg-paper-2 border rounded-xl p-5 space-y-3 transition ${
                   isSubmitted
                     ? isMultipleChoice
                       ? isCorrect
                         ? 'border-emerald-300 bg-emerald-50/30'
                         : 'border-rose-300 bg-rose-50/30'
-                      : 'border-slate-200'
-                    : 'border-slate-200'
+                      : 'border-hairline'
+                    : 'border-hairline'
                 }`}
               >
                 <div className="flex items-start space-x-2">
-                  <span className="text-xs font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200">
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded bg-accent-soft text-accent-700 border border-accent/25">
                     Soru {qIdx + 1}
                   </span>
-                  <h3 className="text-xs sm:text-sm font-bold text-slate-900 leading-relaxed">
+                  <h3 className="text-xs sm:text-sm font-semibold text-ink leading-relaxed">
                     {q.question}
                   </h3>
                 </div>
@@ -224,7 +224,7 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
                       const isSelected = userAnswers[q.id] === optIdx;
                       const isRightOption = q.correctOptionIndex === optIdx;
 
-                      let btnStyle = 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300';
+                      let btnStyle = 'bg-paper border-hairline text-ink-2 hover:bg-paper-3 hover:border-hairline-2';
                       if (isSubmitted) {
                         if (isRightOption) {
                           btnStyle = 'bg-emerald-50 border-emerald-400 text-emerald-900 font-semibold';
@@ -232,7 +232,7 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
                           btnStyle = 'bg-rose-50 border-rose-300 text-rose-900';
                         }
                       } else if (isSelected) {
-                        btnStyle = 'bg-indigo-50 border-indigo-400 text-indigo-900 font-semibold';
+                        btnStyle = 'bg-accent-soft border-accent/60 text-accent-700 font-semibold';
                       }
 
                       return (
@@ -259,13 +259,13 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
                       onChange={(e) => handleOpenEndedChange(q.id, e.target.value)}
                       disabled={isSubmitted}
                       placeholder="İngilizce veya Türkçe yanıtınızı yazın..."
-                      className="w-full p-3 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                      className="w-full p-3 bg-paper border border-hairline-2 rounded-lg text-xs text-ink placeholder-ink-3 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent"
                     />
 
                     {isSubmitted && q.sampleAnswerEn && (
-                      <div className="bg-indigo-50 p-3 rounded-lg border border-indigo-200 text-xs space-y-1">
-                        <strong className="text-indigo-900 block font-bold">Örnek Doğru Yanıt (İngilizce):</strong>
-                        <p className="text-slate-800 font-mono text-[11px]">{q.sampleAnswerEn}</p>
+                      <div className="bg-accent-soft p-3 rounded-lg border border-accent/25 text-xs space-y-1">
+                        <strong className="text-accent-700 block font-semibold">Örnek Doğru Yanıt (İngilizce):</strong>
+                        <p className="text-ink-800 font-mono text-[11px]">{q.sampleAnswerEn}</p>
                       </div>
                     )}
                   </div>
@@ -273,9 +273,9 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
 
                 {/* Explanation Box on Submit */}
                 {isSubmitted && q.explanationTr && (
-                  <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs text-slate-700 space-y-1">
-                    <strong className="text-slate-900 block font-bold">Çözüm Analizi:</strong>
-                    <p className="text-slate-600 leading-relaxed text-[11px]">{q.explanationTr}</p>
+                  <div className="bg-paper p-3 rounded-lg border border-hairline text-xs text-ink-2 space-y-1">
+                    <strong className="text-ink block font-semibold">Çözüm Analizi:</strong>
+                    <p className="text-ink-2 leading-relaxed text-[11px]">{q.explanationTr}</p>
                   </div>
                 )}
               </div>
@@ -289,7 +289,7 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
         <div className="flex justify-end pt-2">
           <button
             onClick={handleSubmit}
-            className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-sm cursor-pointer"
+            className="px-6 py-2.5 bg-accent hover:bg-accent-700 text-white font-semibold text-xs sm:text-sm rounded-xl transition cursor-pointer"
           >
             Yanıtları Kontrol Et & Analiz Et
           </button>
@@ -300,7 +300,7 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
         <div className="flex justify-end pt-2">
           <button
             onClick={onCompleteLayer}
-            className="flex items-center space-x-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-sm cursor-pointer"
+            className="flex items-center space-x-2 px-5 py-2.5 bg-accent hover:bg-accent-700 text-white font-semibold text-xs sm:text-sm rounded-xl transition cursor-pointer"
           >
             <CheckCircle className="w-4 h-4" />
             <span>4. Katmanı Tamamladım, 5. Katmana Geç</span>

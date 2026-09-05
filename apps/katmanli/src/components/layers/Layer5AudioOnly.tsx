@@ -29,34 +29,34 @@ export const Layer5AudioOnly: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
 
   return (
     <div className="space-y-6">
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+      <div className="bg-paper-2 border border-hairline rounded-xl p-4">
         <div className="flex items-center space-x-2.5 mb-2">
-          <span className="px-2.5 py-1 bg-sky-50 text-sky-700 border border-sky-200 text-xs font-bold rounded-md uppercase tracking-wider">
+          <span className="px-2.5 py-1 bg-accent-soft text-accent border border-accent/25 text-xs font-semibold rounded-md">
             Layer 5
           </span>
-          <h2 className="text-base sm:text-lg font-bold text-slate-900">Sadece Dinleme</h2>
+          <h2 className="text-base sm:text-lg font-semibold text-ink">Sadece Dinleme</h2>
         </div>
-        <p className="text-xs text-slate-600 leading-relaxed">
+        <p className="text-xs text-ink-2 leading-relaxed">
           Videoyu görsel, jest ve slayt desteği olmadan <strong>sadece kulaklıkla</strong> ses
           modunda dinleyin. Görüntü kapalı olduğu için beyniniz doğrudan sese odaklanır.
         </p>
       </div>
 
       {!ytId ? (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-900">
+        <div className="rounded-xl border border-hairline p-4 text-[13px] text-ink-2">
           Bu derste gömülü video yok.
         </div>
       ) : (
         <div className="max-w-2xl mx-auto">
-          <div className="bg-slate-900 rounded-2xl p-6 shadow-lg space-y-5">
+          <div className="bg-ink rounded-2xl p-6 space-y-5">
             {/* Oynatıcı: görünmez ama DOM'da */}
-            <div className="relative rounded-xl overflow-hidden bg-slate-950 aspect-video">
+            <div className="relative rounded-xl overflow-hidden bg-ink-950 aspect-video">
               <div ref={containerRef} className="w-full h-full" />
               {!peek && (
-                <div className="absolute inset-0 bg-slate-900 flex flex-col items-center justify-center space-y-3">
-                  <Headphones className="w-14 h-14 text-sky-400" />
-                  <p className="text-sm font-bold text-slate-200">Görüntü Kapalı</p>
-                  <p className="text-[11px] text-slate-500 px-8 text-center">
+                <div className="absolute inset-0 bg-ink flex flex-col items-center justify-center space-y-3">
+                  <Headphones className="w-14 h-14 text-ink-3" />
+                  <p className="text-sm font-semibold text-hairline">Görüntü Kapalı</p>
+                  <p className="text-[11px] text-ink-3 px-8 text-center">
                     Sadece sese odaklanın. Anlamadığınız yerleri not edin.
                   </p>
                 </div>
@@ -65,13 +65,13 @@ export const Layer5AudioOnly: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
 
             {/* İlerleme */}
             <div className="space-y-1.5">
-              <div className="w-full bg-slate-700 rounded-full h-1.5 overflow-hidden">
+              <div className="w-full bg-ink-2 rounded-full h-1.5 overflow-hidden">
                 <div
-                  className="bg-sky-500 h-1.5 rounded-full transition-all"
+                  className="bg-accent h-1.5 rounded-full transition-all"
                   style={{ width: `${progressPct}%` }}
                 />
               </div>
-              <div className="flex justify-between text-[11px] font-mono text-slate-400">
+              <div className="flex justify-between text-[11px] font-mono text-ink-3">
                 <span>{formatSeconds(currentTime)}</span>
                 <span>{duration > 0 ? formatSeconds(duration) : '--:--'}</span>
               </div>
@@ -82,7 +82,7 @@ export const Layer5AudioOnly: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
               <button
                 type="button"
                 onClick={() => (isPlaying ? pause() : play())}
-                className="flex items-center space-x-2 px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white text-sm font-bold rounded-xl transition cursor-pointer"
+                className="flex items-center space-x-2 px-6 py-3 bg-accent hover:bg-accent-700 text-white text-sm font-semibold rounded-xl transition cursor-pointer"
               >
                 {isPlaying ? (
                   <>
@@ -100,7 +100,7 @@ export const Layer5AudioOnly: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
               <button
                 type="button"
                 onClick={() => setPeek((p) => !p)}
-                className="flex items-center space-x-1.5 px-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl transition cursor-pointer"
+                className="flex items-center space-x-1.5 px-4 py-3 bg-ink-800 hover:bg-ink-2 text-hairline-2 text-xs font-semibold rounded-xl transition cursor-pointer"
                 title="Zorlandığınızda kısa süre görüntüye bakabilirsiniz"
               >
                 {peek ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

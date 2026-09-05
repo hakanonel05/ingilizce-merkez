@@ -31,7 +31,7 @@ export const LayerHeaderBar: React.FC<Props> = ({
     <div className="flex min-w-0 items-center gap-3">
       <span
         className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl
-          border border-indigo-100 bg-indigo-50 text-indigo-600"
+          border border-accent/20 bg-accent-soft text-accent"
       >
         {icon}
       </span>
@@ -51,10 +51,10 @@ export const LayerHeaderBar: React.FC<Props> = ({
             </span>
           )}
         </div>
-        <h1 className="truncate text-[19px] font-semibold tracking-tight text-slate-900">
+        <h1 className="truncate text-[19px] font-semibold tracking-tight text-ink">
           {title}
         </h1>
-        <p className="truncate text-[12px] text-slate-500">{subtitle}</p>
+        <p className="truncate text-[12px] text-ink-3">{subtitle}</p>
       </div>
     </div>
 

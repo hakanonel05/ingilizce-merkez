@@ -55,7 +55,7 @@ export const LessonPickerModal: React.FC<Props> = ({
   return (
     <div
       className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto
-        bg-slate-900/40 p-4 backdrop-blur-sm sm:p-6"
+        bg-ink/40 p-4 backdrop-blur-sm sm:p-6"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -63,15 +63,15 @@ export const LessonPickerModal: React.FC<Props> = ({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="my-8 w-full max-w-4xl overflow-hidden rounded-2xl border border-slate-200
-          bg-white shadow-2xl shadow-slate-900/10"
+        className="my-8 w-full max-w-4xl overflow-hidden rounded-2xl border border-hairline
+          bg-paper-2 shadow-ink/10"
       >
-        <div className="flex items-center justify-between gap-4 border-b border-slate-200 px-5 py-4">
+        <div className="flex items-center justify-between gap-4 border-b border-hairline px-5 py-4">
           <div className="min-w-0">
-            <h2 className="text-sm font-semibold tracking-tight text-slate-900">
+            <h2 className="text-sm font-semibold tracking-tight text-ink">
               Çalışma İçeriği
             </h2>
-            <p className="mt-0.5 truncate text-[12px] text-slate-500">
+            <p className="mt-0.5 truncate text-[12px] text-ink-3">
               Bir ders seç ya da yeni bir YouTube videosu / metin ekle
             </p>
           </div>
@@ -79,8 +79,8 @@ export const LessonPickerModal: React.FC<Props> = ({
             type="button"
             onClick={onClose}
             aria-label="Kapat"
-            className="shrink-0 rounded-lg p-1.5 text-slate-400 transition-colors
-              hover:bg-slate-100 hover:text-slate-900 cursor-pointer"
+            className="shrink-0 rounded-lg p-1.5 text-ink-3 transition-colors
+              hover:bg-paper-3 hover:text-ink cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { MistakeEntry, CEFRLevel } from '../types';
-import { BookX, RotateCcw, CheckCircle2, XCircle, ArrowRight, Trash2, ExternalLink, PartyPopper } from 'lucide-react';
+import { RotateCcw, CheckCircle2, XCircle, ArrowRight, Trash2, ExternalLink } from 'lucide-react';
 
 interface MistakesNotebookProps {
   mistakes: MistakeEntry[];
@@ -82,19 +82,12 @@ export default function MistakesNotebook({ mistakes, onReviewMistake, onRemoveMi
   if (mistakes.length === 0) {
     return (
       <div className="space-y-6">
-        <div className="border-b border-hairline/40 pb-6">
-          <div className="flex items-center gap-2 text-accent mb-2">
-            <BookX className="h-4 w-4" />
-            <span className="text-[10px] font-bold tracking-[0.2em] uppercase">Yanlışlar Defteri</span>
-          </div>
-          <h2 className="font-display text-3xl font-bold text-ink">Yanlışlar Defteri</h2>
-        </div>
-        <div className="bg-white border border-hairline/40 p-12 text-center space-y-3 rounded-2xl">
-          <PartyPopper className="h-10 w-10 text-accent mx-auto" />
-          <p className="font-display text-xl font-bold text-ink">Harika! Hiç yanlışın yok.</p>
-          <p className="text-sm text-ink/60 max-w-md mx-auto">
-            Anlama testlerinde veya kelime alıştırmalarında yanlış yaptığın sorular otomatik olarak burada birikir.
-            Şimdilik temiz — okumaya devam et!
+        <h1 className="text-[22px] font-semibold tracking-tight text-brand">Yanlışlar Defteri</h1>
+        <div className="rounded-2xl border border-hairline p-10 text-center">
+          <p className="text-[14px] font-medium text-ink">Hiç yanlışın yok.</p>
+          <p className="mx-auto mt-1 max-w-[52ch] text-[13px] leading-relaxed text-ink-2">
+            Anlama testleri, kelime alıştırmaları ve sınav simülasyonundaki
+            yanlışların otomatik olarak burada birikir.
           </p>
         </div>
       </div>
@@ -105,50 +98,53 @@ export default function MistakesNotebook({ mistakes, onReviewMistake, onRemoveMi
     const isCorrect = practiceSelected === currentItem.correctAnswer;
     return (
       <div className="space-y-6 max-w-2xl mx-auto">
-        <div className="flex items-center justify-between border-b border-hairline/40 pb-4">
-          <div>
-            <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-accent mb-1">Pratik Modu</p>
-            <h2 className="font-display text-2xl font-bold text-ink">
-              {queueIndex + 1} / {queue.length}
-            </h2>
-          </div>
+        <div className="flex items-baseline justify-between gap-3 border-b border-hairline pb-4">
+          <h1 className="text-[22px] font-semibold tracking-tight text-brand">
+            Pratik{' '}
+            <span className="timecode text-[16px] font-normal text-ink-3">
+              {queueIndex + 1}/{queue.length}
+            </span>
+          </h1>
           <button
+            type="button"
             onClick={() => setMode('list')}
-            className="text-xs font-bold text-ink-3 hover:text-ink"
+            className="text-[13px] text-ink-3 transition-colors hover:text-ink cursor-pointer"
           >
             Bitir
           </button>
         </div>
 
-        <div className="bg-white border border-hairline/40 p-6 space-y-5 rounded-xl">
-          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wide text-ink-3">
+        <div className="space-y-5 rounded-2xl border border-hairline bg-paper-2 p-5 sm:p-6">
+          <div className="flex flex-wrap items-center gap-2 text-[11px] text-ink-3">
             <span>{currentItem.passageTitle}</span>
             <span>·</span>
             <span>{SOURCE_LABEL[currentItem.source]}</span>
             <span>·</span>
             <span>{currentItem.cefr}</span>
           </div>
-          <p className="font-display text-lg font-bold text-ink leading-relaxed">{currentItem.question}</p>
+          <p className="text-[15px] font-medium leading-relaxed text-ink">{currentItem.question}</p>
 
-          <div className="grid grid-cols-1 gap-2.5">
+          <div className="space-y-2">
             {currentItem.options.map(option => {
               const optLetter = letter(option);
               const isSelected = practiceSelected === optLetter;
               const isRight = optLetter === currentItem.correctAnswer;
-              let cls = 'bg-paper border-hairline/40 text-ink hover:border-accent/40';
+              let cls = 'border-hairline text-ink hover:bg-paper-3';
               if (practiceChecked) {
-                if (isRight) cls = 'bg-emerald-50 border-emerald-500 text-emerald-900 font-bold';
-                else if (isSelected) cls = 'bg-rose-50 border-rose-500 text-rose-950';
-                else cls = 'bg-white border-hairline/20 text-ink/30 opacity-60';
+                if (isRight) cls = 'border-emerald-500 bg-emerald-50 text-emerald-900';
+                else if (isSelected) cls = 'border-rose-400 bg-rose-50 text-rose-900';
+                else cls = 'border-hairline text-ink-3';
               } else if (isSelected) {
-                cls = 'bg-accent text-white border-accent font-bold';
+                cls = 'border-accent bg-accent-soft text-ink';
               }
               return (
                 <button
                   key={option}
                   disabled={practiceChecked}
                   onClick={() => setPracticeSelected(optLetter)}
-                  className={`w-full text-left p-3.5 border text-sm font-sans flex justify-between items-center transition-all rounded-lg ${cls}`}
+                  className={`flex w-full items-center justify-between gap-3 rounded-xl border px-4 py-3
+                    text-left text-[13px] transition-colors duration-150
+                    disabled:cursor-default cursor-pointer ${cls}`}
                 >
                   <span>{option}</span>
                   {practiceChecked && isRight && <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 ml-2" />}
@@ -163,18 +159,21 @@ export default function MistakesNotebook({ mistakes, onReviewMistake, onRemoveMi
               <button
                 onClick={checkAnswer}
                 disabled={!practiceSelected}
-                className="ml-auto px-5 py-2 text-xs font-bold bg-accent text-white border border-accent hover:opacity-90 disabled:opacity-40 rounded-lg"
+                className="ml-auto rounded-xl bg-accent px-5 py-2.5 text-[13px] font-medium text-white
+                  transition-colors duration-150 hover:bg-accent-700
+                  disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
               >
-                Kontrol Et
+                Kontrol et
               </button>
             ) : (
               <>
-                <span className={`text-sm font-bold ${isCorrect ? 'text-emerald-700' : 'text-rose-700'}`}>
-                  {isCorrect ? 'Doğru! Defterden çıkarıldı.' : 'Yanlış — tekrar karşına çıkacak.'}
+                <span className={`text-[13px] ${isCorrect ? 'text-emerald-700' : 'text-rose-700'}`}>
+                  {isCorrect ? 'Doğru — defterden çıkarıldı.' : 'Yanlış — tekrar karşına çıkacak.'}
                 </span>
                 <button
                   onClick={nextItem}
-                  className="flex items-center gap-1.5 px-5 py-2 text-xs font-bold bg-ink text-white hover:opacity-90 rounded-lg"
+                  className="flex items-center gap-1.5 rounded-xl bg-accent px-5 py-2.5 text-[13px]
+                    font-medium text-white transition-colors hover:bg-accent-700 cursor-pointer"
                 >
                   {queueIndex + 1 >= queue.length ? 'Bitir' : 'Sıradaki'} <ArrowRight className="h-3.5 w-3.5" />
                 </button>
@@ -183,8 +182,8 @@ export default function MistakesNotebook({ mistakes, onReviewMistake, onRemoveMi
           </div>
         </div>
 
-        <p className="text-center text-xs text-ink-3">
-          Bu oturumda: {sessionCorrect} / {sessionDone} doğru
+        <p className="text-[12px] text-ink-3">
+          Bu oturumda <span className="timecode text-ink">{sessionCorrect}/{sessionDone}</span> doğru
         </p>
       </div>
     );
@@ -192,70 +191,78 @@ export default function MistakesNotebook({ mistakes, onReviewMistake, onRemoveMi
 
   return (
     <div className="space-y-6">
-      <div className="border-b border-hairline/40 pb-6 flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 text-accent mb-2">
-            <BookX className="h-4 w-4" />
-            <span className="text-[10px] font-bold tracking-[0.2em] uppercase">Yanlışlar Defteri</span>
-          </div>
-          <h2 className="font-display text-3xl font-bold text-ink">
-            {mistakes.length} yanlış soru birikti
-          </h2>
-          <p className="text-ink/60 mt-2 text-sm">
-            Anlama testleri, kelime alıştırmaları ve sınav simülasyonundaki yanlışların otomatik olarak burada toplanır.
-          </p>
-        </div>
-        <button
-          onClick={startPractice}
-          disabled={filtered.length === 0}
-          className="flex items-center gap-2 px-5 py-2.5 text-sm font-bold bg-accent text-white hover:opacity-90 disabled:opacity-40 shrink-0 rounded-lg"
-        >
-          <RotateCcw className="h-4 w-4" /> Pratik Yap ({filtered.length})
-        </button>
+      <div className="flex flex-wrap items-baseline justify-between gap-3">
+        <h1 className="text-[22px] font-semibold tracking-tight text-brand">Yanlışlar Defteri</h1>
+        <span className="text-[12px] text-ink-3">
+          <span className="timecode text-ink">{mistakes.length}</span> soru birikti
+        </span>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <p className="max-w-[62ch] text-[13px] leading-relaxed text-ink-2">
+        Anlama testleri, kelime alıştırmaları ve sınav simülasyonundaki
+        yanlışların otomatik olarak burada toplanır.
+      </p>
+
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex w-fit flex-wrap gap-0.5 rounded-xl bg-paper-3 p-1">
         {(['ALL', 'A1', 'A2', 'B1', 'B2', 'C1'] as const).map(lvl => (
           <button
             key={lvl}
             onClick={() => setCefrFilter(lvl)}
-            className={`px-3.5 py-1.5 text-xs font-bold border transition-all rounded-lg ${
+            className={`rounded-lg px-3 py-1.5 text-[12px] transition-colors duration-150 cursor-pointer ${
               cefrFilter === lvl
-                ? 'bg-ink text-white border-ink'
-                : 'bg-white text-ink/70 border-hairline/50 hover:border-accent/50'
+                ? 'bg-paper-2 font-medium text-ink'
+                : 'text-ink-2 hover:text-ink'
             }`}
           >
             {lvl === 'ALL' ? 'Tümü' : lvl}
           </button>
         ))}
+        </div>
+
+        <button
+          type="button"
+          onClick={startPractice}
+          disabled={filtered.length === 0}
+          className="flex shrink-0 items-center gap-2 rounded-xl bg-accent px-4 py-2 text-[13px]
+            font-medium text-white transition-colors duration-150 hover:bg-accent-700
+            disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
+        >
+          <RotateCcw className="h-4 w-4" /> Pratik yap ({filtered.length})
+        </button>
       </div>
 
       <div className="space-y-4">
         {grouped.map(group => (
-          <div key={group.passageId} className="bg-white border border-hairline/40 rounded-lg">
-            <div className="px-5 py-3 border-b border-hairline/30 flex items-center justify-between">
-              <div className="flex items-center gap-2 min-w-0">
-                <span className="text-[10px] font-bold px-2 py-0.5 bg-paper border border-hairline/40 shrink-0 rounded-lg">
+          <div key={group.passageId} className="overflow-hidden rounded-2xl border border-hairline bg-paper-2">
+            <div className="flex items-center justify-between gap-3 border-b border-hairline px-5 py-3">
+              <div className="flex min-w-0 items-baseline gap-2">
+                <span className="shrink-0 rounded bg-paper-3 px-1.5 py-0.5 text-[11px] text-ink-2">
                   {group.cefr}
                 </span>
-                <p className="font-display font-bold text-sm text-ink truncate">{group.title}</p>
+                <p className="truncate text-[14px] font-medium text-ink">{group.title}</p>
               </div>
-              <div className="flex items-center gap-3 shrink-0">
-                <span className="text-xs text-ink-3">{group.items.length} yanlış</span>
+              <div className="flex shrink-0 items-center gap-3">
+                <span className="text-[12px] text-ink-3">
+                  <span className="timecode text-ink-2">{group.items.length}</span> yanlış
+                </span>
                 <button
+                  type="button"
                   onClick={() => onSelectPassage(group.passageId)}
-                  className="flex items-center gap-1 text-xs font-bold text-accent hover:underline"
+                  className="flex items-center gap-1 text-[12px] text-ink-3
+                    transition-colors hover:text-accent cursor-pointer"
                 >
-                  Parçaya Git <ExternalLink className="h-3 w-3" />
+                  Parçaya git <ExternalLink className="h-3 w-3" />
                 </button>
               </div>
             </div>
-            <div className="divide-y divide-hairline/20">
+            <div className="divide-y divide-hairline">
               {group.items.map(item => (
-                <div key={item.key} className="px-5 py-3 flex items-start justify-between gap-4">
+                <div key={item.key} className="group flex items-start justify-between gap-4 px-5 py-3
+                  transition-colors hover:bg-paper-3">
                   <div className="min-w-0">
-                    <p className="text-sm text-ink leading-snug">{item.question}</p>
-                    <p className="text-xs text-ink-3 mt-1">
+                    <p className="text-[13px] leading-snug text-ink">{item.question}</p>
+                    <p className="mt-1 text-[12px] text-ink-3">
                       {SOURCE_LABEL[item.source]} · Doğru cevap: {item.correctAnswer} · Senin cevabın: {item.yourAnswer || '—'}
                       {item.reviewCount > 0 && ` · ${item.reviewCount}x tekrar edildi`}
                     </p>
@@ -263,7 +270,9 @@ export default function MistakesNotebook({ mistakes, onReviewMistake, onRemoveMi
                   <button
                     onClick={() => onRemoveMistake(item.key)}
                     title="Artık biliyorum, listeden çıkar"
-                    className="shrink-0 p-1.5 text-ink/30 hover:text-rose-600 transition-colors"
+                    className="row-actions shrink-0 rounded-lg p-1.5 text-ink-3 opacity-0
+                      transition-all hover:bg-paper-2 hover:text-rose-600
+                      focus:opacity-100 group-hover:opacity-100 cursor-pointer"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>

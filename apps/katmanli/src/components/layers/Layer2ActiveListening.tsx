@@ -57,14 +57,14 @@ export const Layer2ActiveListening: React.FC<Props> = ({ lesson, onCompleteLayer
         onAdded={() => { /* VocabHub depo olayıyla kendini tazeliyor */ }}
       />
 
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+      <div className="bg-paper-2 border border-hairline rounded-xl p-4">
         <div className="flex items-center space-x-2.5 mb-2">
-          <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold rounded-md uppercase tracking-wider">
+          <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold rounded-md">
             Layer 2
           </span>
-          <h2 className="text-base sm:text-lg font-bold text-slate-900">Aktif Dinleme</h2>
+          <h2 className="text-base sm:text-lg font-semibold text-ink">Aktif Dinleme</h2>
         </div>
-        <p className="text-xs text-slate-600 leading-relaxed">
+        <p className="text-xs text-ink-2 leading-relaxed">
           Videoyu oynatın ve metni <strong>gözlerinizle</strong> takip edin. Bu katmanda Türkçe
           çeviri bilinçli olarak gösterilmiyor; amaç duyduğunuz sesi yazıyla eşleştirmek. Bu
           çalışma fonetik bilginizi ve kelimelerin ses karşılıklarını zihninize yükler.
@@ -72,24 +72,24 @@ export const Layer2ActiveListening: React.FC<Props> = ({ lesson, onCompleteLayer
       </div>
 
       {!ytId ? (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-900">
+        <div className="rounded-xl border border-hairline p-4 text-[13px] text-ink-2">
           Bu derste gömülü video yok. Katman 1'den video linki ekleyebilirsiniz.
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           <div className="lg:col-span-5 lg:sticky lg:top-4">
-            <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-sm space-y-2">
-              <div className="aspect-video w-full rounded-lg overflow-hidden bg-slate-950">
+            <div className="bg-paper-2 border border-hairline rounded-xl p-3 space-y-2">
+              <div className="aspect-video w-full rounded-lg overflow-hidden bg-ink-950">
                 <div ref={containerRef} className="w-full h-full" />
               </div>
               <div className="flex items-center space-x-2 pt-1">
                 {isPlaying ? (
-                  <span className="inline-flex items-center space-x-1 px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded-full">
+                  <span className="inline-flex items-center space-x-1 px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-semibold rounded-full">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
                     <span>Dinleniyor ({formatSeconds(currentTime)})</span>
                   </span>
                 ) : (
-                  <span className="text-[11px] font-semibold text-slate-500">
+                  <span className="text-[11px] font-semibold text-ink-3">
                     Videoyu başlatın ve metni takip edin
                   </span>
                 )}
@@ -98,10 +98,10 @@ export const Layer2ActiveListening: React.FC<Props> = ({ lesson, onCompleteLayer
           </div>
 
           <div ref={transcriptAreaRef} className="lg:col-span-7">
-            <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-              <div className="bg-slate-900 text-white px-4 py-3 flex items-center space-x-2">
+            <div className="bg-paper-2 border border-hairline rounded-xl overflow-hidden">
+              <div className="bg-ink text-white px-4 py-3 flex items-center space-x-2">
                 <Ear className="w-4 h-4 text-emerald-400" />
-                <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider">
+                <h3 className="text-xs sm:text-sm font-semibold">
                   İngilizce Metin (Türkçe Gizli)
                 </h3>
               </div>
@@ -116,7 +116,7 @@ export const Layer2ActiveListening: React.FC<Props> = ({ lesson, onCompleteLayer
                 </div>
               )}
 
-              <div className="divide-y divide-slate-200 max-h-[70vh] overflow-y-auto">
+              <div className="divide-y divide-hairline max-h-[70vh] overflow-y-auto">
                 {(lesson.sentences || []).map((pair) => {
                   const isActive = activeId === pair.id;
                   return (
@@ -125,13 +125,13 @@ export const Layer2ActiveListening: React.FC<Props> = ({ lesson, onCompleteLayer
                       ref={isActive ? activeRef : null}
                       className={`p-4 border-l-4 transition-all ${
                         isActive
-                          ? 'bg-amber-50 border-amber-500 shadow-sm'
+                          ? 'bg-[var(--marker-bg)] border-amber-500'
                           : 'border-transparent'
                       }`}
                     >
                       <p
                         className={`transcript-en ${
-                          isActive ? 'text-[var(--marker-ink)] font-medium' : 'text-slate-700'
+                          isActive ? 'text-[var(--marker-ink)] font-medium' : 'text-ink-2'
                         }`}
                       >
                         {pair.en}

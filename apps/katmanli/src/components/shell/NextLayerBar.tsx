@@ -34,7 +34,7 @@ export const NextLayerBar: React.FC<Props> = ({
   step, totalSteps, isCompleted, nextLabel, onComplete, onGoNext,
 }) => (
   <div
-    className="sticky bottom-0 z-20 -mx-4 mt-8 border-t border-slate-200
+    className="sticky bottom-0 z-20 -mx-4 mt-8 border-t border-hairline
       bg-white/85 px-4 py-3 backdrop-blur-md
       supports-[backdrop-filter]:bg-white/75 sm:-mx-6 sm:px-6"
   >
@@ -48,16 +48,16 @@ export const NextLayerBar: React.FC<Props> = ({
               key={i}
               className={`h-1.5 rounded-full transition-all duration-300 ease-in-out ${
                 i + 1 === step
-                  ? 'w-5 bg-indigo-600'
+                  ? 'w-5 bg-accent'
                   : i + 1 < step
                     ? 'w-1.5 bg-emerald-500'
-                    : 'w-1.5 bg-slate-200'
+                    : 'w-1.5 bg-hairline'
               }`}
             />
           ))}
         </div>
-        <span className="text-[12px] text-slate-500">
-          Adım <span className="font-semibold text-slate-900">{step}</span> / {totalSteps}
+        <span className="text-[12px] text-ink-3">
+          Adım <span className="font-semibold text-ink">{step}</span> / {totalSteps}
         </span>
       </div>
 
@@ -71,10 +71,10 @@ export const NextLayerBar: React.FC<Props> = ({
             <button
               type="button"
               onClick={onGoNext}
-              className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200
-                bg-white px-4 text-[13px] font-medium text-slate-900
+              className="inline-flex h-10 items-center gap-2 rounded-xl border border-hairline
+                bg-paper-2 px-4 text-[13px] font-medium text-ink
                 transition-all duration-200 ease-in-out
-                hover:border-indigo-300 hover:text-indigo-700 cursor-pointer"
+                hover:border-accent/40 hover:text-accent-700 cursor-pointer"
             >
               <span className="max-w-[10rem] truncate sm:max-w-none">{nextLabel}</span>
               <ArrowRight className="h-4 w-4" />
@@ -86,10 +86,9 @@ export const NextLayerBar: React.FC<Props> = ({
           type="button"
           onClick={onComplete}
           className="inline-flex h-10 items-center gap-2 rounded-xl
-            bg-indigo-600 px-4 text-[13px] font-medium text-white
-            shadow-sm shadow-indigo-600/20
+            bg-accent px-4 text-[13px] font-medium text-white shadow-accent/20
             transition-all duration-200 ease-in-out
-            hover:bg-indigo-700 hover:shadow-md hover:shadow-indigo-600/25
+            hover:bg-accent-700 hover:shadow-accent/25
             cursor-pointer"
         >
           <Check className="h-4 w-4" strokeWidth={2.5} />

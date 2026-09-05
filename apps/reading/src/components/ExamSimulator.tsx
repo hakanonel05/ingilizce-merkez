@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Passage, CEFRLevel, ExamAttempt, GradedQuestionResult } from '../types';
-import { Timer, Play, Flag, CheckCircle2, XCircle, RotateCcw, ExternalLink, ListChecks } from 'lucide-react';
+import { Timer, Play, Flag, CheckCircle2, XCircle, RotateCcw, ExternalLink } from 'lucide-react';
 
 interface ExamSimulatorProps {
   passages: Passage[];
@@ -140,51 +140,49 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
   // ---------------------------------------------------------------- SETUP
   if (phase === 'setup') {
     return (
-      <div className="space-y-8 max-w-2xl mx-auto">
-        <div className="border-b border-hairline/40 pb-6">
-          <div className="flex items-center gap-2 text-accent mb-2">
-            <Timer className="h-4 w-4" />
-            <span className="text-[10px] font-bold tracking-[0.2em] uppercase">Sınav Simülasyonu</span>
-          </div>
-          <h2 className="font-display text-3xl font-bold text-ink">YDS / YÖKDİL Deneme Sınavı</h2>
-          <p className="text-ink/60 mt-2 text-sm leading-relaxed">
-            Gerçek sınav temposunu hissetmek için süreli bir okuma denemesi başlat. Bitince net sonucun ve
-            yanlışların otomatik olarak Yanlışlar Defteri'ne eklenir.
+      <div className="mx-auto max-w-2xl space-y-5">
+        <div>
+          <h1 className="text-[22px] font-semibold tracking-tight text-brand">Sınav Simülasyonu</h1>
+          <p className="mt-2 max-w-[62ch] text-[13px] leading-relaxed text-ink-2">
+            Süreli bir okuma denemesi. Bitince netin hesaplanır, yanlış ve boş
+            sorular Yanlışlar Defteri'ne eklenir.
           </p>
         </div>
 
-        <div className="bg-white border border-hairline/40 p-6 space-y-6 rounded-xl">
+        <div className="space-y-5 rounded-2xl border border-hairline bg-paper-2 p-5 sm:p-6">
           <div>
-            <p className="text-[10px] font-bold tracking-[0.18em] uppercase text-ink-3 mb-3">Kaç Parça?</p>
-            <div className="flex gap-2">
+            <span className="eyebrow">Kaç parça</span>
+            <div className="mt-2 flex gap-2">
               {PASSAGE_COUNT_OPTIONS.map(n => (
                 <button
                   key={n}
                   onClick={() => setCount(n)}
-                  className={`flex-1 py-3 text-sm font-bold border transition-all rounded-lg ${
+                  className={`flex-1 rounded-xl border py-3 text-[13px] transition-colors duration-150 cursor-pointer ${
                     count === n
-                      ? 'bg-accent text-white border-accent'
-                      : 'bg-paper text-ink/70 border-hairline/40 hover:border-accent/40'
+                      ? 'border-accent bg-accent-soft font-medium text-ink'
+                      : 'border-hairline text-ink-2 hover:bg-paper-3'
                   }`}
                 >
-                  {n} Parça
-                  <span className="block text-[10px] font-normal opacity-70 mt-0.5">~{n * MINUTES_PER_PASSAGE} dk</span>
+                  {n} parça
+                  <span className="timecode mt-0.5 block text-[11px] text-ink-3">
+                    ~{n * MINUTES_PER_PASSAGE} dk
+                  </span>
                 </button>
               ))}
             </div>
           </div>
 
           <div>
-            <p className="text-[10px] font-bold tracking-[0.18em] uppercase text-ink-3 mb-3">Seviye</p>
-            <div className="flex flex-wrap gap-2">
+            <span className="eyebrow">Seviye</span>
+            <div className="mt-2 flex w-fit flex-wrap gap-0.5 rounded-xl bg-paper-3 p-1">
               {(['ALL', 'A1', 'A2', 'B1', 'B2', 'C1'] as const).map(lvl => (
                 <button
                   key={lvl}
                   onClick={() => setCefr(lvl)}
-                  className={`px-3.5 py-1.5 text-xs font-bold border transition-all rounded-lg ${
+                  className={`rounded-lg px-3 py-1.5 text-[12px] transition-colors duration-150 cursor-pointer ${
                     cefr === lvl
-                      ? 'bg-ink text-white border-ink'
-                      : 'bg-white text-ink/70 border-hairline/50 hover:border-accent/50'
+                      ? 'bg-paper-2 font-medium text-ink'
+                      : 'text-ink-2 hover:text-ink'
                   }`}
                 >
                   {lvl === 'ALL' ? 'Karışık' : lvl}
@@ -193,16 +191,19 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
             </div>
           </div>
 
-          <div className="pt-2 border-t border-hairline/20 flex items-center justify-between">
-            <p className="text-xs text-ink-3">
-              Havuzda {eligiblePassages.length} uygun parça var.
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-hairline pt-4">
+            <p className="text-[12px] text-ink-3">
+              Havuzda <span className="timecode text-ink">{eligiblePassages.length}</span> uygun parça var.
             </p>
             <button
+              type="button"
               onClick={startExam}
               disabled={eligiblePassages.length === 0}
-              className="flex items-center gap-2 px-6 py-3 text-sm font-bold bg-accent text-white hover:opacity-90 disabled:opacity-40 rounded-lg"
+              className="flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-[13px]
+                font-medium text-white transition-colors duration-150 hover:bg-accent-700
+                disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
             >
-              <Play className="h-4 w-4" /> Sınavı Başlat
+              <Play className="h-4 w-4" /> Sınavı başlat
             </button>
           </div>
         </div>
@@ -222,11 +223,11 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
     return (
       <div className="space-y-6">
         <div className={`sticky top-0 z-30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-3 border-b flex items-center justify-between gap-4 flex-wrap ${
-          isLowTime ? 'bg-rose-50 border-rose-300' : 'bg-white/95 backdrop-blur border-hairline/40'
+          isLowTime ? 'border-rose-300 bg-rose-50' : 'border-hairline bg-paper-2'
         }`}>
           <div className="flex items-center gap-2">
             <Timer className={`h-4 w-4 ${isLowTime ? 'text-rose-600' : 'text-accent'}`} />
-            <span className={`font-mono text-lg font-bold ${isLowTime ? 'text-rose-700' : 'text-ink'}`}>
+            <span className={`timecode text-[18px] font-semibold ${isLowTime ? 'text-rose-700' : 'text-ink'}`}>
               {formatTime(remainingSeconds)}
             </span>
           </div>
@@ -238,7 +239,8 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
               <a
                 key={p.id}
                 href={`#exam-passage-${p.id}`}
-                className="w-7 h-7 flex items-center justify-center text-[11px] font-bold border border-hairline/40 bg-paper text-ink/70 hover:border-accent rounded-lg"
+                className="timecode flex h-7 w-7 items-center justify-center rounded-lg bg-paper-3
+                  text-ink-2 transition-colors hover:text-ink"
               >
                 {i + 1}
               </a>
@@ -246,26 +248,25 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
           </div>
           <button
             onClick={finishExam}
-            className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold bg-ink text-white hover:opacity-90 rounded-lg"
+            className="flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-[12px]
+              font-medium text-white transition-colors hover:bg-accent-700 cursor-pointer"
           >
-            <Flag className="h-3.5 w-3.5" /> Sınavı Bitir
+            <Flag className="h-3.5 w-3.5" /> Sınavı bitir
           </button>
         </div>
 
         <div className="space-y-10">
           {examPassages.map((p, pIndex) => (
-            <div key={p.id} id={`exam-passage-${p.id}`} className="bg-white border border-hairline/40 scroll-mt-24 rounded-lg">
-              <div className="px-6 py-4 border-b border-hairline/30 flex items-center gap-3">
-                <span className="w-7 h-7 flex items-center justify-center bg-accent text-white text-xs font-bold shrink-0">
-                  {pIndex + 1}
-                </span>
-                <div>
-                  <h3 className="font-display text-lg font-bold text-ink">{p.title}</h3>
-                  <span className="text-[10px] font-bold uppercase tracking-wide text-ink-3">{p.cefr} · {p.theme}</span>
+            <div key={p.id} id={`exam-passage-${p.id}`} className="scroll-mt-24 overflow-hidden rounded-2xl border border-hairline bg-paper-2">
+              <div className="flex items-center gap-3 border-b border-hairline px-6 py-4">
+                <span className="timecode shrink-0 text-ink-3">{pIndex + 1}</span>
+                <div className="min-w-0">
+                  <h2 className="truncate text-[16px] font-semibold text-ink">{p.title}</h2>
+                  <span className="text-[11px] text-ink-3">{p.cefr} · {p.theme}</span>
                 </div>
               </div>
 
-              <div className="px-6 py-5 space-y-4 border-b border-hairline/20 font-display text-sm leading-relaxed text-ink/90">
+              <div className="passage-body space-y-4 border-b border-hairline px-6 py-5">
                 {p.paragraphs.map((para, i) => (
                   <p key={i}>{para}</p>
                 ))}
@@ -277,12 +278,10 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
                   return (
                     <div key={q.id} className="space-y-3">
                       <div className="flex gap-2.5 items-start">
-                        <span className="flex h-6 w-6 shrink-0 items-center justify-center bg-paper border border-hairline/40 text-ink text-xs font-bold font-mono rounded-lg">
-                          {qIndex + 1}
-                        </span>
-                        <h4 className="text-sm font-display font-bold text-ink leading-relaxed">{q.question}</h4>
+                        <span className="timecode shrink-0 text-ink-3">{qIndex + 1}</span>
+                        <h3 className="text-[15px] font-medium leading-relaxed text-ink">{q.question}</h3>
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pl-8">
+                      <div className="grid grid-cols-1 gap-2 pl-6 sm:grid-cols-2">
                         {q.options.map(option => {
                           const optLetter = option.trim().charAt(0);
                           const isSelected = selected === optLetter;
@@ -290,10 +289,11 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
                             <button
                               key={option}
                               onClick={() => selectAnswer(p.id, q.id, optLetter)}
-                              className={`text-left p-2.5 border text-xs font-sans transition-all rounded-lg ${
+                              className={`rounded-xl border px-4 py-3 text-left text-[13px]
+                                transition-colors duration-150 cursor-pointer ${
                                 isSelected
-                                  ? 'bg-accent text-white border-accent font-bold'
-                                  : 'bg-paper border-hairline/30 text-ink hover:border-accent/40'
+                                  ? 'border-accent bg-accent-soft text-ink'
+                                  : 'border-hairline text-ink hover:bg-paper-3'
                               }`}
                             >
                               {option}
@@ -312,9 +312,10 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
         <div className="flex justify-center pb-6">
           <button
             onClick={finishExam}
-            className="flex items-center gap-2 px-8 py-3.5 text-sm font-bold bg-ink text-white hover:opacity-90 rounded-lg"
+            className="flex items-center gap-2 rounded-xl bg-accent px-6 py-3 text-[13px]
+              font-medium text-white transition-colors hover:bg-accent-700 cursor-pointer"
           >
-            <Flag className="h-4 w-4" /> Sınavı Bitir ve Sonuçları Gör
+            <Flag className="h-4 w-4" /> Sınavı bitir ve sonuçları gör
           </button>
         </div>
       </div>
@@ -327,57 +328,61 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
 
     return (
       <div className="space-y-8">
-        <div className="border-b border-hairline/40 pb-6">
-          <div className="flex items-center gap-2 text-accent mb-2">
-            <ListChecks className="h-4 w-4" />
-            <span className="text-[10px] font-bold tracking-[0.2em] uppercase">Sonuçlar</span>
-          </div>
-          <h2 className="font-display text-3xl font-bold text-ink">Sınav Tamamlandı</h2>
-        </div>
+        <h1 className="text-[22px] font-semibold tracking-tight text-brand">Sınav sonucu</h1>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {[
-            { label: 'Doğru', value: attempt.correctCount, color: 'text-emerald-700' },
-            { label: 'Yanlış', value: attempt.wrongCount, color: 'text-rose-700' },
-            { label: 'Boş', value: attempt.blankCount, color: 'text-ink-3' },
-            { label: 'Başarı', value: `%${percentage}`, color: 'text-accent' },
-          ].map(stat => (
-            <div key={stat.label} className="bg-white border border-hairline/40 p-5 text-center rounded-xl">
-              <p className={`font-display text-3xl font-bold ${stat.color}`}>{stat.value}</p>
-              <p className="text-[10px] font-bold uppercase tracking-wide text-ink-3 mt-1">{stat.label}</p>
+        {/* DÖRT KUTU DEĞİL TEK YÜZEY. Doğru/yanlış/boş/başarı dördü de
+            aynı sınavın parçası; ayrı kartlara bölünce kıyaslanamaz
+            oluyorlardı. Renk yalnızca doğru ve yanlışta — orada bir şey
+            ifade ediyor. */}
+        <div className="grid grid-cols-2 divide-x divide-y divide-hairline overflow-hidden
+          rounded-2xl border border-hairline bg-paper-2 sm:grid-cols-4 sm:divide-y-0">
+          {([
+            ['Doğru', String(attempt.correctCount), 'text-emerald-700'],
+            ['Yanlış', String(attempt.wrongCount), 'text-rose-700'],
+            ['Boş', String(attempt.blankCount), 'text-ink'],
+            ['Başarı', `%${percentage}`, 'text-ink'],
+          ] as [string, string, string][]).map(([label, value, tone]) => (
+            <div key={label} className="px-4 py-3">
+              <p className="text-[11px] text-ink-3">{label}</p>
+              <p className={`timecode mt-1 text-[22px] font-semibold leading-tight ${tone}`}>{value}</p>
             </div>
           ))}
         </div>
 
-        <p className="text-center text-xs text-ink-3">
-          Süre: {formatTime(attempt.timeTakenSeconds)} / {formatTime(attempt.durationSeconds)} kullanıldı ·
-          {attempt.wrongCount + attempt.blankCount > 0 ? ' Yanlış ve boş sorular Yanlışlar Defteri\'ne eklendi.' : ' Tebrikler, hiç yanlışın yok!'}
+        <p className="text-[13px] leading-relaxed text-ink-2">
+          <span className="timecode">{formatTime(attempt.timeTakenSeconds)}</span> /{' '}
+          <span className="timecode">{formatTime(attempt.durationSeconds)}</span> kullanıldı.
+          {attempt.wrongCount + attempt.blankCount > 0
+            ? " Yanlış ve boş sorular Yanlışlar Defteri'ne eklendi."
+            : ' Hiç yanlışın yok.'}
         </p>
 
         <div className="space-y-4">
           {perPassageResults.map(({ passage, results }) => {
             const correct = results.filter(r => r.isCorrect).length;
             return (
-              <div key={passage.id} className="bg-white border border-hairline/40 rounded-lg">
-                <div className="px-5 py-3 border-b border-hairline/30 flex items-center justify-between">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <span className="text-[10px] font-bold px-2 py-0.5 bg-paper border border-hairline/40 shrink-0 rounded-lg">
+              <div key={passage.id} className="overflow-hidden rounded-2xl border border-hairline bg-paper-2">
+                <div className="flex items-center justify-between gap-3 border-b border-hairline px-5 py-3">
+                  <div className="flex min-w-0 items-baseline gap-2">
+                    <span className="shrink-0 rounded bg-paper-3 px-1.5 py-0.5 text-[11px] text-ink-2">
                       {passage.cefr}
                     </span>
-                    <p className="font-display font-bold text-sm text-ink truncate">{passage.title}</p>
+                    <p className="truncate text-[14px] font-medium text-ink">{passage.title}</p>
                   </div>
-                  <div className="flex items-center gap-3 shrink-0">
-                    <span className="text-xs font-bold text-ink/60">{correct} / {results.length}</span>
+                  <div className="flex shrink-0 items-center gap-3">
+                    <span className="timecode text-ink-2">{correct}/{results.length}</span>
                     <button
+                      type="button"
                       onClick={() => onSelectPassage(passage.id)}
-                      className="flex items-center gap-1 text-xs font-bold text-accent hover:underline"
+                      className="flex items-center gap-1 text-[12px] text-ink-3
+                        transition-colors hover:text-accent cursor-pointer"
                     >
-                      Parçaya Git <ExternalLink className="h-3 w-3" />
+                      Parçaya git <ExternalLink className="h-3 w-3" />
                     </button>
                   </div>
                 </div>
                 {results.some(r => !r.isCorrect) && (
-                  <div className="divide-y divide-hairline/20">
+                  <div className="divide-y divide-hairline">
                     {results.filter(r => !r.isCorrect).map(r => (
                       <div key={r.questionId} className="px-5 py-2.5 flex items-center gap-3 text-xs">
                         <XCircle className="h-3.5 w-3.5 text-rose-500 shrink-0" />
@@ -402,9 +407,10 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
         <div className="flex justify-center pb-6">
           <button
             onClick={resetToSetup}
-            className="flex items-center gap-2 px-6 py-3 text-sm font-bold bg-accent text-white hover:opacity-90 rounded-lg"
+            className="flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-[13px]
+              font-medium text-white transition-colors hover:bg-accent-700 cursor-pointer"
           >
-            <RotateCcw className="h-4 w-4" /> Yeni Sınav Başlat
+            <RotateCcw className="h-4 w-4" /> Yeni sınav başlat
           </button>
         </div>
       </div>

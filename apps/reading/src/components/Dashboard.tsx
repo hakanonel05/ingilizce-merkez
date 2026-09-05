@@ -1,7 +1,29 @@
-import { useState, useMemo } from 'react';
+/**
+ * GÖSTERGE PANELİ — READING
+ *
+ * KARŞILAMA AFİŞİ KALDIRILDI. Ekranın tepesinde dolu menekşe zeminli,
+ * 48px'lik "Tekrar Hoş Geldiniz, Gelişiminizi Keşfedin" başlığı ve içine
+ * gömülü bir seri kartı vardı. Bir pazarlama sayfasının açılışıydı; oysa
+ * burası her gün açılan bir çalışma ekranı ve o afiş her açılışta asıl
+ * sayıları katlamanın altına itiyordu. Seri ve süre zaten üst çubukta.
+ *
+ * ÜÇ SİMETRİK KART BİRLEŞTİ. Okuma / kelime / performans üç ayrı kartta
+ * üç ayrı grafik diliyle anlatılıyordu: dairesel SVG, yığılmış çubuk ve
+ * ikonlu liste. Yan yana üç farklı idiom karşılaştırmayı imkânsız
+ * kılıyor. Şimdi üç sayı tek satırda (kutusuz — büyüklük zaten vurgu),
+ * ayrıntı ise konusuna göre iki kartta.
+ *
+ * CEFR ROZETLERİ NÖTR. Önce A'lar gök mavisi, B'ler kehribar, C'ler mor
+ * idi: paletin dışından üç renk. Seviye zaten harfin kendisinde yazıyor.
+ *
+ * EMOJİ PUANLAR GİTTİ. Başarı "👑 Mükemmel / 👍 İyi / 🆕 Yeni" diye
+ * gösteriliyordu; ölçülen bir yüzdeyi emojiye çevirmek bilgiyi
+ * azaltıyordu.
+ */
+
+import { useState, useMemo, type ReactNode } from "react";
 import { UserProgress, Passage, CEFRLevel } from '../types';
-import { BookOpen, Award, CheckCircle, Zap, TrendingUp, RefreshCw, Star, Clock } from 'lucide-react';
-import { motion } from 'motion/react';
+import { Clock, Star } from 'lucide-react';
 import { PASSAGE_CATALOG } from '../data/passageCatalog';
 
 interface DashboardProps {
@@ -108,320 +130,239 @@ export default function Dashboard({ progress, passages, onSelectPassage, onReset
     return `${hrs} sa ${remMins} dk`;
   };
 
+  /** Kart yüzeyi — gölge yok, 1px çizgi, yumuşak köşe. */
+  const Card = ({ children, className = "" }: { children: ReactNode; className?: string }) => (
+    <section className={`rounded-2xl border border-hairline bg-paper-2 p-5 sm:p-6 ${className}`}>
+      {children}
+    </section>
+  );
+
+  /** Tek bir büyük sayı. Kutu ve ikon yok: büyüklüğün kendisi vurgu. */
+  const Stat = ({ label, value, sub }: { label: string; value: string; sub: string }) => (
+    <div className="min-w-0 flex-1 px-5 py-4 first:pl-0 last:pr-0">
+      <span className="eyebrow">{label}</span>
+      <p className="timecode mt-1.5 text-[26px] font-semibold leading-none text-ink">{value}</p>
+      <p className="mt-1 truncate text-[12px] text-ink-3">{sub}</p>
+    </div>
+  );
+
+  const testSayisi = Object.keys(progress.scores).length;
+
   return (
-    <div id="dashboard-container" className="space-y-8">
-      {/* Welcome Banner */}
-      <div id="welcome-banner" className="relative bg-accent p-10 text-white border border-hairline overflow-hidden rounded-2xl">
-        {/* Buradaki dev "L" filigrani KALDIRILDI. Editoryal dilin bir
-            parcasiydi: Playfair'in serif harf bicimi kose susu olarak
-            calisiyordu. Inter'e gecince duz bir sans "L"ye dondu ve
-            overflow-hidden onu kestigi icin ekranda anlamsiz bir
-            dikdortgen gibi duruyordu. Katmanlida da boyle bir sus yok. */}
+    <div id="dashboard-container" className="space-y-5">
 
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-8">
-          <div className="space-y-3 max-w-2xl">
-            <span className="inline-flex items-center gap-1.5 border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-bold tracking-widest uppercase rounded-lg">
-              <Award className="h-3.5 w-3.5" /> AKILLI ÖĞRENME PLATFORMU
-            </span>
-            <h1 className="text-3xl font-display font-bold tracking-tight md:text-5xl leading-tight">
-              Tekrar Hoş Geldiniz, <br /><span className="font-normal text-white/90">Gelişiminizi Keşfedin.</span>
-            </h1>
-            <p className="text-white/90 text-sm md:text-base leading-relaxed font-display">
-              "100 Reading Passages" kitabındaki zengin okuma parçalarını seviye seviye okuyun, kelimeleri pratik ederek hafızanıza kazıyın. İlerlemenizi buradan takip edebilirsiniz.
-            </p>
-          </div>
-          
-          {/* Daily Streak Card */}
-          <div className="flex items-center gap-4 bg-white/5 border border-white/15 p-5 backdrop-blur-md self-start md:self-auto min-w-[220px] rounded-xl">
-            <div className="flex h-12 w-12 items-center justify-center bg-amber-400/15 text-amber-300 border border-amber-300/30 rounded-lg">
-              <Zap className="h-7 w-7 fill-amber-400" />
-            </div>
-            <div>
-              <p className="text-[10px] text-white/90 font-bold tracking-widest uppercase">GÜNLÜK SERİ</p>
-              <p className="text-3xl font-display font-bold text-amber-300">{progress.dailyStreak} Gün</p>
-            </div>
-          </div>
-        </div>
+      <div className="mb-1 flex items-baseline justify-between gap-3">
+        <h1 className="text-[22px] font-semibold tracking-tight text-brand">Gösterge Paneli</h1>
+        <span className="text-[12px] text-ink-3">
+          toplam <span className="timecode text-ink">{formatTime(progress.totalTimeSpent)}</span> çalışma
+        </span>
       </div>
 
-      {/* Main Stats Grid */}
-      <div id="main-stats-grid" className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
-        {/* Passages Completion Card */}
-        <div className="bg-white border border-hairline/40 p-8 flex flex-col justify-between shadow-xs rounded-xl">
-          <div className="flex items-start justify-between">
-            <div className="space-y-1.5">
-              <h3 className="text-[10px] font-bold text-ink-3 uppercase tracking-widest">OKUMA PARÇALARI</h3>
-              <p className="text-xl font-display font-bold text-ink">{completedPassagesCount} / {totalPassages} Tamamlandı</p>
-            </div>
-            <div className="flex h-10 w-10 items-center justify-center bg-paper text-ink border border-hairline/40 rounded-lg">
-              <BookOpen className="h-4.5 w-4.5" />
-            </div>
-          </div>
-          
-          {/* SVG Circular Progress */}
-          <div className="my-8 flex justify-center">
-            <div className="relative h-28 w-28">
-              <svg className="h-full w-full" viewBox="0 0 36 36">
-                <circle
-                  className="text-paper"
-                  strokeWidth="2.5"
-                  stroke="currentColor"
-                  fill="none"
-                  cx="18"
-                  cy="18"
-                  r="15.9155"
-                />
-                <circle
-                  className="text-accent transition-all duration-1000 ease-out"
-                  strokeDasharray={`${completedPercent}, 100`}
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  stroke="currentColor"
-                  fill="none"
-                  cx="18"
-                  cy="18"
-                  r="15.9155"
-                  transform="rotate(-90 18 18)"
-                />
-              </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-2xl font-display font-bold text-ink">{completedPercent}%</span>
-                <span className="text-[9px] text-ink-3 font-bold tracking-widest uppercase">BAŞARI</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-2.5">
-            <div className="flex justify-between text-xs text-ink/60">
-              <span className="font-medium">Kalan Parça Sayısı:</span>
-              <span className="font-bold font-mono">{totalPassages - completedPassagesCount}</span>
-            </div>
-            <div className="h-1 bg-paper overflow-hidden">
-              <div className="h-full bg-accent transition-all duration-500" style={{ width: `${completedPercent}%` }} />
-            </div>
-          </div>
+      {/* ÜÇ SAYI — tek satır, aralarında yalnızca çizgi */}
+      <section className="rounded-2xl border border-hairline bg-paper-2">
+        <div className="flex flex-col divide-y divide-hairline px-5 sm:flex-row sm:divide-x sm:divide-y-0">
+          <Stat
+            label="Okuma Parçaları"
+            value={`${completedPassagesCount}/${totalPassages}`}
+            sub={`%${completedPercent} tamamlandı`}
+          />
+          <Stat
+            label="Kelime"
+            value={`${wordsStatusStats.learned}/${totalWordsCount}`}
+            sub={`%${learnedPercent} öğrenildi`}
+          />
+          <Stat
+            label="Test Doğruluğu"
+            value={testSayisi > 0 ? `%${avgAccuracy}` : '—'}
+            sub={testSayisi > 0 ? `${testSayisi} testin ortalaması` : 'henüz test çözülmedi'}
+          />
         </div>
+      </section>
 
-        {/* Vocabulary Mastery Card */}
-        <div className="bg-white border border-hairline/40 p-8 flex flex-col justify-between shadow-xs rounded-xl">
-          <div className="flex items-start justify-between">
-            <div className="space-y-1.5">
-              <h3 className="text-[10px] font-bold text-ink-3 uppercase tracking-widest">KELİME DAĞARCIĞI</h3>
-              <p className="text-xl font-display font-bold text-ink">{wordsStatusStats.learned} / {totalWordsCount} Öğrenildi</p>
-            </div>
-            <div className="flex h-10 w-10 items-center justify-center bg-paper text-ink border border-hairline/40 rounded-lg">
-              <CheckCircle className="h-4.5 w-4.5" />
-            </div>
+      <div className="grid gap-5 lg:grid-cols-2">
+
+        {/* OKUMA — genel ilerleme ve seviye dağılımı AYNI konu, tek kart */}
+        <Card>
+          <h2 className="text-[15px] font-semibold text-ink">Okuma ilerlemesi</h2>
+
+          <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-paper-3">
+            <div
+              className="h-full rounded-full bg-accent transition-all duration-700"
+              style={{ width: `${completedPercent}%` }}
+            />
           </div>
-
-          {/* Stacked Progress Bar */}
-          <div className="my-8 space-y-4">
-            <div className="space-y-2">
-              <div className="flex justify-between text-[11px] font-bold tracking-tight">
-                <span className="text-emerald-700 flex items-center gap-1">Öğrenildi: {wordsStatusStats.learned} ({learnedPercent}%)</span>
-                <span className="text-amber-700 flex items-center gap-1">Çalışılıyor: {wordsStatusStats.studied} ({studiedPercent}%)</span>
-              </div>
-              <div className="flex h-2.5 w-full overflow-hidden bg-paper">
-                <div className="bg-emerald-600 transition-all duration-500" style={{ width: `${learnedPercent}%` }} title="Öğrenildi" />
-                <div className="bg-amber-500 transition-all duration-500" style={{ width: `${studiedPercent}%` }} title="Çalışılıyor" />
-                <div className="bg-ink/10 transition-all duration-500" style={{ width: `${unstudiedPercent}%` }} title="Çalışılmadı" />
-              </div>
-            </div>
-            <p className="text-[11px] text-ink-3 text-center font-display">
-              Okuma parçalarını çözdükçe ve kelime kartlarıyla çalıştıkça bu oranlar güncellenir.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-3 gap-2 text-center text-xs border-t border-hairline/20 pt-4">
-            <div>
-              <p className="text-ink-3 font-bold tracking-wider text-[10px] uppercase">Öğrenilen</p>
-              <p className="text-base font-display font-bold text-emerald-600 mt-0.5">{wordsStatusStats.learned}</p>
-            </div>
-            <div>
-              <p className="text-ink-3 font-bold tracking-wider text-[10px] uppercase">Çalışılan</p>
-              <p className="text-base font-display font-bold text-amber-500 mt-0.5">{wordsStatusStats.studied}</p>
-            </div>
-            <div>
-              <p className="text-ink-3 font-bold tracking-wider text-[10px] uppercase">Kalan</p>
-              <p className="text-base font-display font-bold text-ink/60 mt-0.5">{wordsStatusStats.unstudied}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Performance Metrics Card */}
-        <div className="bg-white border border-hairline/40 p-8 flex flex-col justify-between shadow-xs rounded-xl">
-          <div className="flex items-start justify-between">
-            <div className="space-y-1.5">
-              <h3 className="text-[10px] font-bold text-ink-3 uppercase tracking-widest">PERFORMANS VE SÜRE</h3>
-              <p className="text-xl font-display font-bold text-ink">Doğruluk: {avgAccuracy}%</p>
-            </div>
-            <div className="flex h-10 w-10 items-center justify-center bg-paper text-ink border border-hairline/40 rounded-lg">
-              <TrendingUp className="h-4.5 w-4.5" />
-            </div>
-          </div>
-
-          {/* Sub metrics list */}
-          <div className="my-6 space-y-3">
-            <div className="flex items-center justify-between border-b border-hairline/20 pb-2.5">
-              <div className="flex items-center gap-2 text-ink/70">
-                <Clock className="h-4 w-4 opacity-60" />
-                <span className="text-xs font-semibold">Toplam Süre</span>
-              </div>
-              <span className="text-xs font-bold font-mono">{formatTime(progress.totalTimeSpent)}</span>
-            </div>
-
-            <div className="flex items-center justify-between border-b border-hairline/20 pb-2.5">
-              <div className="flex items-center gap-2 text-ink/70">
-                <Star className="h-4 w-4 text-amber-500 fill-amber-400" />
-                <span className="text-xs font-semibold">Favori Parçalarım</span>
-              </div>
-              <span className="text-xs font-bold font-mono">{progress.favoritePassages.length} Adet</span>
-            </div>
-
-            <div className="flex items-center justify-between pb-1">
-              <div className="flex items-center gap-2 text-ink/70">
-                <Award className="h-4 w-4 text-emerald-600" />
-                <span className="text-xs font-semibold">Başarı Puanı</span>
-              </div>
-              <span className="text-xs font-bold font-display">
-                {avgAccuracy >= 85 ? '👑 Mükemmel' : avgAccuracy >= 60 ? '👍 İyi' : progress.completedPassages.length === 0 ? '🆕 Yeni' : '✍️ Geliştirilmeli'}
-              </span>
-            </div>
-          </div>
-
-          <p className="text-[11px] text-ink-3 text-center font-display border-t border-hairline/20 pt-3">
-            Puanlar tamamladığınız testlerin doğruluk derecelerine göre ölçülür.
+          <p className="mt-2 text-[12px] text-ink-3">
+            {totalPassages - completedPassagesCount} parça kaldı
           </p>
-        </div>
 
-      </div>
-
-      {/* CEFR Level Breakdown & Kelime Tekrar Arena */}
-      <div id="secondary-stats-grid" className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        
-        {/* CEFR Seviye Dağılımı */}
-        <div className="bg-white border border-hairline/40 p-8 shadow-xs rounded-xl">
-          <h3 className="text-xl font-display font-bold text-ink mb-6 flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-accent" /> CEFR Seviye İlerlemesi
-          </h3>
-          <div className="space-y-5">
+          <div className="mt-6 space-y-4">
             {(Object.keys(cefrCompleted) as CEFRLevel[]).map(level => {
               const { completed, total } = cefrCompleted[level];
               const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
-              
-              // Custom styled editorial colors matching template
-              let cefrBadgeStyle = '';
-              let fillStyle = 'bg-accent';
-              if (level.startsWith('A')) {
-                cefrBadgeStyle = 'bg-sky-50 text-sky-700';
-              } else if (level.startsWith('B')) {
-                cefrBadgeStyle = 'bg-amber-50 text-amber-800';
-              } else {
-                cefrBadgeStyle = 'bg-violet-50 text-violet-800';
-              }
+              const adi =
+                level === 'A1' ? 'Başlangıç' :
+                level === 'A2' ? 'Temel' :
+                level === 'B1' ? 'Orta' :
+                level === 'B2' ? 'Üst orta' : 'İleri';
 
               return (
-                <div key={level} className="space-y-2">
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="font-bold text-ink flex items-center gap-2.5">
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider font-sans ${cefrBadgeStyle}`}>
+                <div key={level}>
+                  <div className="flex items-baseline justify-between gap-2 text-[12px]">
+                    <span className="flex min-w-0 items-baseline gap-2">
+                      <span className="rounded bg-paper-3 px-1.5 py-0.5 text-[11px] font-medium text-ink-2">
                         {level}
-                      </span> 
-                      <span className="font-display">
-                        {level === 'A1' ? 'Başlangıç (Beginner)' :
-                         level === 'A2' ? 'Temel (Elementary)' :
-                         level === 'B1' ? 'Orta (Intermediate)' :
-                         level === 'B2' ? 'Üst Orta (Upper-Int)' : 'İleri Seviye (Advanced)'}
                       </span>
+                      <span className="truncate text-ink-2">{adi}</span>
                     </span>
-                    <span className="text-ink-3 font-bold font-mono">{completed} / {total} ({percent}%)</span>
+                    <span className="timecode shrink-0 text-ink-3">
+                      {completed}/{total}
+                    </span>
                   </div>
-                  <div className="h-1 bg-paper overflow-hidden">
-                    <div className={`h-full ${fillStyle} transition-all duration-500`} style={{ width: `${percent}%` }} />
+                  <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-paper-3">
+                    <div
+                      className="h-full rounded-full bg-accent transition-all duration-500"
+                      style={{ width: `${percent}%` }}
+                    />
                   </div>
                 </div>
               );
             })}
           </div>
-        </div>
+        </Card>
 
-        {/* Quick Vocabulary Review Card */}
-        <div className="bg-white border border-hairline/40 p-8 shadow-xs flex flex-col justify-between rounded-xl">
-          <div>
-            <h3 className="text-xl font-display font-bold text-ink mb-2 flex items-center gap-2">
-              <RefreshCw className="h-5 w-5 text-amber-500" /> Hızlı Kelime Tekrarı
-            </h3>
-            <p className="text-xs text-ink-3 mb-6 leading-relaxed font-display">
-              "Çalışılıyor" olarak işaretlediğiniz ama henüz tam "Öğrenilmedi" durumundaki kelimelerinizi hızlıca gözden geçirin:
-            </p>
+        {/* KELİME */}
+        <Card>
+          <h2 className="text-[15px] font-semibold text-ink">Kelime dağarcığı</h2>
+          <p className="mt-1 text-[12px] text-ink-3">
+            Parçaları çözdükçe ve kartlarla çalıştıkça güncellenir.
+          </p>
 
-            {wordsToReview.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {wordsToReview.map(w => (
-                  <div 
-                    key={w.term} 
-                    onClick={() => onSelectPassage(w.passageId)}
-                    className="group border border-hairline/30 bg-paper p-4 hover:border-accent transition-all duration-300 cursor-pointer flex flex-col justify-between rounded-xl"
-                  >
-                    <div>
-                      <div className="flex justify-between items-center mb-1.5">
-                        <span className="font-display font-bold text-sm text-ink group-hover:text-accent transition-colors">{w.term}</span>
-                        <span className="text-[9px] bg-white border border-hairline/30 text-ink/60 font-bold px-1.5 py-0.5 rounded-xs font-mono uppercase">{w.partOfSpeech}</span>
-                      </div>
-                      <p className="text-xs text-ink/70 line-clamp-2 leading-relaxed">{w.meaning}</p>
-                    </div>
-                    <span className="text-[9px] text-ink-3 block mt-3 truncate group-hover:text-ink/60 transition-colors">Parça: <span className="font-display font-semibold">{w.passageTitle}</span></span>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center p-10 bg-paper border border-hairline/10 text-center space-y-2 rounded-2xl">
-                <Award className="h-10 w-10 text-ink/20" />
-                <p className="text-xs text-ink font-semibold">Hızlı tekrar listesi boş.</p>
-                <p className="text-[11px] text-ink-3 max-w-xs mt-1 leading-relaxed font-display">
-                  Çalıştığınız parçalardaki kelimeleri 'Çalıştım' olarak işaretlerseniz, burada hızlı tekrar kartları belirir.
-                </p>
-              </div>
-            )}
+          {/* Üç durumun tek şeridi. Renk burada VERİ: öğrenildi ile
+              çalışılıyor birbirinden ayrılmak zorunda. */}
+          <div className="mt-5 flex h-2 w-full overflow-hidden rounded-full bg-paper-3">
+            <div className="bg-emerald-600 transition-all duration-500" style={{ width: `${learnedPercent}%` }} title="Öğrenildi" />
+            <div className="bg-amber-500 transition-all duration-500" style={{ width: `${studiedPercent}%` }} title="Çalışılıyor" />
           </div>
 
-          <div className="mt-8 border-t border-hairline/20 pt-5 flex justify-between items-center text-xs text-ink-3">
-            <span className="font-display">Veriler yerel tarayıcı hafızasında saklanır.</span>
-            <button
-              onClick={() => setShowConfirmReset(true)}
-              className="text-red-600 hover:text-red-800 font-bold tracking-wider uppercase text-[10px] hover:underline"
-            >
-              İlerlemeyi Sıfırla
-            </button>
-          </div>
-        </div>
+          <dl className="mt-5 space-y-2.5">
+            {([
+              ['Öğrenildi', wordsStatusStats.learned, 'bg-emerald-600'],
+              ['Çalışılıyor', wordsStatusStats.studied, 'bg-amber-500'],
+              ['Henüz görülmedi', wordsStatusStats.unstudied, 'bg-paper-3'],
+            ] as [string, number, string][]).map(([label, count, dot]) => (
+              <div key={label} className="flex items-center justify-between text-[13px]">
+                <dt className="flex items-center gap-2 text-ink-2">
+                  <span className={`inline-block h-2 w-2 shrink-0 rounded-full ${dot}`} />
+                  {label}
+                </dt>
+                <dd className="timecode font-medium text-ink">{count}</dd>
+              </div>
+            ))}
+          </dl>
 
+          <div className="mt-5 space-y-2.5 border-t border-hairline pt-4 text-[13px]">
+            <div className="flex items-center justify-between">
+              <span className="flex items-center gap-2 text-ink-2">
+                <Clock className="h-4 w-4 text-ink-3" />
+                Toplam süre
+              </span>
+              <span className="timecode text-ink">{formatTime(progress.totalTimeSpent)}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="flex items-center gap-2 text-ink-2">
+                <Star className="h-4 w-4 text-ink-3" />
+                Favori parçalar
+              </span>
+              <span className="timecode text-ink">{progress.favoritePassages.length}</span>
+            </div>
+          </div>
+        </Card>
       </div>
 
-      {/* Confirm Reset Progress Dialog */}
+      {/* HIZLI TEKRAR */}
+      <Card>
+        <h2 className="text-[15px] font-semibold text-ink">Hızlı tekrar</h2>
+        <p className="mt-1 max-w-[62ch] text-[12px] leading-relaxed text-ink-3">
+          Çalışılıyor olarak işaretlediğin ama henüz öğrenilmemiş kelimeler.
+        </p>
+
+        {wordsToReview.length > 0 ? (
+          <ul className="mt-4 divide-y divide-hairline border-t border-hairline">
+            {wordsToReview.map(w => (
+              <li key={w.term}>
+                <button
+                  type="button"
+                  onClick={() => onSelectPassage(w.passageId)}
+                  className="group flex w-full items-baseline gap-3 py-3 text-left
+                    transition-colors hover:bg-paper-3 cursor-pointer"
+                >
+                  <span className="w-40 shrink-0 truncate text-[14px] font-medium text-ink
+                    transition-colors group-hover:text-accent">
+                    {w.term}
+                  </span>
+                  <span className="min-w-0 flex-1 truncate text-[13px] text-ink-2">
+                    {w.meaning}
+                  </span>
+                  <span className="hidden shrink-0 text-[11px] text-ink-3 sm:block">
+                    {w.passageTitle}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mt-3 max-w-[62ch] text-[13px] leading-relaxed text-ink-2">
+            Liste boş. Bir parçadaki kelimeyi Çalıştım olarak işaretlediğinde
+            burada tekrar için belirir.
+          </p>
+        )}
+      </Card>
+
+      {/* Veri notu ve sıfırlama — sayfanın en sonunda, sessiz */}
+      <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-[12px] text-ink-3">
+        <span>Veriler bu tarayıcıda saklanıyor.</span>
+        <button
+          type="button"
+          onClick={() => setShowConfirmReset(true)}
+          className="text-rose-700 transition-colors hover:text-rose-800 hover:underline cursor-pointer"
+        >
+          İlerlemeyi sıfırla
+        </button>
+      </div>
+
+      {/* Sıfırlama onayı */}
       {showConfirmReset && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-accent/30 backdrop-blur-xs p-4">
-          <div className="w-full max-w-md bg-white p-8 border border-accent shadow-xl space-y-5 rounded-xl">
-            <h4 className="text-xl font-display font-bold text-ink">İlerlemeyi Sıfırla?</h4>
-            <p className="text-xs text-ink/70 leading-relaxed font-display">
-              Uygulamadaki tüm tamamlanan okuma parçaları, test skorları ve öğrenilen kelime istatistikleriniz sıfırlanacaktır. Bu işlem geri alınamaz. Emin misiniz?
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setShowConfirmReset(false)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-md rounded-2xl border border-hairline bg-paper-2 p-6"
+          >
+            <h3 className="text-[17px] font-semibold text-ink">İlerlemeyi sıfırla?</h3>
+            <p className="mt-2 text-[13px] leading-relaxed text-ink-2">
+              Tamamlanan parçalar, test sonuçları ve kelime durumların silinecek.
+              Bu işlem geri alınamaz.
             </p>
-            <div className="flex justify-end gap-3 pt-2">
+            <div className="mt-6 flex justify-end gap-2">
               <button
+                type="button"
                 onClick={() => setShowConfirmReset(false)}
-                className="border border-hairline/40 hover:bg-paper px-4 py-2 text-xs font-bold text-ink transition-colors cursor-pointer rounded-lg"
+                className="rounded-xl border border-hairline px-4 py-2 text-[13px] font-medium
+                  text-ink-2 transition-colors hover:bg-paper-3 hover:text-ink cursor-pointer"
               >
                 Vazgeç
               </button>
               <button
-                onClick={() => {
-                  onResetProgress();
-                  setShowConfirmReset(false);
-                }}
-                className="bg-red-600 hover:bg-red-700 px-4 py-2 text-xs font-bold text-white transition-colors cursor-pointer rounded-lg"
+                type="button"
+                onClick={() => { onResetProgress(); setShowConfirmReset(false); }}
+                className="rounded-xl bg-rose-600 px-4 py-2 text-[13px] font-medium text-white
+                  transition-colors hover:bg-rose-700 cursor-pointer"
               >
-                Evet, Sıfırla
+                Evet, sıfırla
               </button>
             </div>
           </div>
@@ -430,4 +371,3 @@ export default function Dashboard({ progress, passages, onSelectPassage, onReset
     </div>
   );
 }
-
