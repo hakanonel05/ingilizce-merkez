@@ -331,8 +331,8 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
                     className={`rounded px-3 py-1.5 text-[12px] transition-colors cursor-pointer ${
                       cardStatus === id
                         ? id === 'studied'
-                          ? 'bg-amber-500 font-medium text-white'
-                          : 'bg-emerald-600 font-medium text-white'
+                          ? 'bg-marker-bg font-medium text-marker-ink ring-1 ring-marker'
+                          : 'bg-ok-soft font-medium text-ok ring-1 ring-ok-line'
                         : 'text-ink-3 hover:text-ink'
                     }`}
                   >
@@ -398,8 +398,8 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
                     if (isSelected && !testSubmitted) {
                       style = 'border-accent bg-accent-soft text-ink';
                     } else if (testSubmitted) {
-                      if (isCorrectOption) style = 'border-emerald-500 bg-emerald-50 text-emerald-900';
-                      else if (isSelected) style = 'border-rose-400 bg-rose-50 text-rose-900';
+                      if (isCorrectOption) style = 'border-ok bg-ok-soft text-ok';
+                      else if (isSelected) style = 'border-danger bg-danger-soft text-danger';
                       else style = 'border-hairline text-ink-3';
                     }
 
@@ -415,7 +415,7 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
                       >
                         <span>{option}</span>
                         {testSubmitted && isCorrectOption && (
-                          <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
+                          <CheckCircle2 className="h-4 w-4 shrink-0 text-ok" />
                         )}
                       </button>
                     );

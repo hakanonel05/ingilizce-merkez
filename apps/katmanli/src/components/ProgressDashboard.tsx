@@ -157,7 +157,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({ progress }
                 title={`${m.at} video — ${m.label}`}
                 className={`absolute top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2
                   rounded-full border-2 border-paper-2 ${
-                    done >= m.at ? 'bg-emerald-500' : 'bg-hairline-2'
+                    done >= m.at ? 'bg-ok' : 'bg-hairline-2'
                   }`}
                 style={{ left: `${Math.min(100, (m.at / goal) * 100)}%` }}
               />

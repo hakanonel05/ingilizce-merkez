@@ -50,7 +50,7 @@ export const NextLayerBar: React.FC<Props> = ({
                 i + 1 === step
                   ? 'w-5 bg-accent'
                   : i + 1 < step
-                    ? 'w-1.5 bg-emerald-500'
+                    ? 'w-1.5 bg-ok'
                     : 'w-1.5 bg-hairline'
               }`}
             />
@@ -63,7 +63,7 @@ export const NextLayerBar: React.FC<Props> = ({
 
       {isCompleted ? (
         <div className="flex items-center gap-3">
-          <span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-emerald-700">
+          <span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-ok">
             <CircleCheck className="h-4 w-4" />
             Bu katman tamamlandı
           </span>

@@ -131,8 +131,8 @@ export default function MistakesNotebook({ mistakes, onReviewMistake, onRemoveMi
               const isRight = optLetter === currentItem.correctAnswer;
               let cls = 'border-hairline text-ink hover:bg-paper-3';
               if (practiceChecked) {
-                if (isRight) cls = 'border-emerald-500 bg-emerald-50 text-emerald-900';
-                else if (isSelected) cls = 'border-rose-400 bg-rose-50 text-rose-900';
+                if (isRight) cls = 'border-ok bg-ok-soft text-ok';
+                else if (isSelected) cls = 'border-danger bg-danger-soft text-danger';
                 else cls = 'border-hairline text-ink-3';
               } else if (isSelected) {
                 cls = 'border-accent bg-accent-soft text-ink';
@@ -147,8 +147,8 @@ export default function MistakesNotebook({ mistakes, onReviewMistake, onRemoveMi
                     disabled:cursor-default cursor-pointer ${cls}`}
                 >
                   <span>{option}</span>
-                  {practiceChecked && isRight && <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 ml-2" />}
-                  {practiceChecked && isSelected && !isRight && <XCircle className="h-4 w-4 text-rose-500 shrink-0 ml-2" />}
+                  {practiceChecked && isRight && <CheckCircle2 className="h-4 w-4 text-ok shrink-0 ml-2" />}
+                  {practiceChecked && isSelected && !isRight && <XCircle className="h-4 w-4 text-danger shrink-0 ml-2" />}
                 </button>
               );
             })}
@@ -167,7 +167,7 @@ export default function MistakesNotebook({ mistakes, onReviewMistake, onRemoveMi
               </button>
             ) : (
               <>
-                <span className={`text-[13px] ${isCorrect ? 'text-emerald-700' : 'text-rose-700'}`}>
+                <span className={`text-[13px] ${isCorrect ? 'text-ok' : 'text-danger'}`}>
                   {isCorrect ? 'Doğru — defterden çıkarıldı.' : 'Yanlış — tekrar karşına çıkacak.'}
                 </span>
                 <button
@@ -271,7 +271,7 @@ export default function MistakesNotebook({ mistakes, onReviewMistake, onRemoveMi
                     onClick={() => onRemoveMistake(item.key)}
                     title="Artık biliyorum, listeden çıkar"
                     className="row-actions shrink-0 rounded-lg p-1.5 text-ink-3 opacity-0
-                      transition-all hover:bg-paper-2 hover:text-rose-600
+                      transition-all hover:bg-paper-2 hover:text-danger
                       focus:opacity-100 group-hover:opacity-100 cursor-pointer"
                   >
                     <Trash2 className="h-4 w-4" />

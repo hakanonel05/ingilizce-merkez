@@ -204,7 +204,7 @@ export default function PassageList({ passages, progress, onSelectPassage, onTog
 
                       {/* Durum. Varsayilan hal etiketlenmiyor. */}
                       {isCompleted ? (
-                        <span className="flex shrink-0 items-center gap-1 text-[11px] text-emerald-700">
+                        <span className="flex shrink-0 items-center gap-1 text-[11px] text-ok">
                           <Check className="h-3.5 w-3.5" strokeWidth={3} />
                           okundu
                         </span>
@@ -274,7 +274,7 @@ export default function PassageList({ passages, progress, onSelectPassage, onTog
                     className={`row-actions shrink-0 rounded-lg p-1.5 transition-all cursor-pointer
                       hover:bg-paper-2 ${
                         isFavorite
-                          ? 'text-amber-500 opacity-100'
+                          ? 'text-marker opacity-100'
                           : 'text-ink-3 opacity-0 focus:opacity-100 group-hover:opacity-100'
                       }`}
                   >

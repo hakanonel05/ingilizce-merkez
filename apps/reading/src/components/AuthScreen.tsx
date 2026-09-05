@@ -46,7 +46,7 @@ export default function AuthScreen({ onContinueOffline }: { onContinueOffline: (
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {error && <div className="p-3 bg-rose-50 text-rose-700 text-sm border border-rose-200 rounded-lg">{error}</div>}
+          {error && <div className="p-3 bg-danger-soft text-danger text-sm border border-danger-line rounded-lg">{error}</div>}
           
           <div>
             <label className="block text-sm font-medium text-ink mb-1">E-posta</label>

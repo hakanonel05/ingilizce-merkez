@@ -168,7 +168,7 @@ export const LayerSidebar: React.FC<Props> = ({
         </span>
 
         {isDone && !isActive && (
-          <Check className="h-3.5 w-3.5 shrink-0 text-emerald-600" strokeWidth={3} />
+          <Check className="h-3.5 w-3.5 shrink-0 text-ok" strokeWidth={3} />
         )}
       </button>
     );
@@ -240,7 +240,7 @@ export const LayerSidebar: React.FC<Props> = ({
           {/* İlerleme: yedi adımın kaçı bitti */}
           <div className="mx-3 mb-2 h-1 overflow-hidden rounded-full bg-paper-3">
             <div
-              className="h-full rounded-full bg-emerald-500 transition-all duration-500 ease-out"
+              className="h-full rounded-full bg-ok transition-all duration-500 ease-out"
               style={{ width: `${(doneCount / CORE_LAYERS.length) * 100}%` }}
             />
           </div>

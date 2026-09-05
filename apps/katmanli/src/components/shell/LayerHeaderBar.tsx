@@ -43,8 +43,8 @@ export const LayerHeaderBar: React.FC<Props> = ({
           )}
           {isCompleted && (
             <span
-              className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-1.5 py-0.5
-                text-[10px] font-semibold text-emerald-700"
+              className="inline-flex items-center gap-1 rounded-md bg-ok-soft px-1.5 py-0.5
+                text-[10px] font-semibold text-ok"
             >
               <Check className="h-3 w-3" strokeWidth={3} />
               Tamamlandı

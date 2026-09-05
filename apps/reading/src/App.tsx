@@ -923,7 +923,7 @@ export default function App() {
               Bağlantı ya da API yetkilendirmesi başarısız oldu.
             </p>
 
-            <p className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-[12px] leading-relaxed text-rose-800">
+            <p className="rounded-xl border border-danger-line bg-danger-soft p-3 text-[12px] leading-relaxed text-danger">
               {generationError}
             </p>
 

@@ -96,7 +96,7 @@ export default function StoryLibrary({
                           {story.title}
                         </h3>
                         {isRead && (
-                          <span className="flex shrink-0 items-center gap-1 text-[11px] text-emerald-700">
+                          <span className="flex shrink-0 items-center gap-1 text-[11px] text-ok">
                             <CheckCircle2 className="h-3.5 w-3.5" /> okundu
                           </span>
                         )}
@@ -146,8 +146,8 @@ export default function StoryLibrary({
                           <button
                             type="button"
                             onClick={() => { onDeleteStory(story.id); setConfirmingDelete(null); }}
-                            className="rounded-lg bg-rose-600 px-2 py-1 font-medium text-white
-                              transition-colors hover:bg-rose-700 cursor-pointer"
+                            className="rounded-lg bg-danger px-2 py-1 font-medium text-white
+                              transition-colors hover:bg-danger-strong cursor-pointer"
                           >
                             Evet
                           </button>
@@ -167,7 +167,7 @@ export default function StoryLibrary({
                           title="Hikayeyi sil"
                           aria-label="Hikayeyi sil"
                           className="row-actions rounded-lg p-1.5 text-ink-3 opacity-0
-                            transition-all hover:bg-paper-2 hover:text-rose-600
+                            transition-all hover:bg-paper-2 hover:text-danger
                             focus:opacity-100 group-hover:opacity-100 cursor-pointer"
                         >
                           <Trash2 className="h-3.5 w-3.5" />

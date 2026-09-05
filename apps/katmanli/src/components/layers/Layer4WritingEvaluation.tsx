@@ -108,7 +108,7 @@ export const Layer4WritingEvaluation: React.FC<Layer4WritingEvaluationProps> = (
           </div>
 
           {errorMsg && (
-            <p className="flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 p-3 text-[12px] text-rose-800">
+            <p className="flex items-center gap-2 rounded-xl border border-danger-line bg-danger-soft p-3 text-[12px] text-danger">
               <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{errorMsg}</span>
             </p>
@@ -173,10 +173,10 @@ export const Layer4WritingEvaluation: React.FC<Layer4WritingEvaluationProps> = (
               <ul className="mt-3 divide-y divide-hairline border-t border-hairline">
                 {evaluationResult.grammarCorrections.map((corr, idx) => (
                   <li key={idx} className="py-3.5">
-                    <p className="text-[13px] leading-relaxed text-rose-800 line-through decoration-rose-300">
+                    <p className="text-[13px] leading-relaxed text-danger line-through decoration-danger-line">
                       {corr.original}
                     </p>
-                    <p className="mt-1 text-[13px] leading-relaxed text-emerald-800">
+                    <p className="mt-1 text-[13px] leading-relaxed text-ok">
                       {corr.corrected}
                     </p>
                     <p className="mt-1.5 max-w-[68ch] text-[12px] leading-relaxed text-ink-3">

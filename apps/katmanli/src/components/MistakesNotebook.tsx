@@ -55,7 +55,7 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
                   onClearMistakes();
                 }
               }}
-              className="flex items-center space-x-1.5 px-3.5 py-2 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 text-xs font-semibold rounded-lg transition cursor-pointer shrink-0"
+              className="flex items-center space-x-1.5 px-3.5 py-2 bg-danger-soft hover:bg-danger-soft border border-danger-line text-danger text-xs font-semibold rounded-lg transition cursor-pointer shrink-0"
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span>Defteri Temizle</span>
@@ -125,26 +125,26 @@ export const MistakesNotebook: React.FC<MistakesNotebookProps> = ({
                   <button
                     onClick={() => onRemoveMistake(mistake.id)}
                     title="Kaydı sil"
-                    className="p-1.5 text-hairline-2 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition cursor-pointer shrink-0"
+                    className="p-1.5 text-hairline-2 hover:text-danger hover:bg-danger-soft rounded-lg transition cursor-pointer shrink-0"
                   >
                     <X className="w-4 h-4" />
                   </button>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  <div className="bg-rose-50 border border-rose-200 rounded-lg p-3 text-xs space-y-1">
-                    <div className="flex items-center space-x-1.5 font-semibold text-rose-700">
+                  <div className="bg-danger-soft border border-danger-line rounded-lg p-3 text-xs space-y-1">
+                    <div className="flex items-center space-x-1.5 font-semibold text-danger">
                       <XCircle className="w-3.5 h-3.5" />
                       <span>Senin Cevabın</span>
                     </div>
-                    <p className="text-rose-900">{mistake.userAnswer}</p>
+                    <p className="text-danger">{mistake.userAnswer}</p>
                   </div>
-                  <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3 text-xs space-y-1">
-                    <div className="flex items-center space-x-1.5 font-semibold text-emerald-700">
+                  <div className="bg-ok-soft border border-ok-line rounded-lg p-3 text-xs space-y-1">
+                    <div className="flex items-center space-x-1.5 font-semibold text-ok">
                       <CheckCircle2 className="w-3.5 h-3.5" />
                       <span>Doğru Cevap</span>
                     </div>
-                    <p className="text-emerald-900">{mistake.correctAnswer}</p>
+                    <p className="text-ok">{mistake.correctAnswer}</p>
                   </div>
                 </div>
 

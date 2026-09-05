@@ -241,7 +241,7 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
           <div className="h-1.5 w-full overflow-hidden rounded-full bg-paper-2">
             <div
               className={`h-full rounded-full transition-all duration-500 ${
-                repCount >= REP_MINIMUM ? 'bg-emerald-500' : 'bg-accent'
+                repCount >= REP_MINIMUM ? 'bg-ok' : 'bg-accent'
               }`}
               style={{ width: `${Math.min(100, (repCount / REP_TARGET) * 100)}%` }}
             />
@@ -281,7 +281,7 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
             </button>
 
             {repCount >= REP_MINIMUM && (
-              <span className="inline-flex items-center space-x-1.5 text-[11px] font-semibold text-emerald-700">
+              <span className="inline-flex items-center space-x-1.5 text-[11px] font-semibold text-ok">
                 <CheckCircle className="w-3.5 h-3.5" />
                 <span>
                   {repCount >= REP_TARGET
@@ -302,7 +302,7 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
                 currentStep === stepNum && !isCompleted
                   ? 'bg-accent text-white border-accent'
                   : currentStep > stepNum || isCompleted
-                  ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                  ? 'bg-ok-soft text-ok border-ok-line'
                   : 'bg-paper text-ink-3 border-hairline'
               }`}
             >
@@ -312,15 +312,15 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
         </div>
 
         {errorMsg && (
-          <div className="mt-2 flex items-center justify-between rounded-xl border border-rose-200 bg-rose-50 p-3 text-[12px] text-rose-800">
+          <div className="mt-2 flex items-center justify-between rounded-xl border border-danger-line bg-danger-soft p-3 text-[12px] text-danger">
             <div className="flex items-center space-x-2">
-              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+              <AlertCircle className="w-4 h-4 text-danger shrink-0" />
               <span>{errorMsg}</span>
             </div>
             <button
               onClick={startSimulation}
-              className="ml-3 shrink-0 rounded-lg bg-rose-600 px-2.5 py-1 text-[12px] font-medium
-                text-white transition-colors hover:bg-rose-700 cursor-pointer"
+              className="ml-3 shrink-0 rounded-lg bg-danger px-2.5 py-1 text-[12px] font-medium
+                text-white transition-colors hover:bg-danger-strong cursor-pointer"
             >
               Tekrar Yenile
             </button>
@@ -371,8 +371,8 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
 
             {/* Coach Feedback for this answer */}
             {turn.coachFeedback && (
-              <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-[13px] leading-relaxed text-emerald-900">
-                <strong className="text-emerald-800 block font-semibold">Geri Bildirim: </strong>
+              <div className="rounded-xl border border-ok-line bg-ok-soft p-3 text-[13px] leading-relaxed text-ok">
+                <strong className="text-ok block font-semibold">Geri Bildirim: </strong>
                 {turn.coachFeedback}
               </div>
             )}
@@ -396,7 +396,7 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
               onClick={toggleMic}
               className={`p-3 rounded-lg border transition flex items-center justify-center cursor-pointer ${
                 isListening
-                  ? 'bg-rose-600 text-white border-rose-600 animate-pulse'
+                  ? 'bg-danger text-white border-danger animate-pulse'
                   : 'bg-paper-3 hover:bg-hairline text-brand border-hairline'
               }`}
               title={isListening ? 'Konuşmayı durdur' : 'Mikrofonu açıp İngilizce konuşun'}
@@ -425,7 +425,7 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
         </form>
       ) : (
         <div className="space-y-3 rounded-2xl border border-hairline bg-paper-2 p-6 text-center">
-          <Award className="w-10 h-10 text-emerald-600 mx-auto" />
+          <Award className="w-10 h-10 text-ok mx-auto" />
           <h3 className="text-lg font-semibold text-ink">Tebrikler! 7. Katman Konuşma Simülasyonunu Tamamladınız!</h3>
           <p className="text-xs text-ink-2 max-w-xl mx-auto">
             3 soruluk karşılıklı konuşma pratiğini başarıyla gerçekleştirdiniz. Kendi kendinize 10-15 kez sesli anlatım tekrarı yapmayı unutmayın!

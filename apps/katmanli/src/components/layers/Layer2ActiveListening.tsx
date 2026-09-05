@@ -81,8 +81,8 @@ export const Layer2ActiveListening: React.FC<Props> = ({ lesson, onCompleteLayer
               </div>
               <div className="flex items-center space-x-2 pt-1">
                 {isPlaying ? (
-                  <span className="inline-flex items-center space-x-1 px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-semibold rounded-full">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                  <span className="inline-flex items-center space-x-1 px-2 py-0.5 bg-ok-soft text-ok text-[10px] font-semibold rounded-full">
+                    <span className="w-1.5 h-1.5 rounded-full bg-ok animate-pulse" />
                     <span>Dinleniyor ({formatSeconds(currentTime)})</span>
                   </span>
                 ) : (
@@ -97,15 +97,15 @@ export const Layer2ActiveListening: React.FC<Props> = ({ lesson, onCompleteLayer
           <div ref={transcriptAreaRef} className="lg:col-span-7">
             <div className="bg-paper-2 border border-hairline rounded-xl overflow-hidden">
               <div className="bg-ink text-white px-4 py-3 flex items-center space-x-2">
-                <Ear className="w-4 h-4 text-emerald-400" />
+                <Ear className="w-4 h-4 text-ok-line" />
                 <h3 className="text-xs sm:text-sm font-semibold">
                   İngilizce Metin (Türkçe Gizli)
                 </h3>
               </div>
 
               {!hasTimings && (
-                <div className="flex items-start space-x-2 bg-rose-50 border-b border-rose-200 p-3 text-xs text-rose-900">
-                  <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                <div className="flex items-start space-x-2 bg-danger-soft border-b border-danger-line p-3 text-xs text-danger">
+                  <AlertTriangle className="w-4 h-4 text-danger shrink-0 mt-0.5" />
                   <p>
                     Bu derste zaman bilgisi yok, canlı vurgu çalışmıyor. Katman 1'deki
                     &quot;Gerçek Altyazıdan Senkronize Et&quot; düğmesini kullanabilirsiniz.
@@ -122,7 +122,7 @@ export const Layer2ActiveListening: React.FC<Props> = ({ lesson, onCompleteLayer
                       ref={isActive ? activeRef : null}
                       className={`p-4 border-l-4 transition-all ${
                         isActive
-                          ? 'bg-[var(--marker-bg)] border-amber-500'
+                          ? 'bg-[var(--marker-bg)] border-marker'
                           : 'border-transparent'
                       }`}
                     >

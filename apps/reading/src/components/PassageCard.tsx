@@ -137,8 +137,8 @@ export default function PassageCard({
 
         // Styling based on study status matching Editorial Aesthetic
         let underlineStyle = 'border-b border-dashed border-ink/60';
-        if (status === 'studied') underlineStyle = 'border-b-2 border-amber-500';
-        if (status === 'learned') underlineStyle = 'border-b-2 border-emerald-600';
+        if (status === 'studied') underlineStyle = 'border-b-2 border-marker';
+        if (status === 'learned') underlineStyle = 'border-b-2 border-ok';
 
         return (
           <span
@@ -273,7 +273,7 @@ export default function PassageCard({
             aria-label={isFavorite ? 'Favorilerden çıkar' : 'Favorilere ekle'}
             aria-pressed={isFavorite}
             className={`shrink-0 rounded-lg p-2 transition-colors cursor-pointer hover:bg-paper-3 ${
-              isFavorite ? 'text-amber-500' : 'text-ink-3'
+              isFavorite ? 'text-marker' : 'text-ink-3'
             }`}
           >
             <Star className={`h-4.5 w-4.5 ${isFavorite ? 'fill-current' : ''}`} />
@@ -416,10 +416,10 @@ export default function PassageCard({
                                 className={`rounded px-2.5 py-1 text-[11px] transition-colors cursor-pointer ${
                                   status === id
                                     ? id === 'studied'
-                                      ? 'bg-amber-500 font-medium text-white'
+                                      ? 'bg-marker-bg font-medium text-marker-ink ring-1 ring-marker'
                                       : id === 'learned'
-                                        ? 'bg-emerald-600 font-medium text-white'
-                                        : 'bg-paper-2 font-medium text-ink'
+                                        ? 'bg-ok-soft font-medium text-ok ring-1 ring-ok-line'
+                                        : 'bg-paper-3 font-medium text-ink ring-1 ring-hairline-2'
                                     : 'text-ink-3 hover:text-ink'
                                 }`}
                               >
@@ -477,9 +477,9 @@ export default function PassageCard({
                               buttonStyle = 'border-accent bg-accent-soft text-ink';
                             } else if (comprehensionSubmitted) {
                               if (isOptionCorrect) {
-                                buttonStyle = 'border-emerald-500 bg-emerald-50 text-emerald-900';
+                                buttonStyle = 'border-ok bg-ok-soft text-ok';
                               } else if (isOptionSelected) {
-                                buttonStyle = 'border-rose-400 bg-rose-50 text-rose-900';
+                                buttonStyle = 'border-danger bg-danger-soft text-danger';
                               } else {
                                 buttonStyle = 'border-hairline text-ink-3';
                               }
@@ -496,10 +496,10 @@ export default function PassageCard({
                               >
                                 <span>{option}</span>
                                 {comprehensionSubmitted && isOptionCorrect && (
-                                  <Check className="h-4 w-4 text-emerald-600 shrink-0 ml-2" />
+                                  <Check className="h-4 w-4 text-ok shrink-0 ml-2" />
                                 )}
                                 {comprehensionSubmitted && isOptionSelected && !isOptionCorrect && (
-                                  <X className="h-4 w-4 text-rose-500 shrink-0 ml-2" />
+                                  <X className="h-4 w-4 text-danger shrink-0 ml-2" />
                                 )}
                               </button>
                             );
@@ -600,9 +600,9 @@ export default function PassageCard({
                               buttonStyle = 'border-accent bg-accent-soft text-ink';
                             } else if (exercisesSubmitted) {
                               if (isOptionCorrect) {
-                                buttonStyle = 'border-emerald-500 bg-emerald-50 text-emerald-900';
+                                buttonStyle = 'border-ok bg-ok-soft text-ok';
                               } else if (isOptionSelected) {
-                                buttonStyle = 'border-rose-400 bg-rose-50 text-rose-900';
+                                buttonStyle = 'border-danger bg-danger-soft text-danger';
                               } else {
                                 buttonStyle = 'border-hairline text-ink-3';
                               }
@@ -619,10 +619,10 @@ export default function PassageCard({
                               >
                                 <span>{option}</span>
                                 {exercisesSubmitted && isOptionCorrect && (
-                                  <Check className="h-4 w-4 text-emerald-600 shrink-0 ml-2" />
+                                  <Check className="h-4 w-4 text-ok shrink-0 ml-2" />
                                 )}
                                 {exercisesSubmitted && isOptionSelected && !isOptionCorrect && (
-                                  <X className="h-4 w-4 text-rose-500 shrink-0 ml-2" />
+                                  <X className="h-4 w-4 text-danger shrink-0 ml-2" />
                                 )}
                               </button>
                             );
@@ -754,8 +754,8 @@ export default function PassageCard({
                         className={`flex-1 rounded px-2 py-1.5 text-[12px] transition-colors cursor-pointer ${
                           isCurrent
                             ? id === 'studied'
-                              ? 'bg-amber-500 font-medium text-white'
-                              : 'bg-emerald-600 font-medium text-white'
+                              ? 'bg-marker-bg font-medium text-marker-ink ring-1 ring-marker'
+                              : 'bg-ok-soft font-medium text-ok ring-1 ring-ok-line'
                             : 'text-ink-3 hover:text-ink'
                         }`}
                       >
@@ -773,7 +773,7 @@ export default function PassageCard({
                     text-[12px] font-medium transition-colors duration-150
                     disabled:cursor-default cursor-pointer ${
                     bankedTerms.has(activeWordDetail.term.toLowerCase())
-                      ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                      ? 'border-ok-line bg-ok-soft text-ok'
                       : 'border-hairline text-ink-2 hover:bg-paper-3 hover:text-ink'
                   }`}
                   title="Bu kelimeyi katmanlı'daki FSRS tekrar destesine ekle"
@@ -804,7 +804,7 @@ export default function PassageCard({
             <dl className="space-y-2.5 text-[13px]">
               <div className="flex items-center justify-between gap-3">
                 <dt className="text-ink-2">Okuma durumu</dt>
-                <dd className={progress.completedPassages.includes(passage.id) ? 'text-emerald-700' : 'text-ink-3'}>
+                <dd className={progress.completedPassages.includes(passage.id) ? 'text-ok' : 'text-ink-3'}>
                   {progress.completedPassages.includes(passage.id) ? 'tamamlandı' : 'sürüyor'}
                 </dd>
               </div>

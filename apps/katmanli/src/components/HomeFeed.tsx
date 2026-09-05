@@ -205,7 +205,7 @@ export const HomeFeed: React.FC<Props> = ({
                       key={l.id}
                       title={`Katman ${l.id}: ${l.label}`}
                       className={`h-1.5 flex-1 rounded-full ${
-                        completedLayers.includes(l.id) ? 'bg-emerald-500' : 'bg-paper-3'
+                        completedLayers.includes(l.id) ? 'bg-ok' : 'bg-paper-3'
                       }`}
                     />
                   ))}
@@ -370,7 +370,7 @@ export const HomeFeed: React.FC<Props> = ({
                   title={d.key}
                   className={`flex h-7 flex-1 items-center justify-center rounded-md
                     text-[9px] ${d.active
-                      ? 'bg-emerald-500 font-semibold text-white'
+                      ? 'bg-ok font-semibold text-white'
                       : 'bg-paper-3 text-ink-3'}`}
                 >
                   {d.day}

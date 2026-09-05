@@ -138,14 +138,14 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
         </p>
 
         {errorMsg && (
-          <div className="flex items-center justify-between bg-rose-50 border border-rose-200 p-3 rounded-lg text-xs text-rose-800">
+          <div className="flex items-center justify-between bg-danger-soft border border-danger-line p-3 rounded-lg text-xs text-danger">
             <div className="flex items-center space-x-2">
-              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+              <AlertCircle className="w-4 h-4 text-danger shrink-0" />
               <span>{errorMsg}</span>
             </div>
             <button
               onClick={handleGenerateQuiz}
-              className="ml-3 px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-[11px] font-semibold shrink-0 cursor-pointer"
+              className="ml-3 px-2.5 py-1 bg-danger hover:bg-danger-strong text-white rounded text-[11px] font-semibold shrink-0 cursor-pointer"
             >
               Tekrar Dene
             </button>
@@ -153,14 +153,14 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
         )}
 
         {isSubmitted && (
-          <div className="bg-emerald-50 border border-emerald-200 p-3.5 rounded-lg flex items-center justify-between text-xs text-emerald-900">
+          <div className="bg-ok-soft border border-ok-line p-3.5 rounded-lg flex items-center justify-between text-xs text-ok">
             <div className="flex items-center space-x-2 font-semibold">
-              <Award className="w-5 h-5 text-emerald-600" />
+              <Award className="w-5 h-5 text-ok" />
               <span>Test Sonucu: {calculateScore()} / {quizQuestions.length} Doğru Kavrayış</span>
             </div>
             <button
               onClick={() => setIsSubmitted(false)}
-              className="text-xs font-semibold text-emerald-700 hover:text-emerald-900 underline cursor-pointer"
+              className="text-xs font-semibold text-ok hover:text-ok underline cursor-pointer"
             >
               Yeniden Çöz
             </button>
@@ -199,8 +199,8 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
                   isSubmitted
                     ? isMultipleChoice
                       ? isCorrect
-                        ? 'border-emerald-300 bg-emerald-50/30'
-                        : 'border-rose-300 bg-rose-50/30'
+                        ? 'border-ok-line bg-ok-soft/30'
+                        : 'border-danger-line bg-danger-soft/30'
                       : 'border-hairline'
                     : 'border-hairline'
                 }`}
@@ -224,9 +224,9 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
                       let btnStyle = 'bg-paper border-hairline text-ink-2 hover:bg-paper-3 hover:border-hairline-2';
                       if (isSubmitted) {
                         if (isRightOption) {
-                          btnStyle = 'bg-emerald-50 border-emerald-400 text-emerald-900 font-semibold';
+                          btnStyle = 'bg-ok-soft border-ok-line text-ok font-semibold';
                         } else if (isSelected && !isRightOption) {
-                          btnStyle = 'bg-rose-50 border-rose-300 text-rose-900';
+                          btnStyle = 'bg-danger-soft border-danger-line text-danger';
                         }
                       } else if (isSelected) {
                         btnStyle = 'bg-accent-soft border-accent/60 text-accent-700 font-semibold';
@@ -239,8 +239,8 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
                           className={`w-full text-left p-3 rounded-lg border text-xs transition flex items-center justify-between cursor-pointer ${btnStyle}`}
                         >
                           <span>{opt}</span>
-                          {isSubmitted && isRightOption && <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />}
-                          {isSubmitted && isSelected && !isRightOption && <XCircle className="w-4 h-4 text-rose-600 shrink-0" />}
+                          {isSubmitted && isRightOption && <CheckCircle2 className="w-4 h-4 text-ok shrink-0" />}
+                          {isSubmitted && isSelected && !isRightOption && <XCircle className="w-4 h-4 text-danger shrink-0" />}
                         </button>
                       );
                     })}

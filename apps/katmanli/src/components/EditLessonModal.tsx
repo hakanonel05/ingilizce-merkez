@@ -354,7 +354,7 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
                       <button
                         type="button"
                         onClick={() => handleDeleteSentence(idx)}
-                        className="p-1 text-ink-3 hover:text-rose-600 rounded transition cursor-pointer"
+                        className="p-1 text-ink-3 hover:text-danger rounded transition cursor-pointer"
                         title="Bu cümleyi sil"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -476,15 +476,15 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
               </div>
 
               {aiSuccessMsg && (
-                <div className="flex items-center space-x-2 text-xs text-emerald-800 bg-emerald-50 border border-emerald-200 p-3 rounded-lg">
-                  <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+                <div className="flex items-center space-x-2 text-xs text-ok bg-ok-soft border border-ok-line p-3 rounded-lg">
+                  <Check className="w-4 h-4 text-ok shrink-0" />
                   <span>{aiSuccessMsg}</span>
                 </div>
               )}
 
               {aiErrorMsg && (
-                <div className="flex items-center space-x-2 text-xs text-rose-800 bg-rose-50 border border-rose-200 p-3 rounded-lg">
-                  <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+                <div className="flex items-center space-x-2 text-xs text-danger bg-danger-soft border border-danger-line p-3 rounded-lg">
+                  <AlertCircle className="w-4 h-4 text-danger shrink-0" />
                   <span>{aiErrorMsg}</span>
                 </div>
               )}

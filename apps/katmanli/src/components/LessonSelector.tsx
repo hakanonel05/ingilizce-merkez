@@ -256,9 +256,9 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
           )}
 
           {errorMsg && (
-            <div className="mt-3 rounded-xl border border-rose-200 bg-rose-50 p-3">
-              <p className="text-[12px] font-medium text-rose-800">İşlem başarısız</p>
-              <p className="mt-0.5 text-[12px] leading-relaxed text-rose-700">{errorMsg}</p>
+            <div className="mt-3 rounded-xl border border-danger-line bg-danger-soft p-3">
+              <p className="text-[12px] font-medium text-danger">İşlem başarısız</p>
+              <p className="mt-0.5 text-[12px] leading-relaxed text-danger">{errorMsg}</p>
             </div>
           )}
         </form>
@@ -371,8 +371,8 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
                         <button
                           type="button"
                           onClick={(e) => handleConfirmDelete(e, lesson.id)}
-                          className="rounded-lg bg-rose-600 px-2 py-1 font-medium text-white
-                            transition-colors hover:bg-rose-700 cursor-pointer"
+                          className="rounded-lg bg-danger px-2 py-1 font-medium text-white
+                            transition-colors hover:bg-danger-strong cursor-pointer"
                         >
                           Evet
                         </button>
@@ -406,7 +406,7 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
                             title="Bu dersi sil"
                             aria-label="Bu dersi sil"
                             className="rounded-lg p-1.5 text-ink-3 transition-colors
-                              hover:bg-paper-2 hover:text-rose-600 cursor-pointer"
+                              hover:bg-paper-2 hover:text-danger cursor-pointer"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
                           </button>

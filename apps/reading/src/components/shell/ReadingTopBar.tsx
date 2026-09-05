@@ -123,7 +123,7 @@ export const ReadingTopBar: React.FC<Props> = ({
           {/* Sayaçlar — tek şerit, katmanlıdaki ile aynı biçim */}
           <div className="hidden items-center gap-3 rounded-xl border border-hairline px-3 py-1.5 md:flex">
             <span className="flex items-center gap-1.5">
-              <Zap className="h-3.5 w-3.5 text-amber-500" />
+              <Zap className="h-3.5 w-3.5 text-marker" />
               <span className="timecode font-semibold text-ink">{dailyStreak}</span>
               <span className="text-[10px] text-ink-3">gün</span>
             </span>

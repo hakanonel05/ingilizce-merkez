@@ -223,11 +223,11 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
     return (
       <div className="space-y-6">
         <div className={`sticky top-0 z-30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-3 border-b flex items-center justify-between gap-4 flex-wrap ${
-          isLowTime ? 'border-rose-300 bg-rose-50' : 'border-hairline bg-paper-2'
+          isLowTime ? 'border-danger-line bg-danger-soft' : 'border-hairline bg-paper-2'
         }`}>
           <div className="flex items-center gap-2">
-            <Timer className={`h-4 w-4 ${isLowTime ? 'text-rose-600' : 'text-brand'}`} />
-            <span className={`timecode text-[18px] font-semibold ${isLowTime ? 'text-rose-700' : 'text-ink'}`}>
+            <Timer className={`h-4 w-4 ${isLowTime ? 'text-danger' : 'text-brand'}`} />
+            <span className={`timecode text-[18px] font-semibold ${isLowTime ? 'text-danger' : 'text-ink'}`}>
               {formatTime(remainingSeconds)}
             </span>
           </div>
@@ -337,8 +337,8 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
         <div className="grid grid-cols-2 divide-x divide-y divide-hairline overflow-hidden
           rounded-2xl border border-hairline bg-paper-2 sm:grid-cols-4 sm:divide-y-0">
           {([
-            ['Doğru', String(attempt.correctCount), 'text-emerald-700'],
-            ['Yanlış', String(attempt.wrongCount), 'text-rose-700'],
+            ['Doğru', String(attempt.correctCount), 'text-ok'],
+            ['Yanlış', String(attempt.wrongCount), 'text-danger'],
             ['Boş', String(attempt.blankCount), 'text-ink'],
             ['Başarı', `%${percentage}`, 'text-ink'],
           ] as [string, string, string][]).map(([label, value, tone]) => (
@@ -385,7 +385,7 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
                   <div className="divide-y divide-hairline">
                     {results.filter(r => !r.isCorrect).map(r => (
                       <div key={r.questionId} className="px-5 py-2.5 flex items-center gap-3 text-xs">
-                        <XCircle className="h-3.5 w-3.5 text-rose-500 shrink-0" />
+                        <XCircle className="h-3.5 w-3.5 text-danger shrink-0" />
                         <span className="text-ink/80 truncate flex-1">{r.question}</span>
                         <span className="text-ink-3 shrink-0">
                           Doğru: {r.correctAnswer} · Sen: {r.yourAnswer || '—'}
@@ -395,7 +395,7 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
                   </div>
                 )}
                 {results.every(r => r.isCorrect) && (
-                  <div className="px-5 py-2.5 flex items-center gap-2 text-xs text-emerald-700">
+                  <div className="px-5 py-2.5 flex items-center gap-2 text-xs text-ok">
                     <CheckCircle2 className="h-3.5 w-3.5" /> Tüm sorular doğru!
                   </div>
                 )}

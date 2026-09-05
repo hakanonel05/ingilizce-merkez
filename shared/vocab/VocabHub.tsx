@@ -642,7 +642,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 <span>{allCards.length} kartı yeniden sınıflandır</span>
               </button>
               {reclassifyInfo && (
-                <span className="text-[11px] font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 rounded px-2.5 py-1.5">
+                <span className="text-[11px] font-semibold text-ok bg-ok-soft border border-ok-line rounded px-2.5 py-1.5">
                   {reclassifyInfo}
                 </span>
               )}
@@ -805,7 +805,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
             </p>
 
             {manualError && (
-              <p className="text-[11px] font-semibold text-rose-800 bg-rose-50 border border-rose-200 rounded px-2.5 py-1.5">
+              <p className="text-[11px] font-semibold text-danger bg-danger-soft border border-danger-line rounded px-2.5 py-1.5">
                 {manualError}
               </p>
             )}
@@ -893,13 +893,13 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 )}
 
                 {extractError && (
-                  <p className="flex items-start space-x-1.5 text-[11px] font-semibold text-rose-800 bg-rose-50 border border-rose-200 rounded px-2.5 py-1.5">
+                  <p className="flex items-start space-x-1.5 text-[11px] font-semibold text-danger bg-danger-soft border border-danger-line rounded px-2.5 py-1.5">
                     <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
                     <span>{extractError}</span>
                   </p>
                 )}
                 {extractInfo && (
-                  <p className="text-[11px] font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 rounded px-2.5 py-1.5">
+                  <p className="text-[11px] font-semibold text-ok bg-ok-soft border border-ok-line rounded px-2.5 py-1.5">
                     {extractInfo}
                   </p>
                 )}
@@ -1195,7 +1195,7 @@ const CardTable: React.FC<{
                 <button
                   type="button"
                   onClick={() => onDelete(c.id)}
-                  className="rounded-lg p-1.5 text-ink-3 transition-colors hover:bg-paper-3 hover:text-rose-600 cursor-pointer"
+                  className="rounded-lg p-1.5 text-ink-3 transition-colors hover:bg-paper-3 hover:text-danger cursor-pointer"
                   title="Kartı sil"
                 >
                   <Trash2 className="w-3.5 h-3.5" />

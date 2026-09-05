@@ -258,7 +258,7 @@ export const Dashboard: React.FC = () => {
                 {selected.quizzes > 0 && <Chip label="Quiz" value={String(selected.quizzes)} />}
                 {selected.completions > 0 && <Chip label="Tamamlanan" value={String(selected.completions)} />}
                 {selected.mistakes > 0 && (
-                  <Chip label="Yanlış" value={String(selected.mistakes)} tone="bg-rose-100 text-rose-800" />
+                  <Chip label="Yanlış" value={String(selected.mistakes)} tone="bg-danger-soft text-danger" />
                 )}
                 {selected.minutesTotal === 0 && selected.markedActive && (
                   <Chip label="Çalışıldı" value="süre kaydı yok" />
@@ -335,8 +335,8 @@ export const Dashboard: React.FC = () => {
           <div className="flex flex-wrap gap-1.5">
             <Chip label="Toplam" value={String(vocab.total)} />
             <Chip label="Hiç çalışılmamış" value={String(vocab.fresh)} />
-            <Chip label="Oturmuş" value={String(vocab.mature)} tone="bg-emerald-100 text-emerald-800" />
-            <Chip label="Vadesi gelen" value={String(vocab.due)} tone="bg-rose-100 text-rose-800" />
+            <Chip label="Oturmuş" value={String(vocab.mature)} tone="bg-ok-soft text-ok" />
+            <Chip label="Vadesi gelen" value={String(vocab.due)} tone="bg-danger-soft text-danger" />
             {vocab.suspended > 0 && <Chip label="Askıda" value={String(vocab.suspended)} />}
           </div>
 
@@ -372,7 +372,7 @@ export const Dashboard: React.FC = () => {
                   <span
                     key={w.front}
                     title={w.back}
-                    className="px-2 py-0.5 bg-rose-50 text-rose-800 text-[11px] font-semibold rounded border border-rose-100"
+                    className="px-2 py-0.5 bg-danger-soft text-danger text-[11px] font-semibold rounded border border-danger-line"
                   >
                     {w.front} <span className="opacity-60">×{w.lapses}</span>
                   </span>

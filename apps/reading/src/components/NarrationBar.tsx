@@ -127,7 +127,7 @@ export default function NarrationBar({ narration, total }: Props) {
       )}
 
       {error && (
-        <p className="border-t border-rose-200 bg-rose-50 px-3 py-2 text-[12px] text-rose-800">
+        <p className="border-t border-danger-line bg-danger-soft px-3 py-2 text-[12px] text-danger">
           {error}
         </p>
       )}

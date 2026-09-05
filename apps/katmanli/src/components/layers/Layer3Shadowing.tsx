@@ -330,7 +330,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                   <button
                     type="button"
                     onClick={startRecording}
-                    className="flex items-center space-x-1.5 px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-lg transition cursor-pointer"
+                    className="flex items-center space-x-1.5 px-3.5 py-2 bg-danger hover:bg-danger-strong text-white text-xs font-semibold rounded-lg transition cursor-pointer"
                   >
                     <Mic className="w-3.5 h-3.5" />
                     <span>{hasSavedForCurrent ? 'Yeniden Kaydet' : 'Kaydı Başlat'}</span>
@@ -352,7 +352,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                     <button
                       type="button"
                       onClick={handleDeleteCurrent}
-                      className="flex items-center space-x-1.5 px-3 py-2 bg-paper-3 hover:bg-rose-100 text-ink-2 hover:text-rose-700 text-xs font-semibold rounded-lg transition cursor-pointer"
+                      className="flex items-center space-x-1.5 px-3 py-2 bg-paper-3 hover:bg-danger-soft text-ink-2 hover:text-danger text-xs font-semibold rounded-lg transition cursor-pointer"
                       title="Bu cümlenin kaydını sil"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -363,7 +363,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
               </div>
 
               {hasSavedForCurrent && (
-                <p className="inline-flex items-center space-x-1.5 text-[11px] font-semibold text-emerald-700">
+                <p className="inline-flex items-center space-x-1.5 text-[11px] font-semibold text-ok">
                   <Save className="w-3.5 h-3.5" />
                   <span>Bu cümlenin kaydı cihazında saklı</span>
                 </p>
@@ -387,7 +387,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                     <button
                       type="button"
                       onClick={handleDeleteAll}
-                      className="flex items-center space-x-1 text-[11px] font-semibold text-ink-3 hover:text-rose-700 cursor-pointer"
+                      className="flex items-center space-x-1 text-[11px] font-semibold text-ink-3 hover:text-danger cursor-pointer"
                     >
                       <Trash2 className="w-3 h-3" />
                       <span>Tümünü Sil</span>
@@ -425,7 +425,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                                 }
                                 await refreshList();
                               }}
-                              className="p-1 text-ink-3 hover:text-rose-600 shrink-0 cursor-pointer"
+                              className="p-1 text-ink-3 hover:text-danger shrink-0 cursor-pointer"
                               title="Bu kaydı sil"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -439,7 +439,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
               )}
 
               {recordError && (
-                <p className="text-[11px] font-semibold text-rose-800 bg-rose-50 border border-rose-200 rounded px-2.5 py-1.5">
+                <p className="text-[11px] font-semibold text-danger bg-danger-soft border border-danger-line rounded px-2.5 py-1.5">
                   {recordError}
                 </p>
               )}

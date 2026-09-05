@@ -343,7 +343,7 @@ export const SelectionToCard: React.FC<Props> = ({
             </p>
 
             {error && (
-              <p className="text-[11px] font-semibold text-rose-800 bg-rose-50 border border-rose-200 rounded px-2.5 py-1.5">
+              <p className="text-[11px] font-semibold text-danger bg-danger-soft border border-danger-line rounded px-2.5 py-1.5">
                 {error}
               </p>
             )}
@@ -377,12 +377,12 @@ export const SelectionToCard: React.FC<Props> = ({
           kota dolu, ağ hatası) kullanıcı düğmeye basıyor ve hiçbir şey
           olmuyor sanıyordu. Panel yokken de görünür. */}
       {error && !draft && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[80] max-w-[92vw] flex items-start gap-2 px-4 py-2.5 bg-rose-50 border border-rose-200 text-rose-900 text-xs font-semibold rounded-xl">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[80] max-w-[92vw] flex items-start gap-2 px-4 py-2.5 bg-danger-soft border border-danger-line text-danger text-xs font-semibold rounded-xl">
           <span className="leading-relaxed">{error}</span>
           <button
             type="button"
             onClick={() => setError(null)}
-            className="shrink-0 text-rose-700 hover:text-rose-900 cursor-pointer"
+            className="shrink-0 text-danger hover:text-danger cursor-pointer"
             aria-label="Kapat"
           >
             <X className="w-3.5 h-3.5" />
@@ -393,7 +393,7 @@ export const SelectionToCard: React.FC<Props> = ({
       {/* Kaydedildi bildirimi */}
       {savedMsg && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[80] flex items-center space-x-2 px-4 py-2.5 bg-ink text-white text-xs font-semibold rounded-xl">
-          <Check className="w-4 h-4 text-emerald-400" />
+          <Check className="w-4 h-4 text-ok-line" />
           <span>{savedMsg}</span>
         </div>
       )}

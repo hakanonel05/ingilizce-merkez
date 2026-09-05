@@ -102,8 +102,41 @@
      Bu deger kullanildigi her zeminde gecer (5.18 / 4.71 / 4.76) ve
      uzerine yazilan beyaz rozet metni icin de 5.18. */
   --color-brand:        #C2410C;
-  --color-brand-strong: #C2410C;
+  --color-brand-strong: #9A3412;
   --color-brand-soft:   #FFF3EC;
+
+  /* DURUM RENKLERI — dogru / yanlis.
+     Depoda 258 yerde "bg-emerald-50", "text-rose-800" gibi sabit Tailwind
+     siniflari yaziliyordu: emerald'in 16, rose'un 16 ayri tonu kullanilmis,
+     yani "dogru" rengi dosyadan dosyaya degisiyordu.
+
+     Bu renkler paletten atilamaz, cunku dekoratif degil: bir cevabin dogru
+     mu yanlis mi oldugunu soyluyorlar ve bunu renkten baska bir sey
+     soylemiyor. Yapilan sey onlari isimlendirip tek degere indirmek.
+
+     Kirmizi OLCULEREK secildi. Ilk aday #B91C1C idi; marka turuncusuyla
+     arasindaki hue farki yalnizca 17 derece cikti, yani hata rengi markaya
+     benziyordu. #BE123C 32 derece ayriliyor. Ikisi de kullanildiklari her
+     zeminde AA geciyor (en dusuk 5.28 ve 5.99).
+
+     Yumusak zeminler sayfa zemininde ve beyaz kartta ayrisiyor; paper-3
+     uzerinde ayrisma cizgiden gelir, bu yuzden "-soft" her zaman "-line"
+     ile birlikte kullanilir. */
+  --color-ok:          #166534;
+  --color-ok-strong:   #14532D;
+  --color-ok-line:     #B7D6BF;
+  --color-ok-soft:     #E6F1E9;
+  --color-danger:      #BE123C;
+  --color-danger-strong: #9F1239;
+  --color-danger-line: #EFC3CE;
+  --color-danger-soft: #F7E6EB;
+
+  /* ISARET (kehribar). :root'ta zaten vardi ama @theme'de YOKTU, yani
+     "bg-marker" diye bir sinif hic uretilmiyordu ve bilesenler mecburen
+     "bg-amber-500" yaziyordu. hairline-2 ile ayni tuzak. */
+  --color-marker:      #F59E0B;
+  --color-marker-bg:   #FFFBEB;
+  --color-marker-ink:  #92400E;
 }
 
 :root {
@@ -157,10 +190,12 @@
   --brand-soft:   #FFF3EC;
 
   /* Durumlar */
-  --ok:         #059669;   /* emerald-600 */
-  --ok-bg:      #ECFDF5;   /* emerald-50  */
-  --danger:     #DC2626;   /* red-600 */
-  --danger-bg:  #FEF2F2;   /* red-50 */
+  --ok:          #166534;
+  --ok-line:     #B7D6BF;
+  --ok-soft:     #E6F1E9;
+  --danger:      #BE123C;
+  --danger-line: #EFC3CE;
+  --danger-soft: #F7E6EB;
 
   /* Canlı altyazı işareti — ekrandaki tek "sıcak" renk.
      Süs değil: şu an konuşulan cümleyi gösteriyor. */

@@ -158,15 +158,15 @@ export const FlashcardReview: React.FC<Props> = ({
 
   if (queue.length === 0) {
     return (
-      <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-8 text-center space-y-3">
-        <PartyPopper className="w-10 h-10 text-emerald-600 mx-auto" />
+      <div className="bg-ok-soft border border-ok-line rounded-xl p-8 text-center space-y-3">
+        <PartyPopper className="w-10 h-10 text-ok mx-auto" />
         <h3 className="text-base font-semibold text-ink">Bugünlük kart kalmadı</h3>
         <p className="text-xs text-ink-2 max-w-md mx-auto">
           Vadesi gelen tüm kartları çalıştınız. FSRS bir sonraki tekrarı en verimli
           zamana yerleştirdi; yarın yeni kartlar hazır olacak.
         </p>
         {reviewedCount > 0 && (
-          <p className="text-xs font-semibold text-emerald-800">
+          <p className="text-xs font-semibold text-ok">
             Bu oturumda {reviewedCount} tekrar yaptınız.
           </p>
         )}
@@ -347,25 +347,25 @@ export const FlashcardReview: React.FC<Props> = ({
               <button
                 type="button"
                 onClick={() => grade(Rating.Again)}
-                className="flex flex-col items-center px-4 py-3 bg-rose-600 hover:bg-rose-700 text-white rounded-xl transition cursor-pointer"
+                className="flex flex-col items-center px-4 py-3 bg-danger hover:bg-danger-strong text-white rounded-xl transition cursor-pointer"
               >
                 <span className="flex items-center space-x-1.5 text-sm font-semibold">
                   <RotateCcw className="w-4 h-4" />
                   <span>Again</span>
                 </span>
-                <span className="text-[11px] text-rose-100 font-mono">{previews?.again}</span>
+                <span className="text-[11px] text-white/85 font-mono">{previews?.again}</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => grade(Rating.Good)}
-                className="flex flex-col items-center px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl transition cursor-pointer"
+                className="flex flex-col items-center px-4 py-3 bg-ok hover:bg-ok-strong text-white rounded-xl transition cursor-pointer"
               >
                 <span className="flex items-center space-x-1.5 text-sm font-semibold">
                   <Check className="w-4 h-4" />
                   <span>Good</span>
                 </span>
-                <span className="text-[11px] text-emerald-100 font-mono">{previews?.good}</span>
+                <span className="text-[11px] text-white/85 font-mono">{previews?.good}</span>
               </button>
             </div>
           )}

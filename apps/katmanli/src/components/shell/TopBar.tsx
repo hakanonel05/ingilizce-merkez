@@ -181,7 +181,7 @@ export const TopBar: React.FC<Props> = ({
               hover:bg-paper-3 cursor-pointer md:flex"
           >
             <span className="flex items-center gap-1.5">
-              <Flame className="h-3.5 w-3.5 text-amber-500" />
+              <Flame className="h-3.5 w-3.5 text-marker" />
               <span className="timecode font-semibold text-ink">
                 {progress.studyStreakDays}
               </span>

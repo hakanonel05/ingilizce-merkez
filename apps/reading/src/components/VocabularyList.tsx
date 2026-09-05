@@ -314,8 +314,8 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
                           className={`rounded px-2 py-1 text-[11px] transition-colors cursor-pointer ${
                             status === id
                               ? id === 'studied'
-                                ? 'bg-amber-500 font-medium text-white'
-                                : 'bg-emerald-600 font-medium text-white'
+                                ? 'bg-marker-bg font-medium text-marker-ink ring-1 ring-marker'
+                                : 'bg-ok-soft font-medium text-ok ring-1 ring-ok-line'
                               : 'text-ink-3 hover:text-ink'
                           }`}
                         >
@@ -334,7 +334,7 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
                       aria-label={inBank ? 'Tekrar bankasında' : 'Tekrar bankasına ekle'}
                       className={`rounded-lg p-1.5 transition-colors cursor-pointer disabled:cursor-default ${
                         inBank
-                          ? 'text-emerald-600'
+                          ? 'text-ok'
                           : 'row-actions text-ink-3 opacity-0 hover:bg-paper-3 hover:text-ink focus:opacity-100 group-hover:opacity-100'
                       }`}
                     >

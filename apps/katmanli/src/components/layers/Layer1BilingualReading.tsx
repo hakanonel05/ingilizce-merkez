@@ -429,9 +429,9 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
 
         {/* Zaman bilgisi yoksa uyarı + tek tıkla düzeltme */}
         {!hasTimings && (
-          <div className="bg-rose-50 border border-rose-200 p-3 rounded-lg text-xs text-rose-900 space-y-2.5">
+          <div className="bg-danger-soft border border-danger-line p-3 rounded-lg text-xs text-danger space-y-2.5">
             <div className="flex items-start space-x-2">
-              <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+              <AlertTriangle className="w-4 h-4 text-danger shrink-0 mt-0.5" />
               <p>
                 Bu derste zaman bilgisi yok, bu yüzden cümleler videoyla senkronize edilemiyor.
                 Hazır dersler elle yazıldığı için zaman damgası içermez.
@@ -446,8 +446,8 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                 type="button"
                 onClick={handleResync}
                 disabled={isResyncing}
-                className="flex items-center gap-2 rounded-xl bg-rose-600 px-3.5 py-2 text-[13px]
-                  font-medium text-white transition-colors duration-150 hover:bg-rose-700
+                className="flex items-center gap-2 rounded-xl bg-danger px-3.5 py-2 text-[13px]
+                  font-medium text-white transition-colors duration-150 hover:bg-danger-strong
                   disabled:cursor-wait disabled:opacity-60 cursor-pointer"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${isResyncing ? 'animate-spin' : ''}`} />
@@ -460,14 +460,14 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
             )}
 
             {isResyncing && (
-              <p className="text-[11px] text-rose-700 pl-0.5">
+              <p className="text-[11px] text-danger pl-0.5">
                 Videonun altyazısı indiriliyor, cümlelere bölünüyor ve Türkçeye çevriliyor.
                 Sayfadan ayrılma.
               </p>
             )}
 
             {resyncError && (
-              <p className="rounded-lg border border-rose-300 bg-rose-100 px-2.5 py-1.5 text-[12px] text-rose-800">
+              <p className="rounded-lg border border-danger-line bg-danger-soft px-2.5 py-1.5 text-[12px] text-danger">
                 {resyncError}
               </p>
             )}
@@ -591,7 +591,7 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                   </button>
                   {isVideoPlaying ? (
                     <span className="inline-flex items-center gap-1.5 text-[12px] text-ink-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-ok" />
                       <span className="timecode">{formatSeconds(currentVideoTime)}</span>
                     </span>
                   ) : (

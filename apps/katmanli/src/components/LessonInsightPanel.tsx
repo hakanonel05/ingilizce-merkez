@@ -132,8 +132,8 @@ export const LessonInsightPanel: React.FC<Props> = ({
           gostergesiyle ayni bicim. */}
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px]">
         {([
-          ['biliyorsun', insight.knownTokens, 'bg-emerald-600'],
-          ['öğreniyorsun', insight.learningTokens, 'bg-amber-500'],
+          ['biliyorsun', insight.knownTokens, 'bg-ok'],
+          ['öğreniyorsun', insight.learningTokens, 'bg-marker'],
           ['bilmiyorsun', insight.unknownTokens, 'bg-[var(--hairline-2)]'],
         ] as [string, number, string][]).map(([label, value, dot]) => (
           <span key={label} className="flex items-center gap-1.5 text-[var(--ink-3)]">

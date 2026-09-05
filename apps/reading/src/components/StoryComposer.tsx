@@ -353,7 +353,7 @@ export default function StoryComposer({ progress, passages, onStoryReady, onTask
       {note && <p className="text-[11px] text-ink/60">{note}</p>}
 
       {error && (
-        <p className="flex items-start gap-1.5 rounded-lg border border-rose-200 bg-rose-50 px-2.5 py-1.5 text-[12px] text-rose-800">
+        <p className="flex items-start gap-1.5 rounded-lg border border-danger-line bg-danger-soft px-2.5 py-1.5 text-[12px] text-danger">
           <AlertTriangle className="h-3.5 w-3.5 shrink-0 mt-0.5" />
           <span>{error}</span>
         </p>

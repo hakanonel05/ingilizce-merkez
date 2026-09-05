@@ -240,14 +240,14 @@ export default function Dashboard({ progress, passages, onSelectPassage, onReset
           {/* Üç durumun tek şeridi. Renk burada VERİ: öğrenildi ile
               çalışılıyor birbirinden ayrılmak zorunda. */}
           <div className="mt-5 flex h-2 w-full overflow-hidden rounded-full bg-paper-3">
-            <div className="bg-emerald-600 transition-all duration-500" style={{ width: `${learnedPercent}%` }} title="Öğrenildi" />
-            <div className="bg-amber-500 transition-all duration-500" style={{ width: `${studiedPercent}%` }} title="Çalışılıyor" />
+            <div className="bg-ok transition-all duration-500" style={{ width: `${learnedPercent}%` }} title="Öğrenildi" />
+            <div className="bg-marker transition-all duration-500" style={{ width: `${studiedPercent}%` }} title="Çalışılıyor" />
           </div>
 
           <dl className="mt-5 space-y-2.5">
             {([
-              ['Öğrenildi', wordsStatusStats.learned, 'bg-emerald-600'],
-              ['Çalışılıyor', wordsStatusStats.studied, 'bg-amber-500'],
+              ['Öğrenildi', wordsStatusStats.learned, 'bg-ok'],
+              ['Çalışılıyor', wordsStatusStats.studied, 'bg-marker'],
               ['Henüz görülmedi', wordsStatusStats.unstudied, 'bg-paper-3'],
             ] as [string, number, string][]).map(([label, count, dot]) => (
               <div key={label} className="flex items-center justify-between text-[13px]">
@@ -324,7 +324,7 @@ export default function Dashboard({ progress, passages, onSelectPassage, onReset
         <button
           type="button"
           onClick={() => setShowConfirmReset(true)}
-          className="text-rose-700 transition-colors hover:text-rose-800 hover:underline cursor-pointer"
+          className="text-danger transition-colors hover:text-danger hover:underline cursor-pointer"
         >
           İlerlemeyi sıfırla
         </button>
@@ -359,8 +359,8 @@ export default function Dashboard({ progress, passages, onSelectPassage, onReset
               <button
                 type="button"
                 onClick={() => { onResetProgress(); setShowConfirmReset(false); }}
-                className="rounded-xl bg-rose-600 px-4 py-2 text-[13px] font-medium text-white
-                  transition-colors hover:bg-rose-700 cursor-pointer"
+                className="rounded-xl bg-danger px-4 py-2 text-[13px] font-medium text-white
+                  transition-colors hover:bg-danger-strong cursor-pointer"
               >
                 Evet, sıfırla
               </button>

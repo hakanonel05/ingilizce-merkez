@@ -104,14 +104,14 @@ export const Layer2PhoneticsGrammar: React.FC<Layer2PhoneticsGrammarProps> = ({
         </p>
 
         {errorMsg && (
-          <div className="flex items-center justify-between bg-rose-50 border border-rose-200 p-3 rounded-lg text-xs text-rose-800">
+          <div className="flex items-center justify-between bg-danger-soft border border-danger-line p-3 rounded-lg text-xs text-danger">
             <div className="flex items-center space-x-2">
-              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+              <AlertCircle className="w-4 h-4 text-danger shrink-0" />
               <span>{errorMsg}</span>
             </div>
             <button
               onClick={handleGenerateAnalysis}
-              className="ml-3 px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-[11px] font-semibold shrink-0 cursor-pointer"
+              className="ml-3 px-2.5 py-1 bg-danger hover:bg-danger-strong text-white rounded text-[11px] font-semibold shrink-0 cursor-pointer"
             >
               Tekrar Dene
             </button>
