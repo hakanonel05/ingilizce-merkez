@@ -5,8 +5,7 @@ edecek biri için yazıldı. Kodun ne yaptığı zaten kaynaktaki yorumlarda
 yazılı; burada olan şey, koda bakarak anlaşılmayan kararlar, tuzaklar ve
 açık kalan işler.
 
-Son güncelleme: 30 Ağustos 2026 · `ea3a6af` üzerine **commit edilmemiş**
-çalışma (bu kopyada git geçmişi yok)
+Son güncelleme: 30 Ağustos 2026 · `main` yayında
 
 ---
 
@@ -110,7 +109,7 @@ satırı çalıştır.
 **`tsc` bellek yiyor.** JSON kelime listeleri tip çıkarımını şişiriyor:
 
 ```bash
-NODE_OPTIONS=--max-old-space-size=6144 npx tsc --noEmit
+NODE_OPTIONS=--max-old-space-size=10240 npx tsc --noEmit
 ```
 
 **Bash heredoc `\\`'yi `\` yapıyor.** Regex içeren betikleri heredoc ile
@@ -151,10 +150,26 @@ arayüzde hiçbir şey bozuk görünmüyor — çünkü sağlayıcı atlamak zin
 normal davranışı. Ancak Groq'un günlük kotası da dolunca ortaya çıktı.
 
 Liste artık `gemini-3.6-flash` ile başlıyor (Google'ın 404 gövdesinde
-önerdiği model), arkasında `gemini-flash-latest` takma adı var. Sıra
-ölçümle seçildi: takma ad tek başına öndeyken yük altında 503 veriyordu
-(2/3 başarı), sabit kimlik 3/3. Takma ad yine de listede duruyor, çünkü
-3.6 da kapatılırsa kendini günceller.
+önerdiği model), arkasında `gemini-flash-latest` takma adı var. Takma ad
+listede duruyor çünkü 3.6 da kapatılırsa kendini günceller.
+
+**503 GEÇİCİDİR, 404 KALICI — ikisi aynı kefeye konmuştu.** Gemini
+yoğunlukta `503 UNAVAILABLE / "high demand"` dönüyor. Eski kod bunu
+kalıcı hata sayıp modeli DENEMEDEN atlıyordu; sonuç, bir anlık
+yoğunlukta zincirin bütün Gemini modellerini tek turda tüketmesi ve
+Gemini hiç devrede değilmiş gibi görünmesiydi. Artık 503 kısa bir
+geri çekilmeyle aynı modelde yeniden deneniyor (`isTransientError`).
+Ölçüm: geçersiz bir Groq anahtarıyla istek, düzeltmeden önce hata
+veriyordu, sonrasında `gemini-3.6-flash` ile BAŞARILI dönüyor.
+
+**Zincir çökerse hata artık HER SAĞLAYICIYI adlandırıyor.** Önceden
+`lastError` fırlatılıyordu; o da en son denenen modelin hatası, yani
+genelde listenin dibindeki en eski modelin. Groq anahtarı geçersizken
+kullanıcı "gemini-2.0-flash artık yok" görüyordu — yanlış teşhis.
+Şimdi mesaj `groq: ... | gemini: ...` biçiminde, ve zincirde
+bulunmayan sağlayıcı varsa "DENENMEDİ (anahtarı tanımlı değil)" diye
+yazılıyor. "Gemini neden devreye girmedi" sorusunun cevabı artık hata
+metninde.
 
 **BİR SAĞLAYICININ ÇALIŞTIĞINI ARAYÜZDEN ANLAYAMAZSIN.** Yanıttaki
 `model` alanına bak; GERÇEKTEN kullanılan modeli bildiriyor. "Hikaye

@@ -763,6 +763,30 @@ function getAIClient(): GoogleGenAI | null {
   }
 }
 
+/**
+ * GECICI mi, kalici mi?
+ *
+ * Gemini yogunlukta 503 / UNAVAILABLE donuyor ("This model is currently
+ * experiencing high demand"). Bu, modelin kaldirilmis olmasindan (404)
+ * tamamen farkli bir sey: birkac saniye sonra calisiyor. Onceden ikisi
+ * de ayni kefeye konup model DENENMEDEN atlaniyordu; olcumde
+ * gemini-3.6-flash ve gemini-flash-latest arka arkaya 503 verdi ve
+ * zincir tek denemede butun Gemini modellerini tuketti.
+ *
+ * Kota hatasi (429) zaten ayrica ele aliniyor; burasi yalnizca
+ * "sunucu su an mesgul" durumu.
+ */
+function isTransientError(err: any): boolean {
+  const raw = (err?.message || "") + JSON.stringify(err || {});
+  return (
+    err?.status === "UNAVAILABLE" ||
+    err?.code === 503 ||
+    err?.httpStatus === 503 ||
+    /\b503\b/.test(raw) ||
+    /UNAVAILABLE|high demand|overloaded|try again later/i.test(raw)
+  );
+}
+
 function isRateLimitError(err: any): boolean {
   const errStr = (err?.message || "") + JSON.stringify(err || {});
   return (
@@ -895,6 +919,23 @@ async function generateContentWithRetry(
   const providers = params.providers?.length ? params.providers : getProviderChain();
   let lastError: any = null;
 
+  /**
+   * Saglayici basina ILK hata.
+   *
+   * Sonunda `lastError` firlatiliyordu; o da zincirin EN SON denedigi
+   * modelin hatasi, yani genelde listenin dibindeki en eski modelin.
+   * Gercek hayattaki ornek: Groq anahtari gecersizken kullaniciya
+   * "gemini-2.0-flash artik yok" yaziyordu - dogru olmayan bir teshis.
+   *
+   * Ayrica zincirde HANGI saglayicilarin oldugu da yaziliyor: anahtari
+   * tanimli olmayan saglayici sessizce atlaniyor ve mesajda hic
+   * gorunmuyordu, dolayisiyla "Gemini neden devreye girmedi" sorusunun
+   * cevabi hata metninde yoktu.
+   */
+  const firstErrorByProvider = new Map<string, string>();
+  const kisalt = (e: any) =>
+    String(e?.message || e || 'bilinmeyen hata').replace(/\s+/g, ' ').slice(0, 180);
+
   // Saglayicilar sirayla denenir. Biri kotasini doldurursa digerine gecilir.
   for (const provider of providers) {
     const isGroq = provider === 'groq';
@@ -933,6 +974,9 @@ async function generateContentWithRetry(
           return { text: response.text || "", usedModel: modelName };
         } catch (err: any) {
           lastError = err;
+          if (!firstErrorByProvider.has(provider)) {
+            firstErrorByProvider.set(provider, kisalt(err));
+          }
 
           if (isRateLimitError(err)) {
             const raw = (err?.message || '') + JSON.stringify(err || {});
@@ -950,6 +994,15 @@ async function generateContentWithRetry(
               `[AI] ${provider}/${modelName} limite takildi (429). ${backoffMs} ms bekleniyor (deneme ${attempt + 1}/3).`
             );
             await sleep(backoffMs);
+          } else if (isTransientError(err) && attempt < 2) {
+            // "Su an mesgul" — model KALDIRILMIS degil. Kisa bekleyip
+            // ayni modeli yeniden dene; atlarsak zincir bir anlik
+            // yogunluk yuzunden butun modelleri bosa harciyor.
+            const backoffMs = 1500 * Math.pow(2, attempt);
+            console.warn(
+              `[AI] ${provider}/${modelName} gecici olarak mesgul (503). ${backoffMs} ms bekleniyor (deneme ${attempt + 1}/3).`
+            );
+            await sleep(backoffMs);
           } else {
             console.warn(`[AI] ${provider}/${modelName} hatasi:`, err?.message || err);
             break; // Sonraki modele gec
@@ -959,6 +1012,22 @@ async function generateContentWithRetry(
 
       if (providerExhausted) break;
     }
+  }
+
+  // Zincirin TAMAMI basarisiz. Tek bir modelin hatasini firlatmak yerine
+  // her saglayicinin neyle takildigini ve zincirde kimin oldugunu yaz.
+  if (firstErrorByProvider.size > 0) {
+    const denenmeyen = ['gemini', 'groq'].filter((p) => !providers.includes(p));
+    const parcalar = [...firstErrorByProvider].map(([p, m]) => `${p}: ${m}`);
+    if (denenmeyen.length) {
+      parcalar.push(`${denenmeyen.join(', ')} DENENMEDI (anahtari tanimli degil)`);
+    }
+    const hata: any = new Error(parcalar.join(' | '));
+    // Cagiran uclar isRateLimitError/formatErrorMessage ile bu nesneye
+    // bakiyor; ozgun hatayi kaybetmemek icin altina asiliyor.
+    hata.cause = lastError;
+    hata.status = lastError?.status;
+    throw hata;
   }
 
   throw lastError;
