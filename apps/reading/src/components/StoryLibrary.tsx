@@ -60,7 +60,7 @@ export default function StoryLibrary({
       <div>
         <div className="flex items-center gap-2.5 mb-4">
           <Library className="h-4 w-4 text-accent" />
-          <h2 className="font-display text-lg font-bold text-ink">
+          <h2 className="font-display text-lg font-semibold text-ink">
             Hikayelerim
           </h2>
           <span className="font-mono text-[11px] text-ink-3">
@@ -69,11 +69,11 @@ export default function StoryLibrary({
         </div>
 
         {stories.length === 0 ? (
-          <div className="border border-dashed border-hairline/50 bg-white p-8 text-center rounded-xl">
+          <div className="border border-dashed border-hairline/50 bg-paper-2 p-8 text-center rounded-xl">
             <BookOpen className="mx-auto h-6 w-6 text-ink/20" />
             <p className="mt-3 text-xs leading-relaxed text-ink/60">
               Henüz hikaye üretmedin. Yukarıdaki kutudan seviyeni seç ve
-              <strong className="font-bold"> Hikayeyi Oluştur</strong>'a bas;
+              <strong className="font-semibold"> Hikayeyi Oluştur</strong>'a bas;
               ürettiğin her hikaye burada kalır.
             </p>
           </div>
@@ -89,7 +89,7 @@ export default function StoryLibrary({
               return (
                 <article
                   key={story.id}
-                  className="flex flex-col border border-hairline/40 bg-white transition-colors hover:border-accent/40 rounded-lg"
+                  className="flex flex-col border border-hairline/40 bg-paper-2 transition-colors hover:border-accent/40 rounded-lg"
                 >
                   <button
                     type="button"
@@ -97,10 +97,10 @@ export default function StoryLibrary({
                     className="flex-1 p-4 text-left cursor-pointer"
                   >
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="border border-accent/30 bg-paper px-1.5 py-0.5 font-mono text-[10px] font-bold text-ink rounded-lg">
+                      <span className="border border-accent/30 bg-paper px-1.5 py-0.5 font-mono text-[10px] font-semibold text-ink rounded-lg">
                         {story.cefr}
                       </span>
-                      <span className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-accent">
+                      <span className="flex items-center gap-1 text-[10px] font-semibold text-accent">
                         <Sparkles className="h-3 w-3" /> Sana özel
                       </span>
                       {/* Hangi model yazdi: acik kaynak modellerle
@@ -111,13 +111,13 @@ export default function StoryLibrary({
                         </span>
                       )}
                       {isRead && (
-                        <span className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-emerald-700">
+                        <span className="flex items-center gap-1 text-[10px] font-semibold text-emerald-700">
                           <CheckCircle2 className="h-3 w-3" /> Okundu
                         </span>
                       )}
                     </div>
 
-                    <h3 className="font-display text-base font-bold leading-tight text-ink break-words">
+                    <h3 className="font-display text-base font-semibold leading-tight text-ink break-words">
                       {story.title}
                     </h3>
                     <p className="mt-1 text-[11px] text-ink-3 break-words">
@@ -131,7 +131,7 @@ export default function StoryLibrary({
                         <span
                           key={w.term}
                           title={w.meaning}
-                          className="border border-hairline/40 bg-paper px-1.5 py-0.5 text-[10px] font-bold text-ink/80 rounded-lg"
+                          className="border border-hairline/40 bg-paper px-1.5 py-0.5 text-[10px] font-semibold text-ink/80 rounded-lg"
                         >
                           {w.term}
                         </span>
@@ -171,7 +171,7 @@ export default function StoryLibrary({
                   <div className="border-t border-hairline/30 px-3 py-2">
                     {isConfirming ? (
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="flex items-center gap-1 text-[10px] font-bold text-rose-800">
+                        <span className="flex items-center gap-1 text-[10px] font-semibold text-rose-800">
                           <AlertTriangle className="h-3 w-3" /> Silinsin mi?
                         </span>
                         <button
@@ -180,14 +180,14 @@ export default function StoryLibrary({
                             onDeleteStory(story.id);
                             setConfirmingDelete(null);
                           }}
-                          className="border border-rose-300 bg-rose-50 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-rose-900 hover:bg-rose-100 cursor-pointer rounded-lg"
+                          className="border border-rose-300 bg-rose-50 px-2 py-1 text-[10px] font-semibold text-rose-900 hover:bg-rose-100 cursor-pointer rounded-lg"
                         >
                           Sil
                         </button>
                         <button
                           type="button"
                           onClick={() => setConfirmingDelete(null)}
-                          className="border border-hairline/40 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-ink/60 hover:border-accent/40 cursor-pointer rounded-lg"
+                          className="border border-hairline/40 px-2 py-1 text-[10px] font-semibold text-ink/60 hover:border-accent/40 cursor-pointer rounded-lg"
                         >
                           Vazgeç
                         </button>
@@ -196,7 +196,7 @@ export default function StoryLibrary({
                       <button
                         type="button"
                         onClick={() => setConfirmingDelete(story.id)}
-                        className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-ink-3 hover:text-rose-700 transition-colors cursor-pointer"
+                        className="flex items-center gap-1.5 text-[10px] font-semibold text-ink-3 hover:text-rose-700 transition-colors cursor-pointer"
                       >
                         <Trash2 className="h-3 w-3" /> Hikayeyi sil
                       </button>

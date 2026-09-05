@@ -54,7 +54,7 @@ export const GoalEditorModal: React.FC<Props> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4 backdrop-blur-sm"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -66,13 +66,13 @@ export const GoalEditorModal: React.FC<Props> = ({
           if (e.key === 'Escape') onClose();
           if (e.key === 'Enter') save();
         }}
-        className="w-full max-w-sm overflow-hidden rounded-2xl border border-slate-200
-          bg-white shadow-2xl shadow-slate-900/10"
+        className="w-full max-w-sm overflow-hidden rounded-2xl border border-hairline
+          bg-paper-2 shadow-ink/10"
       >
-        <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-5 py-4">
+        <div className="flex items-center justify-between gap-3 border-b border-hairline px-5 py-4">
           <div className="flex items-center gap-2">
-            <Target className="h-4 w-4 text-indigo-600" />
-            <h2 className="text-sm font-semibold tracking-tight text-slate-900">
+            <Target className="h-4 w-4 text-accent" />
+            <h2 className="text-sm font-semibold tracking-tight text-ink">
               Hedef ve seri
             </h2>
           </div>
@@ -80,8 +80,8 @@ export const GoalEditorModal: React.FC<Props> = ({
             type="button"
             onClick={onClose}
             aria-label="Kapat"
-            className="rounded-lg p-1.5 text-slate-400 transition-colors
-              hover:bg-slate-100 hover:text-slate-900 cursor-pointer"
+            className="rounded-lg p-1.5 text-ink-3 transition-colors
+              hover:bg-paper-3 hover:text-ink cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -89,7 +89,7 @@ export const GoalEditorModal: React.FC<Props> = ({
 
         <div className="space-y-4 px-5 py-5">
           <label className="block space-y-1.5">
-            <span className="text-[12px] font-medium text-slate-700">Video hedefi</span>
+            <span className="text-[12px] font-medium text-ink-2">Video hedefi</span>
             <input
               type="number"
               min={1}
@@ -97,39 +97,39 @@ export const GoalEditorModal: React.FC<Props> = ({
               value={goalDraft}
               autoFocus
               onChange={(e) => setGoalDraft(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2
-                text-sm text-slate-900 transition-colors
-                focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/15"
+              className="w-full rounded-lg border border-hairline bg-paper-2 px-3 py-2
+                text-sm text-ink transition-colors
+                focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/15"
             />
           </label>
 
           <label className="block space-y-1.5">
-            <span className="text-[12px] font-medium text-slate-700">Gün serisi</span>
+            <span className="text-[12px] font-medium text-ink-2">Gün serisi</span>
             <input
               type="number"
               min={0}
               max={9999}
               value={streakDraft}
               onChange={(e) => setStreakDraft(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2
-                text-sm text-slate-900 transition-colors
-                focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/15"
+              className="w-full rounded-lg border border-hairline bg-paper-2 px-3 py-2
+                text-sm text-ink transition-colors
+                focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/15"
             />
           </label>
 
-          <p className="text-[11px] leading-relaxed text-slate-400">
+          <p className="text-[11px] leading-relaxed text-ink-3">
             Tamamlanan video sayısı derslerin durumundan türetilir, elle
             değiştirilmez.
           </p>
         </div>
 
-        <div className="flex items-center gap-2 border-t border-slate-200 bg-slate-50 px-5 py-4">
+        <div className="flex items-center gap-2 border-t border-hairline bg-paper px-5 py-4">
           <button
             type="button"
             onClick={save}
             className="inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg
-              bg-indigo-600 text-[13px] font-medium text-white shadow-sm
-              transition-all duration-200 ease-in-out hover:bg-indigo-700 cursor-pointer"
+              bg-accent text-[13px] font-medium text-white
+              transition-all duration-200 ease-in-out hover:bg-accent-700 cursor-pointer"
           >
             <Check className="h-3.5 w-3.5" />
             Kaydet
@@ -138,8 +138,8 @@ export const GoalEditorModal: React.FC<Props> = ({
             type="button"
             onClick={onClose}
             className="inline-flex h-9 items-center justify-center rounded-lg border
-              border-slate-200 bg-white px-4 text-[13px] font-medium text-slate-600
-              transition-colors hover:text-slate-900 cursor-pointer"
+              border-hairline bg-paper-2 px-4 text-[13px] font-medium text-ink-2
+              transition-colors hover:text-ink cursor-pointer"
           >
             Vazgeç
           </button>

@@ -30,8 +30,7 @@ import {
 } from './vocabSettings';
 import { FlashcardReview } from './FlashcardReview';
 import {
-  Layers, Sparkles, Loader2, Search, Trash2, Play, BookMarked,
-  Filter, EyeOff, Eye, Download, AlertTriangle, Settings2, PlusCircle, X, Check,
+  Layers, Sparkles, Loader2, Search, Trash2, Play, Filter, EyeOff, Eye, Download, AlertTriangle, Settings2, PlusCircle, X, Check,
   Wand2, RefreshCw,
 } from 'lucide-react';
 
@@ -410,72 +409,88 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
     URL.revokeObjectURL(url);
   };
 
+  /**
+   * Deste sayaci.
+   *
+   * DORT AYRI RENKLI HAP DEGIL. Once "Kart" gri, "Vadesi gelen" pembe,
+   * "Ogreniliyor" sari, "Tekrar" yesil dolgulu haplardi: ayni destenin
+   * dort parcasi icin dort renk. Renk hicbirinde bir sey ifade
+   * etmiyordu - sayilar zaten kendilerini soyluyor - ama ekrani
+   * alacali gosteriyordu.
+   *
+   * `tone` prop'u duruyor: cagri yerleri degismesin diye kabul ediliyor
+   * ama artik yok sayiliyor.
+   */
   const StatPill: React.FC<{ label: string; value: number; tone?: string }> = ({
     label,
     value,
-    tone = 'bg-slate-100 text-slate-700',
   }) => (
-    <span className={`px-2.5 py-1 rounded-lg text-[11px] font-bold ${tone}`}>
-      {label}: {value}
+    <span className="flex items-baseline gap-1 text-[11px] text-ink-3">
+      <span className="timecode font-medium text-ink">{value}</span>
+      {label.toLocaleLowerCase('tr')}
     </span>
   );
 
   return (
     <div className="space-y-5">
-      {/* Başlık */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
+      {/* BAŞLIK BURADA YOK.
+          Burada "Kelime" rozeti ve "Kelime Kartları" başlığı vardı.
+          Katmanlıda bu bileşenin üstünde LayerHeaderBar zaten
+          "Kelime & Cümle Bankası" yazıyor; iki başlık üst üste geliyordu.
+          Reading tarafında ise başlık artık App.tsx'te, diğer bölümlerle
+          aynı biçimde (marka renginde bölüm adı). */}
+      <div className="rounded-2xl border border-hairline bg-paper-2 p-4 space-y-3">
         <div className="flex items-center justify-between flex-wrap gap-2">
-          <div className="flex items-center space-x-2.5">
-            <span className="px-2.5 py-1 bg-accent-soft text-accent border border-accent/30 text-xs font-bold rounded-md uppercase tracking-wider">
-              Kelime
-            </span>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900">Kelime Kartları</h2>
-          </div>
+          <p className="max-w-[62ch] text-[12px] leading-relaxed text-ink-2">
+            Kartlar <strong className="font-medium text-ink">FSRS-6</strong> ile planlanıyor
+            (Anki ile aynı algoritma, hedef tutma oranı %90).
+          </p>
 
           <div className="flex items-center gap-1.5">
             <button
               type="button"
               onClick={() => setShowManualAdd(true)}
-              className="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition cursor-pointer"
+              className="flex items-center gap-1.5 rounded-lg border border-hairline px-3 py-1.5
+                text-[12px] text-ink-2 transition-colors duration-150
+                hover:bg-paper-3 hover:text-ink cursor-pointer"
             >
               <PlusCircle className="w-3.5 h-3.5" />
-              <span>Kart Ekle</span>
+              <span>Kart ekle</span>
             </button>
             <button
               type="button"
               onClick={() => setShowSettings((v) => !v)}
-              className="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition cursor-pointer"
+              className="flex items-center gap-1.5 rounded-lg border border-hairline px-3 py-1.5
+                text-[12px] text-ink-2 transition-colors duration-150
+                hover:bg-paper-3 hover:text-ink cursor-pointer"
             >
               <Settings2 className="w-3.5 h-3.5" />
               <span>Ayarlar</span>
             </button>
           </div>
         </div>
-        <p className="text-xs text-slate-600 leading-relaxed">
-          Kartlar <strong>FSRS-6</strong> algoritmasıyla planlanıyor (Anki ile aynı algoritma,
-          hedef tutma oranı %90). Çalışırken yalnızca <strong>Again</strong> ve
-          <strong> Good</strong> düğmelerini kullanıyorsunuz.
-        </p>
-
-        <div className="flex items-center gap-1.5 border-b border-slate-200 -mb-4 pt-1">
+        {/* Klasör sekmesi idiyomu (`rounded-t-lg` + alt kenarlığa yapışık
+            dolu menekşe) bu depodaki tek örnekti; her yerde açık gri hap
+            kullanılıyor. Aynı dile getirildi. */}
+        <div className="flex w-fit items-center gap-0.5 rounded-xl bg-paper-3 p-1">
           {([
-            ['lesson', `Bu Ders (${lessonCards.length})`],
-            ['all', `Tüm Kartlar (${allCards.length})`],
+            ['lesson', `Bu ders (${lessonCards.length})`],
+            ['all', `Tüm kartlar (${allCards.length})`],
             ['study', 'Çalış'],
           ] as [Tab, string][]).map(([value, label]) => (
             <button
               key={value}
               type="button"
               onClick={() => setTab(value)}
-              className={`px-3.5 py-2 text-xs font-bold rounded-t-lg transition cursor-pointer ${
+              className={`rounded-lg px-3 py-1.5 text-[12px] transition-colors duration-150 cursor-pointer ${
                 tab === value
-                  ? 'bg-accent text-white'
-                  : 'text-slate-600 hover:bg-slate-100'
+                  ? 'bg-paper-2 font-medium text-ink'
+                  : 'text-ink-2 hover:text-ink'
               }`}
             >
               {label}
               {value === 'study' && globalStats.due > 0 && (
-                <span className="ml-1.5 px-1.5 py-0.5 bg-rose-500 text-white rounded-full text-[10px]">
+                <span className="timecode ml-1.5 rounded bg-accent px-1.5 py-0.5 text-[10px] text-white">
                   {globalStats.due}
                 </span>
               )}
@@ -486,13 +501,13 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
 
       {/* Ayarlar paneli */}
       {showSettings && (
-        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-4">
+        <div className="bg-paper-2 border border-hairline rounded-xl p-4 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-slate-900">Çalışma Ayarları</h3>
+            <h3 className="text-sm font-semibold text-ink">Çalışma Ayarları</h3>
             <button
               type="button"
               onClick={() => setShowSettings(false)}
-              className="p-1 text-slate-500 hover:text-slate-700 cursor-pointer"
+              className="p-1 text-ink-3 hover:text-ink-2 cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -500,7 +515,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-700 block">
+              <label className="text-[11px] font-semibold text-ink-2 block">
                 Günlük yeni kart sınırı
               </label>
               <input
@@ -509,15 +524,15 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 max={500}
                 value={settings.newCardsPerDay}
                 onChange={(e) => updateSettings({ newCardsPerDay: Math.max(0, parseInt(e.target.value, 10) || 0) })}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-accent"
+                className="w-full px-3 py-2 bg-paper border border-hairline-2 rounded-lg text-sm focus:outline-none focus:border-accent"
               />
-              <p className="text-[10px] text-slate-500">
+              <p className="text-[10px] text-ink-3">
                 Bugün {daily.newIntroduced} yeni kart gördünüz. 0 yazarsanız sınırsız olur.
               </p>
             </div>
 
             <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-700 block">
+              <label className="text-[11px] font-semibold text-ink-2 block">
                 Günlük tekrar sınırı
               </label>
               <input
@@ -526,15 +541,15 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 max={2000}
                 value={settings.reviewsPerDay}
                 onChange={(e) => updateSettings({ reviewsPerDay: Math.max(0, parseInt(e.target.value, 10) || 0) })}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-accent"
+                className="w-full px-3 py-2 bg-paper border border-hairline-2 rounded-lg text-sm focus:outline-none focus:border-accent"
               />
-              <p className="text-[10px] text-slate-500">
+              <p className="text-[10px] text-ink-3">
                 Bugün {daily.reviewsDone} tekrar yaptınız. 0 = sınırsız (önerilen).
               </p>
             </div>
 
             <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-700 block">
+              <label className="text-[11px] font-semibold text-ink-2 block">
                 Oturum süresi (dakika)
               </label>
               <input
@@ -543,12 +558,12 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 max={180}
                 value={settings.sessionMinutes}
                 onChange={(e) => updateSettings({ sessionMinutes: Math.max(1, parseInt(e.target.value, 10) || 15) })}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-accent"
+                className="w-full px-3 py-2 bg-paper border border-hairline-2 rounded-lg text-sm focus:outline-none focus:border-accent"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-700 block">
+              <label className="text-[11px] font-semibold text-ink-2 block">
                 Ayıklamada istenecek kelime sayısı
               </label>
               <input
@@ -557,21 +572,21 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 max={40}
                 value={settings.extractCount}
                 onChange={(e) => updateSettings({ extractCount: Math.min(40, Math.max(8, parseInt(e.target.value, 10) || 20)) })}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-accent"
+                className="w-full px-3 py-2 bg-paper border border-hairline-2 rounded-lg text-sm focus:outline-none focus:border-accent"
               />
-              <p className="text-[10px] text-slate-500">
+              <p className="text-[10px] text-ink-3">
                 En fazla 40. Kısa videolarda model bu sayıya ulaşamayabilir.
               </p>
             </div>
           </div>
 
           {/* Teşhis: kartların gerçekte hangi derse yazıldığını gösterir */}
-          <div className="pt-3 border-t border-slate-200 space-y-1.5">
-            <h4 className="text-[11px] font-bold text-slate-700">
+          <div className="pt-3 border-t border-hairline space-y-1.5">
+            <h4 className="text-[11px] font-semibold text-ink-2">
               Kart dağılımı (veritabanındaki gerçek durum)
             </h4>
             {allCards.length === 0 ? (
-              <p className="text-[11px] text-slate-500">Veritabanında hiç kart yok.</p>
+              <p className="text-[11px] text-ink-3">Veritabanında hiç kart yok.</p>
             ) : (
               <div className="space-y-0.5 max-h-40 overflow-y-auto">
                 {Object.entries(
@@ -583,15 +598,15 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 ).map(([key, count]) => (
                   <div
                     key={key}
-                    className="flex items-center justify-between text-[11px] bg-slate-50 border border-slate-200 rounded px-2 py-1"
+                    className="flex items-center justify-between text-[11px] bg-paper border border-hairline rounded px-2 py-1"
                   >
-                    <span className="truncate text-slate-700">{key}</span>
-                    <span className="font-bold text-slate-900 shrink-0 ml-2">{count}</span>
+                    <span className="truncate text-ink-2">{key}</span>
+                    <span className="font-semibold text-ink shrink-0 ml-2">{count}</span>
                   </div>
                 ))}
               </div>
             )}
-            <p className="text-[10px] text-slate-500">
+            <p className="text-[10px] text-ink-3">
               Toplam {allCards.length} kart.
               {lesson
                 ? ` Aktif ders: ${lesson.title} [${lesson.id}] — ${lessonCards.length} kart.`
@@ -600,11 +615,11 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
           </div>
 
           {/* Eski kartlarin seviyesini/turunu yerel listelerle tazeleme */}
-          <div className="pt-3 border-t border-slate-200 space-y-1.5">
-            <h4 className="text-[11px] font-bold text-slate-700">
+          <div className="pt-3 border-t border-hairline space-y-1.5">
+            <h4 className="text-[11px] font-semibold text-ink-2">
               Seviyeleri ve söz türlerini yeniden hesapla
             </h4>
-            <p className="text-[10px] text-slate-500 leading-relaxed">
+            <p className="text-[10px] text-ink-3 leading-relaxed">
               Bu özellik eklenmeden önce oluşturulan kartların hepsi
               <strong> B2</strong> olarak ve söz türü olmadan kaydedilmişti.
               Bu düğme kartları 9394 kelimelik CEFR listesi ve kalıp listesiyle
@@ -617,7 +632,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 type="button"
                 onClick={handleReclassify}
                 disabled={reclassifyBusy || allCards.length === 0}
-                className="flex items-center space-x-1.5 px-3 py-1.5 bg-accent hover:bg-accent-700 disabled:bg-slate-300 text-white text-[11px] font-bold rounded-lg cursor-pointer"
+                className="flex items-center space-x-1.5 px-3 py-1.5 bg-accent hover:bg-accent-700 disabled:bg-hairline-2 text-white text-[11px] font-semibold rounded-lg cursor-pointer"
               >
                 {reclassifyBusy ? (
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -634,11 +649,11 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 pt-1 border-t border-slate-200">
+          <div className="flex items-center gap-2 pt-1 border-t border-hairline">
             <button
               type="button"
               onClick={refresh}
-              className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold rounded-lg cursor-pointer"
+              className="px-3 py-1.5 bg-paper-3 hover:bg-hairline text-ink-2 text-[11px] font-semibold rounded-lg cursor-pointer"
             >
               Listeyi yenile
             </button>
@@ -648,7 +663,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 resetDailyCounter();
                 setDaily(getDailyCounter());
               }}
-              className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold rounded-lg cursor-pointer"
+              className="px-3 py-1.5 bg-paper-3 hover:bg-hairline text-ink-2 text-[11px] font-semibold rounded-lg cursor-pointer"
             >
               Günlük sayacı sıfırla
             </button>
@@ -658,7 +673,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 setSettings({ ...DEFAULT_VOCAB_SETTINGS });
                 saveVocabSettings({ ...DEFAULT_VOCAB_SETTINGS });
               }}
-              className="px-3 py-1.5 text-[11px] font-bold text-slate-500 hover:text-slate-800 cursor-pointer"
+              className="px-3 py-1.5 text-[11px] font-semibold text-ink-3 hover:text-ink-800 cursor-pointer"
             >
               Varsayılanlara dön
             </button>
@@ -668,34 +683,34 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
 
       {/* Manuel kart ekleme */}
       {showManualAdd && (
-        <div className="fixed inset-0 bg-slate-900/40 z-[70] flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-5 space-y-3 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-ink/40 z-[70] flex items-center justify-center p-4">
+          <div className="bg-paper-2 rounded-2xl w-full max-w-md p-5 space-y-3 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-slate-900">Elle Kart Ekle</h3>
+              <h3 className="text-sm font-semibold text-ink">Elle Kart Ekle</h3>
               <button
                 type="button"
                 onClick={() => setShowManualAdd(false)}
-                className="p-1 text-slate-500 hover:text-slate-700 cursor-pointer"
+                className="p-1 text-ink-3 hover:text-ink-2 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-600">İngilizce ifade</label>
+              <label className="text-[11px] font-semibold text-ink-2">İngilizce ifade</label>
               <div className="flex gap-2">
                 <input
                   type="text"
                   value={manualFront}
                   onChange={(e) => setManualFront(e.target.value)}
                   placeholder="örn. come across"
-                  className="flex-1 min-w-0 px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm font-bold focus:outline-none focus:border-accent"
+                  className="flex-1 min-w-0 px-3 py-2 bg-paper border border-hairline-2 rounded-lg text-sm font-semibold focus:outline-none focus:border-accent"
                 />
                 <button
                   type="button"
                   onClick={() => void resolveManualCard(manualFront, true)}
                   disabled={!manualFront.trim() || manualBusy}
-                  className="flex items-center space-x-1.5 px-3 py-2 bg-accent hover:bg-accent-700 disabled:bg-slate-300 text-white text-xs font-bold rounded-lg cursor-pointer"
+                  className="flex items-center space-x-1.5 px-3 py-2 bg-accent hover:bg-accent-700 disabled:bg-hairline-2 text-white text-xs font-semibold rounded-lg cursor-pointer"
                   title="Anlamı, örneği, seviyeyi ve söz türünü yeniden doldur"
                 >
                   {manualBusy ? (
@@ -706,7 +721,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                   <span>Yenile</span>
                 </button>
               </div>
-              <p className="flex items-start space-x-1.5 text-[10px] text-slate-500">
+              <p className="flex items-start space-x-1.5 text-[10px] text-ink-3">
                 <Wand2 className="w-3 h-3 shrink-0 mt-0.5" />
                 <span>
                   Kelimeyi yazın, yeterli: anlam, örnek, seviye ve söz türü
@@ -716,25 +731,25 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
             </div>
 
             <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-600">Türkçe karşılık</label>
+              <label className="text-[11px] font-semibold text-ink-2">Türkçe karşılık</label>
               <input
                 type="text"
                 value={manualBack}
                 onChange={(e) => setManualBack(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-accent"
+                className="w-full px-3 py-2 bg-paper border border-hairline-2 rounded-lg text-sm focus:outline-none focus:border-accent"
               />
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-600">Seviye</label>
+                <label className="text-[11px] font-semibold text-ink-2">Seviye</label>
                 <select
                   value={manualLevel}
                   onChange={(e) => {
                     setManualLevel(e.target.value as CardLevel);
                     setManualLevelSource(null);
                   }}
-                  className="w-full px-2 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold cursor-pointer"
+                  className="w-full px-2 py-2 bg-paper-2 border border-hairline-2 rounded-lg text-xs font-semibold cursor-pointer"
                 >
                   {LEVELS.map((l) => (
                     <option key={l} value={l}>{l}</option>
@@ -742,11 +757,11 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 </select>
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-600">Söz türü</label>
+                <label className="text-[11px] font-semibold text-ink-2">Söz türü</label>
                 <select
                   value={manualPos}
                   onChange={(e) => setManualPos(e.target.value as PartOfSpeech)}
-                  className="w-full px-2 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold cursor-pointer"
+                  className="w-full px-2 py-2 bg-paper-2 border border-hairline-2 rounded-lg text-xs font-semibold cursor-pointer"
                 >
                   {POS_ORDER.map((p) => (
                     <option key={p} value={p}>{POS_LABELS_TR[p]}</option>
@@ -754,11 +769,11 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 </select>
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-600">Tür</label>
+                <label className="text-[11px] font-semibold text-ink-2">Tür</label>
                 <select
                   value={manualKind}
                   onChange={(e) => setManualKind(e.target.value as CardKind)}
-                  className="w-full px-2 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold cursor-pointer"
+                  className="w-full px-2 py-2 bg-paper-2 border border-hairline-2 rounded-lg text-xs font-semibold cursor-pointer"
                 >
                   {KINDS.map((k) => (
                     <option key={k.value} value={k.value}>{k.label}</option>
@@ -776,16 +791,16 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
             )}
 
             <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-600">Örnek cümle (isteğe bağlı)</label>
+              <label className="text-[11px] font-semibold text-ink-2">Örnek cümle (isteğe bağlı)</label>
               <input
                 type="text"
                 value={manualExample}
                 onChange={(e) => setManualExample(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:outline-none focus:border-accent"
+                className="w-full px-3 py-2 bg-paper border border-hairline-2 rounded-lg text-xs focus:outline-none focus:border-accent"
               />
             </div>
 
-            <p className="text-[10px] text-slate-500">
+            <p className="text-[10px] text-ink-3">
               Kart {lesson ? `"${lesson.title.slice(0, 40)}"` : '"Elle Eklenenler"'} altına eklenecek.
             </p>
 
@@ -800,7 +815,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 type="button"
                 onClick={saveManualCard}
                 disabled={!manualFront.trim() || !manualBack.trim()}
-                className="flex-1 flex items-center justify-center space-x-1.5 px-4 py-2.5 bg-accent hover:bg-accent-700 disabled:bg-slate-300 text-white text-xs font-bold rounded-xl cursor-pointer"
+                className="flex-1 flex items-center justify-center space-x-1.5 px-4 py-2.5 bg-accent hover:bg-accent-700 disabled:bg-hairline-2 text-white text-xs font-semibold rounded-xl cursor-pointer"
               >
                 <Check className="w-4 h-4" />
                 <span>Ekle</span>
@@ -808,7 +823,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
               <button
                 type="button"
                 onClick={() => setShowManualAdd(false)}
-                className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl cursor-pointer"
+                className="px-4 py-2.5 bg-paper-3 hover:bg-hairline text-ink-2 text-xs font-semibold rounded-xl cursor-pointer"
               >
                 Vazgeç
               </button>
@@ -826,11 +841,11 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
             </div>
           ) : (
             <>
-              <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
+              <div className="bg-paper-2 border border-hairline rounded-xl p-4 space-y-3">
                 <div className="flex items-start justify-between flex-wrap gap-3">
                   <div>
-                    <h3 className="text-sm font-bold text-slate-900">{lesson.title}</h3>
-                    <div className="flex flex-wrap items-center gap-1.5 pt-2">
+                    <h3 className="text-sm font-semibold text-ink">{lesson.title}</h3>
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-2">
                       <StatPill label="Kart" value={lessonStats.total} />
                       <StatPill
                         label="Vadesi gelen"
@@ -858,7 +873,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                       type="button"
                       onClick={handleExtract}
                       disabled={isExtracting}
-                      className="flex items-center space-x-2 px-4 py-2.5 bg-accent hover:bg-accent-700 disabled:bg-accent/40 text-white text-xs font-bold rounded-xl transition cursor-pointer"
+                      className="flex items-center space-x-2 px-4 py-2.5 bg-accent hover:bg-accent-700 disabled:bg-accent/40 text-white text-xs font-semibold rounded-xl transition cursor-pointer"
                     >
                       {isExtracting ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
@@ -873,7 +888,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 </div>
 
                 {(lesson.sentences?.length ?? 0) > 0 && (
-                  <p className="text-[11px] text-slate-500">
+                  <p className="text-[11px] text-ink-3">
                     Transkriptten B2-C1 seviyesindeki kelimeler, phrasal verb'ler, kalıplar,
                     deyimler ve gerçek konuşma ifadeleri ayıklanır. Aynı ifade zaten kartlarınızda
                     varsa üzerine yazılmaz, tekrar geçmişiniz korunur.
@@ -899,7 +914,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                       setStudyScope('lesson');
                       setTab('study');
                     }}
-                    className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition cursor-pointer"
+                    className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 bg-ink hover:bg-ink-800 text-white text-xs font-semibold rounded-xl transition cursor-pointer"
                   >
                     <Play className="w-4 h-4 fill-current" />
                     <span>Bu dersin {lessonStats.due} kartını çalış</span>
@@ -921,8 +936,8 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
       {/* TÜM KARTLAR */}
       {tab === 'all' && (
         <div className="space-y-4">
-          <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-3">
-            <div className="flex flex-wrap items-center gap-1.5">
+          <div className="bg-paper-2 border border-hairline rounded-xl p-4 space-y-3">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
               <StatPill label="Toplam" value={globalStats.total} />
               <StatPill label="Vadesi gelen" value={globalStats.due} tone="bg-rose-100 text-rose-800" />
               <StatPill
@@ -935,18 +950,18 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
             </div>
 
             <div className="relative">
-              <Search className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
+              <Search className="w-4 h-4 text-ink-3 absolute left-3 top-2.5" />
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Kelime veya anlam ara..."
-                className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-accent"
+                className="w-full pl-9 pr-3 py-2 bg-paper border border-hairline rounded-lg text-xs text-ink focus:outline-none focus:border-accent"
               />
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              <span className="flex items-center space-x-1 text-[11px] font-bold text-slate-500">
+              <span className="flex items-center space-x-1 text-[11px] font-semibold text-ink-3">
                 <Filter className="w-3.5 h-3.5" />
                 <span>Filtre:</span>
               </span>
@@ -954,7 +969,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
               <select
                 value={levelFilter}
                 onChange={(e) => setLevelFilter(e.target.value as any)}
-                className="px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 cursor-pointer"
+                className="px-2.5 py-1.5 bg-paper-2 border border-hairline-2 rounded-lg text-xs font-semibold text-ink-800 cursor-pointer"
               >
                 <option value="all">Tüm seviyeler</option>
                 {LEVELS.map((l) => (
@@ -965,7 +980,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
               <select
                 value={kindFilter}
                 onChange={(e) => setKindFilter(e.target.value as any)}
-                className="px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 cursor-pointer"
+                className="px-2.5 py-1.5 bg-paper-2 border border-hairline-2 rounded-lg text-xs font-semibold text-ink-800 cursor-pointer"
               >
                 <option value="all">Tüm türler</option>
                 {KINDS.map((k) => (
@@ -976,7 +991,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
               <select
                 value={posFilter}
                 onChange={(e) => setPosFilter(e.target.value as any)}
-                className="px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 cursor-pointer"
+                className="px-2.5 py-1.5 bg-paper-2 border border-hairline-2 rounded-lg text-xs font-semibold text-ink-800 cursor-pointer"
               >
                 <option value="all">Tüm söz türleri</option>
                 {POS_ORDER.map((p) => (
@@ -987,7 +1002,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
               <select
                 value={lessonFilter}
                 onChange={(e) => setLessonFilter(e.target.value)}
-                className="px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 cursor-pointer max-w-[220px]"
+                className="px-2.5 py-1.5 bg-paper-2 border border-hairline-2 rounded-lg text-xs font-semibold text-ink-800 cursor-pointer max-w-[220px]"
               >
                 <option value="all">Tüm dersler</option>
                 {lessons.map((l) => (
@@ -999,14 +1014,14 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 type="button"
                 onClick={exportCsv}
                 disabled={filtered.length === 0}
-                className="flex items-center space-x-1.5 px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 disabled:opacity-40 text-slate-700 text-xs font-bold rounded-lg cursor-pointer"
+                className="flex items-center space-x-1.5 px-2.5 py-1.5 bg-paper-3 hover:bg-hairline disabled:opacity-40 text-ink-2 text-xs font-semibold rounded-lg cursor-pointer"
                 title="Anki'ye alınabilecek CSV olarak indir"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>CSV</span>
               </button>
 
-              <span className="text-[11px] text-slate-500 ml-auto">
+              <span className="text-[11px] text-ink-3 ml-auto">
                 {filtered.length} kart gösteriliyor
               </span>
             </div>
@@ -1025,15 +1040,15 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
       {/* ÇALIŞ */}
       {tab === 'study' && (
         <div className="space-y-4">
-          <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-sm flex items-center justify-between flex-wrap gap-2">
+          <div className="bg-paper-2 border border-hairline rounded-xl p-3 flex items-center justify-between flex-wrap gap-2">
             <div className="flex items-center gap-1.5">
               <button
                 type="button"
                 onClick={() => setStudyScope('all')}
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
+                className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition cursor-pointer ${
                   studyScope === 'all'
                     ? 'bg-accent text-white'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    : 'bg-paper-3 text-ink-2 hover:bg-hairline'
                 }`}
               >
                 Tüm Kartlar ({globalStats.due})
@@ -1042,16 +1057,16 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 type="button"
                 onClick={() => setStudyScope('lesson')}
                 disabled={!lesson}
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition disabled:opacity-40 cursor-pointer ${
+                className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition disabled:opacity-40 cursor-pointer ${
                   studyScope === 'lesson'
                     ? 'bg-accent text-white'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    : 'bg-paper-3 text-ink-2 hover:bg-hairline'
                 }`}
               >
                 Sadece Bu Ders ({lessonStats.due})
               </button>
             </div>
-            <span className="text-[11px] text-slate-500">
+            <span className="text-[11px] text-ink-3">
               Günlük hedef: {settings.sessionMinutes} dk · Bugün {daily.newIntroduced}
               {settings.newCardsPerDay > 0 ? `/${settings.newCardsPerDay}` : ''} yeni kart
             </span>
@@ -1059,8 +1074,8 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
 
           {limitedPool.length === 0 && studyPool.some((c) => c.due <= Date.now()) ? (
             <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 text-center space-y-2">
-              <h3 className="text-sm font-bold text-slate-900">Günlük sınıra ulaşıldı</h3>
-              <p className="text-xs text-slate-600 max-w-md mx-auto">
+              <h3 className="text-sm font-semibold text-ink">Günlük sınıra ulaşıldı</h3>
+              <p className="text-xs text-ink-2 max-w-md mx-auto">
                 Bugün için ayarladığınız yeni kart sınırına ({settings.newCardsPerDay})
                 ulaştınız. Daha fazla çalışmak isterseniz Ayarlar'dan sınırı yükseltin
                 veya günlük sayacı sıfırlayın.
@@ -1068,7 +1083,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
               <button
                 type="button"
                 onClick={() => setShowSettings(true)}
-                className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg cursor-pointer"
+                className="px-4 py-2 bg-ink hover:bg-ink-800 text-white text-xs font-semibold rounded-lg cursor-pointer"
               >
                 Ayarları Aç
               </button>
@@ -1102,9 +1117,8 @@ const CardTable: React.FC<{
 }> = ({ cards, onDelete, onToggleSuspend, showLesson, emptyText }) => {
   if (cards.length === 0) {
     return (
-      <div className="bg-white border border-slate-200 rounded-xl p-8 text-center">
-        <BookMarked className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-        <p className="text-xs text-slate-500">{emptyText}</p>
+      <div className="rounded-2xl border border-hairline p-10 text-center">
+        <p className="text-[13px] leading-relaxed text-ink-2">{emptyText}</p>
       </div>
     );
   }
@@ -1112,8 +1126,8 @@ const CardTable: React.FC<{
   const now = Date.now();
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-      <div className="divide-y divide-slate-200 max-h-[65vh] overflow-y-auto">
+    <div className="overflow-hidden rounded-2xl border border-hairline bg-paper-2">
+      <div className="divide-y divide-hairline max-h-[65vh] overflow-y-auto">
         {cards.map((c) => {
           const isDue = !c.suspended && c.due <= now;
           const dueLabel = isDue
@@ -1123,39 +1137,37 @@ const CardTable: React.FC<{
           return (
             <div
               key={c.id}
-              className={`p-3.5 flex items-start justify-between gap-3 ${
-                c.suspended ? 'opacity-50' : ''
-              }`}
+              className={`group flex items-start justify-between gap-3 px-3.5 py-3
+                transition-colors hover:bg-paper-3 ${c.suspended ? 'opacity-50' : ''}`}
             >
               <div className="flex-1 min-w-0 space-y-1">
-                <div className="flex items-center flex-wrap gap-1.5">
-                  <span className="font-bold text-sm text-slate-900">{c.front}</span>
-                  <span className="px-1.5 py-0.5 bg-indigo-100 text-indigo-800 text-[10px] font-bold rounded">
+                {/* DÖRT RENKLİ ROZET YERİNE TEK KÜNYE SATIRI.
+                    Bir kartta aynı anda menekşe (seviye), gri (tür), mor
+                    (söz türü) ve kehribar ("yeni") rozet olabiliyordu;
+                    mor paletin dışındaydı ve dördü de aynı şeyi yapıyordu:
+                    kelimenin künyesini yazmak. */}
+                <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                  <span className="text-[14px] font-medium text-ink">{c.front}</span>
+                  <span className="rounded bg-paper-3 px-1.5 py-0.5 text-[11px] text-ink-2">
                     {c.level}
                   </span>
-                  <span className="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[10px] font-semibold rounded">
+                  <span className="text-[11px] text-ink-3">
                     {KINDS.find((k) => k.value === c.kind)?.label || c.kind}
                   </span>
-                  {c.pos && (
-                    <span className="px-1.5 py-0.5 bg-violet-100 text-violet-800 text-[10px] font-semibold rounded">
-                      {POS_LABELS_TR[c.pos]}
-                    </span>
-                  )}
+                  {c.pos && <span className="text-[11px] text-ink-3">· {POS_LABELS_TR[c.pos]}</span>}
                   {c.state !== CardState.Review && (
-                    <span className="px-1.5 py-0.5 bg-amber-100 text-amber-800 text-[10px] font-semibold rounded">
-                      yeni
-                    </span>
+                    <span className="text-[11px] text-[var(--marker-ink)]">· yeni</span>
                   )}
                 </div>
 
-                <p className="text-xs text-slate-700">{c.back}</p>
+                <p className="text-[13px] text-ink-2">{c.back}</p>
 
                 {c.exampleEn && (
-                  <p className="text-[11px] text-slate-500 italic truncate">{c.exampleEn}</p>
+                  <p className="text-[11px] text-ink-3 italic truncate">{c.exampleEn}</p>
                 )}
 
-                <div className="flex items-center flex-wrap gap-2 text-[10px] text-slate-500 pt-0.5">
-                  <span className={isDue ? 'text-rose-600 font-bold' : ''}>{dueLabel}</span>
+                <div className="flex items-center flex-wrap gap-2 text-[10px] text-ink-3 pt-0.5">
+                  <span className={isDue ? 'text-accent' : ''}>{dueLabel}</span>
                   <span>tekrar: {c.reps}</span>
                   {c.lapses > 0 && <span>unutma: {c.lapses}</span>}
                   {c.stability !== null && <span>S: {c.stability.toFixed(1)}g</span>}
@@ -1174,11 +1186,12 @@ const CardTable: React.FC<{
                 </div>
               </div>
 
-              <div className="flex items-center gap-1 shrink-0">
+              <div className="row-actions flex shrink-0 items-center gap-1 opacity-0
+                transition-opacity focus-within:opacity-100 group-hover:opacity-100">
                 <button
                   type="button"
                   onClick={() => onToggleSuspend(c)}
-                  className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 cursor-pointer"
+                  className="rounded-lg p-1.5 text-ink-3 transition-colors hover:bg-paper-3 hover:text-ink cursor-pointer"
                   title={c.suspended ? 'Askıdan çıkar' : 'Askıya al'}
                 >
                   {c.suspended ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
@@ -1186,7 +1199,7 @@ const CardTable: React.FC<{
                 <button
                   type="button"
                   onClick={() => onDelete(c.id)}
-                  className="p-1.5 rounded-lg bg-slate-100 hover:bg-rose-100 text-slate-500 hover:text-rose-700 cursor-pointer"
+                  className="rounded-lg p-1.5 text-ink-3 transition-colors hover:bg-paper-3 hover:text-rose-600 cursor-pointer"
                   title="Kartı sil"
                 >
                   <Trash2 className="w-3.5 h-3.5" />

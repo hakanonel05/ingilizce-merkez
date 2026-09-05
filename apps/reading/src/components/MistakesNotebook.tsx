@@ -85,13 +85,13 @@ export default function MistakesNotebook({ mistakes, onReviewMistake, onRemoveMi
         <div className="border-b border-hairline/40 pb-6">
           <div className="flex items-center gap-2 text-accent mb-2">
             <BookX className="h-4 w-4" />
-            <span className="text-[10px] font-bold tracking-[0.2em] uppercase">Yanlışlar Defteri</span>
+            <span className="text-[10px] font-semibold tracking-[0.2em]">Yanlışlar Defteri</span>
           </div>
-          <h2 className="font-display text-3xl font-bold text-ink">Yanlışlar Defteri</h2>
+          <h2 className="font-display text-3xl font-semibold text-ink">Yanlışlar Defteri</h2>
         </div>
-        <div className="bg-white border border-hairline/40 p-12 text-center space-y-3 rounded-2xl">
+        <div className="bg-paper-2 border border-hairline/40 p-12 text-center space-y-3 rounded-2xl">
           <PartyPopper className="h-10 w-10 text-accent mx-auto" />
-          <p className="font-display text-xl font-bold text-ink">Harika! Hiç yanlışın yok.</p>
+          <p className="font-display text-xl font-semibold text-ink">Harika! Hiç yanlışın yok.</p>
           <p className="text-sm text-ink/60 max-w-md mx-auto">
             Anlama testlerinde veya kelime alıştırmalarında yanlış yaptığın sorular otomatik olarak burada birikir.
             Şimdilik temiz — okumaya devam et!
@@ -107,28 +107,28 @@ export default function MistakesNotebook({ mistakes, onReviewMistake, onRemoveMi
       <div className="space-y-6 max-w-2xl mx-auto">
         <div className="flex items-center justify-between border-b border-hairline/40 pb-4">
           <div>
-            <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-accent mb-1">Pratik Modu</p>
-            <h2 className="font-display text-2xl font-bold text-ink">
+            <p className="text-[10px] font-semibold tracking-[0.2em] text-accent mb-1">Pratik Modu</p>
+            <h2 className="font-display text-2xl font-semibold text-ink">
               {queueIndex + 1} / {queue.length}
             </h2>
           </div>
           <button
             onClick={() => setMode('list')}
-            className="text-xs font-bold text-ink-3 hover:text-ink"
+            className="text-xs font-semibold text-ink-3 hover:text-ink"
           >
             Bitir
           </button>
         </div>
 
-        <div className="bg-white border border-hairline/40 p-6 space-y-5 rounded-xl">
-          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wide text-ink-3">
+        <div className="bg-paper-2 border border-hairline/40 p-6 space-y-5 rounded-xl">
+          <div className="flex items-center gap-2 text-[10px] font-semibold tracking-wide text-ink-3">
             <span>{currentItem.passageTitle}</span>
             <span>·</span>
             <span>{SOURCE_LABEL[currentItem.source]}</span>
             <span>·</span>
             <span>{currentItem.cefr}</span>
           </div>
-          <p className="font-display text-lg font-bold text-ink leading-relaxed">{currentItem.question}</p>
+          <p className="font-display text-lg font-semibold text-ink leading-relaxed">{currentItem.question}</p>
 
           <div className="grid grid-cols-1 gap-2.5">
             {currentItem.options.map(option => {
@@ -137,11 +137,11 @@ export default function MistakesNotebook({ mistakes, onReviewMistake, onRemoveMi
               const isRight = optLetter === currentItem.correctAnswer;
               let cls = 'bg-paper border-hairline/40 text-ink hover:border-accent/40';
               if (practiceChecked) {
-                if (isRight) cls = 'bg-emerald-50 border-emerald-500 text-emerald-900 font-bold';
+                if (isRight) cls = 'bg-emerald-50 border-emerald-500 text-emerald-900 font-semibold';
                 else if (isSelected) cls = 'bg-rose-50 border-rose-500 text-rose-950';
-                else cls = 'bg-white border-hairline/20 text-ink/30 opacity-60';
+                else cls = 'bg-paper-2 border-hairline/20 text-ink/30 opacity-60';
               } else if (isSelected) {
-                cls = 'bg-accent text-white border-accent font-bold';
+                cls = 'bg-accent text-white border-accent font-semibold';
               }
               return (
                 <button
@@ -163,18 +163,18 @@ export default function MistakesNotebook({ mistakes, onReviewMistake, onRemoveMi
               <button
                 onClick={checkAnswer}
                 disabled={!practiceSelected}
-                className="ml-auto px-5 py-2 text-xs font-bold bg-accent text-white border border-accent hover:opacity-90 disabled:opacity-40 rounded-lg"
+                className="ml-auto px-5 py-2 text-xs font-semibold bg-accent text-white border border-accent hover:opacity-90 disabled:opacity-40 rounded-lg"
               >
                 Kontrol Et
               </button>
             ) : (
               <>
-                <span className={`text-sm font-bold ${isCorrect ? 'text-emerald-700' : 'text-rose-700'}`}>
+                <span className={`text-sm font-semibold ${isCorrect ? 'text-emerald-700' : 'text-rose-700'}`}>
                   {isCorrect ? 'Doğru! Defterden çıkarıldı.' : 'Yanlış — tekrar karşına çıkacak.'}
                 </span>
                 <button
                   onClick={nextItem}
-                  className="flex items-center gap-1.5 px-5 py-2 text-xs font-bold bg-ink text-white hover:opacity-90 rounded-lg"
+                  className="flex items-center gap-1.5 px-5 py-2 text-xs font-semibold bg-ink text-white hover:opacity-90 rounded-lg"
                 >
                   {queueIndex + 1 >= queue.length ? 'Bitir' : 'Sıradaki'} <ArrowRight className="h-3.5 w-3.5" />
                 </button>
@@ -196,9 +196,9 @@ export default function MistakesNotebook({ mistakes, onReviewMistake, onRemoveMi
         <div>
           <div className="flex items-center gap-2 text-accent mb-2">
             <BookX className="h-4 w-4" />
-            <span className="text-[10px] font-bold tracking-[0.2em] uppercase">Yanlışlar Defteri</span>
+            <span className="text-[10px] font-semibold tracking-[0.2em]">Yanlışlar Defteri</span>
           </div>
-          <h2 className="font-display text-3xl font-bold text-ink">
+          <h2 className="font-display text-3xl font-semibold text-ink">
             {mistakes.length} yanlış soru birikti
           </h2>
           <p className="text-ink/60 mt-2 text-sm">
@@ -208,7 +208,7 @@ export default function MistakesNotebook({ mistakes, onReviewMistake, onRemoveMi
         <button
           onClick={startPractice}
           disabled={filtered.length === 0}
-          className="flex items-center gap-2 px-5 py-2.5 text-sm font-bold bg-accent text-white hover:opacity-90 disabled:opacity-40 shrink-0 rounded-lg"
+          className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold bg-accent text-white hover:opacity-90 disabled:opacity-40 shrink-0 rounded-lg"
         >
           <RotateCcw className="h-4 w-4" /> Pratik Yap ({filtered.length})
         </button>
@@ -219,10 +219,10 @@ export default function MistakesNotebook({ mistakes, onReviewMistake, onRemoveMi
           <button
             key={lvl}
             onClick={() => setCefrFilter(lvl)}
-            className={`px-3.5 py-1.5 text-xs font-bold border transition-all rounded-lg ${
+            className={`px-3.5 py-1.5 text-xs font-semibold border transition-all rounded-lg ${
               cefrFilter === lvl
                 ? 'bg-ink text-white border-ink'
-                : 'bg-white text-ink/70 border-hairline/50 hover:border-accent/50'
+                : 'bg-paper-2 text-ink/70 border-hairline/50 hover:border-accent/50'
             }`}
           >
             {lvl === 'ALL' ? 'Tümü' : lvl}
@@ -232,19 +232,19 @@ export default function MistakesNotebook({ mistakes, onReviewMistake, onRemoveMi
 
       <div className="space-y-4">
         {grouped.map(group => (
-          <div key={group.passageId} className="bg-white border border-hairline/40 rounded-lg">
+          <div key={group.passageId} className="bg-paper-2 border border-hairline/40 rounded-lg">
             <div className="px-5 py-3 border-b border-hairline/30 flex items-center justify-between">
               <div className="flex items-center gap-2 min-w-0">
-                <span className="text-[10px] font-bold px-2 py-0.5 bg-paper border border-hairline/40 shrink-0 rounded-lg">
+                <span className="text-[10px] font-semibold px-2 py-0.5 bg-paper border border-hairline/40 shrink-0 rounded-lg">
                   {group.cefr}
                 </span>
-                <p className="font-display font-bold text-sm text-ink truncate">{group.title}</p>
+                <p className="font-display font-semibold text-sm text-ink truncate">{group.title}</p>
               </div>
               <div className="flex items-center gap-3 shrink-0">
                 <span className="text-xs text-ink-3">{group.items.length} yanlış</span>
                 <button
                   onClick={() => onSelectPassage(group.passageId)}
-                  className="flex items-center gap-1 text-xs font-bold text-accent hover:underline"
+                  className="flex items-center gap-1 text-xs font-semibold text-accent hover:underline"
                 >
                   Parçaya Git <ExternalLink className="h-3 w-3" />
                 </button>

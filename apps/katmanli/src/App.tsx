@@ -7,8 +7,10 @@ import { LessonPickerModal } from './components/shell/LessonPickerModal';
 import { LayerHeaderBar } from './components/shell/LayerHeaderBar';
 import { NextLayerBar } from './components/shell/NextLayerBar';
 import {
-  LayerSidebar, CORE_LAYERS, LAYER_TABS, CORE_LAYER_COUNT, findLayer,
+  LayerSidebar, CORE_LAYERS, LAYER_TABS, CORE_LAYER_COUNT, findLayer, HOME_LAYER,
 } from './components/shell/LayerSidebar';
+import { IconRail } from './components/shell/IconRail';
+import { HomeFeed } from './components/HomeFeed';
 import { Layer1BilingualReading } from './components/layers/Layer1BilingualReading';
 import { Layer2ActiveListening } from './components/layers/Layer2ActiveListening';
 import { Layer3Shadowing } from './components/layers/Layer3Shadowing';
@@ -137,7 +139,11 @@ export default function App() {
   });
 
   const [activeLessonId, setActiveLessonId] = useState<string>(() => lessons[0]?.id || '');
-  const [activeLayer, setActiveLayer] = useState<number>(1);
+  /* Uygulama Akis ekraninda aciliyor, dogrudan Katman 1'de degil: hangi
+     derste kalindigi, sirada hangi adim oldugu ve bugun kac kelime tekrari
+     dustugu orada bir arada duruyor. Katman 1'de acilmak, dun 4. katmanda
+     birakmis birini her seferinde basa donduruyordu. */
+  const [activeLayer, setActiveLayer] = useState<number>(HOME_LAYER);
   const [isGuideOpen, setIsGuideOpen] = useState<boolean>(false);
   const [isGrammarCoachOpen, setIsGrammarCoachOpen] = useState<boolean>(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
@@ -730,8 +736,9 @@ async function buildLessonData(
 
       <TopBar
         progress={displayProgress}
-        activeLesson={activeLesson ?? null}
+        activeLayer={activeLayer}
         onOpenSidebar={() => setIsSidebarOpen(true)}
+        onGoHome={() => setActiveLayer(HOME_LAYER)}
         onOpenLessonPicker={() => setIsLessonPickerOpen(true)}
         onOpenGuide={() => setIsGuideOpen(true)}
         onOpenGrammarCoach={() => setIsGrammarCoachOpen(true)}
@@ -741,10 +748,16 @@ async function buildLessonData(
         onEditGoals={() => setIsGoalEditorOpen(true)}
       />
 
-      {/* Calisma alani: solda dikey adim listesi, ortada tek odak.
-          Ders secici artik burada degil - ust cubuktaki hapin actigi
-          pencerede. */}
+      {/* Calisma alani: solda ikon seridi + menu paneli, ortada tek odak.
+          Ders secici artik ust cubukta degil - "Dersler" sekmesinin ve
+          seritteki arama dugmesinin actigi pencerede. */}
       <div className="flex flex-1 w-full">
+
+        <IconRail
+          onOpenLessonPicker={() => setIsLessonPickerOpen(true)}
+          onAddLesson={() => setIsLessonPickerOpen(true)}
+          onGoHome={() => setActiveLayer(HOME_LAYER)}
+        />
 
         <LayerSidebar
           activeLayer={activeLayer}
@@ -753,9 +766,25 @@ async function buildLessonData(
           hasLesson={!!activeLesson}
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
+          onOpenGuide={() => setIsGuideOpen(true)}
+          onOpenGrammarCoach={() => setIsGrammarCoachOpen(true)}
+          onOpenSettings={() => setIsSettingsOpen(true)}
         />
 
         <main className="min-w-0 flex-1">
+          {/* Akis kendi genislik ve dolgusunu tasiyor (uc sutunlu bir
+              duzeni var), o yuzden asagidaki tek sutunlu kabin disinda. */}
+          {activeLayer === HOME_LAYER ? (
+            <HomeFeed
+              activeLesson={activeLesson ?? null}
+              lessons={lessons}
+              progress={displayProgress}
+              completedLayers={completedLayers}
+              onSelectLayer={setActiveLayer}
+              onOpenLessonPicker={() => setIsLessonPickerOpen(true)}
+              onOpenGuide={() => setIsGuideOpen(true)}
+            />
+          ) : (
           <div className="min-h-[500px] max-w-[1180px] w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
           {!activeLesson &&
           activeLayer !== 9 &&
@@ -763,13 +792,13 @@ async function buildLessonData(
           activeLayer !== 11 &&
           activeLayer !== 12 ? (
             <div className="max-w-md mx-auto my-20 text-center space-y-4">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-indigo-100 bg-indigo-50">
-                <PlayCircle className="h-5 w-5 text-indigo-600" />
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-accent/20 bg-accent-soft">
+                <PlayCircle className="h-5 w-5 text-accent" />
               </div>
-              <h3 className="text-xl font-semibold tracking-tight text-slate-900">
+              <h3 className="text-xl font-semibold tracking-tight text-ink">
                 Bir ders seç ya da ekle
               </h3>
-              <p className="text-sm leading-relaxed text-slate-500">
+              <p className="text-sm leading-relaxed text-ink-3">
                 Bir YouTube linki ver; altyazı çekilip cümlelere bölünür ve yedi
                 katmanlı çalışma başlar. Dilersen örnek derslerle de deneyebilirsin.
               </p>
@@ -777,9 +806,9 @@ async function buildLessonData(
                 <button
                   type="button"
                   onClick={() => setIsLessonPickerOpen(true)}
-                  className="inline-flex h-10 items-center gap-2 rounded-xl bg-indigo-600 px-4
-                    text-[13px] font-medium text-white shadow-sm
-                    transition-all duration-200 ease-in-out hover:bg-indigo-700 cursor-pointer"
+                  className="inline-flex h-10 items-center gap-2 rounded-xl bg-accent px-4
+                    text-[13px] font-medium text-white
+                    transition-colors duration-150 hover:bg-accent-700 cursor-pointer"
                 >
                   <PlayCircle className="h-4 w-4" />
                   Ders seç veya ekle
@@ -787,9 +816,9 @@ async function buildLessonData(
                 <button
                   type="button"
                   onClick={handleRestorePresetLessons}
-                  className="inline-flex h-10 items-center rounded-xl border border-slate-200
-                    bg-white px-4 text-[13px] font-medium text-slate-700
-                    transition-colors hover:border-slate-300 hover:text-slate-900 cursor-pointer"
+                  className="inline-flex h-10 items-center rounded-xl border border-hairline
+                    bg-paper-2 px-4 text-[13px] font-medium text-ink-2
+                    transition-colors hover:border-hairline-2 hover:text-ink cursor-pointer"
                 >
                   Örnek dersleri yükle
                 </button>
@@ -797,6 +826,31 @@ async function buildLessonData(
             </div>
           ) : (
             <>
+              {/* AKTIF DERS SERIDI.
+                  Ders adi ust cubuktan buraya indi: ust cubugun ortasi
+                  artik bolumler arasi gezinme. Ders "hangi bolumdeyim"
+                  degil "ne uzerinde calisiyorum" bilgisi, yani calistigin
+                  sutunun kendi icinde durmasi dogru yer. */}
+              {activeLesson && (
+                <button
+                  type="button"
+                  onClick={() => setIsLessonPickerOpen(true)}
+                  title="Ders değiştir veya yeni ders ekle"
+                  className="group mb-4 flex w-full min-w-0 items-center gap-2 rounded-xl
+                    border border-hairline bg-paper-2 px-3 py-2 text-left
+                    transition-colors duration-150 hover:bg-paper-3 cursor-pointer"
+                >
+                  <PlayCircle className="h-4 w-4 shrink-0 text-ink-3 transition-colors group-hover:text-accent" />
+                  <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-ink">
+                    {activeLesson.title}
+                  </span>
+                  <span className="timecode shrink-0 text-ink-3">
+                    {[activeLesson.cefrLevel, `${activeLesson.sentences.length} cümle`]
+                      .filter(Boolean).join(' · ')}
+                  </span>
+                </button>
+              )}
+
               {/* Aktif katmanin basligi: sol liste dar ekranda gizli
                   oldugu icin calisma alani kendini tanitmali. */}
               {activeItem && (
@@ -922,6 +976,7 @@ async function buildLessonData(
             />
           )}
           </div>
+          )}
         </main>
       </div>
 
@@ -929,7 +984,7 @@ async function buildLessonData(
           yazi ayni koyulukta oldugu icin okunmuyordu (kontrast orani
           1.0). Ayrica sayfanin en dikkat cekici ogesi oydu; oysa
           soyledigi sey bir imza. */}
-      <footer className="border-t border-slate-200 py-5 text-center text-[11px] text-slate-500">
+      <footer className="border-t border-hairline py-5 text-center text-[11px] text-ink-3">
         <p>Katmanlı Çalışma (Layered Learning) Metodolojisi</p>
       </footer>
 

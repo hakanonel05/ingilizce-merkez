@@ -11,6 +11,8 @@ import VocabularyWorkbook from './components/VocabularyWorkbook';
 import MistakesNotebook from './components/MistakesNotebook';
 import ExamSimulator from './components/ExamSimulator';
 import AppSwitcher from './AppSwitcher';
+import { ReadingTopBar } from './components/shell/ReadingTopBar';
+import { ReadingSidebar } from './components/shell/ReadingSidebar';
 import AuthScreen from './components/AuthScreen';
 import StoryLibrary from './components/StoryLibrary';
 import { SettingsModal } from '../../../shared/vocab/SettingsModal';
@@ -24,28 +26,7 @@ import { mergeCloudProgress } from './lib/mergeProgress';
 import { syncOnStartup, scheduleAutoSync } from '../../../shared/vocab/syncClient';
 import { ACTIVITY_CHANGED_EVENT } from '../../../shared/analytics/activityLog';
 import { getLocalFallbackPassage } from '../serverLocalPassage';
-import {
-  LayoutDashboard,
-  BookOpen,
-  Sparkles,
-  Wand2,
-  Settings2,
-  BookMarked,
-  Zap,
-  Clock,
-  BookOpenCheck,
-  BookText,
-  Download,
-  Upload,
-  Smartphone,
-  LogOut,
-  CloudCog,
-  BookX,
-  Timer,
-  CalendarRange,
-  Layers,
-  CloudOff
-} from 'lucide-react';
+import { CloudOff } from 'lucide-react';
 
 const LOCAL_STORAGE_KEY = 'english_reading_trainer_progress_v1';
 
@@ -88,6 +69,8 @@ export default function App() {
   }, []);
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  /** Dar ekranda menu cekmecesi; genis ekranda panel zaten acik. */
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'dashboard' | 'passages' | 'stories' | 'trainer' | 'list' | 'workbook' | 'mistakes' | 'exam' | 'cards' | 'report'>('dashboard');
 
   // PWA kurulum prompt'u
@@ -699,130 +682,40 @@ export default function App() {
   }
 
   return (
-    <div id="app-root" className="min-h-screen bg-paper text-ink font-sans flex flex-col justify-between">
+    <div id="app-root" className="min-h-screen bg-paper text-ink font-sans flex flex-col">
 
       <AppSwitcher active="reading" />
 
-      {/* Top Banner Navigation Bar */}
-      <header className="sticky top-0 z-40 bg-white border-b border-hairline/40 backdrop-blur-md">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Telefonda tek satira sigmiyordu: baslik ve arac dugmeleri yan yana
-              zorlandigi icin sayfa yatay kayiyordu. Artik satir sarabiliyor ve
-              yukseklik icerige gore buyuyor. */}
-          <div className="flex min-h-20 flex-wrap items-center justify-between gap-x-4 gap-y-2 py-2.5 sm:py-0">
+      <ReadingTopBar
+        onOpenSidebar={() => setIsSidebarOpen(true)}
+        onGoHome={() => { setActiveTab('dashboard'); setSelectedPassageId(null); }}
+        hasSession={!!session}
+        isSyncing={isSyncing}
+        dailyStreak={progress.dailyStreak}
+        totalTimeSpent={progress.totalTimeSpent}
+        showInstallBtn={showInstallBtn}
+        onInstallPWA={handleInstallPWA}
+        onOpenSettings={() => setIsSettingsOpen(true)}
+        onBackup={handleBackupData}
+        onRestore={handleRestoreData}
+        onSignIn={() => setIsOfflineMode(false)}
+        onSignOut={() => supabase.auth.signOut()}
+      />
 
-            {/* Brand Logo & Slogan */}
-            <div className="flex items-center gap-3 sm:gap-4 min-w-0">
-              <div className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center bg-accent text-white font-display text-xl font-bold">
-                L
-              </div>
-              <div className="min-w-0">
-                <p className="font-display text-2xl font-bold tracking-tight text-ink leading-none flex items-center gap-1.5">
-                  Lexis <span className="text-xs font-sans font-normal tracking-widest uppercase opacity-40">Trainer</span>
-                </p>
-                <span className="text-[9px] text-ink-3 font-bold tracking-widest uppercase block mt-1">
-                  Okuma & Kelime Çalışması
-                </span>
-              </div>
-            </div>
+      <div className="flex w-full flex-1">
 
-            {/* Streak, Timer & Backup Widgets */}
-            <div className="flex flex-wrap items-center justify-end gap-1.5 sm:gap-2">
+        <ReadingSidebar
+          activeTab={activeTab}
+          onSelectTab={(tab) => { setActiveTab(tab); setSelectedPassageId(null); }}
+          mistakeCount={progress.mistakes.length}
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
 
-              {/* Cloud Sync Status */}
-              {session && (
-                <div className="flex items-center gap-1.5 border border-hairline/40 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-slate-50 text-slate-500 rounded-lg">
-                  <CloudCog className={`h-3.5 w-3.5 ${isSyncing ? 'animate-spin text-accent' : ''}`} />
-                  <span className="hidden sm:inline">{isSyncing ? 'Eşitleniyor...' : 'Eşitlendi'}</span>
-                </div>
-              )}
-
-              {/* Logout Button */}
-              {session ? (
-                <button
-                  onClick={() => supabase.auth.signOut()}
-                  title="Çıkış Yap"
-                  className="flex items-center gap-1.5 border border-hairline/40 hover:bg-slate-50 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-600 transition-colors cursor-pointer rounded-lg"
-                >
-                  <LogOut className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">Çıkış</span>
-                </button>
-              ) : (
-                <button
-                  onClick={() => setIsOfflineMode(false)}
-                  className="flex items-center gap-1.5 border border-accent bg-white text-accent hover:bg-accent hover:text-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer rounded-lg"
-                >
-                  Giriş Yap
-                </button>
-              )}
-
-              {/* PWA Ana Ekrana Ekle Butonu */}
-              {showInstallBtn && (
-                <button
-                  onClick={handleInstallPWA}
-                  title="Ana ekrana uygulama olarak ekle"
-                  className="flex items-center gap-1.5 border border-accent bg-accent text-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider hover:bg-white hover:text-accent transition-colors cursor-pointer rounded-lg"
-                >
-                  <Smartphone className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">Ekle</span>
-                </button>
-              )}
-
-              {/* Ayarlar — API anahtarlari.
-                  Reading tarafinda hic ayar ekrani yoktu: anahtarlar
-                  yalnizca katmanlidan girilebiliyordu. Hikaye ureteci ve
-                  sesli okuma bu anahtarlara bagli oldugu icin yeni bir
-                  cihazda reading tek basina kullanilamiyordu. */}
-              <button
-                onClick={() => setIsSettingsOpen(true)}
-                title="API anahtarları"
-                className="flex items-center gap-1.5 border border-ink/20 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-ink/70 hover:border-accent hover:text-accent transition-colors cursor-pointer rounded-lg"
-              >
-                <Settings2 className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Ayarlar</span>
-              </button>
-
-              {/* Veri Yedekle */}
-              <button
-                onClick={handleBackupData}
-                title="Tüm çalışma verilerini JSON dosyası olarak indir"
-                className="flex items-center gap-1.5 border border-ink/20 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-ink/70 hover:border-accent hover:text-accent transition-colors cursor-pointer rounded-lg"
-              >
-                <Download className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Yedekle</span>
-              </button>
-
-              {/* Veri Geri Yükle */}
-              <button
-                onClick={handleRestoreData}
-                title="Yedek JSON dosyasından verileri geri yükle"
-                className="flex items-center gap-1.5 border border-ink/20 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-ink/70 hover:border-accent hover:text-accent transition-colors cursor-pointer rounded-lg"
-              >
-                <Upload className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Geri Yükle</span>
-              </button>
-
-              {/* Daily Streak Badge */}
-              <div className="flex items-center gap-1.5 border border-amber-200 bg-amber-50 px-3.5 py-1.5 text-xs font-bold text-amber-800 rounded-lg">
-                <Zap className="h-3.5 w-3.5 fill-current" />
-                <span className="tracking-wide uppercase text-[10px]">{progress.dailyStreak} GÜN SERİ</span>
-              </div>
-
-              {/* Time Spent Badge */}
-              <div className="hidden md:flex items-center gap-1.5 border border-ink/10 bg-paper px-3.5 py-1.5 text-xs font-bold text-ink rounded-lg">
-                <Clock className="h-3.5 w-3.5 opacity-60" />
-                <span className="tracking-wide uppercase text-[10px]">
-                  {Math.floor(progress.totalTimeSpent / 60)} DK ÇALIŞILDI
-                </span>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </header>
 
       {/* Main Body Layout */}
-      <main className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-10 flex-1">
+        <main className="min-w-0 flex-1">
+          <div className="mx-auto w-full max-w-[1180px] px-4 py-6 sm:px-6 sm:py-8">
 
         {/*
           ÇEVRİMDIŞI UYARISI.
@@ -833,11 +726,11 @@ export default function App() {
           çalışmasının neden diğer bilgisayara gelmediğini anlamıyordu.
         */}
         {!session && (
-          <div className="mb-8 flex flex-wrap items-center justify-between gap-3 border border-accent/25 bg-white px-4 py-3 rounded-lg">
-            <div className="flex items-start gap-2.5 min-w-0">
-              <CloudOff className="h-4 w-4 shrink-0 mt-0.5 text-accent" />
-              <p className="text-xs leading-relaxed text-ink/80">
-                <strong className="font-bold">Çevrimdışı moddasın.</strong>{' '}
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-hairline bg-paper-2 px-4 py-3">
+            <div className="flex min-w-0 items-start gap-2.5">
+              <CloudOff className="mt-0.5 h-4 w-4 shrink-0 text-ink-3" />
+              <p className="text-[12px] leading-relaxed text-ink-2">
+                <span className="font-medium text-ink">Çevrimdışı moddasın.</span>{' '}
                 Okuduğun parçalar, kelime durumların ve alıştırma cevapların
                 yalnızca <strong>bu bilgisayarda</strong> tutuluyor. Başka bir
                 cihazda görebilmek için hesabınla giriş yapman gerekiyor —
@@ -846,58 +739,12 @@ export default function App() {
             </div>
             <button
               onClick={() => setIsOfflineMode(false)}
-              className="shrink-0 border border-accent bg-accent px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white transition-colors hover:bg-white hover:text-accent cursor-pointer rounded-lg"
+              className="shrink-0 rounded-xl bg-accent px-3.5 py-2 text-[12px] font-medium
+                text-white transition-colors duration-150 hover:bg-accent-700 cursor-pointer"
             >
               Giriş yap ve eşitle
             </button>
           </div>
-        )}
-
-        {/* Navigation Tab Menu Grid (Only when not viewing specific Passage card) */}
-        {selectedPassageId === null && (
-          <nav className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 gap-3 mb-10">
-            {[
-              { id: 'dashboard', label: 'Gösterge Paneli', subtitle: 'İSTATİSTİK & İLERLEME', icon: LayoutDashboard },
-              { id: 'passages', label: 'Okuma Parçaları', subtitle: 'KÜTÜPHANE METİNLERİ', icon: BookOpen },
-              { id: 'stories', label: 'Hikayelerim', subtitle: 'SANA ÖZEL & SESLİ', icon: Wand2 },
-              { id: 'trainer', label: 'Kelime Çalışma', subtitle: 'HAFIZA KARTLARI & TEST', icon: Sparkles },
-              { id: 'list', label: 'Kelime Haznesi', subtitle: 'KÜLLİYAT SÖZLÜĞÜ', icon: BookMarked },
-              { id: 'workbook', label: 'Kelime Kitabı', subtitle: 'TABLOLAR & TESTLER', icon: BookText },
-              { id: 'mistakes', label: 'Yanlışlar Defteri', subtitle: `${progress.mistakes.length} SORU`, icon: BookX },
-              { id: 'exam', label: 'Sınav Simülasyonu', subtitle: 'DENEME SINAVI', icon: Timer },
-              { id: 'cards', label: 'Kelime Kartları', subtitle: 'FSRS ARALIKLI TEKRAR', icon: Layers },
-              { id: 'report', label: 'Karne', subtitle: 'ÇALIŞMA TAKVİMİ', icon: CalendarRange }
-            ].map(tab => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => {
-                    setActiveTab(tab.id as any);
-                    setSelectedPassageId(null);
-                  }}
-                  className={`flex items-start gap-2.5 p-3 sm:p-4 border text-left transition-all duration-300 cursor-pointer rounded-xl ${
-                    isActive
-                      ? 'bg-accent text-white border-accent shadow-md'
-                      : 'bg-white border-hairline/40 hover:border-accent/40'
-                  }`}
-                >
-                  <div className={`flex h-8 w-8 shrink-0 items-center justify-center border rounded-lg ${
-                    isActive
-                      ? 'bg-white/10 text-white border-white/20'
-                      : 'bg-paper text-ink/70 border-hairline/40'
-                  }`}>
-                    <Icon className="h-4 w-4" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className={`text-sm font-display font-bold leading-tight break-words ${isActive ? 'text-white' : 'text-ink'}`}>{tab.label}</p>
-                    <span className={`text-[9px] font-bold tracking-widest block mt-1.5 truncate ${isActive ? 'text-white/90' : 'text-ink-3'}`}>{tab.subtitle}</span>
-                  </div>
-                </button>
-              );
-            })}
-          </nav>
         )}
 
         {/* Tab Content Panels Rendering */}
@@ -993,15 +840,31 @@ export default function App() {
               )}
 
               {activeTab === 'cards' && (
-                <VocabHub lesson={null} lessons={cardLessons} />
+                <div className="space-y-5">
+                  {/* Bölüm başlığı VocabHub'ın içinden buraya taşındı:
+                      orada olunca katmanlıda katman başlığıyla üst üste
+                      geliyordu. Bkz. shared/vocab/VocabHub.tsx. */}
+                  <h1 className="text-[22px] font-semibold tracking-tight text-brand">
+                    Kelime Kartları
+                  </h1>
+                  <VocabHub lesson={null} lessons={cardLessons} />
+                </div>
               )}
 
-              {activeTab === 'report' && <StudyReport />}
+              {activeTab === 'report' && (
+                <div className="space-y-5">
+                  {/* Başlık StudyReport'un içinden buraya taşındı;
+                      katmanlıda katman başlığıyla üst üste geliyordu. */}
+                  <h1 className="text-[22px] font-semibold tracking-tight text-brand">Karne</h1>
+                  <StudyReport />
+                </div>
+              )}
             </>
           )}
+          </div>
         </div>
-
-      </main>
+        </main>
+      </div>
 
       <SettingsModal
         isOpen={isSettingsOpen}
@@ -1010,45 +873,42 @@ export default function App() {
       />
 
       {/* Footer Branding */}
-      <footer className="bg-white border-t border-hairline/30 py-8 mt-16 text-center text-ink-3 text-xs">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-2">
-          <div className="flex justify-center items-center gap-1.5">
-            <BookOpenCheck className="h-4 w-4 text-accent opacity-60" />
-            <span className="font-display font-bold text-ink tracking-wide">Lexis • English Reading Trainer</span>
-          </div>
-          <p className="text-[10px] text-ink-3 font-mono">
-            &copy; {new Date().getFullYear()} — Tüm Hakları Saklıdır. Geliştirici Sürümü.
-          </p>
-        </div>
+      {/* Alt bilgi. Ortalanmış marka bloğu + ikon + mono telif satırı
+          vardı; söylediği şey bir imza, ekranın en dikkat çeken öğesi
+          olmamalı. Tek satır. */}
+      <footer className="border-t border-hairline py-6 text-center">
+        <p className="text-[11px] text-ink-3">
+          Lexis Trainer · {new Date().getFullYear()}
+        </p>
       </footer>
 
       {/* Yapay Zeka Parça Oluşturma Yükleniyor Modalı */}
       {isGenerating && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-hairline max-w-lg w-full p-8 shadow-2xl text-center space-y-6 animate-fade-in rounded-xl">
-            <div className="flex justify-center">
-              <div className="animate-spin rounded-full h-10 w-10 border-2 border-accent border-t-transparent"></div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-lg space-y-5 rounded-2xl border border-hairline bg-paper-2 p-8">
+            <div className="flex items-center gap-3">
+              <span className="h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-accent border-t-transparent" />
+              <div className="min-w-0">
+                <h3 className="truncate text-[17px] font-semibold text-ink">
+                  {generatingMetadata?.title}
+                </h3>
+                <p className="mt-0.5 text-[12px] text-ink-3">
+                  Parça <span className="timecode">{generatingMetadata?.id}</span>
+                  {' · '}{generatingMetadata?.cefr} · yapay zekâ ile yükleniyor
+                </p>
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <span className="text-[10px] font-bold text-accent font-mono uppercase tracking-widest block">AI Yapay Zeka Motoru Aktif</span>
-              <h3 className="text-xl font-display font-extrabold text-ink leading-tight">
-                {generatingMetadata?.title}
-              </h3>
-              <p className="text-[10px] text-ink-3 font-mono uppercase tracking-wider">
-                Okuma Parçası #{generatingMetadata?.id} • CEFR: {generatingMetadata?.cefr}
-              </p>
-            </div>
+            <p className="max-w-[62ch] text-[13px] leading-relaxed text-ink-2">
+              Orijinal kitaptaki parça, kelimeler ve YDS tarzı sorular aranıp
+              kütüphanene kalıcı olarak ekleniyor. Bu biraz sürebilir.
+            </p>
 
-            <div className="bg-paper p-5 border border-hairline/20 text-left rounded-xl">
-              <span className="text-[9px] font-bold text-ink-3 font-mono block mb-1.5 uppercase tracking-wider">💡 GÜNÜN ÇALIŞMA TAVSİYESİ</span>
-              <p className="text-xs text-ink/70 font-display leading-relaxed">
-                "{studyTips[tipIndex]}"
-              </p>
-            </div>
-
-            <p className="text-xs text-accent font-sans leading-relaxed font-bold bg-indigo-50/60 p-4 border border-indigo-100 rounded-xl">
-              Yapay zeka, Google Search aracıyla interneti tarayarak Ahmet Akın ve İsmail Turasan'ın kaleme aldığı orijinal kitaptaki birebir aynı okuma parçasını, kelimeleri ve YDS tarzı soruları bulur ve saniyeler içinde kütüphanenize kalıcı olarak yükler.
+            {/* Bekleme sirasindaki calisma tavsiyesi. Once "💡 GÜNÜN
+                ÇALIŞMA TAVSİYESİ" diye emoji'li, buyuk harf bir etiketi
+                vardi; tavsiyenin kendisi zaten tirnak icinde. */}
+            <p className="border-l-2 border-hairline-2 pl-3 text-[13px] italic leading-relaxed text-ink-3">
+              {studyTips[tipIndex]}
             </p>
           </div>
         </div>
@@ -1056,37 +916,33 @@ export default function App() {
 
       {/* Yapay Zeka Hata Modalı */}
       {generationError && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border-2 border-rose-500 max-w-lg w-full p-8 shadow-2xl text-center space-y-6 rounded-xl">
-            <div className="flex justify-center">
-              <div className="h-10 w-10 rounded-xl bg-rose-50 flex items-center justify-center text-rose-600 font-extrabold font-mono text-lg border border-rose-200">
-                !
-              </div>
-            </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-lg space-y-4 rounded-2xl border border-hairline bg-paper-2 p-6">
+            <h3 className="text-[17px] font-semibold text-ink">Parça yüklenemedi</h3>
+            <p className="text-[13px] leading-relaxed text-ink-2">
+              Bağlantı ya da API yetkilendirmesi başarısız oldu.
+            </p>
 
-            <div className="space-y-2">
-              <span className="text-[10px] font-bold text-rose-600 font-mono uppercase tracking-widest block">Yükleme Başarısız Oldu</span>
-              <h3 className="text-lg font-display font-extrabold text-ink">
-                Bağlantı veya API Yetkilendirme Hatası
-              </h3>
-            </div>
-
-            <p className="text-xs text-ink/70 leading-relaxed font-mono bg-rose-50 p-4 border border-rose-100 text-left rounded-xl">
+            <p className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-[12px] leading-relaxed text-rose-800">
               {generationError}
             </p>
 
-            <div className="flex gap-2 justify-center font-mono">
+            <div className="flex justify-end gap-2 pt-1">
               <button
+                type="button"
                 onClick={() => setGenerationError(null)}
-                className="px-4 py-2 border border-hairline/30 bg-white text-ink/60 hover:bg-paper text-[10px] font-bold uppercase tracking-wider cursor-pointer rounded-lg"
+                className="rounded-xl border border-hairline px-4 py-2 text-[13px] font-medium
+                  text-ink-2 transition-colors hover:bg-paper-3 hover:text-ink cursor-pointer"
               >
                 Kapat
               </button>
               <button
+                type="button"
                 onClick={() => handleSelectPassage(generatingMetadata?.id || 1)}
-                className="px-4 py-2 bg-accent text-white hover:bg-white hover:text-ink border border-accent text-[10px] font-bold uppercase tracking-wider cursor-pointer rounded-lg"
+                className="rounded-xl bg-accent px-4 py-2 text-[13px] font-medium text-white
+                  transition-colors hover:bg-accent-700 cursor-pointer"
               >
-                Tekrar Dene
+                Tekrar dene
               </button>
             </div>
           </div>

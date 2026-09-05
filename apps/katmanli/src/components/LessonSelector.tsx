@@ -1,7 +1,27 @@
+/**
+ * DERS LİSTESİ VE İÇE AKTARMA
+ *
+ * KENDİ KARTI VE BAŞLIĞI YOK. Bu bileşen yalnızca LessonPickerModal'ın
+ * içinde kullanılıyor; pencere zaten kenarlıklı beyaz bir yüzey ve
+ * "Çalışma İçeriği" başlığı taşıyor. Burada bir kart ve "Çalışma İçeriği
+ * Seçimi" başlığı daha vardı: kutu içinde kutu, üst üste iki başlık.
+ *
+ * LİSTE, IZGARA DEĞİL. Kartlar iki sütunlu bir ızgaradaydı ve ders
+ * başlıkları uzun olduğu için hepsi iki satırda kırpılıyordu. Alt alta
+ * satırlarda başlık tam genişliği kullanıyor, göz de tek bir sol kenarı
+ * takip ediyor.
+ *
+ * SEVİYE ROZETİ RENKSİZ. Önce C1/C2 mor, B2 kehribar, gerisi yeşildi —
+ * paletin dışından üç renk. Seviye zaten HARFİN KENDİSİNDE yazıyor;
+ * renk bunun üstüne bilgi eklemiyor, yalnızca listeyi alacalı yapıyordu.
+ */
+
 import React, { useState } from 'react';
 import { VideoLesson } from '../types';
 import { lessonComputedLevel } from '../lib/lessonInsight';
-import { Youtube, Sparkles, Plus, Loader2, Play, CheckCircle2, Clock, BarChart2, Trash2, FileText, Edit3, RefreshCw } from 'lucide-react';
+import {
+  Youtube, Sparkles, Plus, Loader2, Check, Trash2, FileText, Edit3, RefreshCw, X,
+} from 'lucide-react';
 
 interface LessonSelectorProps {
   lessons: VideoLesson[];
@@ -16,6 +36,18 @@ interface LessonSelectorProps {
   onEditLesson?: (lesson: VideoLesson) => void;
   onRestorePresetLessons?: () => void;
 }
+
+/** Birincil eylem düğmesi — dolu menekşe, gölgesiz. */
+const primaryButton =
+  `inline-flex items-center justify-center gap-1.5 rounded-xl bg-accent px-4 py-2
+   text-[13px] font-medium text-white transition-colors duration-150
+   hover:bg-accent-700 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer`;
+
+/** Metin girişleri: tek bir tanım, dört yerde tekrarlanmasın diye. */
+const inputClass =
+  `w-full rounded-xl border border-hairline bg-paper-2 px-3.5 py-2.5 text-[13px]
+   text-ink placeholder-ink-3 transition-colors
+   focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/15`;
 
 export const LessonSelector: React.FC<LessonSelectorProps> = ({
   lessons,
@@ -34,6 +66,7 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
   const [errorMsg, setErrorMsg] = useState('');
   const [progressMsg, setProgressMsg] = useState('');
   const [showImportForm, setShowImportForm] = useState(false);
+  const [confirmingDeleteId, setConfirmingDeleteId] = useState<string | null>(null);
 
   const handleImport = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,8 +109,6 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
     }
   };
 
-  const [confirmingDeleteId, setConfirmingDeleteId] = useState<string | null>(null);
-
   const handleDeleteClick = (e: React.MouseEvent, lessonId: string) => {
     e.stopPropagation();
     setConfirmingDeleteId(lessonId);
@@ -85,9 +116,7 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
 
   const handleConfirmDelete = (e: React.MouseEvent, lessonId: string) => {
     e.stopPropagation();
-    if (onDeleteLesson) {
-      onDeleteLesson(lessonId);
-    }
+    if (onDeleteLesson) onDeleteLesson(lessonId);
     setConfirmingDeleteId(null);
   };
 
@@ -96,124 +125,115 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
     setConfirmingDeleteId(null);
   };
 
+  /** İçe aktarma biçimi sekmesi — sade metin, dolu düğme değil. */
+  const modeTab = (mode: 'youtube' | 'text', label: string, icon: React.ReactNode) => (
+    <button
+      type="button"
+      onClick={() => { setInputMode(mode); setErrorMsg(''); }}
+      className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px]
+        transition-colors duration-150 cursor-pointer ${
+          inputMode === mode
+            ? 'bg-paper-2 font-medium text-ink'
+            : 'text-ink-2 hover:text-ink'
+        }`}
+    >
+      {icon}
+      {label}
+    </button>
+  );
+
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-sm space-y-4">
-      {/* Top Header */}
+    <div className="space-y-5">
+
+      {/* ---------- ÜST SATIR ---------- */}
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center space-x-2.5">
-          <div className="w-8 h-8 bg-red-50 text-red-600 rounded-lg flex items-center justify-center border border-red-100">
-            <Youtube className="w-4 h-4" />
-          </div>
-          <div>
-            <h2 className="text-sm sm:text-base font-bold text-slate-900">Çalışma İçeriği Seçimi</h2>
-            <p className="text-[11px] text-slate-500">{lessons.length} Ders Hazır Transkript</p>
-          </div>
-        </div>
+        <p className="text-[12px] text-ink-3">
+          <span className="timecode font-semibold text-ink">{lessons.length}</span> ders
+        </p>
 
         <button
+          type="button"
           onClick={() => setShowImportForm(!showImportForm)}
-          className="flex items-center space-x-1.5 px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-sm transition cursor-pointer"
+          className={showImportForm
+            ? `inline-flex items-center gap-1.5 rounded-xl border border-hairline px-4 py-2
+               text-[13px] font-medium text-ink-2 transition-colors duration-150
+               hover:bg-paper-3 hover:text-ink cursor-pointer`
+            : primaryButton}
         >
-          <Plus className="w-4 h-4" />
-          <span>{showImportForm ? 'Formu Kapat' : 'Yeni YouTube Videosu / Metin Ekle'}</span>
+          {showImportForm
+            ? <><X className="h-4 w-4" /> Formu kapat</>
+            : <><Plus className="h-4 w-4" /> Yeni ders ekle</>}
         </button>
       </div>
 
-      {/* Import Custom Video Form */}
+      {/* ---------- İÇE AKTARMA FORMU ---------- */}
       {showImportForm && (
-        <form onSubmit={handleImport} className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
-          {/* Tabs: Youtube vs Manual Text */}
-          <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
-            <button
-              type="button"
-              onClick={() => { setInputMode('youtube'); setErrorMsg(''); }}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
-                inputMode === 'youtube'
-                  ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100'
-              }`}
-            >
-              <Youtube className="w-3.5 h-3.5" />
-              <span>YouTube Linki ile Ekle</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => { setInputMode('text'); setErrorMsg(''); }}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
-                inputMode === 'text'
-                  ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100'
-              }`}
-            >
-              <FileText className="w-3.5 h-3.5" />
-              <span>İngilizce Metin / Transkript Yapıştır</span>
-            </button>
+        <form onSubmit={handleImport} className="rounded-2xl bg-paper-3 p-4">
+          <div className="mb-3 flex flex-wrap items-center gap-1">
+            {modeTab('youtube', 'YouTube linki', <Youtube className="h-3.5 w-3.5" />)}
+            {modeTab('text', 'Metin yapıştır', <FileText className="h-3.5 w-3.5" />)}
           </div>
 
           {inputMode === 'youtube' ? (
-            <div className="space-y-2">
-              <p className="text-[11px] text-slate-600">
-                YouTube video linkini yapıştırın. Sistem videonun <strong>resmi/otomatik İngilizce altyazısını (CC)</strong> çeker ve Gemini AI ile cümle cümle çevirerek Katmanlı Çalışma formatına getirir.
+            <div className="space-y-3">
+              <p className="max-w-[62ch] text-[12px] leading-relaxed text-ink-2">
+                Videonun İngilizce altyazısı (CC) çekilir, cümlelere bölünür ve
+                Gemini ile çevrilerek katmanlı çalışma biçimine getirilir.
               </p>
-              <div className="flex flex-col sm:flex-row gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row">
                 <input
                   type="text"
                   value={youtubeInput}
                   onChange={(e) => setYoutubeInput(e.target.value)}
-                  placeholder="Örn: https://www.youtube.com/watch?v=1bszFX_XcbU"
-                  className="flex-1 min-w-0 px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  placeholder="https://www.youtube.com/watch?v=…"
+                  className={`${inputClass} min-w-0 flex-1`}
                   disabled={isLoading}
                 />
                 <button
                   type="submit"
                   disabled={isLoading || !youtubeInput.trim()}
-                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-xs font-bold rounded-lg transition flex items-center justify-center space-x-1.5 cursor-pointer shadow-sm"
+                  className={`${primaryButton} shrink-0`}
                 >
                   {isLoading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>{progressMsg || 'Altyazılar Çekiliyor...'}</span>
-                    </>
+                    <><Loader2 className="h-4 w-4 animate-spin" />
+                      {progressMsg || 'Altyazı çekiliyor…'}</>
                   ) : (
-                    <>
-                      <Sparkles className="w-4 h-4" />
-                      <span>Transkript Çıkar</span>
-                    </>
+                    <><Sparkles className="h-4 w-4" /> Transkript çıkar</>
                   )}
                 </button>
               </div>
             </div>
           ) : (
             <div className="space-y-3">
-              <p className="text-[11px] text-slate-600">
-                Altyazısı çekilemeyen videolar veya herhangi bir İngilizce konuşma metnini doğrudan yapıştırın. Videoyu derse gömmek için YouTube linkini de ekleyebilirsiniz.
+              <p className="max-w-[62ch] text-[12px] leading-relaxed text-ink-2">
+                Altyazısı çekilemeyen videolar için metni doğrudan yapıştır.
+                Videoyu derse gömmek istersen linkini de ekleyebilirsin.
               </p>
 
               <div>
-                <label className="block text-[11px] font-bold text-slate-700 mb-1">
-                  YouTube Video Linki (İsteğe Bağlı - Videoyu Gömmek İçin):
+                <label className="mb-1 block text-[12px] font-medium text-ink-2">
+                  YouTube linki <span className="font-normal text-ink-3">(isteğe bağlı)</span>
                 </label>
                 <input
                   type="text"
                   value={manualYoutubeUrl}
                   onChange={(e) => setManualYoutubeUrl(e.target.value)}
-                  placeholder="Örn: https://www.youtube.com/watch?v=1bszFX_XcbU"
-                  className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  placeholder="https://www.youtube.com/watch?v=…"
+                  className={inputClass}
                   disabled={isLoading}
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-bold text-slate-700 mb-1">
-                  İngilizce Metin / Transkript (Zorunlu):
+                <label className="mb-1 block text-[12px] font-medium text-ink-2">
+                  İngilizce metin
                 </label>
                 <textarea
                   value={textInput}
                   onChange={(e) => setTextInput(e.target.value)}
-                  placeholder="İngilizce transkript veya konuşma metnini buraya yapıştırın..."
-                  rows={4}
-                  className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  placeholder="Transkripti ya da konuşma metnini buraya yapıştır…"
+                  rows={5}
+                  className={inputClass}
                   disabled={isLoading}
                 />
               </div>
@@ -222,18 +242,13 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
                 <button
                   type="submit"
                   disabled={isLoading || !textInput.trim()}
-                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-xs font-bold rounded-lg transition flex items-center justify-center space-x-1.5 cursor-pointer shadow-sm"
+                  className={primaryButton}
                 >
                   {isLoading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>{progressMsg || 'Metin İşleniyor...'}</span>
-                    </>
+                    <><Loader2 className="h-4 w-4 animate-spin" />
+                      {progressMsg || 'Metin işleniyor…'}</>
                   ) : (
-                    <>
-                      <Sparkles className="w-4 h-4" />
-                      <span>Ders Oluştur</span>
-                    </>
+                    <><Sparkles className="h-4 w-4" /> Ders oluştur</>
                   )}
                 </button>
               </div>
@@ -241,155 +256,169 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
           )}
 
           {errorMsg && (
-            <div className="text-xs text-rose-800 bg-rose-50 border border-rose-200 p-3 rounded-lg space-y-1">
-              <strong className="block font-bold">İşlem Başarısız:</strong>
-              <p>{errorMsg}</p>
+            <div className="mt-3 rounded-xl border border-rose-200 bg-rose-50 p-3">
+              <p className="text-[12px] font-medium text-rose-800">İşlem başarısız</p>
+              <p className="mt-0.5 text-[12px] leading-relaxed text-rose-700">{errorMsg}</p>
             </div>
           )}
         </form>
       )}
 
-      {/* Preset & Custom Lesson Cards */}
+      {/* ---------- DERS LİSTESİ ---------- */}
       {lessons.length === 0 ? (
-        <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 text-center space-y-3">
-          <p className="text-xs text-slate-600 font-medium">
-            Henüz eklenmiş bir çalışma dersi bulunmuyor.
-          </p>
+        <div className="rounded-2xl border border-hairline p-8 text-center">
+          <p className="text-[13px] text-ink-2">Henüz eklenmiş bir ders yok.</p>
           {onRestorePresetLessons && (
             <button
               type="button"
               onClick={onRestorePresetLessons}
-              className="inline-flex items-center space-x-1.5 px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition shadow-sm cursor-pointer"
+              className={`${primaryButton} mt-4`}
             >
-              <RefreshCw className="w-3.5 h-3.5" />
-              <span>Varsayılan Örnek Dersleri Yükle</span>
+              <RefreshCw className="h-4 w-4" />
+              Örnek dersleri yükle
             </button>
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <ul className="divide-y divide-hairline border-t border-hairline">
           {lessons.map((lesson) => {
             const isSelected = activeLesson ? lesson.id === activeLesson.id : false;
             // Metinden olculen seviye, elle girilenden once gelir: biri
             // olcum, digeri beyan. Olculemezse (metin yoksa) beyana duselim.
             const measuredLevel = lessonComputedLevel(lesson);
             const shownLevel = measuredLevel || lesson.level;
+
             return (
-              <div
-                key={lesson.id}
-                onClick={() => onSelectLesson(lesson)}
-                className={`group relative p-4 rounded-xl border transition-all cursor-pointer flex flex-col justify-between ${
-                  isSelected
-                    ? 'bg-indigo-50/50 border-indigo-500 ring-1 ring-indigo-500 shadow-sm'
-                    : 'bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-300'
-                }`}
-              >
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between gap-2">
-                    <span
-                      title={
-                        measuredLevel
-                          ? `Metindeki kelimelerin %90'ını kapsayan seviye.${
-                              lesson.level && lesson.level !== measuredLevel
-                                ? ` Derse elle girilen seviye: ${lesson.level}.`
-                                : ''
-                            }`
-                          : 'Elle girilen seviye (metin çözümlenemedi).'
-                      }
-                      className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                        shownLevel === 'C1' || shownLevel === 'C2'
-                          ? 'bg-purple-100 text-purple-800 border border-purple-200'
-                          : shownLevel === 'B2'
-                          ? 'bg-amber-100 text-amber-800 border border-amber-200'
-                          : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                      }`}
-                    >
-                      {shownLevel} Level
-                    </span>
+              <li key={lesson.id}>
+                <div
+                  onClick={() => onSelectLesson(lesson)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      onSelectLesson(lesson);
+                    }
+                  }}
+                  className={`group flex cursor-pointer items-start gap-3 px-3 py-3.5
+                    transition-colors duration-150 ${
+                      isSelected ? 'bg-accent-soft' : 'hover:bg-paper-3'
+                    }`}
+                >
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-baseline gap-2">
+                      <h3 className={`min-w-0 flex-1 truncate text-[14px] font-medium ${
+                        isSelected ? 'text-accent-700' : 'text-ink'
+                      }`}>
+                        {lesson.title}
+                      </h3>
+                      {isSelected && (
+                        <span className="flex shrink-0 items-center gap-1 text-[11px] font-medium text-accent">
+                          <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                          aktif
+                        </span>
+                      )}
+                    </div>
 
-                    <div className="flex items-center space-x-2">
-                      <span className="text-[11px] text-slate-500 flex items-center space-x-1">
-                        <Clock className="w-3 h-3 text-slate-400" />
-                        <span>~{lesson.durationMinutes} min</span>
+                    <p className="mt-0.5 line-clamp-1 text-[12px] leading-relaxed text-ink-3">
+                      {lesson.description}
+                    </p>
+
+                    {/* Kunye: renk yok, yalnizca ayrac. */}
+                    <p className="mt-1.5 flex flex-wrap items-center gap-x-2 text-[11px] text-ink-3">
+                      <span
+                        title={
+                          measuredLevel
+                            ? `Metindeki kelimelerin %90'ını kapsayan seviye.${
+                                lesson.level && lesson.level !== measuredLevel
+                                  ? ` Derse elle girilen seviye: ${lesson.level}.`
+                                  : ''
+                              }`
+                            : 'Elle girilen seviye (metin çözümlenemedi).'
+                        }
+                        className="rounded bg-paper-3 px-1.5 py-0.5 font-medium text-ink-2
+                          group-hover:bg-paper-2"
+                      >
+                        {shownLevel}
                       </span>
+                      <span>·</span>
+                      <span className="timecode">{lesson.sentences.length} cümle</span>
+                      <span>·</span>
+                      <span className="timecode">~{lesson.durationMinutes} dk</span>
+                    </p>
+                  </div>
 
-                      {onEditLesson && (
+                  {/* Satir eylemleri. Fare ustundeyken, klavyeyle
+                      odaklanildiginda ya da silme onayi acikken gorunur;
+                      her satirda surekli durunca liste icerik degil dugme
+                      listesi gibi okunuyordu.
+
+                      `row-actions` sinifi DOKUNMATIK icin: telefonda hover
+                      diye bir sey yok, yani gizli kalsalar duzenle ve sil
+                      dugmelerine hic ulasilamazdi. index.css'teki
+                      `pointer: coarse` kurali onlari orada surekli acik
+                      tutuyor. */}
+                  <div
+                    className={`row-actions flex shrink-0 items-center gap-0.5 transition-opacity ${
+                      confirmingDeleteId === lesson.id
+                        ? 'opacity-100'
+                        : 'opacity-0 focus-within:opacity-100 group-hover:opacity-100'
+                    }`}
+                  >
+                    {onDeleteLesson && confirmingDeleteId === lesson.id ? (
+                      <span className="flex items-center gap-1.5 text-[11px]">
+                        <span className="text-ink-2">Silinsin mi?</span>
                         <button
                           type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onEditLesson(lesson);
-                          }}
-                          className="p-1 text-slate-400 hover:text-indigo-600 rounded transition cursor-pointer opacity-80 hover:opacity-100"
-                          title="Bu çalışmayı düzenle"
+                          onClick={(e) => handleConfirmDelete(e, lesson.id)}
+                          className="rounded-lg bg-rose-600 px-2 py-1 font-medium text-white
+                            transition-colors hover:bg-rose-700 cursor-pointer"
                         >
-                          <Edit3 className="w-3.5 h-3.5" />
+                          Evet
                         </button>
-                      )}
-
-                      {onDeleteLesson && (
-                        confirmingDeleteId === lesson.id ? (
-                          <div className="flex items-center space-x-1 bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded text-[10px]">
-                            <span className="text-rose-700 font-bold">Silinsin mi?</span>
-                            <button
-                              type="button"
-                              onClick={(e) => handleConfirmDelete(e, lesson.id)}
-                              className="px-1.5 py-0.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded cursor-pointer"
-                            >
-                              Evet
-                            </button>
-                            <button
-                              type="button"
-                              onClick={handleCancelDelete}
-                              className="px-1.5 py-0.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded cursor-pointer"
-                            >
-                              İptal
-                            </button>
-                          </div>
-                        ) : (
+                        <button
+                          type="button"
+                          onClick={handleCancelDelete}
+                          className="rounded-lg px-2 py-1 text-ink-2 transition-colors
+                            hover:bg-hairline hover:text-ink cursor-pointer"
+                        >
+                          İptal
+                        </button>
+                      </span>
+                    ) : (
+                      <>
+                        {onEditLesson && (
+                          <button
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); onEditLesson(lesson); }}
+                            title="Bu dersi düzenle"
+                            aria-label="Bu dersi düzenle"
+                            className="rounded-lg p-1.5 text-ink-3 transition-colors
+                              hover:bg-paper-2 hover:text-ink cursor-pointer"
+                          >
+                            <Edit3 className="h-3.5 w-3.5" />
+                          </button>
+                        )}
+                        {onDeleteLesson && (
                           <button
                             type="button"
                             onClick={(e) => handleDeleteClick(e, lesson.id)}
-                            className="p-1 text-slate-400 hover:text-rose-600 rounded transition cursor-pointer opacity-80 hover:opacity-100"
                             title="Bu dersi sil"
+                            aria-label="Bu dersi sil"
+                            className="rounded-lg p-1.5 text-ink-3 transition-colors
+                              hover:bg-paper-2 hover:text-rose-600 cursor-pointer"
                           >
-                            <Trash2 className="w-3.5 h-3.5" />
+                            <Trash2 className="h-3.5 w-3.5" />
                           </button>
-                        )
-                      )}
-                    </div>
+                        )}
+                      </>
+                    )}
                   </div>
-
-                  <h3 className={`text-xs sm:text-sm font-bold line-clamp-2 ${isSelected ? 'text-indigo-900' : 'text-slate-800 group-hover:text-slate-900'}`}>
-                    {lesson.title}
-                  </h3>
-                  <p className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed">
-                    {lesson.description}
-                  </p>
                 </div>
-
-                <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
-                  <div className="flex items-center space-x-1 text-slate-500">
-                    <BarChart2 className="w-3.5 h-3.5 text-indigo-500" />
-                    <span>{lesson.sentences.length} Cümle</span>
-                  </div>
-
-                  {isSelected ? (
-                    <span className="flex items-center space-x-1 text-indigo-700 font-bold text-xs">
-                      <CheckCircle2 className="w-4 h-4 text-indigo-600" />
-                      <span>Aktif Ders</span>
-                    </span>
-                  ) : (
-                    <span className="flex items-center space-x-1 text-slate-500 group-hover:text-indigo-600 text-xs font-semibold">
-                      <Play className="w-3.5 h-3.5" />
-                      <span>Seç ve Çalış</span>
-                    </span>
-                  )}
-                </div>
-              </div>
+              </li>
             );
           })}
-        </div>
+        </ul>
       )}
     </div>
   );

@@ -169,39 +169,39 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-3xl shadow-2xl overflow-hidden my-8 space-y-0 text-slate-900">
+    <div className="fixed inset-0 z-50 bg-ink-950/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+      <div className="bg-paper-2 border border-hairline rounded-2xl w-full max-w-3xl overflow-hidden my-8 space-y-0 text-ink">
         
         {/* Header */}
-        <div className="bg-slate-900 text-white px-6 py-4 flex items-center justify-between border-b border-slate-800">
+        <div className="bg-ink text-white px-6 py-4 flex items-center justify-between border-b border-ink-800">
           <div className="flex items-center space-x-2.5">
-            <div className="p-2 bg-indigo-600/30 text-indigo-400 rounded-lg border border-indigo-500/30">
+            <div className="p-2 bg-accent/30 text-accent rounded-lg border border-accent/30">
               <Edit3 className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold">Çalışma İçeriğini Düzenle</h3>
-              <p className="text-xs text-slate-400 truncate max-w-md">{lesson.title}</p>
+              <h3 className="text-base font-semibold">Çalışma İçeriğini Düzenle</h3>
+              <p className="text-xs text-ink-3 truncate max-w-md">{lesson.title}</p>
             </div>
           </div>
 
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-white rounded-lg transition hover:bg-slate-800 cursor-pointer"
+            className="p-1.5 text-ink-3 hover:text-white rounded-lg transition hover:bg-ink-800 cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex items-center space-x-2 border-b border-slate-200 bg-slate-50 px-6 py-2.5">
+        <div className="flex items-center space-x-2 border-b border-hairline bg-paper px-6 py-2.5">
           <button
             type="button"
             onClick={() => setActiveTab('details')}
-            className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-lg text-xs font-bold transition cursor-pointer ${
+            className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold transition cursor-pointer ${
               activeTab === 'details'
-                ? 'bg-indigo-600 text-white shadow-sm'
-                : 'text-slate-600 hover:bg-slate-200/70'
+                ? 'bg-accent text-white'
+                : 'text-ink-2 hover:bg-hairline/70'
             }`}
           >
             <Youtube className="w-3.5 h-3.5" />
@@ -211,10 +211,10 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
           <button
             type="button"
             onClick={() => setActiveTab('sentences')}
-            className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-lg text-xs font-bold transition cursor-pointer ${
+            className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold transition cursor-pointer ${
               activeTab === 'sentences'
-                ? 'bg-indigo-600 text-white shadow-sm'
-                : 'text-slate-600 hover:bg-slate-200/70'
+                ? 'bg-accent text-white'
+                : 'text-ink-2 hover:bg-hairline/70'
             }`}
           >
             <FileText className="w-3.5 h-3.5" />
@@ -224,10 +224,10 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
           <button
             type="button"
             onClick={() => setActiveTab('ai_reanalyze')}
-            className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-lg text-xs font-bold transition cursor-pointer ${
+            className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold transition cursor-pointer ${
               activeTab === 'ai_reanalyze'
-                ? 'bg-amber-600 text-white shadow-sm'
-                : 'text-slate-600 hover:bg-amber-100/70 text-amber-900'
+                ? 'bg-amber-600 text-white'
+                : 'text-ink-2 hover:bg-amber-100/70 text-amber-900'
             }`}
           >
             <Sparkles className="w-3.5 h-3.5" />
@@ -242,7 +242,7 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
           {activeTab === 'details' && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-ink-2 mb-1">
                   Çalışma / Ders Başlığı:
                 </label>
                 <input
@@ -251,12 +251,12 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
                   onChange={(e) => setTitle(e.target.value)}
                   required
                   placeholder="Ders başlığını girin..."
-                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="w-full px-3.5 py-2 bg-paper border border-hairline-2 rounded-lg text-xs text-ink focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-ink-2 mb-1">
                   Açıklama:
                 </label>
                 <textarea
@@ -264,12 +264,12 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
                   onChange={(e) => setDescription(e.target.value)}
                   rows={2}
                   placeholder="Ders hakkında kısa açıklama..."
-                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="w-full px-3.5 py-2 bg-paper border border-hairline-2 rounded-lg text-xs text-ink focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-ink-2 mb-1">
                   YouTube Video Linki:
                 </label>
                 <input
@@ -277,19 +277,19 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
                   value={youtubeUrl}
                   onChange={(e) => setYoutubeUrl(e.target.value)}
                   placeholder="https://www.youtube.com/watch?v=..."
-                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="w-full px-3.5 py-2 bg-paper border border-hairline-2 rounded-lg text-xs text-ink focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-ink-2 mb-1">
                     İngilizce Seviyesi:
                   </label>
                   <select
                     value={level}
                     onChange={(e) => setLevel(e.target.value as any)}
-                    className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-500"
+                    className="w-full px-3.5 py-2 bg-paper border border-hairline-2 rounded-lg text-xs text-ink focus:outline-none focus:border-accent"
                   >
                     <option value="B1">B1 Level</option>
                     <option value="B2">B2 Level</option>
@@ -298,7 +298,7 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-ink-2 mb-1">
                     Tahmini Süre (Dakika):
                   </label>
                   <input
@@ -307,7 +307,7 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
                     max={120}
                     value={durationMinutes}
                     onChange={(e) => setDurationMinutes(parseInt(e.target.value, 10) || 5)}
-                    className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-500"
+                    className="w-full px-3.5 py-2 bg-paper border border-hairline-2 rounded-lg text-xs text-ink focus:outline-none focus:border-accent"
                   />
                 </div>
               </div>
@@ -318,13 +318,13 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
           {activeTab === 'sentences' && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <p className="text-xs text-slate-600">
+                <p className="text-xs text-ink-2">
                   Cümleleri, Türkçe çevirilerini veya zaman damgalarını doğrudan düzenleyebilirsiniz:
                 </p>
                 <button
                   type="button"
                   onClick={handleAddSentence}
-                  className="inline-flex items-center space-x-1 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-bold rounded-lg transition cursor-pointer"
+                  className="inline-flex items-center space-x-1 px-3 py-1.5 bg-accent-soft hover:bg-accent-soft text-accent-700 border border-accent/25 text-xs font-semibold rounded-lg transition cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Yeni Cümle Ekle</span>
@@ -333,10 +333,10 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
 
               <div className="space-y-3">
                 {sentences.map((s, idx) => (
-                  <div key={idx} className="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
+                  <div key={idx} className="bg-paper p-3 rounded-xl border border-hairline space-y-2">
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center space-x-2">
-                        <span className="text-[10px] font-bold text-slate-400 font-mono">
+                        <span className="text-[10px] font-semibold text-ink-3 font-mono">
                           #{idx + 1}
                         </span>
                         <input
@@ -344,14 +344,14 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
                           value={s.timestamp || '00:00'}
                           onChange={(e) => handleSentenceChange(idx, 'timestamp', e.target.value)}
                           placeholder="00:00"
-                          className="w-16 px-2 py-0.5 text-[11px] font-mono bg-white border border-slate-300 rounded text-center text-slate-800"
+                          className="w-16 px-2 py-0.5 text-[11px] font-mono bg-paper-2 border border-hairline-2 rounded text-center text-ink-800"
                         />
                       </div>
 
                       <button
                         type="button"
                         onClick={() => handleDeleteSentence(idx)}
-                        className="p-1 text-slate-400 hover:text-rose-600 rounded transition cursor-pointer"
+                        className="p-1 text-ink-3 hover:text-rose-600 rounded transition cursor-pointer"
                         title="Bu cümleyi sil"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -364,14 +364,14 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
                         value={s.en}
                         onChange={(e) => handleSentenceChange(idx, 'en', e.target.value)}
                         placeholder="İngilizce cümle..."
-                        className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-medium text-slate-900 focus:outline-none focus:border-indigo-500"
+                        className="w-full px-3 py-1.5 bg-paper-2 border border-hairline-2 rounded-lg text-xs font-medium text-ink focus:outline-none focus:border-accent"
                       />
                       <input
                         type="text"
                         value={s.tr}
                         onChange={(e) => handleSentenceChange(idx, 'tr', e.target.value)}
                         placeholder="Türkçe çeviri..."
-                        className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-600 italic focus:outline-none focus:border-indigo-500"
+                        className="w-full px-3 py-1.5 bg-paper-2 border border-hairline rounded-lg text-xs text-ink-2 italic focus:outline-none focus:border-accent"
                       />
                     </div>
                   </div>
@@ -384,7 +384,7 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
           {activeTab === 'ai_reanalyze' && (
             <div className="space-y-4">
               <div className="bg-amber-50 border border-amber-200 p-3 rounded-xl text-xs text-amber-900 space-y-1">
-                <strong className="block font-bold">🤖 Gemini AI Yapay Zeka Çevirisi</strong>
+                <strong className="block font-semibold">🤖 Gemini AI Yapay Zeka Çevirisi</strong>
                 <p className="leading-relaxed">
                   İngilizce konuşma metnini aşağıya yapıştırın veya dosyadan yükleyin. Yapay zeka metni cümlelere böler ve Türkçe çevirileriyle transkripti yeniden oluşturur.
                 </p>
@@ -395,7 +395,7 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
 
               <div>
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
-                  <label className="text-xs font-bold text-slate-700">
+                  <label className="text-xs font-semibold text-ink-2">
                     Tam İngilizce Transkript / Konuşma Metni:
                   </label>
 
@@ -411,7 +411,7 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
                       disabled={isAnalyzing}
-                      className="inline-flex items-center space-x-1 px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 disabled:opacity-50 text-amber-800 border border-amber-200 text-[11px] font-bold rounded-lg transition cursor-pointer"
+                      className="inline-flex items-center space-x-1 px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 disabled:opacity-50 text-amber-800 border border-amber-200 text-[11px] font-semibold rounded-lg transition cursor-pointer"
                       title="Transkripti dosyadan yükle (.txt, .srt, .vtt)"
                     >
                       <UploadCloud className="w-3.5 h-3.5" />
@@ -426,7 +426,7 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
                         setAiErrorMsg('');
                       }}
                       disabled={isAnalyzing || !rawText}
-                      className="inline-flex items-center space-x-1 px-2.5 py-1.5 bg-slate-50 hover:bg-slate-100 disabled:opacity-40 text-slate-600 border border-slate-200 text-[11px] font-bold rounded-lg transition cursor-pointer"
+                      className="inline-flex items-center space-x-1 px-2.5 py-1.5 bg-paper hover:bg-paper-3 disabled:opacity-40 text-ink-2 border border-hairline text-[11px] font-semibold rounded-lg transition cursor-pointer"
                       title="Metni tamamen temizle ve baştan yapıştır"
                     >
                       <Eraser className="w-3.5 h-3.5" />
@@ -439,7 +439,7 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
                   onChange={(e) => setRawText(e.target.value)}
                   rows={8}
                   placeholder="İngilizce transkript metnini buraya yapıştırın..."
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500"
+                  className="w-full px-3.5 py-2.5 bg-paper border border-hairline-2 rounded-lg text-xs text-ink placeholder-ink-3 focus:outline-none focus:border-amber-500"
                   disabled={isAnalyzing}
                 />
               </div>
@@ -449,7 +449,7 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
                   type="button"
                   onClick={handleAiReanalyze}
                   disabled={isAnalyzing || !rawText.trim()}
-                  className="px-4 py-2 bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white text-xs font-bold rounded-lg transition flex items-center space-x-1.5 cursor-pointer shadow-sm"
+                  className="px-4 py-2 bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white text-xs font-semibold rounded-lg transition flex items-center space-x-1.5 cursor-pointer"
                 >
                   {isAnalyzing ? (
                     <>
@@ -482,17 +482,17 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
           )}
 
           {/* Modal Footer Buttons */}
-          <div className="pt-4 border-t border-slate-200 flex items-center justify-end space-x-3">
+          <div className="pt-4 border-t border-hairline flex items-center justify-end space-x-3">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition cursor-pointer"
+              className="px-4 py-2 bg-paper-3 hover:bg-hairline text-ink-2 text-xs font-semibold rounded-lg transition cursor-pointer"
             >
               İptal
             </button>
             <button
               type="submit"
-              className="flex items-center space-x-1.5 px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition shadow-sm cursor-pointer"
+              className="flex items-center space-x-1.5 px-5 py-2 bg-accent hover:bg-accent-700 text-white text-xs font-semibold rounded-lg transition cursor-pointer"
             >
               <Save className="w-4 h-4" />
               <span>Değişiklikleri Kaydet</span>

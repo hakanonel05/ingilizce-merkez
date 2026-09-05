@@ -109,7 +109,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-      <div className="w-full max-w-2xl my-8 border border-[var(--hairline-2)] bg-[var(--paper-2)] shadow-2xl overflow-hidden">
+      <div className="w-full max-w-2xl my-8 border border-[var(--hairline-2)] bg-[var(--paper-2)] overflow-hidden">
         {/* Başlık */}
         <div className="flex items-center justify-between gap-4 px-6 py-4 border-b border-[var(--hairline)]">
           <div className="flex items-center gap-2.5 min-w-0">

@@ -77,9 +77,9 @@ export default function VocabularyWorkbook({ workbookState, onWorkbookStateChang
       <div className="border-b border-hairline/40 pb-6">
         <div className="flex items-center gap-2 text-accent mb-2">
           <BookText className="h-4 w-4" />
-          <span className="text-[10px] font-bold tracking-[0.2em] uppercase">Kelime Kitabı</span>
+          <span className="text-[10px] font-semibold tracking-[0.2em]">Kelime Kitabı</span>
         </div>
-        <h2 className="font-display text-3xl font-bold text-ink">Kelime Kitabı — Temel Kelime Tabloları</h2>
+        <h2 className="font-display text-3xl font-semibold text-ink">Kelime Kitabı — Temel Kelime Tabloları</h2>
         <p className="text-ink/60 mt-2 max-w-3xl text-sm leading-relaxed">
           Kitabın başındaki gibi: anlamına göre gruplanmış eş anlamlı kelime tabloları ve her tablonun yanında
           Collocation, Synonyms ve Sentence testleri. Bir tablo seçin, kelimeleri çalışın, sonra testleri çözün.
@@ -89,16 +89,16 @@ export default function VocabularyWorkbook({ workbookState, onWorkbookStateChang
       {/* Table selector */}
       <div className="space-y-3">
         <div>
-          <p className="text-[10px] font-bold tracking-[0.18em] uppercase text-ink-3 mb-2">Temel Sıfatlar</p>
+          <p className="text-[10px] font-semibold tracking-[0.18em] text-ink-3 mb-2">Temel Sıfatlar</p>
           <div className="flex flex-wrap gap-2">
             {adjectiveTables.map(t => (
               <button
                 key={t.id}
                 onClick={() => setActiveId(t.id)}
-                className={`px-3.5 py-1.5 text-xs font-bold border transition-all rounded-lg ${
+                className={`px-3.5 py-1.5 text-xs font-semibold border transition-all rounded-lg ${
                   activeId === t.id
                     ? 'bg-accent text-white border-accent'
-                    : 'bg-white text-ink/70 border-hairline/50 hover:border-accent/50'
+                    : 'bg-paper-2 text-ink/70 border-hairline/50 hover:border-accent/50'
                 }`}
               >
                 TABLO {t.tableNo}
@@ -107,16 +107,16 @@ export default function VocabularyWorkbook({ workbookState, onWorkbookStateChang
           </div>
         </div>
         <div>
-          <p className="text-[10px] font-bold tracking-[0.18em] uppercase text-ink-3 mb-2">Temel Fiiller</p>
+          <p className="text-[10px] font-semibold tracking-[0.18em] text-ink-3 mb-2">Temel Fiiller</p>
           <div className="flex flex-wrap gap-2">
             {verbTables.map(t => (
               <button
                 key={t.id}
                 onClick={() => setActiveId(t.id)}
-                className={`px-3.5 py-1.5 text-xs font-bold border transition-all rounded-lg ${
+                className={`px-3.5 py-1.5 text-xs font-semibold border transition-all rounded-lg ${
                   activeId === t.id
                     ? 'bg-accent text-white border-accent'
-                    : 'bg-white text-ink/70 border-hairline/50 hover:border-accent/50'
+                    : 'bg-paper-2 text-ink/70 border-hairline/50 hover:border-accent/50'
                 }`}
               >
                 TABLO {t.tableNo}
@@ -129,17 +129,17 @@ export default function VocabularyWorkbook({ workbookState, onWorkbookStateChang
       {table && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           {/* LEFT: Word table (PDF-like) */}
-          <div className="bg-white border border-hairline/40 rounded-lg">
+          <div className="bg-paper-2 border border-hairline/40 rounded-lg">
             <div className="bg-ink text-white px-4 py-3 flex items-center gap-2 rounded-lg">
               <Grid3x3 className="h-4 w-4 opacity-70" />
-              <span className="font-display font-bold text-sm tracking-wide">
+              <span className="font-display font-semibold text-sm tracking-wide">
                 {table.category === 'adjectives' ? 'TEMEL SIFAT LİSTESİ' : 'TEMEL FİİL LİSTESİ'} · TABLO {table.tableNo}
               </span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2">
               {table.groups.map((g, gi) => (
                 <div key={gi} className="border-b border-r border-hairline/30 p-3">
-                  <p className="text-[11px] font-bold uppercase tracking-wide text-accent mb-1.5">
+                  <p className="text-[11px] font-semibold tracking-wide text-accent mb-1.5">
                     {gi + 1}. {g.theme}
                   </p>
                   <ol className="space-y-0.5">
@@ -160,11 +160,11 @@ export default function VocabularyWorkbook({ workbookState, onWorkbookStateChang
             {table.exercises.map((ex, exIdx) => {
               const isChecked = !!checked[exIdx];
               return (
-                <div key={exIdx} className="bg-white border border-hairline/40 rounded-lg">
+                <div key={exIdx} className="bg-paper-2 border border-hairline/40 rounded-lg">
                   <div className="px-4 py-3 border-b border-hairline/30 flex items-center gap-2">
                     <ListChecks className="h-4 w-4 text-accent" />
                     <div>
-                      <p className="font-display font-bold text-sm text-ink">{ex.title}</p>
+                      <p className="font-display font-semibold text-sm text-ink">{ex.title}</p>
                       <p className="text-[11px] text-ink-3 mt-0.5">{ex.instruction}</p>
                     </div>
                   </div>
@@ -179,7 +179,7 @@ export default function VocabularyWorkbook({ workbookState, onWorkbookStateChang
                             <span className="text-ink-3 mr-1.5">{qIdx + 1}.</span>
                             {ex.type === 'synonyms' ? (
                               <span>
-                                <span className="font-bold">"{q.prompt}"</span> ile eş anlamlı olan(lar):
+                                <span className="font-semibold">"{q.prompt}"</span> ile eş anlamlı olan(lar):
                               </span>
                             ) : (
                               <span>{q.prompt}</span>
@@ -221,12 +221,12 @@ export default function VocabularyWorkbook({ workbookState, onWorkbookStateChang
                   <div className="px-4 py-3 border-t border-hairline/30 flex items-center justify-between">
                     {isChecked ? (
                       <>
-                        <span className="text-sm font-bold text-ink">
+                        <span className="text-sm font-semibold text-ink">
                           Sonuç: {scoreExercise(ex, exIdx)} / {ex.questions.length} doğru
                         </span>
                         <button
                           onClick={() => setCheckedLocal(exIdx, false)}
-                          className="flex items-center gap-1.5 text-xs font-bold text-accent hover:underline"
+                          className="flex items-center gap-1.5 text-xs font-semibold text-accent hover:underline"
                         >
                           <RotateCcw className="h-3.5 w-3.5" /> Tekrar Dene
                         </button>
@@ -234,7 +234,7 @@ export default function VocabularyWorkbook({ workbookState, onWorkbookStateChang
                     ) : (
                       <button
                         onClick={() => setCheckedLocal(exIdx, true)}
-                        className="ml-auto px-4 py-1.5 text-xs font-bold bg-accent text-white border border-accent hover:opacity-90 rounded-lg"
+                        className="ml-auto px-4 py-1.5 text-xs font-semibold bg-accent text-white border border-accent hover:opacity-90 rounded-lg"
                       >
                         Kontrol Et
                       </button>

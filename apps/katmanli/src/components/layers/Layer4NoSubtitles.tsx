@@ -30,14 +30,14 @@ export const Layer4NoSubtitles: React.FC<Props> = ({
 
   return (
     <div className="space-y-6">
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+      <div className="bg-paper-2 border border-hairline rounded-xl p-4">
         <div className="flex items-center space-x-2.5 mb-2">
-          <span className="px-2.5 py-1 bg-orange-50 text-orange-700 border border-orange-200 text-xs font-bold rounded-md uppercase tracking-wider">
+          <span className="px-2.5 py-1 bg-orange-50 text-orange-700 border border-orange-200 text-xs font-semibold rounded-md">
             Layer 4
           </span>
-          <h2 className="text-base sm:text-lg font-bold text-slate-900">Altyazısız İzleme</h2>
+          <h2 className="text-base sm:text-lg font-semibold text-ink">Altyazısız İzleme</h2>
         </div>
-        <p className="text-xs text-slate-600 leading-relaxed">
+        <p className="text-xs text-ink-2 leading-relaxed">
           Altyazıyı tamamen kapatın ve videoyu izleyin. <strong>%100 anlamak zorunda
           değilsiniz</strong>; başlangıçta %60-70 yakalamak yeterlidir. İzledikten sonra
           aşağıdaki anlama testine geçin.
@@ -50,12 +50,12 @@ export const Layer4NoSubtitles: React.FC<Props> = ({
         </div>
       ) : (
         <div className="max-w-3xl mx-auto space-y-3">
-          <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-sm">
-            <div className="aspect-video w-full rounded-lg overflow-hidden bg-slate-950">
+          <div className="bg-paper-2 border border-hairline rounded-xl p-3">
+            <div className="aspect-video w-full rounded-lg overflow-hidden bg-ink-950">
               <div ref={containerRef} className="w-full h-full" />
             </div>
             <div className="flex items-center justify-between pt-2">
-              <span className="text-[11px] font-mono text-slate-500">
+              <span className="text-[11px] font-mono text-ink-3">
                 {formatSeconds(currentTime)}
               </span>
               <span className="inline-flex items-center space-x-1.5 text-[11px] font-semibold text-orange-700">
@@ -69,7 +69,7 @@ export const Layer4NoSubtitles: React.FC<Props> = ({
             <button
               type="button"
               onClick={() => setWatched(true)}
-              className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold rounded-xl transition cursor-pointer"
+              className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white text-xs font-semibold rounded-xl transition cursor-pointer"
             >
               <Check className="w-4 h-4" />
               <span>Videoyu altyazısız izledim, teste geç</span>
@@ -79,7 +79,7 @@ export const Layer4NoSubtitles: React.FC<Props> = ({
       )}
 
       {watched && (
-        <div className="pt-2 border-t border-slate-200">
+        <div className="pt-2 border-t border-hairline">
           <Layer3ComprehensionQuiz
             lesson={lesson}
             onCompleteLayer={onCompleteLayer}

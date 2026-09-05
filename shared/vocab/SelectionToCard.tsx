@@ -222,7 +222,7 @@ export const SelectionToCard: React.FC<Props> = ({
             transform: 'translateX(-50%)',
             zIndex: 60,
           }}
-          className="flex items-center space-x-1.5 px-3 py-2 bg-accent hover:bg-accent-700 text-white text-xs font-bold rounded-lg shadow-lg transition cursor-pointer whitespace-nowrap"
+          className="flex items-center space-x-1.5 px-3 py-2 bg-accent hover:bg-accent-700 text-white text-xs font-semibold rounded-lg transition cursor-pointer whitespace-nowrap"
         >
           {isLoading ? (
             <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -235,55 +235,55 @@ export const SelectionToCard: React.FC<Props> = ({
 
       {/* Taslak paneli */}
       {draft && (
-        <div className="fixed inset-0 bg-slate-900/40 z-[70] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-ink/40 z-[70] flex items-center justify-center p-4">
           <div
             ref={panelRef}
-            className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-5 space-y-3 max-h-[90vh] overflow-y-auto"
+            className="bg-paper-2 rounded-2xl w-full max-w-md p-5 space-y-3 max-h-[90vh] overflow-y-auto"
           >
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-slate-900 flex items-center space-x-2">
+              <h3 className="text-sm font-semibold text-ink flex items-center space-x-2">
                 <Layers className="w-4 h-4 text-accent" />
                 <span>Kelime Kartı Ekle</span>
               </h3>
               <button
                 type="button"
                 onClick={() => setDraft(null)}
-                className="p-1 text-slate-500 hover:text-slate-700 cursor-pointer"
+                className="p-1 text-ink-3 hover:text-ink-2 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-600">İfade</label>
+              <label className="text-[11px] font-semibold text-ink-2">İfade</label>
               <input
                 type="text"
                 value={draft.front}
                 onChange={(e) => setDraft({ ...draft, front: e.target.value })}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm font-bold text-slate-900 focus:outline-none focus:border-accent"
+                className="w-full px-3 py-2 bg-paper border border-hairline-2 rounded-lg text-sm font-semibold text-ink focus:outline-none focus:border-accent"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-600">Türkçe karşılık</label>
+              <label className="text-[11px] font-semibold text-ink-2">Türkçe karşılık</label>
               <input
                 type="text"
                 value={draft.back}
                 onChange={(e) => setDraft({ ...draft, back: e.target.value })}
                 placeholder="Anlamı"
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-accent"
+                className="w-full px-3 py-2 bg-paper border border-hairline-2 rounded-lg text-sm text-ink focus:outline-none focus:border-accent"
               />
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-600">Seviye</label>
+                <label className="text-[11px] font-semibold text-ink-2">Seviye</label>
                 <select
                   value={draft.level}
                   onChange={(e) =>
                     setDraft({ ...draft, level: e.target.value as CardLevel, levelSource: 'ai' })
                   }
-                  className="w-full px-2 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold cursor-pointer"
+                  className="w-full px-2 py-2 bg-paper-2 border border-hairline-2 rounded-lg text-xs font-semibold cursor-pointer"
                 >
                   {CEFR_ORDER.map((l) => (
                     <option key={l} value={l}>{l}</option>
@@ -292,11 +292,11 @@ export const SelectionToCard: React.FC<Props> = ({
               </div>
 
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-600">Söz türü</label>
+                <label className="text-[11px] font-semibold text-ink-2">Söz türü</label>
                 <select
                   value={draft.pos}
                   onChange={(e) => setDraft({ ...draft, pos: e.target.value as PartOfSpeech })}
-                  className="w-full px-2 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold cursor-pointer"
+                  className="w-full px-2 py-2 bg-paper-2 border border-hairline-2 rounded-lg text-xs font-semibold cursor-pointer"
                 >
                   {POS_ORDER.map((p) => (
                     <option key={p} value={p}>{POS_LABELS_TR[p]}</option>
@@ -305,11 +305,11 @@ export const SelectionToCard: React.FC<Props> = ({
               </div>
 
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-600">Tür</label>
+                <label className="text-[11px] font-semibold text-ink-2">Tür</label>
                 <select
                   value={draft.kind}
                   onChange={(e) => setDraft({ ...draft, kind: e.target.value as CardKind })}
-                  className="w-full px-2 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold cursor-pointer"
+                  className="w-full px-2 py-2 bg-paper-2 border border-hairline-2 rounded-lg text-xs font-semibold cursor-pointer"
                 >
                   <option value="word">Kelime</option>
                   <option value="phrasal_verb">Phrasal Verb</option>
@@ -331,13 +331,13 @@ export const SelectionToCard: React.FC<Props> = ({
             </p>
 
             {draft.exampleEn && (
-              <div className="bg-slate-50 border border-slate-200 rounded-lg p-2.5 space-y-0.5">
-                <p className="text-xs text-slate-900 font-medium">{draft.exampleEn}</p>
-                {draft.exampleTr && <p className="text-[11px] text-slate-600">{draft.exampleTr}</p>}
+              <div className="bg-paper border border-hairline rounded-lg p-2.5 space-y-0.5">
+                <p className="text-xs text-ink font-medium">{draft.exampleEn}</p>
+                {draft.exampleTr && <p className="text-[11px] text-ink-2">{draft.exampleTr}</p>}
               </div>
             )}
 
-            <p className="text-[10px] text-slate-500">
+            <p className="text-[10px] text-ink-3">
               Kart <strong>{lessonTitle}</strong> dersine eklenecek. Kelime Kartları
               sekmesinde &quot;Bu Ders&quot; veya &quot;Tüm Kartlar&quot; altında görünür.
             </p>
@@ -353,7 +353,7 @@ export const SelectionToCard: React.FC<Props> = ({
                 type="button"
                 onClick={handleSave}
                 disabled={!draft.front.trim() || !draft.back.trim()}
-                className="flex-1 flex items-center justify-center space-x-1.5 px-4 py-2.5 bg-accent hover:bg-accent-700 disabled:bg-slate-300 text-white text-xs font-bold rounded-xl transition cursor-pointer"
+                className="flex-1 flex items-center justify-center space-x-1.5 px-4 py-2.5 bg-accent hover:bg-accent-700 disabled:bg-hairline-2 text-white text-xs font-semibold rounded-xl transition cursor-pointer"
               >
                 <Check className="w-4 h-4" />
                 <span>Kartlarıma Ekle</span>
@@ -361,7 +361,7 @@ export const SelectionToCard: React.FC<Props> = ({
               <button
                 type="button"
                 onClick={() => setDraft(null)}
-                className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition cursor-pointer"
+                className="px-4 py-2.5 bg-paper-3 hover:bg-hairline text-ink-2 text-xs font-semibold rounded-xl transition cursor-pointer"
               >
                 Vazgeç
               </button>
@@ -377,7 +377,7 @@ export const SelectionToCard: React.FC<Props> = ({
           kota dolu, ağ hatası) kullanıcı düğmeye basıyor ve hiçbir şey
           olmuyor sanıyordu. Panel yokken de görünür. */}
       {error && !draft && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[80] max-w-[92vw] flex items-start gap-2 px-4 py-2.5 bg-rose-50 border border-rose-200 text-rose-900 text-xs font-semibold rounded-xl shadow-lg">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[80] max-w-[92vw] flex items-start gap-2 px-4 py-2.5 bg-rose-50 border border-rose-200 text-rose-900 text-xs font-semibold rounded-xl">
           <span className="leading-relaxed">{error}</span>
           <button
             type="button"
@@ -392,7 +392,7 @@ export const SelectionToCard: React.FC<Props> = ({
 
       {/* Kaydedildi bildirimi */}
       {savedMsg && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[80] flex items-center space-x-2 px-4 py-2.5 bg-slate-900 text-white text-xs font-bold rounded-xl shadow-lg">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[80] flex items-center space-x-2 px-4 py-2.5 bg-ink text-white text-xs font-semibold rounded-xl">
           <Check className="w-4 h-4 text-emerald-400" />
           <span>{savedMsg}</span>
         </div>

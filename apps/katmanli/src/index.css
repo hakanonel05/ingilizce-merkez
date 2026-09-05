@@ -10,8 +10,9 @@
 /* =====================================================================
    KATMANLI İNGİLİZCE — TASARIM SİSTEMİ
 
-   Yön: modern, sakin, yüksek kontrastlı bir çalışma arayüzü.
-   (Linear / Notion / Apple minimalizmi.)
+   Yon: sakin, yuksek kontrastli bir calisma arayuzu.
+   Referanslar: qurio.academy (kabuk ve palet) + apple.com (tipografi ve
+   bosluk disiplini). Ayrintili kurallar: .claude/skills/frontend-design.
 
    ÖNEMLİ BİR KARAR: burada ~90 satırlık bir "palet eşleme" katmanı
    vardı; kaynaktaki slate/indigo sınıflarını kağıt/mürekkep tonlarına
@@ -51,42 +52,71 @@
      ekliyor. Bilesenlerdeki slate olcegi oldugu gibi duruyor, gorsel
      hiyerarsi bozulmuyor.
      ===================================================================== */
-  --color-paper:        #F8FAFC;
+  --color-paper:        #F5F4F2;
   --color-paper-2:      #FFFFFF;
-  --color-paper-3:      #F1F5F9;
-  --color-ink:          #0F172A;
-  --color-ink-2:        #475569;
-  --color-ink-3:        #64748B;
-  --color-hairline:     #E2E8F0;
+  --color-paper-3:      #EDEBE8;
+  --color-ink:          #1C1917;
+  --color-ink-2:        #57534E;
+  --color-ink-3:        #78716C;
+  --color-ink-800:      #292524;
+  --color-ink-950:      #0C0A09;
+  --color-hairline:     #E7E5E4;
   --color-accent:       #4F46E5;
   --color-accent-700:   #4338CA;
   --color-accent-soft:  #EEF2FF;
+
+  /* MARKA RENGI (turuncu) — vurgu icin, eylem icin DEGIL.
+     qurio.academy'de iki renk var ve isleri kesin ayrilmis: menekse-mavi
+     yalnizca aktif/tiklanabilir durumu isaretler, turuncu yalnizca markayi
+     ve bir cumledeki tek anahtar kelimeyi ("Social *Space*") isaretler.
+     Turuncu bir dugmenin zemini olursa bu ayrim cokup ekran iki renkli
+     bir SaaS panosuna doner.
+     --brand buyuk metin icin (beyazda 4.0 kontrast, >=18px kalinda AA),
+     --brand-strong 14px ve altindaki metin icin (5.6). */
+  --color-paper-warm:   #F6F3EE;
+
+  --color-brand:        #E8590C;
+  --color-brand-strong: #C2410C;
+  --color-brand-soft:   #FFF3EC;
 }
 
 :root {
-  /* Zeminler — kirli krem yok; nötr, temiz gri-beyaz */
-  --paper:      #F8FAFC;   /* slate-50  — sayfa zemini */
+  /* Zeminler — SICAK NOTR. Onceki palet slate idi (mavi-soguk gri);
+     referans aldigimiz qurio.academy notr-sicak bir gri kullaniyor ve
+     ayni beyaz kartin altinda daha az "yazilim panosu" duruyor.
+     Yine de KREM DEGIL: kremde beyaz kart zeminden sarimsi ayrisip
+     kirli duruyor, burada ayrisma yalnizca acikligta. */
+  --paper:      #F5F4F2;   /* sicak notr — sayfa zemini */
   --paper-2:    #FFFFFF;   /* saf beyaz — çalışma kartları */
-  --paper-3:    #F1F5F9;   /* slate-100 — ikincil yüzey */
+  --paper-3:    #EDEBE8;   /* stone-150 — ikincil yuzey */
 
   /* Metin — üçü de kendi zemininde net okunur */
-  --ink:        #0F172A;   /* slate-900 — ana metin */
-  --ink-2:      #475569;   /* slate-600 — ikincil */
-  /* "Pasif" diye slate-400 secilmisti; ama kullanildigi her yer acik
+  --ink:        #1C1917;   /* stone-900 — ana metin */
+  --ink-2:      #57534E;   /* stone-600 — ikincil */
+  /* "Pasif" diye en acik ton secilmisti; ama kullanildigi her yer acik
      zeminde 10-11px ACIKLAMA metni ve olculen kontrast 2.56 idi
-     (gereken 4.5). Okunmasi gereken yazi icin fazla soluk. slate-500
-     ayni sakinlikte duruyor ama 4.76 ile okunuyor. */
-  --ink-3:      #64748B;   /* slate-500 — ikincil/pasif */
+     (gereken 4.5). Okunmasi gereken yazi icin fazla soluk. stone-500
+     ayni sakinlikte duruyor ama 4.83 ile okunuyor. */
+  --ink-3:      #78716C;   /* stone-500 — pasif (beyazda 4.8) */
+  --ink-800:    #292524;   /* stone-800 — koyu panel */
+  --ink-950:    #0C0A09;   /* stone-950 — en koyu yuzey */
 
   /* Çizgiler */
-  --hairline:   #E2E8F0;   /* slate-200 */
-  --hairline-2: #CBD5E1;   /* slate-300 */
+  --hairline:   #E7E5E4;   /* stone-200 */
+  --hairline-2: #D6D3D1;   /* stone-300 */
 
   /* Vurgu — aktif adım ve birincil eylem */
   --accent:      #4F46E5;  /* indigo-600 */
   --accent-700:  #4338CA;  /* indigo-700 */
   --accent-soft: #EEF2FF;  /* indigo-50  */
   --accent-ring: rgba(79, 70, 229, 0.18);
+
+  /* Marka — yukaridaki @theme notuna bak. */
+  --paper-warm: #F6F3EE;   /* yalnizca hero seridi */
+
+  --brand:        #E8590C;
+  --brand-strong: #C2410C;
+  --brand-soft:   #FFF3EC;
 
   /* Durumlar */
   --ok:         #059669;   /* emerald-600 */
@@ -100,7 +130,8 @@
   --marker-bg:  #FFFBEB;   /* amber-50  */
   --marker-ink: #92400E;   /* amber-800 */
 
-  --radius:     12px;
+  --radius:     14px;
+  --radius-lg:  18px;
   --sidebar-w:  276px;
 }
 
@@ -191,10 +222,10 @@ body {
   font-weight: 600;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  /* --ink-3 (slate-400) beyaz üzerinde 2.56 kontrast veriyor. Bölüm
-     başlıkları okunması GEREKEN metinler, dekoratif değil; slate-500
+  /* Eski deger beyaz üzerinde 2.56 kontrast veriyordu. Bölüm
+     başlıkları okunması GEREKEN metinler, dekoratif değil; stone-500
      aynı sakinlikte ama 4.7 kontrastla okunuyor. */
-  color: #64748B;
+  color: #78716C;
 }
 
 /* Transkript gövdesi. Uzun İngilizce metin okunuyor: rahat satır
@@ -310,6 +341,12 @@ html { -webkit-text-size-adjust: 100%; }
 
   /* Basılı tutunca çıkan gri kutuyu kaldırır */
   button, a, [role="button"] { -webkit-tap-highlight-color: transparent; }
+
+  /* Hover'a bagli gizlenen satir eylemleri (ornegin ders listesindeki
+     duzenle/sil) dokunmatikte ERISILEMEZ olurdu: parmakla hover yok, yani
+     opacity-0 kalici hale gelirdi. Burada surekli acik tutuluyorlar. */
+  .row-actions { opacity: 1 !important; }
+
 }
 
 /* Telefon tarayıcılarında 100vh adres çubuğunu saymaz: sayfa alta taşar.
@@ -329,4 +366,24 @@ html { -webkit-text-size-adjust: 100%; }
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
   }
+}
+
+/* =====================================================================
+   KELIME ISARETI (marka)
+
+   Arayuzun tamami sans; serif YALNIZCA marka adinda. Basliklarda serif
+   denenip birakilmisti (yukaridaki tipografi notu) — orada dagitiyordu,
+   burada tam tersine tek bir kelimeyi arayuzun geri kalanindan ayirmaya
+   yariyor.
+
+   WEBFONT INDIRILMIYOR: iki kelimelik bir isaret icin ayri bir yazi tipi
+   dosyasi cekmek, sayfa acilisina o dosyanin maliyetini eklemek demek.
+   Yigin isletim sistemlerinde HAZIR bulunan serifleri sirayla deniyor;
+   uc platformda da makul bir eski-stil serif bulunuyor.
+   ===================================================================== */
+.wordmark {
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
+    "Times New Roman", serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }

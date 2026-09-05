@@ -9,7 +9,7 @@ import {
   READING_CORE_LESSON_TITLE,
   readingPassageLessonId,
 } from '../lib/vocabBank';
-import { Search, Volume2, CheckCircle2, Bookmark, ArrowRight, Eye, Sparkles, BookOpen, BrainCircuit, Check } from 'lucide-react';
+import { Search, Volume2, Eye, BrainCircuit, Check } from 'lucide-react';
 
 interface VocabularyListProps {
   passages: Passage[];
@@ -126,289 +126,249 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
     }
   };
 
+  /** Söz türü kısaltmasının okunabilir karşılığı. */
+  const posLabel = (p: string) =>
+    p === 'n' ? 'isim' :
+    p === 'v' ? 'fiil' :
+    p === 'adj' ? 'sıfat' :
+    p === 'adv' ? 'zarf' :
+    p === 'prep' ? 'edat' : 'phrasal verb';
+
+  /** Segment düğmesi — liste ve parça ekranlarıyla aynı dil. */
+  const segment = (label: string, isActive: boolean, onClick: () => void) => (
+    <button
+      key={label}
+      type="button"
+      onClick={onClick}
+      className={`rounded-lg px-3 py-1.5 text-[12px] transition-colors duration-150 cursor-pointer ${
+        isActive ? 'bg-paper-2 font-medium text-ink' : 'text-ink-2 hover:text-ink'
+      }`}
+    >
+      {label}
+    </button>
+  );
+
+  const selectClass =
+    'rounded-xl border border-hairline bg-paper-2 px-2.5 py-2 text-[12px] text-ink ' +
+    'transition-colors focus:border-accent focus:outline-none cursor-pointer';
+
   return (
-    <div id="vocabulary-list-container" className="space-y-6">
-      
-      {/* List Source Tabs Selector */}
-      <div className="flex bg-white border border-hairline/40 p-1.5 shadow-xs font-mono text-xs justify-center sm:justify-start gap-2 rounded-lg">
-        <button
-          onClick={() => {
+    <div id="vocabulary-list-container" className="space-y-5">
+
+      <div className="flex items-baseline justify-between gap-3">
+        <h1 className="text-[22px] font-semibold tracking-tight text-brand">Kelime Haznesi</h1>
+        {/* DÖRT BÜYÜK SAYI KARTI YERİNE TEK SATIR.
+            Toplam / öğrenilen / çalışılan / kalan dört sütunlu bir kartta
+            36px rakamlarla duruyordu; dördü de aynı ağırlıkta olduğu için
+            hiçbiri öne çıkmıyordu ve kartın kendisi ekranın üçte birini
+            alıyordu. Sayılar burada bağlam bilgisi, ekranın konusu değil. */}
+        <span className="text-[12px] text-ink-3">
+          <span className="timecode text-ink">{learnedCount}</span> öğrenildi{' · '}
+          <span className="timecode text-ink">{studiedCount}</span> çalışılıyor{' · '}
+          <span className="timecode text-ink">{unstudiedCount}</span> kaldı
+        </span>
+      </div>
+
+      {/* Kaynak seçimi ve filtreler — hepsi tek satırda, aynı sakinlikte */}
+      <div className="flex flex-col gap-3">
+        <div className="flex w-fit gap-0.5 rounded-xl bg-paper-3 p-1">
+          {segment('Okuma parçası kelimeleri', sourceType === 'passages', () => {
             setSourceType('passages');
-            setSearch('');
-            setStatusFilter('All');
-            setPartOfSpeechFilter('All');
-          }}
-          className={`px-5 py-3 font-bold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
-            sourceType === 'passages'
-              ? 'bg-accent text-white border border-accent shadow-xs font-bold rounded-lg'
-              : 'text-ink-3 hover:text-ink hover:bg-paper'
-          }`}
-        >
-          <BookOpen className="h-4 w-4" />
-          Okuma Parçası Kelimeleri
-        </button>
-        <button
-          onClick={() => {
+            setSearch(''); setStatusFilter('All'); setPartOfSpeechFilter('All');
+          })}
+          {segment('Temel kelime listeleri', sourceType === 'core', () => {
             setSourceType('core');
             setCoreCategoryFilter('All');
-            setSearch('');
-            setStatusFilter('All');
-            setPartOfSpeechFilter('All');
-          }}
-          className={`px-5 py-3 font-bold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
-            sourceType === 'core'
-              ? 'bg-accent text-white border border-accent shadow-xs font-bold rounded-lg'
-              : 'text-ink-3 hover:text-ink hover:bg-paper'
-          }`}
-        >
-          <Sparkles className="h-4 w-4" />
-          Temel Kelime Listeleri (Workbook)
-        </button>
-      </div>
-
-      {/* Top Metrics Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 bg-white border border-hairline/40 p-6 shadow-xs font-mono rounded-xl">
-        <div className="space-y-1">
-          <p className="text-[10px] font-bold text-ink-3 uppercase tracking-widest">LİSTE TOPLAMI</p>
-          <p className="text-3xl font-bold text-ink">{totalCount}</p>
-        </div>
-        <div className="space-y-1 border-t sm:border-t-0 sm:border-l border-hairline/20 pt-4 sm:pt-0 sm:pl-6">
-          <p className="text-[10px] font-bold text-emerald-700 uppercase tracking-widest">ÖĞRENİLEN</p>
-          <p className="text-3xl font-bold text-emerald-700">{learnedCount}</p>
-        </div>
-        <div className="space-y-1 border-t sm:border-t-0 sm:border-l border-hairline/20 pt-4 sm:pt-0 sm:pl-6">
-          <p className="text-[10px] font-bold text-amber-700 uppercase tracking-widest">ÇALIŞILAN</p>
-          <p className="text-3xl font-bold text-amber-700">{studiedCount}</p>
-        </div>
-        <div className="space-y-1 border-t sm:border-t-0 sm:border-l border-hairline/20 pt-4 sm:pt-0 sm:pl-6">
-          <p className="text-[10px] font-bold text-ink-3 uppercase tracking-widest">KALAN</p>
-          <p className="text-3xl font-bold text-ink-3">{unstudiedCount}</p>
-        </div>
-      </div>
-
-      {/* Filters Toolbar */}
-      <div className="flex flex-col lg:flex-row gap-4 justify-between items-stretch lg:items-center bg-white border border-hairline/40 p-6 shadow-xs rounded-xl">
-        
-        {/* Search Input */}
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-ink-3" />
-          <input
-            type="text"
-            placeholder={sourceType === 'passages' ? "Kelime, Türkçe anlam veya açıklamalarda ara..." : "Temel listelerde kelime ara..."}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 border border-hairline/30 bg-paper focus:bg-white focus:outline-hidden focus:border-accent transition-all font-sans text-xs sm:text-sm text-ink rounded-lg"
-          />
+            setSearch(''); setStatusFilter('All'); setPartOfSpeechFilter('All');
+          })}
         </div>
 
-        {/* Dropdown Filters Row */}
-        <div className="flex flex-wrap gap-4 font-mono text-[11px] tracking-wider uppercase">
-          
-          {/* Core category filter (Only visible in 'core' source) */}
-          {sourceType === 'core' && (
-            <div className="flex items-center gap-2 text-ink/60 font-bold">
-              <span>GRUP:</span>
+        <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
+          <div className="relative lg:w-72">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-3" />
+            <input
+              type="text"
+              placeholder={sourceType === 'passages' ? 'Kelime veya anlam ara…' : 'Temel listelerde ara…'}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full rounded-xl border border-hairline bg-paper-2 py-2.5 pl-9 pr-3
+                text-[13px] text-ink placeholder-ink-3 transition-colors
+                focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/15"
+            />
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            {sourceType === 'core' && (
               <select
                 value={coreCategoryFilter}
                 onChange={(e) => setCoreCategoryFilter(e.target.value)}
-                className="px-3 py-2 border border-hairline/30 bg-white font-bold text-ink focus:outline-hidden focus:border-accent text-xs cursor-pointer rounded-lg uppercase"
+                aria-label="Grup"
+                className={selectClass}
               >
-                <option value="All">TÜMÜ</option>
+                <option value="All">Tüm gruplar</option>
                 {Object.entries(CORE_VOCABULARY_CATEGORIES).map(([key, value]) => (
                   <option key={key} value={key}>{value.title.split(' ')[0]}</option>
                 ))}
               </select>
-            </div>
-          )}
+            )}
 
-          {/* Status filter dropdown */}
-          <div className="flex items-center gap-2 text-ink/60 font-bold">
-            <span>DURUM:</span>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 border border-hairline/30 bg-white font-bold text-ink focus:outline-hidden focus:border-accent text-xs cursor-pointer rounded-lg uppercase"
+              aria-label="Durum"
+              className={selectClass}
             >
-              <option value="All">HEPSİ</option>
-              <option value="unstudied">ÇALIŞILMADI</option>
-              <option value="studied">ÇALIŞILIYOR</option>
-              <option value="learned">ÖĞRENİLDİ</option>
+              <option value="All">Tüm durumlar</option>
+              <option value="unstudied">Çalışılmadı</option>
+              <option value="studied">Çalışılıyor</option>
+              <option value="learned">Öğrenildi</option>
             </select>
-          </div>
 
-          {/* Part of speech dropdown filter */}
-          <div className="flex items-center gap-2 text-ink/60 font-bold">
-            <span>TÜR:</span>
             <select
               value={posFilter}
               onChange={(e) => setPartOfSpeechFilter(e.target.value)}
-              className="px-3 py-2 border border-hairline/30 bg-white font-bold text-ink focus:outline-hidden focus:border-accent text-xs cursor-pointer rounded-lg uppercase"
+              aria-label="Söz türü"
+              className={selectClass}
             >
-              <option value="All">TÜMÜ</option>
-              <option value="n">Noun (İsim)</option>
-              <option value="v">Verb (Fiil)</option>
-              <option value="adj">Adjective (Sıfat)</option>
-              <option value="adv">Adverb (Zarf)</option>
-              <option value="phr. v">Phrasal Verb (Deyim Fiil)</option>
-              <option value="prep">Preposition (Edat)</option>
+              <option value="All">Tüm türler</option>
+              <option value="n">İsim</option>
+              <option value="v">Fiil</option>
+              <option value="adj">Sıfat</option>
+              <option value="adv">Zarf</option>
+              <option value="phr. v">Phrasal verb</option>
+              <option value="prep">Edat</option>
             </select>
           </div>
-
         </div>
-
       </div>
 
-      {/* Words Inventory Grid */}
+      {/* IZGARA DEĞİL LİSTE. Kelimeler üç sütunlu kartlardaydı ve her kart
+          kendi içinde bir kutu daha taşıyordu ("Anlamı" kutusu). Bir kelime
+          + karşılığı iki satırlık bilgi; kutuya gerek yok. */}
       {filteredVocabulary.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <ul className="divide-y divide-hairline border-y border-hairline">
           {filteredVocabulary.map(item => {
             const status = progress.wordStatus[item.term] || 'unstudied';
-
-            // Status Styling matching editorial styles
-            let statusTag = '';
-            if (status === 'unstudied') statusTag = 'bg-paper text-ink-3 border-hairline/20';
-            else if (status === 'studied') statusTag = 'bg-amber-50 text-amber-800 border-amber-200 font-bold';
-            else if (status === 'learned') statusTag = 'bg-emerald-50 text-emerald-800 border-emerald-200 font-bold';
+            const inBank = bankedTerms.has(item.term.toLowerCase());
 
             return (
-              <div 
-                key={item.term}
-                className="group relative border border-hairline/40 bg-white p-6 shadow-xs hover:shadow-md hover:border-accent transition-all duration-300 flex flex-col justify-between rounded-xl"
-              >
-                <div>
-                  {/* Top line Info */}
-                  <div className="flex justify-between items-start gap-4 mb-3">
-                    <div className="space-y-1">
-                      <h4 className="text-lg font-display font-extrabold text-ink flex items-center gap-2">
-                        {item.term}
-                        <button
-                          onClick={() => speakWord(item.term)}
-                          className="p-1 rounded-xs text-ink/30 hover:text-accent hover:bg-paper transition-colors cursor-pointer"
-                          title="Telaffuz Dinle"
-                        >
-                          <Volume2 className="h-4 w-4" />
-                        </button>
-                      </h4>
-                      <span className="inline-block text-[9px] font-bold text-ink-3 bg-paper border border-hairline/30 px-1.5 py-0.5 uppercase font-mono tracking-wider rounded-lg">
-                        {item.partOfSpeech === 'n' ? 'Noun' :
-                         item.partOfSpeech === 'v' ? 'Verb' :
-                         item.partOfSpeech === 'adj' ? 'Adjective' :
-                         item.partOfSpeech === 'adv' ? 'Adverb' :
-                         item.partOfSpeech === 'prep' ? 'Preposition' : 'Phrasal Verb'}
-                      </span>
+              <li key={item.term} className="group px-3 py-3.5">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-[14px] font-medium text-ink">{item.term}</span>
+                      <span className="text-[11px] text-ink-3">{posLabel(item.partOfSpeech)}</span>
+
+                      <button
+                        type="button"
+                        onClick={() => speakWord(item.term)}
+                        title="Telaffuzu dinle"
+                        aria-label="Telaffuzu dinle"
+                        className="row-actions rounded p-1 text-ink-3 opacity-0 transition-opacity
+                          hover:text-ink focus:opacity-100 group-hover:opacity-100 cursor-pointer"
+                      >
+                        <Volume2 className="h-3.5 w-3.5" />
+                      </button>
                     </div>
 
-                    <span className={`px-2.5 py-0.5 text-[9px] uppercase font-bold tracking-widest border rounded-xs ${statusTag}`}>
-                      {status === 'unstudied' ? 'Kalan' : status === 'studied' ? 'Çalışılıyor' : 'Öğrenildi'}
-                    </span>
-                  </div>
-
-                  {/* Definition & Meaning info */}
-                  <div className="space-y-3 mt-4">
-                    <div className="bg-paper p-3.5 border border-hairline/20 rounded-lg">
-                      <span className="text-[9px] text-ink-3 block font-bold tracking-wider uppercase font-mono mb-0.5">Anlamı</span>
-                      <p className="font-bold text-accent text-sm font-sans">{item.meaning}</p>
-                    </div>
+                    <p className="mt-0.5 text-[13px] text-ink-2">{item.meaning}</p>
 
                     {item.definition && (
-                      <p className="text-xs text-ink/60 leading-relaxed font-display line-clamp-2">
+                      <p className="mt-0.5 line-clamp-1 text-[12px] leading-relaxed text-ink-3">
                         {item.definition}
                       </p>
                     )}
+
+                    {!item.isCore && item.passageId && onSelectPassage ? (
+                      <button
+                        type="button"
+                        onClick={() => onSelectPassage(item.passageId!)}
+                        title={item.passageTitle}
+                        className="mt-1 inline-flex items-center gap-1 text-[11px] text-ink-3
+                          transition-colors hover:text-accent cursor-pointer"
+                      >
+                        <Eye className="h-3 w-3" />
+                        {item.passageTitle}
+                      </button>
+                    ) : item.isCore && item.category ? (
+                      <span className="mt-1 block text-[11px] text-ink-3">
+                        {CORE_VOCABULARY_CATEGORIES[item.category as keyof typeof CORE_VOCABULARY_CATEGORIES]?.title.split(' ')[0]}
+                      </span>
+                    ) : null}
                   </div>
-                </div>
 
-                {/* Footer status buttons & Backlink to Passage */}
-                <div className="mt-6 pt-4 border-t border-hairline/20 flex items-center justify-between gap-3">
-                  {!item.isCore && item.passageId && onSelectPassage ? (
-                    <button
-                      onClick={() => onSelectPassage(item.passageId!)}
-                      className="text-[10px] font-bold text-accent hover:underline transition-colors flex items-center gap-1 uppercase tracking-wide cursor-pointer font-mono"
-                      title={`Parçayı Gör: ${item.passageTitle}`}
-                    >
-                      <Eye className="h-3.5 w-3.5" /> Parçayı Gör
-                    </button>
-                  ) : item.isCore && item.category ? (
-                    <span className="text-[10px] font-bold text-ink-3 font-mono uppercase tracking-wider bg-paper border border-hairline/20 px-2 py-0.5 rounded-lg">
-                      🗂️ {CORE_VOCABULARY_CATEGORIES[item.category as keyof typeof CORE_VOCABULARY_CATEGORIES]?.title.split(' ')[0]}
-                    </span>
-                  ) : (
-                    <div />
-                  )}
-
-                  <div className="flex gap-1 font-mono text-[9px]">
-                    {[
-                      { id: 'studied', label: 'ÇALIŞTIM', color: 'bg-amber-500 text-white border-amber-600 font-bold' },
-                      { id: 'learned', label: 'ÖĞRENDİM', color: 'bg-emerald-600 text-white border-emerald-700 font-bold' }
-                    ].map(btn => {
-                      const isCurrent = status === btn.id;
-                      return (
+                  <div className="flex shrink-0 items-center gap-1.5">
+                    {/* Durum. Önce hem sağ üstte bir rozet hem altta iki
+                        renkli düğme vardı — aynı bilgi iki kez, üstelik
+                        rozet tıklanabilir değildi. Tek denetim kaldı. */}
+                    <div className="flex gap-0.5 rounded-lg bg-paper-3 p-0.5">
+                      {([
+                        ['studied', 'Çalışıyorum'],
+                        ['learned', 'Öğrendim'],
+                      ] as [string, string][]).map(([id, label]) => (
                         <button
-                          key={btn.id}
-                          onClick={() => onWordStatusChange(item.term, btn.id as any)}
-                          className={`px-2.5 py-1.5 border text-[9px] font-bold uppercase tracking-wider transition-all cursor-pointer rounded-lg ${
-                            isCurrent
-                              ? btn.id === 'studied' ? 'bg-amber-500 text-white border-amber-500 font-bold' : 'bg-emerald-600 text-white border-emerald-600 font-bold'
-                              : 'bg-white hover:bg-paper text-ink-3 border-hairline/30'
+                          key={id}
+                          type="button"
+                          onClick={() => onWordStatusChange(item.term, id as any)}
+                          aria-pressed={status === id}
+                          className={`rounded px-2 py-1 text-[11px] transition-colors cursor-pointer ${
+                            status === id
+                              ? id === 'studied'
+                                ? 'bg-amber-500 font-medium text-white'
+                                : 'bg-emerald-600 font-medium text-white'
+                              : 'text-ink-3 hover:text-ink'
                           }`}
                         >
-                          {btn.label}
+                          {label}
                         </button>
-                      );
-                    })}
+                      ))}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => handleAddToBank(item)}
+                      disabled={inBank || addingTerm === item.term}
+                      title={inBank
+                        ? 'Tekrar bankasında'
+                        : 'FSRS tekrar destesine ekle (katmanlı ile ortak)'}
+                      aria-label={inBank ? 'Tekrar bankasında' : 'Tekrar bankasına ekle'}
+                      className={`rounded-lg p-1.5 transition-colors cursor-pointer disabled:cursor-default ${
+                        inBank
+                          ? 'text-emerald-600'
+                          : 'row-actions text-ink-3 opacity-0 hover:bg-paper-3 hover:text-ink focus:opacity-100 group-hover:opacity-100'
+                      }`}
+                    >
+                      {inBank
+                        ? <Check className="h-4 w-4" strokeWidth={3} />
+                        : <BrainCircuit className="h-4 w-4" />}
+                    </button>
                   </div>
                 </div>
-
-                {/* Paylaşılan FSRS kelime bankasına ekle (Katmanlı'nın Kelime Kartları ekranıyla ortak) */}
-                <button
-                  onClick={() => handleAddToBank(item)}
-                  disabled={bankedTerms.has(item.term.toLowerCase()) || addingTerm === item.term}
-                  className={`mt-3 w-full flex items-center justify-center gap-1.5 py-2 border text-[9px] font-bold uppercase tracking-wider transition-all cursor-pointer disabled:cursor-default rounded-lg ${
-                    bankedTerms.has(item.term.toLowerCase())
-                      ? 'bg-paper text-emerald-700 border-emerald-200'
-                      : 'bg-white text-ink/60 border-hairline/30 hover:border-accent hover:text-accent'
-                  }`}
-                  title="Bu kelimeyi katmanlı'daki FSRS tekrar destesine ekle"
-                >
-                  {bankedTerms.has(item.term.toLowerCase()) ? (
-                    <>
-                      <Check className="h-3.5 w-3.5" /> Tekrar Bankasında
-                    </>
-                  ) : (
-                    <>
-                      <BrainCircuit className="h-3.5 w-3.5" />
-                      {addingTerm === item.term ? 'Ekleniyor...' : 'Tekrar Bankasına Ekle'}
-                    </>
-                  )}
-                </button>
-
-              </div>
+              </li>
             );
           })}
-        </div>
+        </ul>
       ) : (
-        <div className="flex flex-col items-center justify-center p-16 bg-white border border-hairline/40 text-center rounded-2xl">
-          <Bookmark className="h-12 w-12 text-ink/20 mb-2" />
-          <p className="text-base font-display font-bold text-ink">Hiç kelime bulunamadı.</p>
-          <p className="text-xs text-ink-3 mt-1 max-w-sm font-display">
-            Seçtiğiniz filtreleri veya arama kriterlerini değiştirerek tekrar aramayı deneyebilirsiniz.
+        <div className="rounded-2xl border border-hairline p-10 text-center">
+          <p className="text-[14px] font-medium text-ink">Eşleşen kelime yok.</p>
+          <p className="mx-auto mt-1 max-w-[46ch] text-[13px] leading-relaxed text-ink-2">
+            Arama terimini ya da seçili filtreleri değiştirmeyi dene.
           </p>
           <button
+            type="button"
             onClick={() => {
               setSearch('');
               setStatusFilter('All');
               setPartOfSpeechFilter('All');
-              if (sourceType === 'core') {
-                setCoreCategoryFilter('All');
-              }
+              if (sourceType === 'core') setCoreCategoryFilter('All');
             }}
-            className="mt-5 px-5 py-2 bg-accent text-white text-xs font-bold hover:bg-white hover:text-ink border border-accent transition-colors cursor-pointer rounded-lg"
+            className="mt-5 rounded-xl bg-accent px-4 py-2 text-[13px] font-medium text-white
+              transition-colors duration-150 hover:bg-accent-700 cursor-pointer"
           >
-            Filtreleri Temizle
+            Filtreleri temizle
           </button>
         </div>
       )}
-
     </div>
   );
 }
