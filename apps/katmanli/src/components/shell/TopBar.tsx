@@ -223,11 +223,14 @@ export const TopBar: React.FC<Props> = ({
           {iconButton(onOpenSettings, 'API anahtarları', <KeyRound className="h-4 w-4" />)}
 
           {/* Kullanim kilavuzu: sitenin kendi statik sayfasi (/kilavuz/).
-              Yeni sekmede aciliyor - okurken calismanin yerini kaybetme. */}
+              Ayni sekmede aciliyor. Once yeni sekmeye aciyordu, gerekcesi
+              "yarim kalan calisma kaybolmasin" idi; ama o kayip gercek bir
+              hataydi ve yeni sekme yalnizca BU yolu koruyordu - geri tusuna
+              basan yine kaybediyordu. Kayip kaynagindan kapatildi
+              (Layer4WritingEvaluation'daki otomatik kayit), yeni sekmeye
+              gerek kalmadi. Kullanici isterse zaten orta tikla acabilir. */}
           <a
             href="/kilavuz/"
-            target="_blank"
-            rel="noopener"
             title="Kullanım kılavuzu"
             aria-label="Kullanım kılavuzu"
             className="flex h-9 w-9 items-center justify-center rounded-xl text-ink-3

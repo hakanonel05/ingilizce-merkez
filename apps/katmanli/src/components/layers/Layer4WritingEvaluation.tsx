@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { VideoLesson, WritingEvaluationResult } from '../../types';
 import { apiFetch } from '../../lib/userKeys';
 import { Edit3, Sparkles, CheckCircle, Loader2, Lightbulb, AlertCircle, Check } from 'lucide-react';
@@ -19,6 +19,24 @@ export const Layer4WritingEvaluation: React.FC<Layer4WritingEvaluationProps> = (
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [evaluationResult, setEvaluationResult] = useState<WritingEvaluationResult | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
+
+  /* YAZILAN METIN YAZILDIKCA SAKLANIYOR.
+     Eskiden yalnizca "Degerlendir" kaydediyordu; degerlendirmeden once
+     sayfadan ayrilan (geri tusu, sekmeyi kapatma, bir baglanti) yazdigi
+     paragraflari kaybediyordu.
+
+     Her tusa basista degil, yazmayi biraktiktan 600 ms sonra: kayit
+     lessons durumunu guncelliyor ve o da localStorage'a yaziliyor.
+     Ilk kurulusta yazilmiyor - kaydedilecek yeni bir sey yok, ustelik
+     bos bir metni derse yazmak var olani silerdi. */
+  const ilkKurulus = useRef(true);
+  useEffect(() => {
+    if (ilkKurulus.current) { ilkKurulus.current = false; return; }
+    const zamanlayici = setTimeout(() => {
+      onSaveWriting(summaryText, commentText);
+    }, 600);
+    return () => clearTimeout(zamanlayici);
+  }, [summaryText, commentText]);
 
   const handleEvaluate = async (e: React.FormEvent) => {
     e.preventDefault();

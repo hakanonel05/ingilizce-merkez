@@ -936,7 +936,13 @@ async function buildLessonData(
               )}
 
               {activeLayer === 6 && activeLesson && (
+                /* key ZORUNLU: bilesen yazilan metni useState'in baslangic
+                   degerinden aliyor ve o degerlendirme yalnizca kurulusta
+                   calisiyor. key olmadan ders degistiginde eski dersin
+                   metni ekranda kaliyor - otomatik kayit acikken bu, A
+                   dersinin yazisini B dersine yazardi. */
                 <Layer4WritingEvaluation
+                  key={activeLesson.id}
                   lesson={activeLesson}
                   onCompleteLayer={() => handleCompleteLayer(6)}
                   onSaveWriting={handleSaveWriting}
