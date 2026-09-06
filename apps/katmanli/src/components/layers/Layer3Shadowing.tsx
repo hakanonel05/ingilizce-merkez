@@ -259,6 +259,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                     type="button"
                     onClick={() => goTo(index - 1)}
                     disabled={index === 0}
+                    aria-label="Önceki cümle"
                     className="p-1.5 rounded-lg bg-paper-3 hover:bg-hairline disabled:opacity-40 text-ink-2 cursor-pointer"
                   >
                     <ChevronLeft className="w-4 h-4" />
@@ -267,6 +268,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                     type="button"
                     onClick={() => goTo(index + 1)}
                     disabled={index === sentences.length - 1}
+                    aria-label="Sonraki cümle"
                     className="p-1.5 rounded-lg bg-paper-3 hover:bg-hairline disabled:opacity-40 text-ink-2 cursor-pointer"
                   >
                     <ChevronRight className="w-4 h-4" />
