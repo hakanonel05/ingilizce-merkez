@@ -14,10 +14,13 @@
  * bir kere seçilip saatlerce çalışılıyor — ama hangi derste olduğunu
  * görmek sık, ve o bilgi artık çalıştığın sütunun kendi içinde duruyor.
  *
- * "ETKİNLİKLER" VE "SIRALAMA" KAPALI: ikisinin de arkasında veri yok
- * (uygulamada ne etkinlik takvimi ne de kullanıcılar arası bir sıralama
- * var). Tasarımdaki yerlerini koruyorlar ama tıklanmıyorlar; çalışıyormuş
- * gibi görünüp boş bir ekrana götürmeleri daha kötü olurdu.
+ * ORTADA İKİ SEKME VAR, DÖRT DEĞİL. Bir süre "Etkinlikler" ve "Sıralama"
+ * da duruyordu — kapalı, tıklanmayan, soluk. Gerekçe "tasarımdaki yerlerini
+ * koruyorlar" idi ve bu geçersiz bir gerekçeydi: ikisi de referans alınan
+ * siteden gelen boş kabuklardı. Bu uygulamada ne etkinlik takvimi var, ne
+ * de kullanıcılar arası bir sıralama OLABİLİR — tek kullanıcılı, bütün
+ * veri kullanıcının kendi cihazında. Soluk bir sekme "yakında geliyor"
+ * demektir; gelmeyecek bir şey için söylenen bu, yer tutucu içeriktir.
  */
 
 import React from 'react';
@@ -162,8 +165,6 @@ export const TopBar: React.FC<Props> = ({
         >
           {navTab('Akış', activeLayer === HOME_LAYER, onGoHome)}
           {navTab('Dersler', false, onOpenLessonPicker)}
-          {navTab('Etkinlikler', false)}
-          {navTab('Sıralama', false)}
         </nav>
 
         {/* Orta gezinme gizliyken sağ grup sağa yaslansın */}

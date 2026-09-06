@@ -108,6 +108,49 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* ------------------------------------------------------- üst şerit */
+/* Sayfanın tek yapışkan öğesi. İnce tutuluyor: bu bir belge, uygulama
+   değil — şerit okumanın önüne geçmemeli. */
+.ustserit {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--ground);
+  border-bottom: 1px solid var(--rule);
+}
+.ustserit-ic {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: "Archivo", system-ui, sans-serif;
+  font-size: 13px;
+}
+@media (min-width: 1060px) { .ustserit-ic { padding: 0 32px; } }
+.ustserit a {
+  color: var(--ink-2);
+  text-decoration: none;
+  padding: 6px 8px;
+  margin: -6px 0;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.ustserit a:hover { color: var(--ink); background: var(--surface-2); }
+.ustserit a:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 1px; }
+.ustserit .geri { font-weight: 600; color: var(--ink); display: inline-flex; align-items: center; gap: 7px; }
+.ustserit .geri .ok { color: var(--accent-text); font-size: 15px; line-height: 1; }
+.ustserit-baglar { display: flex; align-items: center; gap: 2px; }
+/* Dar ekranda uygulama adlari yerine tek kelime; şerit sarmasın. */
+.ustserit-baglar .uzun { display: none; }
+@media (min-width: 620px) {
+  .ustserit-baglar .uzun { display: inline; }
+  .ustserit-baglar .kisa { display: none; }
+}
+
 /* ---------------------------------------------------------- iskelet */
 .sayfa {
   display: grid;
@@ -130,9 +173,9 @@ body {
   .rehber {
     display: block;
     position: sticky;
-    top: 0;
+    top: 46px;
     align-self: start;
-    max-height: 100vh;
+    max-height: calc(100vh - 46px);
     overflow-y: auto;
     padding: 40px 0 40px;
     font-family: "Archivo", system-ui, sans-serif;
@@ -221,7 +264,7 @@ a { color: var(--accent-text); text-underline-offset: 3px; text-decoration-thick
 .kunye b { color: var(--ink-2); font-weight: 500; }
 
 /* ------------------------------------------------------------- bölüm */
-.bolum { margin-top: 76px; scroll-margin-top: 24px; }
+.bolum { margin-top: 76px; scroll-margin-top: 62px; }
 .bolum-ust {
   display: flex;
   align-items: baseline;
@@ -238,7 +281,7 @@ a { color: var(--accent-text); text-underline-offset: 3px; text-decoration-thick
   letter-spacing: .1em;
   font-variant-numeric: tabular-nums;
 }
-.alt { margin-top: 46px; scroll-margin-top: 24px; }
+.alt { margin-top: 46px; scroll-margin-top: 62px; }
 .alt > h3 { margin-bottom: 12px; }
 .alt > h3 + p { color: var(--ink-2); }
 
@@ -296,7 +339,7 @@ figcaption b { color: var(--ink-2); font-weight: 500; }
   gap: 0 22px;
   padding: 30px 0;
   border-top: 1px solid var(--rule);
-  scroll-margin-top: 24px;
+  scroll-margin-top: 62px;
 }
 .katman:first-child { border-top: 2px solid var(--ink); }
 .katman-no {
@@ -456,6 +499,22 @@ details .cevap > * + * { margin-top: .8em; }
 html { scroll-behavior: smooth; }
 </style>
 
+
+<div class="ustserit">
+  <div class="ustserit-ic">
+    <a class="geri" id="geri" href="https://ingilizcemerkez.netlify.app/">
+      <span class="ok" aria-hidden="true">&#8592;</span><span id="geri-yazi">Siteye dön</span>
+    </a>
+    <nav class="ustserit-baglar" aria-label="Uygulamalar">
+      <a href="https://ingilizcemerkez.netlify.app/">
+        <span class="uzun">Okuma &amp; Kelime</span><span class="kisa">Okuma</span>
+      </a>
+      <a href="https://ingilizcemerkez.netlify.app/katmanli/">
+        <span class="uzun">Katmanlı İngilizce</span><span class="kisa">Katmanlı</span>
+      </a>
+    </nav>
+  </div>
+</div>
 
 <div class="sayfa">
 
@@ -1192,6 +1251,32 @@ html { scroll-behavior: smooth; }
 
 </main>
 </div>
+
+<script>
+/* Uygulamadan gelindiyse "geri dön" gerçekten GERİ gitsin: tarayıcı
+   sayfayı önbellekten getirir ve çalışma kaldığı yerden devam eder.
+   Paylaşılan bir linkten gelindiyse geriye dönecek bir şey yok, o yüzden
+   bağlantı olduğu gibi kalır ve siteye götürür.
+
+   Betik hiç çalışmazsa geriye kalan düz bir bağlantıdır. */
+(function () {
+  try {
+    var site = /(^|\.)ingilizcemerkez\.netlify\.app$/.test(location.hostname)
+      || location.hostname === 'localhost';
+    if (!site) return;
+    if (!document.referrer) return;
+    if (new URL(document.referrer).origin !== location.origin) return;
+    if (history.length < 2) return;
+
+    var bag = document.getElementById('geri');
+    document.getElementById('geri-yazi').textContent = 'Geri dön';
+    bag.addEventListener('click', function (e) {
+      e.preventDefault();
+      history.back();
+    });
+  } catch (e) { /* bağlantı zaten çalışıyor */ }
+})();
+</script>
 
 </body>
 </html>

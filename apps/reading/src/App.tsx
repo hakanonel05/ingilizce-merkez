@@ -29,6 +29,10 @@ import { getLocalFallbackPassage } from '../serverLocalPassage';
 import { CloudOff } from 'lucide-react';
 
 const LOCAL_STORAGE_KEY = 'english_reading_trainer_progress_v1';
+/* "Çevrimdışı devam et" seçimi. Saklanmasaydı giriş ekranı her sayfa
+   yüklemesinde geri gelirdi — yenilemede, sekmeyi kapatıp açmada ve her
+   tam sayfa gezinmesinde. */
+const OFFLINE_MODE_KEY = 'english_reading_trainer_offline_v1';
 
 /**
  * "user_progress tablosunda mistakes/exam_history sutunlari yok" bayragi.
@@ -55,7 +59,24 @@ const INITIAL_PROGRESS: UserProgress = {
 
 export default function App() {
   const [session, setSession] = useState<any>(null);
-  const [isOfflineMode, setIsOfflineMode] = useState(false);
+  const [isOfflineMode, setIsOfflineMode] = useState(() => {
+    try {
+      return localStorage.getItem(OFFLINE_MODE_KEY) === '1';
+    } catch {
+      return false;
+    }
+  });
+
+  /** Seçimi hem duruma hem depoya yazar; depo erişilemezse yine de çalışır. */
+  const setOfflineMode = (acik: boolean) => {
+    setIsOfflineMode(acik);
+    try {
+      if (acik) localStorage.setItem(OFFLINE_MODE_KEY, '1');
+      else localStorage.removeItem(OFFLINE_MODE_KEY);
+    } catch {
+      /* depo kapalıysa seçim yalnızca bu oturum boyunca geçerli olur */
+    }
+  };
   const [isSyncing, setIsSyncing] = useState(false);
 
   useEffect(() => {
@@ -678,7 +699,7 @@ export default function App() {
   }, []);
 
   if (!session && !isOfflineMode) {
-    return <AuthScreen onContinueOffline={() => setIsOfflineMode(true)} />;
+    return <AuthScreen onContinueOffline={() => setOfflineMode(true)} />;
   }
 
   return (
@@ -698,8 +719,11 @@ export default function App() {
         onOpenSettings={() => setIsSettingsOpen(true)}
         onBackup={handleBackupData}
         onRestore={handleRestoreData}
-        onSignIn={() => setIsOfflineMode(false)}
-        onSignOut={() => supabase.auth.signOut()}
+        onSignIn={() => setOfflineMode(false)}
+        /* Çıkışta çevrimdışı işareti de siliniyor: kullanıcı açıkça
+           "çık" dediyse onu çevrimdışı moda düşürmek değil, giriş
+           ekranına bırakmak doğrusu. */
+        onSignOut={() => { setOfflineMode(false); supabase.auth.signOut(); }}
       />
 
       <div className="flex w-full flex-1">
