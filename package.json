@@ -11,7 +11,8 @@
     "build:katmanli": "vite build --config vite.katmanli.config.ts",
     "build": "npm run build:reading && npm run build:katmanli",
     "lint": "tsc --noEmit",
-    "check:tokens": "node scripts/token-siniflari.mjs"
+    "check:tokens": "node scripts/token-siniflari.mjs",
+    "test:katmanlar": "node scripts/katman-simulasyonu.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

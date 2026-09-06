@@ -119,6 +119,32 @@ ezer. `apps/katmanli/src/index.css`'te `h1..h6 { color }` yazmak, koyu
 panellerdeki `text-slate-300` başlıkları slate-900'e çevirip görünmez
 yapmıştı (kontrast oranı 1.0). Taban stilleri **`@layer base` içine yaz**.
 
+**Tanımsız bir token, sınıfı sessizce yok eder.** Tailwind 4'te `@theme`
+içinde karşılığı olmayan bir token'ın yardımcı sınıfı hiç üretilmez ve hata
+da verilmez. Bu tuzağa üç kez düşüldü: `hairline-2` (48 kullanım),
+reading tarafında `ink-800`/`ink-950` (shared/ bileşenleri üzerinden 9
+kullanım) ve `marker` (bileşenler bu yüzden `bg-amber-500` yazmak zorunda
+kalmıştı). Artık kontrolü var: `npm run check:tokens` kaynaktaki her token
+sınıfını toplayıp derlenmiş CSS'te arıyor. **Token eklerken iki index.css'i
+birlikte güncelle** — adları ayrışırsa shared/ bileşenleri bir tarafta
+renksiz kalır.
+
+**Durumdan okunan effect muhafızları StrictMode'da işe yaramaz.** React
+geliştirmede her effect'i kur/yık/tekrar kur diye çalıştırır. İkinci
+çalışma ilk istek dönmeden olduğu için `isGenerating`, `history.length`
+gibi durum değişkenleri hâlâ başlangıç değerindedir ve muhafız hiçbir şey
+engellemez. Muhafızı **ref'e taşı**; ref render'lar arasında aynı nesnedir
+ve anında güncellenir. Aynı sebeple effect temizliğinde `AbortController`
+ile isteği iptal etmek de yanlış: React kendi temizliğini gerçek
+unmount'tan ayıramıyor, iptal tek kalan isteği de öldürüyor.
+
+**Effect bağımlılığı, isteğin DOLDURDUĞU alan olmamalı.** `App.tsx`'teki
+arka plan üretimi vocabulary/grammarRules/quizQuestions uzunluklarına
+bağlıydı ve koşulu "biri boşsa çalış" idi. Yanıt üçünden birini
+doldurmazsa (modelin boş dizi dönmesi olağan) effect kendini yeniden
+tetikliyordu — ücretli bir uç noktada üst sınırsız. Ders başına tek
+deneme, sonucu ne olursa olsun.
+
 **Netlify fonksiyonu 26 saniyede kesiliyor** (`netlify.toml`). Uzun yapay
 zeka işleri parçalara bölünmeli. Seslendirme bu yüzden paragraf paragraf
 üretiliyor; tek istekte bir hikayeyi seslendirmek bu sınırı aşıyordu.
@@ -224,52 +250,89 @@ düşüyor ve bunu kullanıcıya söylüyor.
 
 ## 5. Son oturumda yapılanlar
 
+### Vurgu rengi indigodan mürekkebe
+
+Dolu düğmeler `#4F46E5` idi — Tailwind'in `indigo-600`'ü, yapay zekayla
+üretilmiş arayüzlerin fiilî varsayılanı ve skill dosyasının **birinci yasak
+maddesi**. Referans siteden kopyalanmıştı; bu projenin markası turuncu.
+
+Üç aday aynı ekranda yan yana üretilip gözle karşılaştırıldı. Turuncu
+ikinci sıradaydı ama kehribar zaten Katman 1'de konuşulan cümleyi
+işaretliyor; ekran dolusu turuncu düğme onu bastırırdı. Roller ayrıldı:
+
+    dolu birincil eylem, aktif menü   -> mürekkep, üstüne beyaz (16.9:1)
+    satır içi bağlantı, marka, başlık -> turuncu (kâğıtta 4.71)
+    konuşulan cümle                   -> kehribar
+
+`text-accent` iki iş yapıyordu; yalnızca bağımsız bağlantı metni olan 44
+tanesi markaya taşındı, accent zemini üstündeki 34 tanesi mürekkep kaldı
+(nötr çip + koyu yazı). `accent-700` artık accent'ten **daha açık**: koyu
+bir düğmede koyulaşma görünmüyor, açılma görünüyor.
+
+### Durum renkleri isimlendirildi
+
+35 dosyada **258 sabit sınıf** kendi doğru/yanlış rengini yazıyordu:
+emerald'ın 16, rose'un 16 ayrı tonu. Bunlar paletten atılamaz, çünkü
+dekoratif değil — bir cevabın doğru mu yanlış mı olduğunu yalnızca renk
+söylüyor. Token'a çevrildiler (`ok`, `ok-line`, `ok-soft`, `danger`,
+`danger-line`, `danger-soft`, `marker*`).
+
+Kırmızı **ölçülerek** seçildi: ilk aday `#B91C1C` marka turuncusuyla
+yalnızca 17 derece hue farkındaydı, yani hata rengi markaya benziyordu.
+`#BE123C` 32 derece ayrılıyor.
+
+Bu arada **iki sessiz sınıf kaybı** çıktı (`marker`, reading'de
+`ink-800`/`ink-950`) ve gerçek bir okunabilirlik hatası: "çalışılıyor"
+kelime çipi dolu kehribar + beyaz yazıydı, **2.15:1**. Yazıyı koyulaştırmak
+3.3'e çıkardı, yine yetmedi — `#F59E0B` üstüne okunabilir yazı rengi yok.
+Çip artık dolgu değil işaret: tonlu zemin + renkli halka + koyu yazı,
+15.9:1. Kehribarın depodaki dili zaten buydu.
+
+### Yedi katman uçtan uca sürüldü
+
+Katmanlar CDP ile gerçekten kullanıldı (sahte mikrofon + üretilen WAV,
+ses tanıma ikamesi, yapay zeka uç noktaları için şema uyumlu sahte
+yanıtlar — ayrıntı ve sınırlar bölüm 7'de). **40 kontrolün 40'ı geçiyor.**
+Katman 3 sahte mikrofonla kayıt alıp IndexedDB'ye 58 KB gerçek ses
+yazıyor; Katman 7 üç soruluk konuşmayı baştan sona yürütüyor.
+
+Bu sürüş, ekrana bakarak görülmeyen **iki hata** çıkardı:
+
+1. **Yerel geliştirmede hiçbir yapay zeka isteği sunucuya ulaşmıyordu.**
+   İki vite config'inde de `/api` proxy'si yoktu; vite HTML hata sayfası
+   dönüyor, istemci onu JSON diye ayrıştırıp
+   `Unexpected token 'T', "The server is configured..."` veriyordu. Hata
+   mesajı sebebi gizliyordu. Proxy eklendi.
+2. **Aynı ücretli istek üç kez gidiyordu.** Proxy gelince trafik görünür
+   oldu: analizi eksik bir ders açılınca `/api/analyze-phonetics-grammar`
+   ve `/api/generate-quiz` üçer kez. İki ayrı sebep — StrictMode'da işe
+   yaramayan durum tabanlı muhafız, ve effect'in kendi doldurduğu alana
+   bağımlı olmasından doğan **üst sınırsız** döngü. İkisi de bölüm 3'te
+   anlatılıyor. Artık ders başına bir kez, toplam iki istek.
+
+   Bu arada kendi düzeltmem bir yan etki doğurdu ve ölçüm onu da yakaladı:
+   `AbortController` eklemek StrictMode'un ara temizliğinde tek kalan
+   isteği öldürüyordu, arka plan üretimi geliştirmede hiç çalışmaz olmuştu.
+   İptal kaldırıldı — geç gelen yanıt zararsız, birleştirme ders kimliğine
+   göre ve yalnızca boş alanlara yazıyor.
+
+### Bir önceki oturumdan taşınanlar
+
 **Arayüz baştan kuruldu.** İki uygulama tek kabuk ve tek palet altında
 birleşti: ikon şeridi + menü paneli + üst çubuk, katmanlıda yeni bir
-**Akış** giriş ekranı. Uygulama artık Katman 1 yerine Akış'ta açılıyor —
-dün 4. katmanda bırakan biri her seferinde başa dönüyordu.
+**Akış** giriş ekranı. 25 dosyada 1046 sabit renk sınıfı token'a çevrildi.
 
-Ölçülebilir kısmı: 25 dosyada **1046 sabit renk sınıfı** token'a çevrildi,
-palet dışı 13 renk (turuncu, mor, gök mavisi, kırmızı, yeşil) tekilleşti,
-"AI izi" sayacı katmanlıda 235→0, reading'de 397→3 indi. Kalan eşleşmeler
-tek tek doğrulandı, hepsi yanlış pozitif.
-
-**Tasarımdan bağımsız BEŞ GERÇEK HATA çıktı:**
-
-1. **Uydurma çalışma verisi.** Süreç panosundaki haftalık grafik
-   `progress.weeklyStudyMinutes` okuyordu; o alan depoda **hiçbir yerde
-   yazılmıyor**. Yani grafik herkeste, her zaman koddaki sabit
-   `[25, 40, 30, 55, 35, 60, 45]` dizisini gösteriyordu — üstüne
-   "Haftalık Toplam: 290 dk" ve "en yüksek performans" cümleleri de
-   ondan hesaplanıyordu. Gerçek kaynağa bağlandı: `getAllDayStats()`.
-2. **Gösterge çubuğunda iki aynı renk.** "Bugün" ve "Geçmiş günler"
-   noktalarının ikisi de `bg-accent` idi; gösterge, grafiğin çizmediği
-   bir ayrımı açıklıyordu.
-3. **Çalışmayan 3B kart çevirme.** Kelime kartı `rotate-y-180` yazıyordu
-   ama ne `preserve-3d` ne `backface-visibility` tanımlıydı — kart hiç
-   dönmüyor, yalnızca opaklık değişiyordu. Sahte dönüş kaldırıldı.
-4. **Dokunmatikte erişilemeyen düğmeler.** Satır eylemleri (düzenle, sil,
-   telaffuz) hover'a bağlıydı; telefonda hover yok. `pointer: coarse`
-   kuralıyla orada sürekli açık.
-5. **Kontrast.** Kelime kartındaki klavye ipucu `bg-ink` üstünde
-   `text-ink-3` idi — 2.6:1.
-
-Ayrıca mobilde 41px yatay taşma (üst çubuktaki serif kelime işareti
-`shrink-0` idi) ve kapalı menü çekmecesinin ekranda kalan 64px'i düzeldi.
-
-**Genişlik.** İçerik sütunu 1180px'de sabitti; 1900px'lik bir ekranda iki
-yanda ~350'şer piksel boşa gidiyordu. 1440 (xl) ve 1760 (2xl) kademeleri
-eklendi, Katman 1'in sütun oranı 5/7→4/8 oldu, Katman 4'ün videosu
-`max-w-3xl`→`max-w-5xl`. Ölçüm: Katman 1'in İngilizce transkript sütunu
-210→460px, Katman 4'ün videosu 768→998px.
-
-Metin ağırlıklı yerler bilerek dar bırakıldı: okuma parçası gövdesi 48ch,
-Katman 5 (görüntü kasıtlı kapalı), sınav kurulum formu.
+Tasarımdan bağımsız beş gerçek hata çıkmıştı: uydurma haftalık çalışma
+verisi (`progress.weeklyStudyMinutes` depoda hiçbir yerde yazılmıyordu,
+grafik herkeste aynı sabit diziyi gösteriyordu), göstergede iki aynı renk,
+hiç dönmeyen 3B kart çevirme, dokunmatikte erişilemeyen hover düğmeleri ve
+`bg-ink` üstünde 2.6:1 kontrast. İçerik sütunu 1180px'den 1440/1760'a
+çıkarıldı.
 
 **CRLF TUZAĞI.** Bu depoda bazı dosyalar CRLF satır sonu kullanıyor. Çok
 satırlı bir arama/değiştirme dizesini LF ile yazarsan **sessizce**
-eşleşmez — hata vermez, sadece bulunamadı der. Bu oturumda üç düzenleme
-buna takıldı. Betiklerinde dosyanın kendi satır sonuna uyarlan.
+eşleşmez — hata vermez, sadece bulunamadı der. Betiklerinde dosyanın kendi
+satır sonuna uyarlan.
 
 ## 6. Açık kalan işler
 
@@ -352,3 +415,34 @@ her şey "kontrast 1.18" çıkar. Yarı saydam metni de zemine kendin bindir
 Bir ölçüm inanılmaz bir sonuç veriyorsa (slate-900 beyaz üzerinde 1.18)
 kodda değil ÖLÇÜMDE hata ara. Bu oturumda ölçüm iki kez yanlış alarm
 verdi: biri yukarıdaki canvas hatası, diğeri geçiş tuzağı (bölüm 3).
+
+### Katmanları uçtan uca sürmek
+
+    npm run test:katmanlar      # once dev:katmanli ve dev:api ayakta olsun
+
+Yedi katmanın hepsi CDP ile gerçekten kullanılıyor: düğmeye basılıyor,
+sonucun DOM'a düştüğü doğrulanıyor (40 kontrol). Kullanılan üç ikame ve
+sınırları:
+
+- **Mikrofon gerçek.** Chrome `--use-fake-device-for-media-stream` ve
+  `--use-file-for-fake-audio-capture=<wav>` ile açılıyor; üretilen konuşma
+  benzeri WAV besleniyor. MediaRecorder gerçekten çalışıyor, IndexedDB'ye
+  gerçekten yazıyor (ölçülen: 58 KB). Yalnızca sesin kaynağı sentetik.
+- **Ses tanıma ikame.** `webkitSpeechRecognition` headless'ta yok; W3C
+  arayüzünü taşıyan bir sınıf enjekte ediliyor. Bu, UYGULAMANIN kodunu
+  test eder, tarayıcının tanıma motorunu etmez.
+- **Yapay zeka uç noktaları ikame.** Depoda `GEMINI_API_KEY` yok. İstekler
+  CDP `Fetch` ile yakalanıp `server.ts`'teki şemanın aynısıyla
+  yanıtlanıyor. İstemcinin gönderdiği gövde de raporlanıyor ki yanlış alan
+  gönderiliyorsa görülsün. Gemini'nin kendisi test EDİLMEZ.
+
+`speechSynthesis` headless'ta 0 sesle gelir, yani hiç ses çıkmaz; çağrının
+yapıldığını saymak uygulama kodunu doğrulamaya yeter.
+
+**Yerel geliştirmede `/api` proxy'si şart.** İki vite config'inde de
+tanımlı (`:3000`'e). Proxy yokken vite `/api/...` yollarına HTML hata
+sayfası dönüyordu ve istemci onu JSON diye ayrıştırıp
+`Unexpected token 'T', "The server is configured..."` veriyordu — yani
+yapay zeka özelliklerinin hiçbiri localhost'ta çalışmıyordu ve hata mesajı
+sebebi gizliyordu. `npm run dev:api` çalışmıyorsa istekler açıkça düşer;
+bu doğru davranış.
