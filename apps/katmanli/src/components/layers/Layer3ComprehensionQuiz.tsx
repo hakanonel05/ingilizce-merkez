@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { VideoLesson, QuizQuestion, MistakeEntry } from '../../types';
 import { apiFetch } from '../../lib/userKeys';
 import { HelpCircle, CheckCircle2, XCircle, Sparkles, CheckCircle, Loader2, Award, AlertCircle } from 'lucide-react';
@@ -23,9 +23,12 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
 
   const quizQuestions = lesson.quizQuestions || [];
 
-  // Auto generate if empty on mount
+  /* Bos ise bir kez uret - Layer2PhoneticsGrammar'daki ayni muhafiz. */
+  const uretilenDersRef = useRef<string | null>(null);
   useEffect(() => {
-    if (quizQuestions.length === 0 && !isGenerating && lesson.sentences?.length > 0) {
+    if (uretilenDersRef.current === lesson.id) return;
+    if (quizQuestions.length === 0 && lesson.sentences?.length > 0) {
+      uretilenDersRef.current = lesson.id;
       handleGenerateQuiz();
     }
   }, [lesson.id]);

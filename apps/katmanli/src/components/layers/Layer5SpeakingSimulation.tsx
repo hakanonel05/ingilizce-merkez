@@ -57,11 +57,18 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
   const [errorMsg, setErrorMsg] = useState('');
   const recognitionRef = useRef<any>(null);
 
-  // Start initial conversation question when component mounts
+  /* Ilk soruyu bir kez sor.
+     Muhafiz history.length idi ve ise yaramiyordu: StrictMode etkiyi
+     gelistirmede iki kez calistiriyor, ikinci calisma ilk istek daha
+     donmeden oldugu icin history hala bos oluyor ve ayni soru iki kez
+     isteniyordu (olculdu: iki /api/speaking-chat, iki seslendirme).
+     ref render'lar arasi ayni nesne ve aninda guncellendigi icin
+     ikinci calistirmayi da, hizli yeniden kurulmalari da durdurur. */
+  const baslatildiRef = useRef(false);
   useEffect(() => {
-    if (history.length === 0) {
-      startSimulation();
-    }
+    if (baslatildiRef.current) return;
+    baslatildiRef.current = true;
+    startSimulation();
   }, []);
 
   const speakText = (text: string) => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { VideoLesson, VocabularyItem, GrammarRuleItem } from '../../types';
 import { apiFetch } from '../../lib/userKeys';
 import { Sparkles, Volume2, BookOpen, Lightbulb, Loader2, RefreshCw, AlertCircle } from 'lucide-react';
@@ -22,9 +22,15 @@ export const Layer2PhoneticsGrammar: React.FC<Layer2PhoneticsGrammarProps> = ({
   const vocabularyList = lesson.vocabulary || [];
   const grammarList = lesson.grammarRules || [];
 
-  // Auto generate if empty on mount
+  /* Bos ise bir kez uret. Muhafiz olarak isGenerating yetmiyor:
+     StrictMode etkiyi iki kez calistirir ve ikinci calismada durum hala
+     baslangic degerindedir. Ders basina tek sefer, ref ile.
+     Bkz. Layer5SpeakingSimulation'daki ayni not. */
+  const uretilenDersRef = useRef<string | null>(null);
   useEffect(() => {
-    if (vocabularyList.length === 0 && grammarList.length === 0 && !isGenerating && lesson.sentences?.length > 0) {
+    if (uretilenDersRef.current === lesson.id) return;
+    if (vocabularyList.length === 0 && grammarList.length === 0 && lesson.sentences?.length > 0) {
+      uretilenDersRef.current = lesson.id;
       handleGenerateAnalysis();
     }
   }, [lesson.id]);

@@ -495,7 +495,32 @@ async function buildLessonData(
     setActiveLayer(1);
   };
 
-  // Background Auto-Generation for Katman 2 & 3 if missing
+  /* Bir ders icin arka plan uretimi YALNIZCA BIR KEZ denenir.
+     Isaret durumda degil ref'te tutuluyor: durum guncellemesi asenkron
+     oldugu icin ayni anda calisan ikinci bir etki onu hep baslangic
+     degerinde gorurdu. Ayrintili gerekce icin asagidaki nota bak. */
+  const arkaPlanDenenenRef = useRef<Set<string>>(new Set());
+
+  /* KATMANLARIN VERISINI ARKA PLANDA URET (kelime, gramer, test).
+     Eksik olan varsa bir kez uretilir; kullanici katmana geldiginde
+     bekleme olmasin diye.
+
+     BU ETKI ESKIDEN AYNI ISTEGI UC KEZ GONDERIYORDU. Iki sebebi vardi:
+
+     (a) Es zamanli kopya - "zaten calisiyor" isareti yoktu. StrictMode
+         gelistirmede etkiyi iki kez calistirir ve ikinci calisma ilk
+         istek donmeden olur. Eski isCancelled yalnizca sonucu yok
+         sayiyordu, istegi iptal etmiyordu; istek yine de gidiyordu.
+
+     (b) Kendini besleyen dongu - bagimliliklar bu uc alanin UZUNLUKLARI
+         ve kosul "biri bossa calis" idi. Yanit ucunden birini
+         doldurmazsa (modelin bos dizi donmesi olagan) uzunluk degisir,
+         etki yeniden kosar, kosul hala saglanir, istek yeniden gider.
+         Ucretli bir uc noktada bunun ust siniri yoktu.
+
+     Ref'teki kume ikisini de kapatiyor: ders basina tek deneme, sonucu
+     ne olursa olsun. Uretilemezse kullanici ilgili katmandaki
+     "Yenile" dugmesiyle elle tetikleyebiliyor. */
   useEffect(() => {
     if (
       activeLesson &&
@@ -505,7 +530,16 @@ async function buildLessonData(
        (!activeLesson.grammarRules || activeLesson.grammarRules.length === 0) ||
        (!activeLesson.quizQuestions || activeLesson.quizQuestions.length === 0))
     ) {
-      let isCancelled = false;
+      if (arkaPlanDenenenRef.current.has(activeLesson.id)) return;
+      arkaPlanDenenenRef.current.add(activeLesson.id);
+
+      /* Ne iptal ne de "sonucu yok say" var, bilerek.
+         React temizligi gercek unmount'tan ayirt edilemiyor; StrictMode
+         her etkiyi kur/yik/tekrar kur diye calistirdigi icin iptal
+         eklemek TEK kalan istegi de olduruyordu ve gelistirmede arka
+         plan uretimi hic calismiyordu. Gec gelen yanitin zarari da yok:
+         asagidaki birlestirme ders kimligine gore ve yalnizca BOS
+         alanlara yaziyor. */
       const generateAllLayersInBackground = async () => {
         try {
           const fullText = activeLesson.sentences.map((s) => s.en).join(' ');
@@ -524,28 +558,23 @@ async function buildLessonData(
 
           const [phoneticsData, quizData] = await Promise.all([phoneticsPromise, quizPromise]);
 
-          if (!isCancelled) {
-            setLessons((prev) =>
-              prev.map((l) => {
-                if (l.id === activeLesson.id) {
-                  return {
-                    ...l,
-                    vocabulary: (l.vocabulary && l.vocabulary.length > 0) ? l.vocabulary : (phoneticsData.vocabulary || []),
-                    grammarRules: (l.grammarRules && l.grammarRules.length > 0) ? l.grammarRules : (phoneticsData.grammarRules || []),
-                    quizQuestions: (l.quizQuestions && l.quizQuestions.length > 0) ? l.quizQuestions : (quizData.quizQuestions || []),
-                  };
-                }
-                return l;
-              })
-            );
-          }
+          setLessons((prev) =>
+            prev.map((l) => {
+              if (l.id !== activeLesson.id) return l;
+              return {
+                ...l,
+                vocabulary: (l.vocabulary && l.vocabulary.length > 0) ? l.vocabulary : (phoneticsData.vocabulary || []),
+                grammarRules: (l.grammarRules && l.grammarRules.length > 0) ? l.grammarRules : (phoneticsData.grammarRules || []),
+                quizQuestions: (l.quizQuestions && l.quizQuestions.length > 0) ? l.quizQuestions : (quizData.quizQuestions || []),
+              };
+            })
+          );
         } catch (e) {
           console.warn('Background analysis generation failed:', e);
         }
       };
 
       generateAllLayersInBackground();
-      return () => { isCancelled = true; };
     }
   }, [activeLessonId, activeLesson?.id, activeLesson?.vocabulary?.length, activeLesson?.grammarRules?.length, activeLesson?.quizQuestions?.length]);
 
