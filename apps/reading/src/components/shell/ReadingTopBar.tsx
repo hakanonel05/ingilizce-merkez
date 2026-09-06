@@ -19,7 +19,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Menu, Zap, Clock, CloudCog, CloudOff, LogOut, Settings2,
-  Download, Upload, Smartphone, Database,
+  Download, Upload, Smartphone, Database, BookOpen,
 } from 'lucide-react';
 
 interface Props {
@@ -199,6 +199,20 @@ export const ReadingTopBar: React.FC<Props> = ({
           </div>
 
           {iconButton(onOpenSettings, 'API anahtarları', <Settings2 className="h-4 w-4" />)}
+
+          {/* Kullanim kilavuzu: sitenin kendi statik sayfasi (/kilavuz/).
+              Yeni sekmede aciliyor - okurken calismanin yerini kaybetme. */}
+          <a
+            href="/kilavuz/"
+            target="_blank"
+            rel="noopener"
+            title="Kullanım kılavuzu"
+            aria-label="Kullanım kılavuzu"
+            className="flex h-9 w-9 items-center justify-center rounded-xl text-ink-3
+              transition-colors duration-150 hover:bg-paper-3 hover:text-ink cursor-pointer"
+          >
+            <BookOpen className="h-4 w-4" />
+          </a>
 
           {hasSession && iconButton(onSignOut, 'Çıkış yap', <LogOut className="h-4 w-4" />)}
         </div>

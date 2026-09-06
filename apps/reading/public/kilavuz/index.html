@@ -1,0 +1,1197 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>İngilizce Merkez Kılavuzu</title>
+<meta name="description" content="İngilizce Merkez kullanım kılavuzu: iki çalışma alanının her ekranı, ekran görüntüleriyle.">
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+</head>
+<body>
+<style>
+/* ===================================================================
+   İNGİLİZCE MERKEZ KILAVUZU
+
+   Palet uygulamanın kendi token'larından geliyor; kılavuz anlattığı
+   şeye benzemeli. Tek fark sayfa zemini: uygulamanınkinden (#F5F4F2)
+   bir ton koyu, çünkü buradaki ekran görüntülerinin çoğu beyaz ve
+   sayfanın üstünde nesne gibi durmaları gerekiyor.
+
+   Yazı: başlıklar Archivo (teknik grotesk), gövde Source Serif 4
+   (uzun Türkçe metin serifte daha rahat), arayüz adları JetBrains
+   Mono — uygulamanın sayılarda kullandığı yazı tipi. Kılavuzda mono
+   ile yazılan her şey ekranda birebir öyle yazıyor.
+   =================================================================== */
+
+:root {
+  --ground:      #E9E6E0;
+  --surface:     #FFFFFF;
+  --surface-2:   #F3F1EC;
+  --ink:         #1C1917;
+  --ink-2:       #57534E;
+  --ink-3:       #6B6560;
+  --rule:        #D6D2CB;
+  --rule-soft:   #E0DCD5;
+  --accent:      #C2410C;
+  /* Küçük yazı ve bağlantılar için. --accent bu sayfanın zemininde
+     (#E9E6E0) yalnızca 4.16 veriyor; ölçüldü. */
+  --accent-text: #9A3412;
+  --accent-soft: #FBEDE5;
+  --ok:          #166534;
+  --ok-soft:     #E6F1E9;
+  --warn:        #BE123C;
+  --warn-soft:   #F7E6EB;
+  --note:        #92400E;
+  --note-soft:   #FBF3E2;
+  --chip-bg:     #E2DED6;
+  --shadow:      0 1px 2px rgba(28,25,23,.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground:      #17150F;
+    --surface:     #201D17;
+    --surface-2:   #262218;
+    --ink:         #EDE9E1;
+    --ink-2:       #BDB6AA;
+    --ink-3:       #9B9488;
+    --rule:        #3A352C;
+    --rule-soft:   #2C281F;
+    --accent:      #F08A55;
+    --accent-text: #F5A278;
+    --accent-soft: #2E1D12;
+    --ok:          #86C79A;
+    --ok-soft:     #16251A;
+    --warn:        #F1A0B4;
+    --warn-soft:   #2B161C;
+    --note:        #E6BE7C;
+    --note-soft:   #2A2114;
+    --chip-bg:     #2E2A21;
+    --shadow:      0 1px 2px rgba(0,0,0,.4);
+  }
+}
+
+:root[data-theme="dark"] {
+  --ground:      #17150F;
+  --surface:     #201D17;
+  --surface-2:   #262218;
+  --ink:         #EDE9E1;
+  --ink-2:       #BDB6AA;
+  --ink-3:       #9B9488;
+  --rule:        #3A352C;
+  --rule-soft:   #2C281F;
+  --accent:      #F08A55;
+  --accent-text: #F5A278;
+  --accent-soft: #2E1D12;
+  --ok:          #86C79A;
+  --ok-soft:     #16251A;
+  --warn:        #F1A0B4;
+  --warn-soft:   #2B161C;
+  --note:        #E6BE7C;
+  --note-soft:   #2A2114;
+  --chip-bg:     #2E2A21;
+  --shadow:      0 1px 2px rgba(0,0,0,.4);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  line-height: 1.68;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------------------------------------------------------- iskelet */
+.sayfa {
+  display: grid;
+  grid-template-columns: 1fr;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 20px 120px;
+}
+@media (min-width: 1060px) {
+  .sayfa {
+    grid-template-columns: 232px minmax(0, 1fr);
+    gap: 56px;
+    padding: 0 32px 140px;
+  }
+}
+
+/* --------------------------------------------------------- içindekiler */
+.rehber { display: none; }
+@media (min-width: 1060px) {
+  .rehber {
+    display: block;
+    position: sticky;
+    top: 0;
+    align-self: start;
+    max-height: 100vh;
+    overflow-y: auto;
+    padding: 40px 0 40px;
+    font-family: "Archivo", system-ui, sans-serif;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+}
+.rehber-baslik {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 14px;
+}
+.rehber ol { list-style: none; margin: 0 0 26px; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.rehber a {
+  display: flex;
+  gap: 9px;
+  padding: 5px 8px 5px 0;
+  color: var(--ink-2);
+  text-decoration: none;
+  border-radius: 5px;
+}
+.rehber a:hover { color: var(--accent-text); }
+.rehber a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.rehber .no {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+  color: var(--ink-3);
+  padding-top: 2px;
+  min-width: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------------- gövde */
+.govde { min-width: 0; padding-top: 40px; }
+.olcu { max-width: 68ch; }
+
+h1, h2, h3, h4 {
+  font-family: "Archivo", system-ui, sans-serif;
+  text-wrap: balance;
+  margin: 0;
+}
+h1 { font-size: clamp(34px, 5.2vw, 52px); font-weight: 700; letter-spacing: -.024em; line-height: 1.06; }
+h2 { font-size: clamp(25px, 3vw, 32px); font-weight: 700; letter-spacing: -.018em; line-height: 1.16; }
+h3 { font-size: 20px; font-weight: 600; letter-spacing: -.008em; line-height: 1.3; }
+h4 { font-size: 15px; font-weight: 600; letter-spacing: .002em; }
+
+p { margin: 0; }
+.olcu > p + p, .metin > p + p { margin-top: 1em; }
+
+a { color: var(--accent-text); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+
+/* -------------------------------------------------------------- kapak */
+.kapak { padding: 8px 0 8px; }
+.kapak .etiket {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.kapak h1 { margin: 18px 0 0; }
+.kapak .giris {
+  margin-top: 20px;
+  max-width: 60ch;
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.kunye {
+  margin-top: 34px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 32px;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: .04em;
+  color: var(--ink-3);
+}
+.kunye b { color: var(--ink-2); font-weight: 500; }
+
+/* ------------------------------------------------------------- bölüm */
+.bolum { margin-top: 76px; scroll-margin-top: 24px; }
+.bolum-ust {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--ink);
+  margin-bottom: 26px;
+}
+.bolum-no {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-text);
+  letter-spacing: .1em;
+  font-variant-numeric: tabular-nums;
+}
+.alt { margin-top: 46px; scroll-margin-top: 24px; }
+.alt > h3 { margin-bottom: 12px; }
+.alt > h3 + p { color: var(--ink-2); }
+
+/* -------------------------------------------------------- arayüz adı */
+/* Kılavuzda mono ile yazılan her şey ekranda birebir öyle yazıyor:
+   okuyucu kelimeyi ekranda arayarak bulabilsin diye. */
+.ui {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: .82em;
+  background: var(--chip-bg);
+  color: var(--ink);
+  padding: .12em .42em;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.yol { color: var(--ink-3); font-family: "JetBrains Mono", ui-monospace, monospace; font-size: .82em; }
+
+/* ------------------------------------------------------------- görsel */
+figure {
+  margin: 26px 0 0;
+  max-width: 980px;
+}
+figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Yer bastan ayrilsin diye; width/height nitelikleriyle birlikte. */
+  aspect-ratio: 1500 / 980;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+figcaption {
+  margin-top: 10px;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: .01em;
+  color: var(--ink-3);
+  max-width: 76ch;
+}
+figcaption b { color: var(--ink-2); font-weight: 500; }
+.ikili { display: grid; gap: 20px; margin-top: 26px; max-width: 980px; }
+@media (min-width: 760px) { .ikili { grid-template-columns: 1fr 1fr; } }
+.ikili figure { margin: 0; max-width: none; }
+
+/* ------------------------------------------------------- katman omurgası */
+/* Numaralandırma burada süs değil: yedi katman gerçekten sıralı ve
+   sıra bilginin kendisi — dördüncü katman ikinciden önce yapılmaz. */
+.omurga { margin-top: 30px; display: flex; flex-direction: column; }
+.katman {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 0 22px;
+  padding: 30px 0;
+  border-top: 1px solid var(--rule);
+  scroll-margin-top: 24px;
+}
+.katman:first-child { border-top: 2px solid var(--ink); }
+.katman-no {
+  font-family: "Archivo", system-ui, sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: .9;
+  letter-spacing: -.04em;
+  /* --rule tonundayken ölçülen kontrast 1.21 idi: numara görünmüyordu.
+     Bu sayı katmanın numarası, dekorasyon değil. */
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.katman-govde { min-width: 0; }
+.katman h3 { margin-bottom: 4px; }
+.katman .rol {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  margin-bottom: 14px;
+}
+.katman .metin { max-width: 66ch; }
+
+/* --------------------------------------------------------- adım listesi */
+/* Numara MUTLAK konumlu, li sıradan bir blok.
+   Grid denendi ve kirdi: grid konteyneri satır içi çocuklarını
+   bloklaştırdığı için <span class="ui"> ayrı bir grid öğesi oluyor,
+   ondan sonraki metin başka bir anonim öğe olarak dar sütuna düşüyor
+   ve kelime kelime alt alta yazılıyordu. */
+ol.adimlar { max-width: 66ch; margin: 16px 0 0; padding: 0; list-style: none; counter-reset: adim; display: flex; flex-direction: column; gap: 11px; }
+ol.adimlar li { counter-increment: adim; position: relative; padding-left: 34px; }
+ol.adimlar li::before {
+  content: counter(adim);
+  position: absolute;
+  left: 4px;
+  top: .34em;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+ul.duz { max-width: 66ch; margin: 14px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 9px; }
+ul.duz li { padding-left: 18px; position: relative; }
+ul.duz li::before { content: ""; position: absolute; left: 2px; top: .72em; width: 5px; height: 1px; background: var(--ink-3); }
+
+/* ------------------------------------------------------------- notlar */
+.not {
+  margin-top: 22px;
+  max-width: 66ch;
+  padding: 15px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--rule);
+  background: var(--surface-2);
+  font-size: 15.5px;
+  line-height: 1.6;
+}
+.not .not-ust {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 6px;
+}
+.not.ipucu { background: var(--note-soft); border-color: var(--note); }
+.not.ipucu .not-ust { color: var(--note); }
+.not.dikkat { background: var(--warn-soft); border-color: var(--warn); }
+.not.dikkat .not-ust { color: var(--warn); }
+.not.gerek { background: var(--ok-soft); border-color: var(--ok); }
+.not.gerek .not-ust { color: var(--ok); }
+
+/* ------------------------------------------------------------- tablo */
+.tablo-kutu { margin-top: 24px; overflow-x: auto; max-width: 980px; }
+table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 15px; }
+th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  border-bottom: 1.5px solid var(--ink);
+  white-space: nowrap;
+}
+tbody tr:last-child td { border-bottom: none; }
+
+/* ------------------------------------------------------------- kartlar */
+.kartlar { display: grid; gap: 16px; margin-top: 24px; max-width: 980px; }
+@media (min-width: 720px) { .kartlar.iki { grid-template-columns: 1fr 1fr; } }
+.kart {
+  padding: 20px 22px;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--surface);
+}
+.kart h4 { margin-bottom: 6px; }
+.kart p { font-size: 15.5px; color: var(--ink-2); line-height: 1.58; }
+.kart .rol {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* --------------------------------------------------------------- sss */
+details {
+  border-bottom: 1px solid var(--rule);
+  max-width: 76ch;
+}
+details summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 16px 32px 16px 0;
+  font-family: "Archivo", system-ui, sans-serif;
+  font-size: 16.5px;
+  font-weight: 600;
+  position: relative;
+}
+details summary::-webkit-details-marker { display: none; }
+details summary::after {
+  content: "+";
+  position: absolute;
+  right: 4px;
+  top: 15px;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 16px;
+  color: var(--ink-3);
+}
+details[open] summary::after { content: "−"; }
+details summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+details .cevap { padding: 0 0 18px; max-width: 66ch; }
+details .cevap > * + * { margin-top: .8em; }
+
+/* --------------------------------------------------------------- alt */
+.alt-not {
+  margin-top: 90px;
+  padding-top: 22px;
+  border-top: 1px solid var(--rule);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--ink-3);
+  max-width: 76ch;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+html { scroll-behavior: smooth; }
+</style>
+
+
+<div class="sayfa">
+
+<nav class="rehber" aria-label="İçindekiler">
+  <p class="rehber-baslik">İçindekiler</p>
+  <ol>
+    <li><a href="#baslangic"><span class="no">00</span><span>Buraya ilk kez geldiysen</span></a></li>
+    <li><a href="#katmanli"><span class="no">01</span><span>Katmanlı İngilizce</span></a></li>
+    <li><a href="#yedi-katman"><span class="no">02</span><span>Yedi katman</span></a></li>
+    <li><a href="#araclar"><span class="no">03</span><span>Kaynaklar &amp; araçlar</span></a></li>
+    <li><a href="#kendi-ders"><span class="no">04</span><span>Kendi videonu ekleme</span></a></li>
+    <li><a href="#okuma"><span class="no">05</span><span>Okuma &amp; Kelime</span></a></li>
+    <li><a href="#parca"><span class="no">06</span><span>Bir parçayı çalışmak</span></a></li>
+    <li><a href="#kelime"><span class="no">07</span><span>Kelime sistemi</span></a></li>
+    <li><a href="#sinav"><span class="no">08</span><span>Sınav ve takip</span></a></li>
+    <li><a href="#ayarlar"><span class="no">09</span><span>Ayarlar ve verilerin</span></a></li>
+    <li><a href="#sss"><span class="no">10</span><span>Sık takılınan yerler</span></a></li>
+  </ol>
+</nav>
+
+<main class="govde">
+
+<header class="kapak">
+  <p class="etiket">Kullanım Kılavuzu</p>
+  <h1>İngilizce Merkez</h1>
+  <p class="giris">
+    Tek adreste iki ayrı çalışma alanı var: hazır okuma parçalarıyla kelime kuran
+    bir bölüm, ve bir videoyu yedi katmanda çalıştıran bir bölüm. Bu kılavuz her
+    ekranın ne işe yaradığını ve nasıl kullanıldığını sırayla anlatıyor.
+  </p>
+  <div class="kunye">
+    <span><b>Adres</b> &nbsp;<a href="/">ingilizcemerkez.netlify.app</a></span>
+    <span><b>Hesap</b> &nbsp;gerekmiyor</span>
+    <span><b>Ücret</b> &nbsp;yok</span>
+    <span><b>Cihaz</b> &nbsp;bilgisayar ve telefon</span>
+  </div>
+</header>
+
+<!-- ============================================================ 00 -->
+<section class="bolum" id="baslangic">
+  <div class="bolum-ust"><span class="bolum-no">00</span><h2>Buraya ilk kez geldiysen</h2></div>
+
+  <div class="olcu">
+    <p>
+      Siteyi açtığında en üstte iki sekme görürsün: <span class="ui">Okuma &amp; Kelime</span>
+      ve <span class="ui">Katmanlı İngilizce</span>. Bunlar aynı sitenin iki ayrı çalışma alanı
+      ve birbirinden bağımsız çalışırlar — birini hiç açmadan diğerini kullanabilirsin.
+    </p>
+  </div>
+
+  <div class="kartlar iki">
+    <div class="kart">
+      <span class="rol">Sekme 1</span>
+      <h4>Okuma &amp; Kelime</h4>
+      <p>
+        Hazır 100 okuma parçası, her birinin altında anlama testi ve kelime alıştırması.
+        Yanında 1226 kelimelik bir hazne, kelime kartları ve süreli sınav simülasyonu.
+        Hiçbir şey kurmadan, hesap açmadan çalışır.
+      </p>
+    </div>
+    <div class="kart">
+      <span class="rol">Sekme 2</span>
+      <h4>Katmanlı İngilizce</h4>
+      <p>
+        Bir YouTube videosunu yedi ayrı katmanda çalışırsın: önce okuyarak,
+        sonra dinleyerek, sonra konuşarak ve yazarak. İki hazır ders yüklü gelir;
+        kendi videonu da ekleyebilirsin.
+      </p>
+    </div>
+  </div>
+
+  <div class="not gerek">
+    <span class="not-ust">Nereden başlamalı</span>
+    İngilizceyle yeni tanışıyorsan <b>Okuma &amp; Kelime</b> tarafından başla: hazır içerik var,
+    hiçbir kurulum gerekmiyor, ilk gün bir parça okuyup testini çözebilirsin.
+    <b>Katmanlı İngilizce</b> daha disiplinli bir program — aynı videoyu günlerce çalışmayı gerektirir.
+  </div>
+
+  <div class="alt">
+    <h3>Hesap açmana gerek yok</h3>
+    <p class="olcu">
+      Okuma &amp; Kelime tarafı bir giriş ekranıyla açılır. Alt taraftaki
+      <span class="ui">Çevrimdışı Devam Et (Senkronizasyon Kapalı)</span> bağlantısına basarsan
+      hiçbir bilgi vermeden kullanmaya başlarsın. Hesap yalnızca <em>aynı ilerlemeyi başka bir
+      cihazda</em> görmek istersen gerekir.
+    </p>
+    <figure><img src="g/rea-00-giris.jpg" width="1500" height="980" alt="Giriş ekranı. Hesap açmak istemiyorsan alttaki Çevrimdışı Devam Et bağlantısı yeter — bütün özellikler açık kalır, yalnızca ilerlemen o cihazda kalır." loading="lazy" decoding="async"><figcaption>Giriş ekranı. Hesap açmak istemiyorsan alttaki <b>Çevrimdışı Devam Et</b> bağlantısı yeter — bütün özellikler açık kalır, yalnızca ilerlemen o cihazda kalır.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============================================================ 01 -->
+<section class="bolum" id="katmanli">
+  <div class="bolum-ust"><span class="bolum-no">01</span><h2>Katmanlı İngilizce</h2></div>
+
+  <div class="olcu">
+    <p>
+      Bu bölümün tek bir fikri var: <b>yeni içeriğe geçmek değil, aynı içeriği tüketmek
+      akıcılığı kuruyor.</b> Bir videoyu bir kez izleyip bırakmak yerine, aynı videoyu yedi kez,
+      her seferinde başka bir beceriyle çalışırsın. Okuma, dinleme, konuşma ve yazma tek bir
+      içerik üzerinden kapalı devre ilerler.
+    </p>
+    <p>
+      Bir video 7–10 günde biter — günde bir katman. Ekranın en altındaki
+      <span class="ui">Adım 3 / 7</span> göstergesi nerede olduğunu hep söyler.
+    </p>
+  </div>
+
+  <div class="alt">
+    <h3>Akış — açılış ekranı</h3>
+    <p>
+      Uygulama seni katmanların ortasında değil <span class="ui">Akış</span> ekranında karşılar.
+      Buradaki <span class="ui">AKTİF ÇALIŞMA</span> kutusu dün nerede bıraktığını gösterir ve
+      tek bir düğmeyle oraya döner.
+    </p>
+    <ul class="duz">
+      <li><b>Aktif çalışma</b> — hangi derste, hangi katmanda olduğun ve kaldığın yere dönen düğme.</li>
+      <li><b>Bugünün notu</b> — sıradaki katmanın ne işe yaradığını bir paragrafta anlatır.</li>
+      <li><b>Yaklaşan tekrarlar</b> — kelime kartlarından vadesi gelenler.</li>
+      <li><b>Çalışma takvimi</b> — hangi gün çalıştığın ve üst üste kaç günlük seri.</li>
+    </ul>
+    <figure><img src="g/kat-00-akis.jpg" width="1500" height="980" alt="Akış ekranı. Sol kenardaki liste yedi katmanı sırayla, altında da araçları gösterir; bitirdiğin katmanların yanında onay işareti belirir." loading="lazy" decoding="async"><figcaption>Akış ekranı. Sol kenardaki liste yedi katmanı sırayla, altında da araçları gösterir; bitirdiğin katmanların yanında onay işareti belirir.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============================================================ 02 -->
+<section class="bolum" id="yedi-katman">
+  <div class="bolum-ust"><span class="bolum-no">02</span><h2>Yedi katman</h2></div>
+
+  <div class="olcu">
+    <p>
+      Sıra önemli. Her katman bir öncekinin bıraktığı yerden devam eder: önce anlamı kurarsın,
+      sonra sesi anlamdan ayırırsın, en sonda ürettirir. Bir katmanı bitirince altındaki
+      <span class="ui">Tamamla</span> düğmesi seni sıradakine geçirir.
+    </p>
+  </div>
+
+  <div class="omurga">
+
+    <article class="katman">
+      <div class="katman-no">1</div>
+      <div class="katman-govde">
+        <h3>Metin Okuma &amp; Anlama</h3>
+        <p class="rol">Anlam ağlarını oturtma</p>
+        <div class="metin">
+          <p>
+            Solda video, sağda çift dilli transkript. İngilizce cümlenin altında Türkçesi durur.
+            Amaç kelime ezberlemek değil — cümle içindeki anlam ağını zihne oturtmak.
+          </p>
+        </div>
+        <ul class="duz">
+          <li><span class="ui">TED Stili Yan Yana</span> ile <span class="ui">Tek Sütun</span> arasında görünüm değiştirebilirsin.</li>
+          <li><span class="ui">Türkçeyi gizle</span> Türkçe satırları kapatır; kendini sınamak için.</li>
+          <li>Her cümlenin yanındaki hoparlör simgesi o cümleyi <b>sesli okur</b>, artı simgesi <b>notlarına ekler</b>.</li>
+          <li>Üstteki arama kutusu <span class="ui">Cümle veya kelime ara...</span> transkript içinde arar.</li>
+          <li><span class="ui">Yapay zekâya sor</span> takıldığın cümleyi gramer koçuna gönderir.</li>
+        </ul>
+        <figure><img src="g/kat-01.jpg" width="1500" height="980" alt="Katman 1. Sağdaki her satırda İngilizce cümle ve altında Türkçesi var; satırın sağındaki iki küçük düğme cümleyi seslendirir ve notlara ekler." loading="lazy" decoding="async"><figcaption>Katman 1. Sağdaki her satırda İngilizce cümle ve altında Türkçesi var; satırın sağındaki iki küçük düğme cümleyi seslendirir ve notlara ekler.</figcaption></figure>
+        <div class="not ipucu">
+          <span class="not-ust">Zaman damgası uyarısı görürsen</span>
+          Hazır dersler elle yazıldığı için cümlelerde zaman bilgisi yoktur ve videoyla senkronize
+          edilemezler. <span class="ui">Gerçek Altyazıdan Senkronize Et</span> düğmesi dersi videonun
+          kendi YouTube altyazısından yeniden üretir ve zaman damgalarını kazandırır.
+        </div>
+      </div>
+    </article>
+
+    <article class="katman">
+      <div class="katman-no">2</div>
+      <div class="katman-govde">
+        <h3>Aktif Dinleme</h3>
+        <p class="rol">Sesi yazıyla eşleştirme</p>
+        <div class="metin">
+          <p>
+            Aynı metin, ama <b>Türkçe çeviri bilerek kapalı</b>. Videoyu oynatıp metni gözlerinle
+            takip edersin. Bu adım kelimelerin ses karşılığını yerleştirir: yazıyı zaten biliyorsun,
+            eksik olan onu duyunca tanımak.
+          </p>
+        </div>
+        <figure><img src="g/kat-02.jpg" width="1500" height="980" alt="Katman 2. Türkçe satırlar bu katmanda hiç gösterilmez — eksiklik değil, katmanın amacı." loading="lazy" decoding="async"><figcaption>Katman 2. Türkçe satırlar bu katmanda hiç gösterilmez — eksiklik değil, katmanın amacı.</figcaption></figure>
+      </div>
+    </article>
+
+    <article class="katman">
+      <div class="katman-no">3</div>
+      <div class="katman-govde">
+        <h3>Sesli Okuma &amp; Shadowing</h3>
+        <p class="rol">Gölgeleme</p>
+        <div class="metin">
+          <p>
+            Cümleyi dinle, sonra konuşmacıyla <b>birlikte</b> sesli oku. Dil bir kas grubudur;
+            sesli okuma o kasları esnetir. Cümleler tek tek ilerler, oklarla gezinirsin.
+          </p>
+        </div>
+        <ol class="adimlar">
+          <li><span class="ui">Yavaş Okut</span> cümleyi bilgisayar sesiyle yavaşça okur.</li>
+          <li>Konuşmacıyla birlikte yüksek sesle tekrarla.</li>
+          <li><span class="ui">Kaydı Başlat</span> ile kendi sesini kaydet, sonra durdurup dinle.</li>
+          <li>Kendi kaydınla orijinali karşılaştır; farkı duyduğun yeri tekrarla.</li>
+        </ol>
+        <figure><img src="g/kat-03.jpg" width="1500" height="980" alt="Katman 3, kayıt alındıktan sonra. Kayıt cihazında saklanır, hiçbir yere gönderilmez; Kayıtlarım listesinden eski kayıtlarına dönebilirsin." loading="lazy" decoding="async"><figcaption>Katman 3, kayıt alındıktan sonra. Kayıt <b>cihazında saklanır</b>, hiçbir yere gönderilmez; <span class="ui">Kayıtlarım</span> listesinden eski kayıtlarına dönebilirsin.</figcaption></figure>
+        <div class="not gerek">
+          <span class="not-ust">Mikrofon izni</span>
+          <span class="ui">Kaydı Başlat</span>'a ilk bastığında tarayıcı mikrofon izni ister.
+          İzin vermezsen bu katmanın kayıt kısmı çalışmaz; okuma kısmı çalışmaya devam eder.
+        </div>
+      </div>
+    </article>
+
+    <article class="katman">
+      <div class="katman-no">4</div>
+      <div class="katman-govde">
+        <h3>Altyazısız İzleme</h3>
+        <p class="rol">Anlama kontrolü</p>
+        <div class="metin">
+          <p>
+            Metin bu katmanda hiç gösterilmez. Videoyu altyazısız izlersin. %100 anlaman
+            beklenmiyor — başlangıçta %60–70 yakalamak yeterli.
+          </p>
+          <p>
+            İzledikten sonra <span class="ui">Videoyu altyazısız izledim, teste geç</span> düğmesi
+            beş soruluk anlama testini açar. <span class="ui">Yanıtları Kontrol Et &amp; Analiz Et</span>
+            ile netini ve her sorunun açıklamasını görürsün.
+          </p>
+        </div>
+        <div class="ikili">
+          <figure><img src="g/kat-04.jpg" width="1500" height="980" alt="Test açılmadan önce: yalnızca video ve süre. &quot;Metin gösterilmiyor — bu katmanda kasıtlı&quot;." loading="lazy" decoding="async"><figcaption>Test açılmadan önce: yalnızca video ve süre. "Metin gösterilmiyor — bu katmanda kasıtlı".</figcaption></figure>
+          <figure><img src="g/kat-04b-test.jpg" width="1500" height="980" alt="Anlama testi. Yanlış cevapladığın sorular otomatik olarak Çalışma Notlarına düşer." loading="lazy" decoding="async"><figcaption>Anlama testi. Yanlış cevapladığın sorular otomatik olarak <span class="ui">Çalışma Notları</span>na düşer.</figcaption></figure>
+        </div>
+      </div>
+    </article>
+
+    <article class="katman">
+      <div class="katman-no">5</div>
+      <div class="katman-govde">
+        <h3>Sadece Dinleme</h3>
+        <p class="rol">Görselsiz ses modu</p>
+        <div class="metin">
+          <p>
+            Görüntü kapatılır, yalnızca ses kalır. Konuşmacının jestleri, dudak hareketi ve
+            slaytları ortadan kalkınca beyin doğrudan sese odaklanmak zorunda kalır.
+            Zorlanırsan <span class="ui">Kısa Bak</span> görüntüyü geçici olarak açar.
+          </p>
+        </div>
+        <figure><img src="g/kat-05.jpg" width="1500" height="980" alt="Katman 5. Video oynamaya devam eder, üstü örtülüdür — Kısa Bak örtüyü kaldırır, Görüntüyü Kapat geri koyar." loading="lazy" decoding="async"><figcaption>Katman 5. Video oynamaya devam eder, üstü örtülüdür — <span class="ui">Kısa Bak</span> örtüyü kaldırır, <span class="ui">Görüntüyü Kapat</span> geri koyar.</figcaption></figure>
+      </div>
+    </article>
+
+    <article class="katman">
+      <div class="katman-no">6</div>
+      <div class="katman-govde">
+        <h3>Yazma &amp; Cümle Kurma</h3>
+        <p class="rol">Özet ve yorum</p>
+        <div class="metin">
+          <p>
+            İki kutu var: <span class="ui">Özet</span> (videodan aklında kalanlar, 1–2 paragraf)
+            ve <span class="ui">Yorum</span> (konuyu kendi hayatınla bağlaman).
+            Türkçeden çeviri yapma, doğrudan İngilizce yaz.
+          </p>
+          <p>
+            Bilinmeyen kelime geldiğinde durma — Türkçe yazıp devam et, fikir akışını kesme.
+            <span class="ui">Değerlendir</span> yazdığını yapay zekâya gönderir; gramer düzeltmeleri,
+            daha doğal kullanım önerileri ve genel bir geri bildirim döner.
+          </p>
+        </div>
+        <figure><img src="g/kat-06.jpg" width="1500" height="980" alt="Katman 6. Basit cümlelerden çekinme — bu katmanda nitelik değil nicelik önemli." loading="lazy" decoding="async"><figcaption>Katman 6. Basit cümlelerden çekinme — bu katmanda nitelik değil nicelik önemli.</figcaption></figure>
+        <div class="not dikkat">
+          <span class="not-ust">Yapay zekâ anahtarı gerekiyor</span>
+          <span class="ui">Değerlendir</span> Google Gemini'ye bağlanır. Anahtar tanımlı değilse
+          bir hata mesajı görürsün. Anahtarın nasıl girildiği
+          <a href="#ayarlar">Ayarlar</a> bölümünde.
+        </div>
+      </div>
+    </article>
+
+    <article class="katman">
+      <div class="katman-no">7</div>
+      <div class="katman-govde">
+        <h3>Sesli Anlatım</h3>
+        <p class="rol">Konuşma simülasyonu</p>
+        <div class="metin">
+          <p>
+            Bir dil koçu video konusu üzerinden sana sırayla <b>üç soru</b> sorar. Her soruyu
+            mikrofonla konuşarak ya da yazarak cevaplayabilirsin. Koç gramer takıntısı yapmaz,
+            akıcılığa bakar ve kısa geri bildirim verir.
+          </p>
+          <p>
+            Üstteki <span class="ui">Sesli anlatım tekrarı</span> sayacı ayrı bir alıştırmadır:
+            yazdığın özeti kendine sesli anlatırsın, metodoloji <b>10–15 tekrar</b> önerir.
+            Her tekrardan sonra <span class="ui">Bir tekrar yaptım</span> düğmesine basarsın.
+          </p>
+        </div>
+        <figure><img src="g/kat-07.jpg" width="1500" height="980" alt="Katman 7. Sorular sırayla açılır; cevabını verdikçe koç geri bildirim yazar ve bir sonraki soruya geçer. Sağdaki hoparlör simgesi soruyu sesli okur." loading="lazy" decoding="async"><figcaption>Katman 7. Sorular sırayla açılır; cevabını verdikçe koç geri bildirim yazar ve bir sonraki soruya geçer. Sağdaki hoparlör simgesi soruyu sesli okur.</figcaption></figure>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ============================================================ 03 -->
+<section class="bolum" id="araclar">
+  <div class="bolum-ust"><span class="bolum-no">03</span><h2>Kaynaklar &amp; araçlar</h2></div>
+  <div class="olcu">
+    <p>
+      Yedi katmanın altında, kenar çubuğunda beş araç daha var. Bunlar sıralı değildir;
+      ihtiyaç duydukça girilir.
+    </p>
+  </div>
+
+  <div class="alt">
+    <h3>Kelime &amp; Cümle Bankası</h3>
+    <p>
+      Aralıklı tekrar destesi. Kartlar <b>FSRS-6</b> ile planlanır — Anki'nin kullandığı algoritmanın
+      aynısı, hedef tutma oranı %90. Katmanlarda bir kelimeyi notlarına eklediğinde buraya düşer.
+    </p>
+    <ul class="duz">
+      <li><span class="ui">Bu Dersten Kelime Ayıkla</span> transkriptten B2–C1 seviyesindeki kelimeleri ve phrasal verb'leri otomatik çıkarır.</li>
+      <li><span class="ui">Kart ekle</span> elle kart açar: yalnızca İngilizce kelimeyi yaz, anlam / örnek / seviye / söz türü kendiliğinden dolar.</li>
+      <li><span class="ui">Çalış</span> vadesi gelen kartları sırayla gösterir.</li>
+    </ul>
+    <div class="ikili">
+      <figure><img src="g/kat-08-vocab.jpg" width="1500" height="980" alt="Banka boşken. Üstteki dört sayı toplam kart, vadesi gelen, öğrenilmekte olan ve tekrar sayısını gösterir." loading="lazy" decoding="async"><figcaption>Banka boşken. Üstteki dört sayı toplam kart, vadesi gelen, öğrenilmekte olan ve tekrar sayısını gösterir.</figcaption></figure>
+      <figure><img src="g/kat-17-kartekle.jpg" width="1500" height="980" alt="Elle kart ekleme. Kelimeyi yazıp Yenileye basman yeterli; diğer alanlar dolar." loading="lazy" decoding="async"><figcaption>Elle kart ekleme. Kelimeyi yazıp <span class="ui">Yenile</span>ye basman yeterli; diğer alanlar dolar.</figcaption></figure>
+    </div>
+  </div>
+
+  <div class="alt">
+    <h3>Fonetik &amp; Gramer</h3>
+    <p>
+      Dersteki kritik kelimelerin IPA okunuşları ve telaffuz ipuçları; yanında gramer yapıları.
+      Gramer burada kural ezberi olarak değil <b>genelden özele</b> anlatılır: teorik açıklama yerine
+      günlük hayattan üç somut örnek.
+    </p>
+    <ul class="duz">
+      <li>İki sekme var: <span class="ui">Kritik Kelimeler &amp; Fonetik</span> ve <span class="ui">Gramer Yapıları &amp; Örnek Cümleler</span>.</li>
+      <li>Her kelimenin yanındaki hoparlör düğmesi telaffuzu seslendirir.</li>
+      <li><span class="ui">AI Analizini Yenile</span> listeyi baştan ürettirir.</li>
+    </ul>
+    <figure><img src="g/kat-09-fonetik.jpg" width="1500" height="980" alt="Fonetik &amp; Gramer. Turuncu yazılan kısım kelimenin IPA okunuşu; altında Türkçe anlamı ve telaffuz ipucu var." loading="lazy" decoding="async"><figcaption>Fonetik &amp; Gramer. Turuncu yazılan kısım kelimenin IPA okunuşu; altında Türkçe anlamı ve telaffuz ipucu var.</figcaption></figure>
+  </div>
+
+  <div class="alt">
+    <h3>Çalışma Notları, Süreç &amp; Hedefler, Karne</h3>
+    <div class="kartlar iki">
+      <div class="kart">
+        <span class="rol">Takip</span>
+        <h4>Çalışma Notları</h4>
+        <p>
+          Anlama testlerinde yanlış cevapladığın sorular burada birikir. Sen bir şey yapmazsın,
+          liste kendiliğinden dolar. Sınavdan önce buraya bakmak en verimli tekrardır.
+        </p>
+      </div>
+      <div class="kart">
+        <span class="rol">Takip</span>
+        <h4>Süreç &amp; Hedefler</h4>
+        <p>
+          Hedef <b>20 video</b>. Gelişim üçüncü–dördüncü videodan sonra hissedilir hale gelir.
+          Ekranda son yedi günün çalışması ve önerilen bir günlük rutin var.
+        </p>
+      </div>
+    </div>
+    <div class="ikili">
+      <figure><img src="g/kat-10-notlar.jpg" width="1500" height="980" alt="Çalışma Notları — henüz yanlışın yoksa boş görünür." loading="lazy" decoding="async"><figcaption>Çalışma Notları — henüz yanlışın yoksa boş görünür.</figcaption></figure>
+      <figure><img src="g/kat-11-surec.jpg" width="1500" height="980" alt="Süreç &amp; Hedefler. Üç kilometre taşı işaretli: 3 video, 10 video, 20 video." loading="lazy" decoding="async"><figcaption>Süreç &amp; Hedefler. Üç kilometre taşı işaretli: 3 video, 10 video, 20 video.</figcaption></figure>
+    </div>
+    <p class="olcu" style="margin-top:26px">
+      <b>Karne</b> haftalık çalışma özetidir: ne kadar süre çalıştığın, kaç kelime eklediğin,
+      quiz sonuçların. Süre ölçümü bu sürümle başladığı için eski çalışmaların süresi görünmez;
+      tarihi bilinen veriler (eklenen kelimeler, quiz sonuçları) geriye dönük gelir.
+    </p>
+    <figure><img src="g/kat-12-karne.jpg" width="1500" height="980" alt="Karne, henüz veri birikmemişken. Ekranın kendisi ne zaman dolacağını yazıyor." loading="lazy" decoding="async"><figcaption>Karne, henüz veri birikmemişken. Ekranın kendisi ne zaman dolacağını yazıyor.</figcaption></figure>
+  </div>
+
+  <div class="alt">
+    <h3>Gramer Koçu ve Metot Rehberi</h3>
+    <p>
+      <span class="ui">Gramer Koçu</span> her ekrandan açılabilen bir sohbet çekmecesidir.
+      Aklına takılan gramer yapısını ya da cümleyi yazarsın; karmaşık kurallara girmeden
+      günlük hayattan üç örnekle açıklar. Katman 1'deki
+      <span class="ui">Yapay zekâya sor</span> düğmesi de aynı koçu açar.
+    </p>
+    <div class="ikili">
+      <figure><img src="g/kat-14-koc.jpg" width="1500" height="980" alt="Gramer Koçu çekmecesi. Alttaki kutuya sorunu yazarsın — örnek: &quot;'Would' ne zaman kullanılır?&quot;" loading="lazy" decoding="async"><figcaption>Gramer Koçu çekmecesi. Alttaki kutuya sorunu yazarsın — örnek: "'Would' ne zaman kullanılır?"</figcaption></figure>
+      <figure><img src="g/kat-13-metot.jpg" width="1500" height="980" alt="Metot Rehberi. Yöntemin tamamını, yedi katmanın gerekçesini ve önerilen ritmi anlatır. İlk gün okunmaya değer." loading="lazy" decoding="async"><figcaption>Metot Rehberi. Yöntemin tamamını, yedi katmanın gerekçesini ve önerilen ritmi anlatır. İlk gün okunmaya değer.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 04 -->
+<section class="bolum" id="kendi-ders">
+  <div class="bolum-ust"><span class="bolum-no">04</span><h2>Kendi videonu ekleme</h2></div>
+  <div class="olcu">
+    <p>
+      İki hazır ders yüklü gelir. Kendi videonu eklemek için ekranın üstündeki ders adına
+      (yanında <span class="ui">15 cümle</span> yazan çubuk) tıkla — ders seçme penceresi açılır.
+    </p>
+    <ol class="adimlar">
+      <li>Üstteki ders çubuğuna tıkla, <span class="ui">Yeni ders ekle</span>'yi seç.</li>
+      <li>YouTube bağlantısını yapıştır. Altyazısı olan videolar en iyi sonucu verir.</li>
+      <li>Site transkripti çeker, cümlelere böler ve Türkçesini üretir.</li>
+      <li>Ders listede belirir; üzerine tıklayarak aktif ders yaparsın.</li>
+    </ol>
+    <figure><img src="g/kat-16-dersler.jpg" width="1500" height="980" alt="Ders seçme penceresi. Aktif ders işaretlidir; her dersin yanında seviye, cümle sayısı ve tahmini süre yazar. Sağdaki simgelerle dersi düzenler ya da s" loading="lazy" decoding="async"><figcaption>Ders seçme penceresi. Aktif ders işaretlidir; her dersin yanında seviye, cümle sayısı ve tahmini süre yazar. Sağdaki simgelerle dersi düzenler ya da silersin.</figcaption></figure>
+    <div class="not dikkat">
+      <span class="not-ust">Altyazısı olmayan video</span>
+      YouTube altyazısı bulunmayan bir videodan transkript çıkarılamaz. Böyle bir videoyu
+      eklemek istersen metni elle yapıştırman gerekir.
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 05 -->
+<section class="bolum" id="okuma">
+  <div class="bolum-ust"><span class="bolum-no">05</span><h2>Okuma &amp; Kelime</h2></div>
+  <div class="olcu">
+    <p>
+      Bu taraf hazır içerikle çalışır: <b>100 okuma parçası</b> A1'den C1'e kadar seviyelendirilmiş,
+      her birinin altında anlama testi ve kelime alıştırması var. Yanında <b>1226 kelimelik</b>
+      bir hazne, kelime kartları ve süreli sınav simülasyonu duruyor.
+    </p>
+  </div>
+
+  <div class="alt">
+    <h3>Gösterge Paneli</h3>
+    <p>
+      Açılış ekranı. Üç sayı ile başlar: kaç parça okudun, kaç kelime öğrendin, test doğruluğun ne.
+      Altında okuma ilerlemesi, kelime dağarcığının dağılımı ve hızlı tekrar kısayolu var.
+    </p>
+    <figure><img src="g/rea-01-panel.jpg" width="1500" height="980" alt="Gösterge Paneli. Üstteki şerit çevrimdışı modda olduğunu ve verilerin yalnızca bu bilgisayarda tutulduğunu hatırlatır." loading="lazy" decoding="async"><figcaption>Gösterge Paneli. Üstteki şerit çevrimdışı modda olduğunu ve verilerin yalnızca bu bilgisayarda tutulduğunu hatırlatır.</figcaption></figure>
+  </div>
+
+  <div class="alt">
+    <h3>Okuma Parçaları</h3>
+    <p>
+      Yüz parçanın listesi. Her satırda numara, başlık, seviye rozeti, o parçanın gramer konusu,
+      kaç kelime ve kaç soru içerdiği yazar.
+    </p>
+    <ul class="duz">
+      <li>Seviye süzgeci: <span class="ui">A1</span> <span class="ui">A2</span> <span class="ui">B1</span> <span class="ui">B2</span> <span class="ui">C1</span> ya da <span class="ui">Tüm seviyeler</span>.</li>
+      <li>Durum süzgeci: <span class="ui">Tümü</span> / <span class="ui">Çalışılacak</span> / <span class="ui">Tamamlanan</span>.</li>
+      <li>Arama kutusu başlık, tema ve kelimeye göre arar.</li>
+      <li>Satırın sağındaki yıldız parçayı favorilere ekler.</li>
+    </ul>
+    <figure><img src="g/rea-02-parcalar.jpg" width="1500" height="980" alt="Parça listesi. Seviye ve durum süzgeçleri üstte; her satır tek tıklamayla açılır." loading="lazy" decoding="async"><figcaption>Parça listesi. Seviye ve durum süzgeçleri üstte; her satır tek tıklamayla açılır.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============================================================ 06 -->
+<section class="bolum" id="parca">
+  <div class="bolum-ust"><span class="bolum-no">06</span><h2>Bir parçayı çalışmak</h2></div>
+  <div class="olcu">
+    <p>
+      Bir parçaya girdiğinde üç sekme görürsün. Sırayla gitmen beklenir:
+      önce metni oku, sonra anladığını sına, sonra kelimeleri pekiştir.
+    </p>
+  </div>
+
+  <figure><img src="g/rea-02c-kelime.jpg" width="1500" height="980" alt="Parça ekranının tamamı. Solda kenar menüsü, ortada metin, sağda sözlük ve ilerleme paneli. Metinde altı çizili kelimeler tıklanabilir." loading="lazy" decoding="async"><figcaption>Parça ekranının tamamı. Solda kenar menüsü, ortada metin, sağda sözlük ve ilerleme paneli. Metinde <b>altı çizili</b> kelimeler tıklanabilir.</figcaption></figure>
+
+  <div class="alt">
+    <h3>Okuma metni</h3>
+    <ul class="duz">
+      <li><span class="ui">Sesli dinle</span> parçayı baştan sona okur. Hız <span class="ui">0.75×</span>'ten <span class="ui">1.5×</span>'e ayarlanır ve altı farklı ses arasından seçim yapabilirsin.</li>
+      <li>Metinde <b>altı çizili</b> kelimeye tıklayınca sağdaki <span class="ui">Sözlük</span> paneli açılır: Türkçe karşılık, İngilizce tanım ve örnek cümle.</li>
+      <li>Sözlük panelinden kelimeyi <span class="ui">Çalışıyorum</span> ya da <span class="ui">Öğrendim</span> olarak işaretleyebilir, <span class="ui">Tekrar bankasına ekle</span> ile kartlarına atabilirsin.</li>
+      <li>Sağ alttaki <span class="ui">Bu parçadaki ilerlemen</span> kutusu okuma durumunu, kaç kelime öğrendiğini ve test sonucunu tutar.</li>
+    </ul>
+    <div class="not ipucu">
+      <span class="not-ust">Kelime durumları ne işe yarar</span>
+      İşaretlediğin durumlar metinde de görünür: <b>çalışılan</b> kelimeler kehribar,
+      <b>öğrenilen</b> kelimeler yeşil alt çizgiyle işaretlenir. Aynı durumlar
+      Kelime Haznesi'ni ve hikaye üretecini besler.
+    </div>
+  </div>
+
+  <div class="alt">
+    <h3>Anlama testi ve Kelime alıştırmaları</h3>
+    <p>
+      İkisi de çoktan seçmeli. Anlama testi paragraf paragraf sorar
+      ("Which of the following is FALSE according to paragraph 3?"); kelime alıştırmaları
+      eş anlam, olumlu/olumsuz anlam ve edat kullanımını sınar.
+      <span class="ui">Testi gönder</span> / <span class="ui">Alıştırmayı gönder</span> ile
+      sonucu alırsın; yanlışların <span class="ui">Yanlışlar Defteri</span>'ne düşer.
+    </p>
+    <div class="ikili">
+      <figure><img src="g/rea-02d-anlama.jpg" width="1500" height="980" alt="Anlama testi sekmesi — bu parçada beş soru var." loading="lazy" decoding="async"><figcaption>Anlama testi sekmesi — bu parçada beş soru var.</figcaption></figure>
+      <figure><img src="g/rea-02e-alistirma.jpg" width="1500" height="980" alt="Kelime alıştırmaları sekmesi — beş alıştırma." loading="lazy" decoding="async"><figcaption>Kelime alıştırmaları sekmesi — beş alıştırma.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 07 -->
+<section class="bolum" id="kelime">
+  <div class="bolum-ust"><span class="bolum-no">07</span><h2>Kelime sistemi</h2></div>
+  <div class="olcu">
+    <p>
+      Kelime tarafında dört ayrı ekran var ve sık karıştırılırlar. Farkları şu:
+    </p>
+  </div>
+
+  <div class="tablo-kutu">
+    <table>
+      <thead>
+        <tr><th>Ekran</th><th>Ne yapar</th><th>Ne zaman kullanılır</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Kelime Çalışma</b></td>
+          <td>Klasik kart çevirme. Ön yüzde kelime, dokununca Türkçesi.</td>
+          <td>Hızlı gözden geçirme; sıralı ya da karışık.</td>
+        </tr>
+        <tr>
+          <td><b>Kelime Kartları</b></td>
+          <td>FSRS aralıklı tekrar destesi — Katmanlı taraftaki bankayla <b>aynı</b> deste.</td>
+          <td>Kalıcı ezber. Her gün vadesi geleni çalışırsın.</td>
+        </tr>
+        <tr>
+          <td><b>Kelime Haznesi</b></td>
+          <td>Bütün kelimelerin listesi, parçaya ve duruma göre süzülür.</td>
+          <td>"Hangi kelimeleri biliyorum?" sorusunun cevabı.</td>
+        </tr>
+        <tr>
+          <td><b>Kelime Kitabı</b></td>
+          <td>Anlamına göre gruplanmış eş anlamlı kelime tabloları ve her tablonun testi.</td>
+          <td>Sınav öncesi toplu çalışma; kitaptaki gibi.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ikili">
+    <figure><img src="g/rea-04-calisma.jpg" width="1500" height="980" alt="Kelime Çalışma. Kaynağı (okuma parçaları / temel liste) ve süzgeci üstten seçersin." loading="lazy" decoding="async"><figcaption>Kelime Çalışma. Kaynağı (okuma parçaları / temel liste) ve süzgeci üstten seçersin.</figcaption></figure>
+    <figure><img src="g/rea-05-kartlar.jpg" width="1500" height="980" alt="Kelime Kartları. CSV düğmesi desteyi Anki'ye alınabilecek biçimde indirir." loading="lazy" decoding="async"><figcaption>Kelime Kartları. <span class="ui">CSV</span> düğmesi desteyi Anki'ye alınabilecek biçimde indirir.</figcaption></figure>
+  </div>
+  <div class="ikili">
+    <figure><img src="g/rea-06-hazne.jpg" width="1500" height="980" alt="Kelime Haznesi. Parça parça gruplanmış; her kelimenin yanından durumunu değiştirebilirsin." loading="lazy" decoding="async"><figcaption>Kelime Haznesi. Parça parça gruplanmış; her kelimenin yanından durumunu değiştirebilirsin.</figcaption></figure>
+    <figure><img src="g/rea-07-kitap.jpg" width="1500" height="980" alt="Kelime Kitabı. Solda tablo numaraları, sağda anlam grupları ve altında Collocation / Synonyms / Sentence testleri." loading="lazy" decoding="async"><figcaption>Kelime Kitabı. Solda tablo numaraları, sağda anlam grupları ve altında Collocation / Synonyms / Sentence testleri.</figcaption></figure>
+  </div>
+
+  <div class="alt">
+    <h3>Hikayelerim</h3>
+    <p>
+      Hikaye üreteci, <b>hâlâ öğrenemediğin kelimelerden</b> sana özel bir hikaye yazar.
+      Boş görünüyorsa henüz öyle bir kelime yok demektir: bir parçada kelimeleri
+      <span class="ui">Çalışıyorum</span> olarak işaretledikçe ya da kart tekrarlarında
+      zorlandıkça havuz dolar.
+    </p>
+    <figure><img src="g/rea-03-hikaye.jpg" width="1500" height="980" alt="Hikayelerim, henüz kelime birikmemişken." loading="lazy" decoding="async"><figcaption>Hikayelerim, henüz kelime birikmemişken.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============================================================ 08 -->
+<section class="bolum" id="sinav">
+  <div class="bolum-ust"><span class="bolum-no">08</span><h2>Sınav ve takip</h2></div>
+
+  <div class="alt" style="margin-top:0">
+    <h3>Sınav Simülasyonu</h3>
+    <p>
+      Süreli bir okuma denemesi. Kaç parça ve hangi seviye olacağını sen seçersin;
+      bitince netin hesaplanır.
+    </p>
+    <ul class="duz">
+      <li>Uzunluk: <span class="ui">3 parça ~18 dk</span>, <span class="ui">5 parça ~30 dk</span> ya da <span class="ui">8 parça ~48 dk</span>.</li>
+      <li>Seviye: <span class="ui">Karışık</span> ya da tek bir seviye.</li>
+      <li>Yanlış ve boş bıraktığın sorular otomatik olarak Yanlışlar Defteri'ne eklenir.</li>
+    </ul>
+    <figure><img src="g/rea-08-sinav.jpg" width="1500" height="980" alt="Sınav kurulumu. Havuzda kaç uygun parça olduğunu altta yazar." loading="lazy" decoding="async"><figcaption>Sınav kurulumu. Havuzda kaç uygun parça olduğunu altta yazar.</figcaption></figure>
+  </div>
+
+  <div class="alt">
+    <h3>Yanlışlar Defteri ve Karne</h3>
+    <p>
+      <b>Yanlışlar Defteri</b> üç kaynaktan beslenir: anlama testleri, kelime alıştırmaları ve
+      sınav simülasyonu. Elle bir şey eklemezsin.
+      <b>Karne</b> haftalık özettir — ne kadar çalıştığın, kaç kelime eklediğin, quiz sonuçların.
+    </p>
+    <div class="ikili">
+      <figure><img src="g/rea-09-yanlis.jpg" width="1500" height="980" alt="Yanlışlar Defteri, henüz boşken." loading="lazy" decoding="async"><figcaption>Yanlışlar Defteri, henüz boşken.</figcaption></figure>
+      <figure><img src="g/rea-10-karne.jpg" width="1500" height="980" alt="Karne. Çalıştıkça dolar; süre ölçümü bu sürümle başladığı için eski çalışmaların süresi görünmez." loading="lazy" decoding="async"><figcaption>Karne. Çalıştıkça dolar; süre ölçümü bu sürümle başladığı için eski çalışmaların süresi görünmez.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 09 -->
+<section class="bolum" id="ayarlar">
+  <div class="bolum-ust"><span class="bolum-no">09</span><h2>Ayarlar ve verilerin</h2></div>
+
+  <div class="olcu">
+    <p>
+      Sitenin çoğu özelliği hiçbir ayar yapmadan çalışır. Ayarlar penceresi iki şey içindir:
+      yapay zekâ anahtarları ve cihazlar arası senkron.
+    </p>
+  </div>
+
+  <div class="alt">
+    <h3>Yapay zekâ anahtarları</h3>
+    <p>
+      Sitenin kendi anahtarları var; boş bıraktığın her alan için onlar kullanılır.
+      Kendi anahtarını yalnızca <b>kendi kotanı</b> kullanmak istersen girersin — ortak kota
+      dolduğunda beklemekten kurtulursun. Girdiklerin <b>yalnızca bu tarayıcıda</b> saklanır,
+      sunucuya gönderilmez.
+    </p>
+    <div class="tablo-kutu">
+      <table>
+        <thead><tr><th>Anahtar</th><th>Neyi çalıştırır</th></tr></thead>
+        <tbody>
+          <tr><td><b>Google Gemini</b></td><td>Çeviri, sözcük çıkarma, anlama testi üretimi, yazma değerlendirmesi, konuşma simülasyonu ve gramer koçu.</td></tr>
+          <tr><td><b>Groq</b></td><td>Açık kaynak modeller. Hikaye üreteci varsayılan olarak bunu kullanır; Gemini kotası dolduğunda yedeğe geçer.</td></tr>
+          <tr><td><b>youtube-transcript.io</b></td><td>YouTube altyazılarını çeker. Canlı sitede kendi videonu ekleyebilmek için gerekir.</td></tr>
+          <tr><td><b>LibreTranslate</b></td><td>Alternatif çeviri servisi. Uygulama bunu varsayılan olarak kullanmıyor — girmene gerek yok.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <figure><img src="g/kat-15-ayarlar.jpg" width="1500" height="980" alt="Ayarlar penceresi. Her alanın yanındaki rozet o anahtarın sitede tanımlı olup olmadığını söyler." loading="lazy" decoding="async"><figcaption>Ayarlar penceresi. Her alanın yanındaki rozet o anahtarın sitede tanımlı olup olmadığını söyler.</figcaption></figure>
+  </div>
+
+  <div class="alt">
+    <h3>Verilerin nerede duruyor</h3>
+    <ul class="duz">
+      <li><b>Çevrimdışı modda</b> her şey o cihazın tarayıcısında kalır: okuduğun parçalar, kelime durumların, kartların, ses kayıtların.</li>
+      <li>Tarayıcı verilerini temizlersen ilerlemen de silinir.</li>
+      <li>Başka bir cihazda aynı ilerlemeyi görmek istiyorsan hesapla giriş yapman gerekir — <span class="ui">Giriş yap ve eşitle</span>.</li>
+      <li>Ses kayıtların hiçbir koşulda sunucuya gönderilmez; cihazında kalır.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================ 10 -->
+<section class="bolum" id="sss">
+  <div class="bolum-ust"><span class="bolum-no">10</span><h2>Sık takılınan yerler</h2></div>
+
+  <details>
+    <summary>"Bu derste zaman bilgisi yok" yazıyor, cümleler videoyla senkronize değil</summary>
+    <div class="cevap">
+      <p>
+        Hazır dersler elle yazıldığı için cümlelerde zaman damgası yoktur. Katman 1'deki
+        <span class="ui">Gerçek Altyazıdan Senkronize Et</span> düğmesi dersi videonun kendi
+        YouTube altyazısından yeniden üretir ve zaman damgalarını kazandırır. Bundan sonra
+        cümleye tıklayınca video o saniyeye atlar.
+      </p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Yapay zekâ özellikleri hata veriyor</summary>
+    <div class="cevap">
+      <p>
+        Anlama testi üretme, yazma değerlendirmesi, konuşma simülasyonu ve gramer koçu
+        Google Gemini'ye bağlanır. Ortak kota dolmuşsa ya da anahtar tanımlı değilse hata alırsın.
+        Ayarlar penceresinden kendi Gemini anahtarını girersen kendi kotanla çalışırsın.
+      </p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Mikrofon çalışmıyor</summary>
+    <div class="cevap">
+      <p>
+        Katman 3'teki kayıt ve Katman 7'deki sesli cevap tarayıcının mikrofon iznini ister.
+        İlk kullanımda çıkan izin kutusunu reddettiysen tarayıcının adres çubuğundaki
+        kilit simgesinden izni yeniden açman gerekir.
+      </p>
+      <p>
+        Katman 7'de mikrofon çalışmasa bile takılmazsın: soruyu alttaki kutuya
+        <b>yazarak</b> da cevaplayabilirsin.
+      </p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Karne ve Süreç ekranları boş görünüyor</summary>
+    <div class="cevap">
+      <p>
+        Bu ekranlar sen çalıştıkça dolar; başlangıçta boş olmaları normaldir. Bir ders çalıştığında,
+        kelime kartı eklediğinde ya da bir test çözdüğünde dolmaya başlar.
+      </p>
+      <p>
+        Süre ölçümü siteye sonradan eklendiği için <b>eski</b> çalışmaların süresi görünmez.
+        Tarihi bilinen veriler — eklenen kelimeler, test sonuçları — geriye dönük gelir.
+      </p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Hikayelerim boş, hiç hikaye üretmiyor</summary>
+    <div class="cevap">
+      <p>
+        Hikaye üreteci <b>hâlâ öğrenemediğin</b> kelimelerden yazar. Henüz öyle bir kelime
+        birikmediyse boş görünür. Bir okuma parçasında kelimeleri
+        <span class="ui">Çalışıyorum</span> olarak işaretlemeye başla ya da kelime kartlarında
+        birkaç tekrar yap; havuz dolunca üreteç çalışır.
+      </p>
+    </div>
+  </details>
+
+  <details>
+    <summary>İlerlememi başka bilgisayarda göremiyorum</summary>
+    <div class="cevap">
+      <p>
+        <span class="ui">Çevrimdışı Devam Et</span> ile girdiysen bütün veriler yalnızca o cihazda
+        tutulur; aktarmak için bir kod yoktur. Aynı ilerlemeyi başka bir cihazda görmek için
+        her iki cihazda da aynı hesapla giriş yapman gerekir.
+      </p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Bir katmanı atlayabilir miyim?</summary>
+    <div class="cevap">
+      <p>
+        Teknik olarak evet — kenar çubuğundan istediğin katmana doğrudan geçebilirsin.
+        Ama yöntem sıraya dayanıyor: her katman bir öncekinin bıraktığı yerden devam ediyor.
+        Katman 4 (altyazısız izleme) Katman 2'yi (aktif dinleme) yapmadan çok zor gelir.
+      </p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Günde ne kadar çalışmalıyım?</summary>
+    <div class="cevap">
+      <p>
+        Önerilen ritim <b>günde bir katman</b>. Bu hızda bir video 7–10 günde biter.
+        Hedef 20 video; gelişim üçüncü–dördüncü videodan sonra hissedilir hale gelir.
+        Metot Rehberi bunu ayrıntılı anlatıyor.
+      </p>
+    </div>
+  </details>
+</section>
+
+<p class="alt-not">
+  Bu kılavuz sitenin bütün ekranları tek tek gezilerek hazırlandı; buradaki ekran görüntüleri
+  uygulamanın kendisinden alındı. Arayüzde bir düğmenin adı değişirse kılavuzdaki karşılığı da
+  güncellenmelidir.
+</p>
+
+</main>
+</div>
+
+</body>
+</html>

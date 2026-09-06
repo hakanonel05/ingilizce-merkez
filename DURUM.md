@@ -334,6 +334,28 @@ satırlı bir arama/değiştirme dizesini LF ile yazarsan **sessizce**
 eşleşmez — hata vermez, sadece bulunamadı der. Betiklerinde dosyanın kendi
 satır sonuna uyarlan.
 
+### Kullanım kılavuzu
+
+`/kilavuz/` adresinde statik bir sayfa: iki uygulamanın her ekranı, 33 ekran
+görüntüsüyle. Kaynağı `apps/reading/public/kilavuz/` — reading derlemesinin
+publicDir'i dist köküne kopyalıyor ve katmanlı aynı origin'de olduğu için
+oradan da aynı adres. **Tek kopya var**, iki uygulamaya iki kopya konmadı.
+
+Bağlantı iki üst çubukta da bir `<a>` olarak duruyor, düğme değil: orta tık
+ve "yeni sekmede aç" kendiliğinden çalışsın diye. Kenar çubuğuna konmadı —
+katmanlıdaki "METOT & AYARLAR" grubunun kuralı o dosyanın kendi notunda
+yazılı: o gruptaki her şey uygulama İÇİNDE pencere açar, dışarı çıkan bir
+bağlantı o kuralı bozardı.
+
+`netlify.toml`'da `/kilavuz` için açık bir kural var. Netlify var olan bir
+dosyayı force olmayan rewrite'ten önce zaten servis ediyor, ama sondaki eğik
+çizgisiz istek dizin çözümüne kalıyordu; kural o belirsizliği kaldırıyor.
+
+Sayfa elle üretildi: ekranlar CDP ile tek tek gezilip yakalandı, sonra bir
+şablona gömüldü. **Arayüzde bir düğmenin adı değişirse kılavuzdaki karşılığı
+da güncellenmeli** — kılavuz arayüz adlarını tek aralıklı yazıyla ve BİREBİR
+veriyor, okuyucu kelimeyi ekranda arayarak bulsun diye.
+
 ## 6. Açık kalan işler
 
 **1. Hikaye istemi ÖLÇÜLDÜ, düzeltme tuttu — ama ölçüt seçimi kritik.**

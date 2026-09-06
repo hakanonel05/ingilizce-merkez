@@ -28,6 +28,15 @@
   to = "/katmanli/index.html"
   status = 200
 
+# Kullanım kılavuzu STATİK bir sayfa (dist/kilavuz/), tek sayfa uygulaması
+# değil. Netlify var olan dosyayı zaten force olmayan bir rewrite'ten önce
+# servis eder, ama sondaki eğik çizgisiz "/kilavuz" isteği dizin çözümüne
+# kalıyordu; bu kural o belirsizliği kaldırıyor.
+[[redirects]]
+  from = "/kilavuz"
+  to = "/kilavuz/index.html"
+  status = 200
+
 # Reading (kök) tek sayfa uygulaması
 [[redirects]]
   from = "/*"

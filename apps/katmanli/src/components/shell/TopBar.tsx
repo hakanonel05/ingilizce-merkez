@@ -22,7 +22,7 @@
 
 import React from 'react';
 import {
-  Menu, Flame, Video, Sparkles, HelpCircle, CalendarRange, KeyRound,
+  Menu, Flame, Video, Sparkles, HelpCircle, CalendarRange, KeyRound, BookOpen,
 } from 'lucide-react';
 import { UserProgress } from '../../types';
 import { HOME_LAYER } from './LayerSidebar';
@@ -221,6 +221,20 @@ export const TopBar: React.FC<Props> = ({
           {iconButton(onOpenReport, 'Karne', <CalendarRange className="h-4 w-4" />, isReportActive)}
           {iconButton(onOpenGuide, 'Metot rehberi', <HelpCircle className="h-4 w-4" />)}
           {iconButton(onOpenSettings, 'API anahtarları', <KeyRound className="h-4 w-4" />)}
+
+          {/* Kullanim kilavuzu: sitenin kendi statik sayfasi (/kilavuz/).
+              Yeni sekmede aciliyor - okurken calismanin yerini kaybetme. */}
+          <a
+            href="/kilavuz/"
+            target="_blank"
+            rel="noopener"
+            title="Kullanım kılavuzu"
+            aria-label="Kullanım kılavuzu"
+            className="flex h-9 w-9 items-center justify-center rounded-xl text-ink-3
+              transition-colors duration-150 hover:bg-paper-3 hover:text-ink cursor-pointer"
+          >
+            <BookOpen className="h-4 w-4" />
+          </a>
         </div>
       </div>
     </header>
