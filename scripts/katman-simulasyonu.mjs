@@ -49,6 +49,14 @@ if (!CHROME) { console.error('Chrome bulunamadi. CHROME_PATH ver.'); process.exi
 
 const OUT = process.argv[2] || path.join(os.tmpdir(), 'katman-simulasyonu');
 const PORT = Number(process.argv[3] || 9411);
+
+/* HER KOSU TEMIZ PROFILLE BASLAR.
+   Bu unutuldugunda betik yanlis alarm verdi: onceki kosunun kaydi ve
+   cozulmus testi tarayici profilinde (localStorage + IndexedDB) kaliyor,
+   ikinci kosuda "Kaydi Baslat" dugmesi "Yeniden Kaydet" oluyor ve test
+   zaten gonderilmis geliyor. Dort kontrol duserek uygulamada hata varmis
+   izlenimi veriyordu. */
+fs.rmSync(path.join(OUT, '_p'), { recursive: true, force: true });
 fs.mkdirSync(OUT, { recursive: true });
 
 /* Sahte mikrofon sesi burada uretiliyor: depoda ikili dosya tutmamak
