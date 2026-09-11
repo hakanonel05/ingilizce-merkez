@@ -807,6 +807,23 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
  * Ikisi cok farkli: dakikalik limitte beklemek yeter, gunluk limitte
  * kota UTC gece yarisina kadar geri gelmez.
  */
+/** Hatanın TÜRÜ. İstemci buna bakıp bekleyip tekrar denemeli mi, yoksa
+ *  oturum boyunca vazgeçmeli mi karar veriyor. Yalnızca metne bakmak
+ *  kırılgan: mesaj değişince istemci sessizce yanlış davranır. */
+export function rateLimitBilgisi(error: any): { kod: string; saniye: number | null } {
+  const raw = (error?.message || '') + JSON.stringify(error || {});
+  const m = raw.match(/retryDelay["':\s]+([0-9.]+)s/i);
+  const saniye = m ? Math.ceil(parseFloat(m[1])) : null;
+
+  if (/API key not valid|API_KEY_INVALID/i.test(raw)) return { kod: "anahtar", saniye: null };
+  if (/PerDay|RequestsPerDay|daily/i.test(raw)) return { kod: "kota-gunluk", saniye: null };
+  if (/PerMinute|RequestsPerMinute|TokensPerMinute/i.test(raw)) {
+    /* Sunucu süre vermezse 30 saniye makul bir bekleme. */
+    return { kod: "kota-dakika", saniye: saniye ?? 30 };
+  }
+  return { kod: "diger", saniye };
+}
+
 function describeRateLimit(error: any): string {
   const raw = (error?.message || '') + JSON.stringify(error || {});
 
@@ -2433,8 +2450,13 @@ app.post("/api/speak", async (req, res) => {
   } catch (error: any) {
     console.error("Error in /api/speak:", error);
     const isQuota = isRateLimitError(error);
+    /* kod + saniye: istemci "bekleyip tekrar dene" ile "bugunluk vazgec"
+       arasindaki farki metne bakmadan anlasin. */
+    const bilgi = rateLimitBilgisi(error);
     res.status(isQuota ? 429 : 500).json({
       error: isQuota ? describeRateLimit(error) : formatErrorMessage(error, "Ses uretilemedi."),
+      kod: bilgi.kod,
+      saniye: bilgi.saniye,
     });
   }
 });

@@ -149,7 +149,14 @@ async function fetchParagraphAudio(
   } catch {
     throw new Error('Sunucu beklenmeyen bir yanıt döndürdü.');
   }
-  if (!res.ok) throw new Error(data?.error || 'Ses üretilemedi.');
+  if (!res.ok) {
+    /* Hata nesnesine sunucunun kodunu taşı: çağıran taraf bekleyip tekrar
+       denemeli mi, yoksa vazgeçmeli mi buna bakıyor. */
+    const hata: any = new Error(data?.error || 'Ses üretilemedi.');
+    hata.kod = data?.kod || 'diger';
+    hata.saniye = data?.saniye ?? null;
+    throw hata;
+  }
   if (!data?.audio) throw new Error('Ses verisi boş geldi.');
 
   // base64 -> Blob: <audio src="data:..."> uzun metinlerde adres
@@ -203,7 +210,12 @@ export function useNarration(passageId: number, paragraphs: string[]): Narration
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   /** Doğal ses bir kez başarısız olduysa her paragrafta yeniden denemeyiz. */
-  const naturalFailedRef = useRef(false);
+  /* Doğal ses ne zamana kadar denenmeyecek (ms). 0 = serbest.
+     Önce basit bir boolean'dı ve TEK YÖNLÜYDÜ: bir kez hata alınca oturum
+     boyunca cihaz sesine düşülüyordu. Ama hataların çoğu geçici —
+     dakikalık limit ~20 saniyede açılıyor. Kullanıcı bir paragrafta
+     takılıp sonraki on paragrafı robot sesiyle dinliyordu. */
+  const dogalDurdurmaRef = useRef(0);
   /** Kullanıcı durdurduktan sonra geciken bir isteğin sesi çalmasın. */
   const runIdRef = useRef(0);
 
@@ -299,7 +311,7 @@ export function useNarration(passageId: number, paragraphs: string[]): Narration
       const runId = runIdRef.current;
       setError(null);
 
-      if (naturalFailedRef.current) {
+      if (Date.now() < dogalDurdurmaRef.current) {
         speakWithDevice(index, runId);
         return;
       }
@@ -349,12 +361,24 @@ export function useNarration(passageId: number, paragraphs: string[]): Narration
       } catch (err: any) {
         if (controller.signal.aborted || runId !== runIdRef.current) return;
 
-        // Doğal ses alınamadı: bir daha denemeden cihaz sesine geç.
-        naturalFailedRef.current = true;
+        /* Ne kadar süreyle vazgeçileceği hatanın TÜRÜNE bağlı:
+             dakikalık limit → sunucunun söylediği kadar bekle, sonra
+                               doğal sesi tekrar dene
+             günlük kota / anahtar → beklemenin faydası yok, oturum
+                               boyunca cihaz sesi */
+        const kod = err?.kod || 'diger';
+        const gecici = kod === 'kota-dakika';
+        dogalDurdurmaRef.current = gecici
+          ? Date.now() + ((err?.saniye || 30) + 2) * 1000
+          : Date.now() + 24 * 60 * 60 * 1000;
+
         setNotice(
           'Doğal ses kullanılamadı (' +
             (err?.message || 'bilinmeyen hata') +
-            '). Cihazının kendi sesiyle okunuyor.'
+            '). ' +
+            (gecici
+              ? 'Birkaç saniye sonra kendiliğinden düzelecek; şimdilik cihazının sesiyle okunuyor.'
+              : 'Cihazının kendi sesiyle okunuyor.')
         );
         speakWithDevice(index, runIdRef.current);
       }
