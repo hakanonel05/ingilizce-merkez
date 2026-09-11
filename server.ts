@@ -46,6 +46,8 @@ interface UserKeys {
   groq?: string;
   transcript?: string;
   libre?: string;
+  /* ElevenLabs: seslendirmenin birincil saglayicisi. */
+  elevenlabs?: string;
 }
 
 const userKeyStore = new AsyncLocalStorage<UserKeys>();
@@ -2241,6 +2243,92 @@ const TTS_VOICES: Record<string, string> = {
   Orus: "Orus",
 };
 
+/* ELEVENLABS SESLERI
+ *
+ * Arayuzdeki alti secenegin her birine AYRI bir ses: ucretsiz hesapta
+ * kullanilabilenleri tek tek denedim (kutuphane sesleri 402 veriyor,
+ * hazir sesler aciktı). Ayni sesi iki secenege baglamak, secicinin
+ * yalanci gorunmesine yol acardi.
+ */
+const ELEVEN_SESLERI: Record<string, string> = {
+  Kore: "EXAVITQu4vr4xnSDxMaL",    // Sarah  — sakin kadin
+  Aoede: "XrExE9yKIg1WjnnlVkGX",   // Matilda — yumusak kadin
+  Leda: "Xb7hH8MSUJpSbSDYk0k2",    // Alice  — genc kadin
+  Puck: "TX3LPaxmHKxFdv7VOQHJ",    // Liam   — canli erkek
+  Charon: "nPczCjzI2devNBz1zQrb",  // Brian  — derin erkek
+  Orus: "JBFqnCBsd6RMkjVDRZzb",    // George — sicak erkek
+};
+
+/* Gemini'de uslubu duz cumleyle anlatiyoruz; ElevenLabs'te karsiligi
+ * sayisal ayarlar:
+ *   stability       dusuk = daha ifadeli, yuksek = daha sabit/monoton
+ *   style           abarti miktari
+ *   speed           okuma hizi
+ */
+const ELEVEN_AYARLARI: Record<string, Record<string, number>> = {
+  /* Uzun metin: ifadeli ama dagilmayan bir anlatim. */
+  hikaye: { stability: 0.45, similarity_boost: 0.8, style: 0.35, speed: 1.0 },
+  /* Ogrencinin taklit edecegi cumle: dogal ritim, hafif yavas. */
+  cumle: { stability: 0.5, similarity_boost: 0.85, style: 0.25, speed: 0.95 },
+  /* Tek kelime: sabit ve net, abarti yok, yavas. */
+  kelime: { stability: 0.75, similarity_boost: 0.9, style: 0.0, speed: 0.8 },
+  /* Sohbet: en ifadeli, normal hiz. */
+  sohbet: { stability: 0.4, similarity_boost: 0.8, style: 0.45, speed: 1.0 },
+};
+
+/**
+ * ElevenLabs ile seslendirir. Basarisizsa null doner ve cagiran Gemini'ye
+ * duser — hata firlatmiyor, cunku bu bir "once bunu dene" adimi.
+ */
+async function elevenlabsSeslendir(
+  metin: string,
+  profilAdi: string,
+  sesAdi: string
+): Promise<{ audio: string; mimeType: string; model: string } | null> {
+  const anahtar = resolveKey("elevenlabs", "ELEVENLABS_API_KEY");
+  if (!anahtar) return null;
+
+  const sesId = ELEVEN_SESLERI[sesAdi] || ELEVEN_SESLERI.Kore;
+  const ayar = ELEVEN_AYARLARI[profilAdi] || ELEVEN_AYARLARI.hikaye;
+
+  try {
+    const res = await fetch(
+      "https://api.elevenlabs.io/v1/text-to-speech/" + sesId,
+      {
+        method: "POST",
+        headers: {
+          "xi-api-key": anahtar,
+          "Content-Type": "application/json",
+          Accept: "audio/mpeg",
+        },
+        body: JSON.stringify({
+          // Flash: v2 Multilingual'in yari fiyati, ucretsiz hakki iki kati,
+          // olcumde daha hizli ve kullanicinin kulagina ayni geliyor.
+          model_id: "eleven_flash_v2_5",
+          text: metin,
+          voice_settings: ayar,
+        }),
+      }
+    );
+    if (!res.ok) {
+      const govde = await res.text();
+      // 401 yetki, 402 ucretli plan gerekiyor, 429 kota. Hepsinde Gemini'ye
+      // dusmek dogru; log yalnizca tani icin.
+      console.warn("ElevenLabs kullanilamadi (" + res.status + "): " + govde.slice(0, 200));
+      return null;
+    }
+    const buf = Buffer.from(await res.arrayBuffer());
+    return {
+      audio: buf.toString("base64"),
+      mimeType: "audio/mpeg",
+      model: "elevenlabs/eleven_flash_v2_5",
+    };
+  } catch (err: any) {
+    console.warn("ElevenLabs istegi basarisiz:", err?.message);
+    return null;
+  }
+}
+
 /* OKUMA PROFILLERI
  * ============================================================================
  * Gemini'nin TTS modeli uslubu SSML ile degil DUZ METINLE aliyor; yonerge ne
@@ -2391,6 +2479,14 @@ app.post("/api/speak", async (req, res) => {
       return res.status(400).json({
         error: `Metin bu profil icin cok uzun (${text.length}/${sinir} karakter).`,
       });
+    }
+
+    // ONCE ELEVENLABS. Ayni cumlede Gemini 4,7 sn / 263 KB WAV, ElevenLabs
+    // Flash 0,7 sn / 43 KB MP3 uretiyor. Basarisiz olursa (kota, yetki,
+    // anahtar yok) sessizce Gemini'ye duşuluyor.
+    const eleven = await elevenlabsSeslendir(text, profilAdi, voice);
+    if (eleven) {
+      return res.json({ ...eleven, voice, profil: profilAdi });
     }
 
     const ai = getGeminiClient();
