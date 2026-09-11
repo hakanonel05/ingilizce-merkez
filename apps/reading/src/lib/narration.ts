@@ -25,7 +25,13 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { onbellegeYaz, onbellektenAl } from '../../../../shared/ses/sesOnbellegi';
-import { kokoroylaHazirla, kokoroyuDurdur, kokoroDurumunuIzle, KokoroDurum } from '../../../../shared/ses/kokoro';
+import {
+  kokoroylaHazirla,
+  kokoroyuDurdur,
+  kokoroDurumunuIzle,
+  kokorodanBekle,
+  KokoroDurum,
+} from '../../../../shared/ses/kokoro';
 import { apiFetch } from '../../../../shared/vocab/userKeys';
 
 export type NarrationVoice = 'Kore' | 'Puck' | 'Charon' | 'Aoede' | 'Leda' | 'Orus';
@@ -397,16 +403,37 @@ export function useNarration(passageId: number, paragraphs: string[]): Narration
         setSource('natural');
         setStatus('playing');
 
-        // Sıradaki paragrafı arkadan indir: paragraf arası sessiz kalmasın.
+        /* SIRADAKİ PARAGRAF
+         *
+         * Paragraf arası sessiz kalmasın diye sıradaki önden hazırlanıyor.
+         * Ama doğrudan ağa gitmiyor: Kokoro tam o sırada aynı paragrafı
+         * üretiyor olabiliyor (canlıda ölçtüm, oluyordu da — çalarken bir
+         * ElevenLabs isteği gidiyordu). Önce ona şans veriliyor.
+         *
+         * Bekleme süresi, çalmakta olan paragrafın kalan süresinden 3 saniye
+         * eksiği: Kokoro yetişirse kotadan hiç yenmiyor, yetişmezse paragraf
+         * bitmeden ağa dönülüyor ve arada sessizlik olmuyor.
+         */
         const nextIndex = index + 1;
         if (nextIndex < list.length) {
-          void fetchParagraphAudio(
-            passageId,
-            nextIndex,
-            list[nextIndex],
-            voice,
-            new AbortController().signal
-          ).catch(() => {
+          void (async () => {
+            const key = cacheKey(passageId, nextIndex, voice);
+            if (await onbellektenAl(key)) return; // Kokoro çoktan bitirmiş
+
+            const kalan = Number.isFinite(audio.duration)
+              ? (audio.duration - audio.currentTime) * 1000 - 3000
+              : 0;
+            if (kalan > 2000 && (await kokorodanBekle(key, kalan))) return;
+
+            if (runId !== runIdRef.current) return; // parça değişmiş
+            await fetchParagraphAudio(
+              passageId,
+              nextIndex,
+              list[nextIndex],
+              voice,
+              new AbortController().signal
+            );
+          })().catch(() => {
             /* ön yükleme başarısızsa sırası gelince tekrar denenir */
           });
         }

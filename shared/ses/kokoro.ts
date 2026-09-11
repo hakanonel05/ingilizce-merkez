@@ -167,6 +167,35 @@ export function kokoroylaHazirla(
   })();
 }
 
+/**
+ * Bir paragrafın Kokoro'dan çıkmasını sınırlı süre bekler.
+ *
+ * NEDEN GEREKLİ: çalma yolu, bir paragraf çalarken sıradakini önden
+ * indiriyor ki paragraf arası sessiz kalmasın. Ama Kokoro tam o sırada aynı
+ * paragrafı üretiyor olabiliyor — ölçtüm, canlıda oluyor da. O anda
+ * ElevenLabs'e gitmek hem gereksiz hem de kullanıcının kotasından yiyor.
+ *
+ * Burada kuyruktaki iş bitene kadar (en fazla verilen süre) bekleniyor.
+ * Kokoro yetişmezse null dönüyor ve çalma yolu normal şekilde ağa gidiyor,
+ * yani paragraf arasında bekleme riski yok.
+ *
+ * Kokoro hiç çalışmıyorsa (desteklenmiyor, kapalı, sıra boş) anında null
+ * dönüyor — boşuna bekletmiyor.
+ */
+export function kokorodanBekle(anahtar: string, enFazlaMs: number): Promise<Blob | null> {
+  if (!isci || kalanIs === 0) return Promise.resolve(null);
+  return new Promise((coz) => {
+    const sayac = setTimeout(() => {
+      bekleyen.delete(anahtar);
+      coz(null);
+    }, enFazlaMs);
+    bekleyen.set(anahtar, (blob) => {
+      clearTimeout(sayac);
+      coz(blob);
+    });
+  });
+}
+
 /** Başka bir parçaya geçilince bekleyen işleri bırak. */
 export function kokoroyuDurdur(): void {
   isci?.postMessage({ tip: 'iptal' });
