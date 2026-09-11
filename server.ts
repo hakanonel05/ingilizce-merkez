@@ -74,6 +74,7 @@ app.use((req, _res, next) => {
       groq: readKeyHeader(req, 'x-user-groq-key'),
       transcript: readKeyHeader(req, 'x-user-transcript-token'),
       libre: readKeyHeader(req, 'x-user-libretranslate-key'),
+      elevenlabs: readKeyHeader(req, 'x-user-elevenlabs-key'),
     },
     () => next()
   );
@@ -2457,6 +2458,51 @@ function sampleRateFromMime(mime: string): number {
   const rate = match ? parseInt(match[1], 10) : NaN;
   return Number.isFinite(rate) && rate > 0 ? rate : 24000;
 }
+
+/**
+ * ElevenLabs'in kalan kotasi. Ayarlar ekrani bunu gosteriyor.
+ *
+ * Anahtarin kendisi ASLA disari verilmiyor; yalnizca sayilar.
+ * Anahtarda "user_read" izni yoksa ElevenLabs 401 doner — o durumda
+ * kullaniciya nedenini soyluyoruz, sessizce bos birakmiyoruz.
+ */
+app.get("/api/ses-kotasi", async (req, res) => {
+  const anahtar = resolveKey("elevenlabs", "ELEVENLABS_API_KEY");
+  if (!anahtar) return res.json({ var: false });
+
+  try {
+    const r = await fetch("https://api.elevenlabs.io/v1/user/subscription", {
+      headers: { "xi-api-key": anahtar },
+    });
+    if (!r.ok) {
+      const yetkiEksik = r.status === 401;
+      return res.json({
+        var: true,
+        hata: yetkiEksik
+          ? "Anahtarin kotayi okuma izni (user_read) yok. Seslendirme calisiyor."
+          : "Kota bilgisi alinamadi (" + r.status + ").",
+      });
+    }
+    const d: any = await r.json();
+    const hak = d.character_limit ?? 0;
+    const kullanilan = d.character_count ?? 0;
+    return res.json({
+      var: true,
+      katman: d.tier || "free",
+      hak,
+      kullanilan,
+      kalan: Math.max(0, hak - kullanilan),
+      /* Flash karakter basina YARIM kredi harciyor; kullanicinin sorusu
+         "kac karakter dinleyebilirim", o yuzden cevirisi de gidiyor. */
+      kalanKarakter: Math.max(0, hak - kullanilan) * 2,
+      yenilenme: d.next_character_count_reset_unix
+        ? d.next_character_count_reset_unix * 1000
+        : null,
+    });
+  } catch (err: any) {
+    return res.json({ var: true, hata: "Kota bilgisi alinamadi." });
+  }
+});
 
 app.post("/api/speak", async (req, res) => {
   try {

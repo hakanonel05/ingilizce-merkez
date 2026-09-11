@@ -8,7 +8,21 @@ import {
   clearUserKeys,
   fetchServerKeyStatus,
   ServerKeyStatus,
+  apiFetch,
 } from './userKeys';
+
+/** /api/ses-kotasi yaniti. Anahtarin kendisi hicbir zaman gelmiyor. */
+interface SesKotasi {
+  var: boolean;
+  hata?: string;
+  katman?: string;
+  hak?: number;
+  kullanilan?: number;
+  kalan?: number;
+  /** Flash karakter basina yarim kredi harciyor; kalan kredinin iki kati. */
+  kalanKarakter?: number;
+  yenilenme?: number | null;
+}
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -50,6 +64,14 @@ const KEY_FIELDS: KeyFieldSpec[] = [
     urlLabel: 'aistudio.google.com/apikey',
   },
   {
+    field: 'elevenlabs',
+    label: 'ElevenLabs',
+    hint: 'Seslendirmenin birincil sağlayıcısı — okuma parçaları ve katmanlardaki cümleler bununla okunuyor. Girmezsen Gemini devreye girer, ses yine çıkar.',
+    url: 'https://elevenlabs.io/app/settings/api-keys',
+    urlLabel: 'elevenlabs.io → API Keys',
+    optional: true,
+  },
+  {
     field: 'groq',
     label: 'Groq',
     hint: 'Açık kaynak modeller (GPT-OSS, Qwen) buradan geliyor — hikaye üreteci varsayılan olarak bunu kullanıyor. Ayrıca Gemini kotası dolduğunda yedeğe geçer.',
@@ -83,6 +105,26 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [visible, setVisible] = useState<Record<string, boolean>>({});
   const [serverStatus, setServerStatus] = useState<ServerKeyStatus | null>(null);
   const [savedMsg, setSavedMsg] = useState('');
+
+  /* Kalan kota yalnizca ayarlar ACIKKEN cekiliyor: her sayfa acilisinda
+     ElevenLabs'e istek atmanin anlami yok. */
+  const [kota, setKota] = useState<SesKotasi | null>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    let iptal = false;
+    (async () => {
+      try {
+        const res = await apiFetch('/api/ses-kotasi');
+        const veri = await res.json();
+        if (!iptal) setKota(veri);
+      } catch {
+        /* Kota gosterilemezse ayarlar ekrani yine calisir. */
+        if (!iptal) setKota(null);
+      }
+    })();
+    return () => { iptal = true; };
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -195,6 +237,41 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     {isVisible ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                   </button>
                 </div>
+
+                {field === 'elevenlabs' && kota?.var && (
+                  <div className="px-2.5 py-2 border border-[var(--hairline)] bg-[var(--paper)] text-[11px] leading-relaxed text-[var(--ink-2)]">
+                    {kota.hata ? (
+                      kota.hata
+                    ) : (
+                      <>
+                        Bu ay{' '}
+                        <strong className="text-[var(--ink)]">
+                          {(kota.kalanKarakter ?? 0).toLocaleString('tr')} karakter
+                        </strong>{' '}
+                        kaldı
+                        {typeof kota.hak === 'number' && typeof kota.kullanilan === 'number' && (
+                          <> ({kota.kullanilan.toLocaleString('tr')}/{kota.hak.toLocaleString('tr')} kredi)</>
+                        )}
+                        {kota.yenilenme && (
+                          <>
+                            {' · '}
+                            <strong className="text-[var(--ink)]">
+                              {new Date(kota.yenilenme).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' })}
+                            </strong>
+                            {' tarihinde yenilenir'}
+                          </>
+                        )}
+                        {'. '}
+                        {/* Kredi degil KARAKTER yaziyoruz: kullanicinin sorusu "kac cumle
+                            dinleyebilirim". ElevenLabs kredi sayiyor, Flash modeli karakter
+                            basina yarim kredi harciyor. */}
+                        <span className="text-[var(--ink-3)]">
+                          Bir okuma paragrafı ortalama 440 karakter.
+                        </span>
+                      </>
+                    )}
+                  </div>
+                )}
 
                 <p className="text-[11px] leading-relaxed text-[var(--ink-3)]">
                   {hint}{' '}

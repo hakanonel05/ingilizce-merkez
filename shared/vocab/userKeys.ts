@@ -25,6 +25,8 @@ export interface UserApiKeys {
   transcript: string;
   /** LibreTranslate - yapay zeka yerine kullanilabilen ceviri servisi. */
   libre: string;
+  /** ElevenLabs - seslendirmenin birincil saglayicisi. */
+  elevenlabs: string;
 }
 
 export const EMPTY_KEYS: UserApiKeys = {
@@ -32,6 +34,7 @@ export const EMPTY_KEYS: UserApiKeys = {
   groq: '',
   transcript: '',
   libre: '',
+  elevenlabs: '',
 };
 
 /** Anahtar alanlarinin gonderilecegi HTTP basliklari (sunucu ile birebir ayni). */
@@ -40,6 +43,7 @@ const KEY_HEADERS: Record<keyof UserApiKeys, string> = {
   groq: 'x-user-groq-key',
   transcript: 'x-user-transcript-token',
   libre: 'x-user-libretranslate-key',
+  elevenlabs: 'x-user-elevenlabs-key',
 };
 
 export function loadUserKeys(): UserApiKeys {
@@ -54,6 +58,7 @@ export function loadUserKeys(): UserApiKeys {
       groq: typeof parsed.groq === 'string' ? parsed.groq : '',
       transcript: typeof parsed.transcript === 'string' ? parsed.transcript : '',
       libre: typeof parsed.libre === 'string' ? parsed.libre : '',
+      elevenlabs: typeof parsed.elevenlabs === 'string' ? parsed.elevenlabs : '',
     };
   } catch {
     return { ...EMPTY_KEYS };
@@ -67,6 +72,7 @@ export function saveUserKeys(keys: UserApiKeys): void {
       groq: keys.groq.trim(),
       transcript: keys.transcript.trim(),
       libre: keys.libre.trim(),
+      elevenlabs: keys.elevenlabs.trim(),
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(trimmed));
   } catch (e) {
