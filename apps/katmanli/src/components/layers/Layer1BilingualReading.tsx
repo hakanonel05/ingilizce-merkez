@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { oku, sesiDurdur } from '../../lib/seslendirme';
 import { VideoLesson, SentencePair } from '../../types';
 import { extractYouTubeId } from '../../lib/youtube';
 import { SelectionToCard } from '../vocab/SelectionToCard';
@@ -292,10 +293,8 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
   const jumpToSentenceInVideo = (pair: SentencePair) => {
     const start = getStartSeconds(pair);
 
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      setPlayingSentenceId(null);
-    }
+    sesiDurdur();
+    setPlayingSentenceId(null);
 
     if (start === null) {
       // Zaman bilgisi yoksa videoyu oynatmak yerine sadece seslendir
@@ -349,21 +348,18 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
   });
 
   const speakText = (sentenceId: number, text: string) => {
-    if ('speechSynthesis' in window) {
-      if (playingSentenceId === sentenceId) {
-        window.speechSynthesis.cancel();
-        setPlayingSentenceId(null);
-        return;
-      }
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'en-US';
-      utterance.rate = 0.9;
-      utterance.onstart = () => setPlayingSentenceId(sentenceId);
-      utterance.onend = () => setPlayingSentenceId(null);
-      utterance.onerror = () => setPlayingSentenceId(null);
-      window.speechSynthesis.speak(utterance);
+    /* Aynı cümleye ikinci kez basmak durduruyor. */
+    if (playingSentenceId === sentenceId) {
+      sesiDurdur();
+      setPlayingSentenceId(null);
+      return;
     }
+    setPlayingSentenceId(sentenceId);
+    void oku(text, { profil: 'cumle', hiz: 0.95 }).finally(() => {
+      /* Bu arada başka bir cümleye basılmış olabilir; yalnızca hâlâ bu
+         cümle çalıyorsa göstergeyi söndür. */
+      setPlayingSentenceId((o) => (o === sentenceId ? null : o));
+    });
   };
 
   return (

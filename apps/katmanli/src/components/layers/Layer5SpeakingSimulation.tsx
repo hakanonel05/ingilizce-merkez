@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { oku, sesiDurdur } from '../../lib/seslendirme';
 import { VideoLesson } from '../../types';
 import { apiFetch } from '../../lib/userKeys';
 import { Mic, MicOff, Volume2, Send, Sparkles, CheckCircle, Loader2, Award, RefreshCw, AlertCircle, Repeat, Plus, Minus } from 'lucide-react';
@@ -72,21 +73,15 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
   }, []);
 
   const speakText = (text: string) => {
-    if ('speechSynthesis' in window) {
-      if (speakingText === text && window.speechSynthesis.speaking) {
-        window.speechSynthesis.cancel();
-        setSpeakingText(null);
-        return;
-      }
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'en-US';
-      utterance.rate = 0.9;
-      utterance.onstart = () => setSpeakingText(text);
-      utterance.onend = () => setSpeakingText(null);
-      utterance.onerror = () => setSpeakingText(null);
-      window.speechSynthesis.speak(utterance);
+    if (speakingText === text) {
+      sesiDurdur();
+      setSpeakingText(null);
+      return;
     }
+    setSpeakingText(text);
+    void oku(text, { profil: 'sohbet' }).finally(() => {
+      setSpeakingText((o) => (o === text ? null : o));
+    });
   };
 
   const startSimulation = async () => {

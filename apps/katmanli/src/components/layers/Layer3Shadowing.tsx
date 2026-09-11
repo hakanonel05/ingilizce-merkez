@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
+import { oku } from '../../lib/seslendirme';
 import { VideoLesson } from '../../types';
 import { extractYouTubeId } from '../../lib/youtube';
 import { useYouTubePlayer, getSentenceStart } from '../../lib/useYouTubePlayer';
@@ -77,13 +78,11 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
     seekTo(bounds.start, true);
   };
 
+  /* Gölgeleme doğal sesten en çok yararlanan katman: öğrenci duyduğu
+     ritmi taklit ediyor, robot ses yanlış ritim öğretiyor. */
   const speakSentence = () => {
-    if (!current || !('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(current.en);
-    u.lang = 'en-US';
-    u.rate = 0.85;
-    window.speechSynthesis.speak(u);
+    if (!current) return;
+    void oku(current.en, { profil: 'cumle', hiz: 0.9 });
   };
 
   const refreshList = async () => {

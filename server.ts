@@ -2201,8 +2201,12 @@ BICIM KURALLARI:
    okunan paragrafin vurgulanmasini sagliyor.
    ============================================================ */
 
-/** Gemini'nin TTS modelleri; ilki calismazsa sonraki denenir. */
+/** Gemini'nin TTS modelleri; ilki calismazsa sonraki denenir.
+ *
+ * 3.1 basta: yonergeyi (tempo, vurgu, duraklama) belirgin sekilde daha iyi
+ * uyguluyor. Hesapta yoksa asagidaki dongu kendiliginden 2.5'e dusuyor. */
 const GEMINI_TTS_MODELS = [
+  "gemini-3.1-flash-tts-preview",
   "gemini-2.5-flash-preview-tts",
   "gemini-2.5-pro-preview-tts",
 ];
@@ -2219,6 +2223,99 @@ const TTS_VOICES: Record<string, string> = {
   Leda: "Leda",
   Orus: "Orus",
 };
+
+/* OKUMA PROFILLERI
+ * ============================================================================
+ * Gemini'nin TTS modeli uslubu SSML ile degil DUZ METINLE aliyor; yonerge ne
+ * kadar belirginse okuma o kadar dogal cikiyor. Google'in onerdigi bicim:
+ * rol tanimi, yonetmen notu, sahne, sonra metin.
+ *
+ * Neden tek yonerge yetmiyordu: ayni "sicak anlatici" tonu bes paragrafli bir
+ * hikayede dogru, tek bir kelimenin telaffuzunda yanlis. Kelime icin yavas ve
+ * abartili net, sohbette hizli ve gundelik olmali. Her ekran kendi profilini
+ * istiyor.
+ *
+ * SES SECIMI: profilin varsayilan sesi var ama istek kendi sesini gonderebilir.
+ */
+type OkumaProfili = {
+  ses: string;
+  rol: string;
+  not: string;
+  sahne: string;
+  baglam: string;
+};
+
+const OKUMA_PROFILLERI: Record<string, OkumaProfili> = {
+  /* Reading: uzun metin, paragraf paragraf geliyor. */
+  hikaye: {
+    ses: "Aoede",
+    rol: "A warm, experienced audiobook narrator reading to an adult English learner.",
+    not: "Style: Warm, engaged storytelling. Pace: Calm and unhurried. Accent: American (General).",
+    sahne: "A quiet room, reading aloud to one attentive listener.",
+    baglam:
+      "Let the punctuation breathe: a real pause at each comma, a longer one at " +
+      "each full stop. Lift the voice on the words that carry the meaning. Never " +
+      "rush the last word of a sentence.",
+  },
+
+  /* Katman 1 ve 3: tek cumle, ogrenci tekrar edecek. */
+  cumle: {
+    ses: "Kore",
+    rol: "A patient English teacher modelling one sentence for a learner to repeat.",
+    not: "Style: Clear and encouraging. Pace: Slightly slower than conversational, but never robotic. Accent: American (General).",
+    sahne: "A one-to-one lesson; the learner will imitate this sentence immediately after.",
+    baglam:
+      "Keep the natural sentence rhythm and stress - this is what the learner " +
+      "copies. Stress the content words, keep function words light. Pause " +
+      "clearly at commas. Do not spell out or over-enunciate; it must still " +
+      "sound like a person talking.",
+  },
+
+  /* Katman 2: tek kelime ya da kisa obek, telaffuz calismasi. */
+  kelime: {
+    ses: "Charon",
+    rol: "A pronunciation coach saying a single word for a learner to study.",
+    not: "Style: Precise and neutral. Pace: Slow and deliberate. Accent: American (General).",
+    sahne: "A pronunciation drill; only this word matters.",
+    baglam:
+      "Articulate every sound fully, especially final consonants. Place the " +
+      "word stress clearly on the correct syllable. Say it once, calmly, with " +
+      "no surrounding words.",
+  },
+
+  /* Katman 5: karsilikli konusma. */
+  sohbet: {
+    ses: "Puck",
+    rol: "A friendly native English speaker chatting with someone practising the language.",
+    not: "Style: Relaxed and conversational. Pace: Natural. Accent: American (General).",
+    sahne: "An informal conversation; the reply should sound spontaneous, not read.",
+    baglam:
+      "Speak as if the thought just occurred to you - small natural hesitations " +
+      "are fine. Keep it friendly and unforced.",
+  },
+};
+
+/** Google'in onerdigi yapilandirilmis yonergeyi kurar. */
+function okumaYonergesi(profil: OkumaProfili, metin: string): string {
+  return [
+    "Read the following transcript based on the audio profile and director's note.",
+    "",
+    "# Audio Profile",
+    profil.rol,
+    "",
+    "# Director's note",
+    profil.not,
+    "",
+    "## Scene:",
+    profil.sahne,
+    "",
+    "## Sample Context:",
+    profil.baglam,
+    "",
+    "## Transcript:",
+    metin,
+  ].join("\n");
+}
 
 /**
  * Ham PCM'i WAV'a cevirir.
@@ -2259,23 +2356,31 @@ function sampleRateFromMime(mime: string): number {
 app.post("/api/speak", async (req, res) => {
   try {
     const text = String(req.body?.text || "").trim();
-    const voice = TTS_VOICES[String(req.body?.voice || "")] || "Kore";
+
+    // Profil, metnin NASIL okunacagini belirliyor. Gonderilmezse "hikaye":
+    // Reading tarafi bugunku davranisini koruyor, eski istemci kirilmiyor.
+    const profilAdi = String(req.body?.profil || "hikaye");
+    const profil = OKUMA_PROFILLERI[profilAdi] || OKUMA_PROFILLERI.hikaye;
+
+    // Ses: istek kendi sesini secebilir, yoksa profilin varsayilani.
+    const voice = TTS_VOICES[String(req.body?.voice || "")] || profil.ses;
 
     if (!text) return res.status(400).json({ error: "Seslendirilecek metin gerekli." });
 
-    // Tek paragraf sinirini asan metin fonksiyon suresini zorlar.
-    if (text.length > 3000) {
-      return res.status(400).json({ error: "Metin tek seferde seslendirilemeyecek kadar uzun." });
+    // Uzunluk siniri profile gore. Tek kelime profiline bir paragraf
+    // dusmesi hatadir; sessizce seslendirmek yerine soylemek daha iyi.
+    const sinir = profilAdi === "kelime" ? 120 : profilAdi === "cumle" ? 600 : 3000;
+    if (text.length > sinir) {
+      return res.status(400).json({
+        error: `Metin bu profil icin cok uzun (${text.length}/${sinir} karakter).`,
+      });
     }
 
     const ai = getGeminiClient();
 
-    // Modele nasil OKUYACAGINI soyluyoruz: TTS modeli metnin basindaki
-    // yonergeyi seslendirmiyor, uslup olarak uyguluyor.
-    const prompt =
-      "Read the following story aloud in a warm, natural storytelling voice, " +
-      "at a calm pace suitable for an English learner. Do not add any words " +
-      "of your own:\n\n" + text;
+    // Modele nasil OKUYACAGINI soyluyoruz: TTS modeli yonergeyi
+    // seslendirmiyor, uslup olarak uyguluyor.
+    const prompt = okumaYonergesi(profil, text);
 
     let lastError: any = null;
 
@@ -2315,6 +2420,7 @@ app.post("/api/speak", async (req, res) => {
           mimeType: isRawPcm ? "audio/wav" : mime || "audio/wav",
           voice,
           model,
+          profil: profilAdi,
         });
       } catch (err) {
         lastError = err;

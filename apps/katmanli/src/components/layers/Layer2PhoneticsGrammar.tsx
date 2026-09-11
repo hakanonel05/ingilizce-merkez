@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { oku, sesiDurdur } from '../../lib/seslendirme';
 import { VideoLesson, VocabularyItem, GrammarRuleItem } from '../../types';
 import { apiFetch } from '../../lib/userKeys';
 import { Sparkles, Volume2, BookOpen, Lightbulb, Loader2, RefreshCw, AlertCircle } from 'lucide-react';
@@ -36,21 +37,16 @@ export const Layer2PhoneticsGrammar: React.FC<Layer2PhoneticsGrammarProps> = ({
   }, [lesson.id]);
 
   const speakWord = (text: string) => {
-    if ('speechSynthesis' in window) {
-      if (speakingText === text && window.speechSynthesis.speaking) {
-        window.speechSynthesis.cancel();
-        setSpeakingText(null);
-        return;
-      }
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'en-US';
-      utterance.rate = 0.85;
-      utterance.onstart = () => setSpeakingText(text);
-      utterance.onend = () => setSpeakingText(null);
-      utterance.onerror = () => setSpeakingText(null);
-      window.speechSynthesis.speak(utterance);
+    if (speakingText === text) {
+      sesiDurdur();
+      setSpeakingText(null);
+      return;
     }
+    setSpeakingText(text);
+    /* "kelime" profili: yavaş ve abartısız net, hece vurgusu doğru yerde. */
+    void oku(text, { profil: 'kelime' }).finally(() => {
+      setSpeakingText((o) => (o === text ? null : o));
+    });
   };
 
   const handleGenerateAnalysis = async () => {
