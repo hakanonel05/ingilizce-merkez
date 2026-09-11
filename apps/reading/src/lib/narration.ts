@@ -120,8 +120,12 @@ export function warmUpDeviceVoices(): void {
    Birkaç megabaytlık tarayıcı deposu bunun yanında çok ucuz.
    ===================================================================== */
 
+/* Anahtarin basindaki surum, uretim ayari degisince eski kayitlarin
+   sessizce calinmasini onluyor. Kokoro'nun okuma hizi 1.0'dan 0.9'a
+   indirildiginde onbellekteki hizli kayitlar gecersiz kaldi; surumu
+   artirmak bunlari bir defada devre disi birakiyor. */
 function cacheKey(passageId: number, index: number, voice: string): string {
-  return `ses|${passageId}|${index}|${voice}`;
+  return `ses2|${passageId}|${index}|${voice}`;
 }
 
 /** Bir paragrafın sesini üretir ve çalınabilir bir blob adresi döndürür. */

@@ -20,7 +20,7 @@ import type { KokoroTTS as KokoroTip } from 'kokoro-js';
 
 type Istek =
   | { tip: 'hazirla' }
-  | { tip: 'uret'; anahtar: string; metin: string; ses: string }
+  | { tip: 'uret'; anahtar: string; metin: string; ses: string; hiz?: number }
   | { tip: 'iptal' };
 
 type Yanit =
@@ -37,7 +37,7 @@ let yukleniyor: Promise<KokoroTip> | null = null;
 let iptalEdildi = false;
 
 /** Sıraya alınan işler; teker teker işleniyor. */
-const kuyruk: { anahtar: string; metin: string; ses: string }[] = [];
+const kuyruk: { anahtar: string; metin: string; ses: string; hiz: number }[] = [];
 let calisiyor = false;
 
 async function modeliYukle(): Promise<KokoroTip> {
@@ -79,7 +79,7 @@ async function kuyruguIsle(): Promise<void> {
     while (kuyruk.length && !iptalEdildi) {
       const is = kuyruk.shift()!;
       try {
-        const audio = await (model as any).generate(is.metin, { voice: is.ses });
+        const audio = await (model as any).generate(is.metin, { voice: is.ses, speed: is.hiz });
         /* WAV'ı ArrayBuffer olarak AKTARIYORUZ (kopyalamıyoruz): bir
            paragraf ~1,3 MB, her seferinde kopyalamak boşuna bellek. */
         const blob: Blob = audio.toBlob
@@ -114,7 +114,7 @@ self.onmessage = (e: MessageEvent<Istek>) => {
   }
   if (m.tip === 'uret') {
     iptalEdildi = false;
-    kuyruk.push({ anahtar: m.anahtar, metin: m.metin, ses: m.ses });
+    kuyruk.push({ anahtar: m.anahtar, metin: m.metin, ses: m.ses, hiz: m.hiz ?? 1 });
     void kuyruguIsle();
   }
 };

@@ -36,7 +36,18 @@ const SES_ESLESME: Record<string, string> = {
 /* Kokoro'nun erkek seslerinin hepsi C+ ve altı; en iyi sesler kadın
    (Heart A, Bella A-) ve İngiliz aksanlı Emma (B-). */
 
+/* OKUMA HIZI
+ *
+ * Kokoro varsayilan 1.0 hizda gercek bir anlaticidan daha tempolu okuyor;
+ * kullanici canli testte "biraz hizli" dedi. 0.9 hem ElevenLabs'in okuma
+ * profiline yaklasiyor hem de yabanci dil calisan biri icin takip edilebilir
+ * kaliyor. Arayuzdeki 0,75x-1,5x dugmeleri bunun uzerine calma hizi olarak
+ * biniyor, yani isteyen yine hizlandirabiliyor.
+ */
+const OKUMA_HIZI = 0.9;
+
 let isci: Worker | null = null;
+
 let bekleyen = new Map<string, (blob: Blob | null) => void>();
 let dinleyiciler = new Set<(d: KokoroDurum, ayrinti?: { yuzde?: number; kalan?: number }) => void>();
 let kalanIs = 0;
@@ -142,7 +153,7 @@ export function kokoroylaHazirla(
     kalanIs += yapilacak.length;
     durumBildir('uretiliyor', { kalan: kalanIs });
     for (const is of yapilacak) {
-      w.postMessage({ tip: 'uret', anahtar: is.anahtar, metin: is.metin, ses });
+      w.postMessage({ tip: 'uret', anahtar: is.anahtar, metin: is.metin, ses, hiz: OKUMA_HIZI });
     }
   })();
 }

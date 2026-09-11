@@ -2,7 +2,9 @@
 // Lexis Trainer — Service Worker (v2 - Robust MIME & Fallback)
 // ============================================================
 
-const CACHE_NAME = 'lexis-trainer-v2';
+/* v3: v2'de Kokoro modelinin 88 MB'lik gereksiz kopyasi vardi. Surum
+   artirilinca eski onbellek silinip yerine temizi kuruluyor. */
+const CACHE_NAME = 'lexis-trainer-v3';
 
 // Başlangıçta önbelleğe alınacak temel statik dosyalar
 const APP_SHELL = [
@@ -75,6 +77,24 @@ self.addEventListener('fetch', (event) => {
 
   // 1. API veya kendi sunucumuz dışındaki istekleri pas geç
   if (url.pathname.startsWith('/api/') || request.method !== 'GET') {
+    return;
+  }
+
+  /*
+   * 1b. SES MODELİ DOSYALARINI PAS GEÇ.
+   *
+   * Kokoro'nun modeli (~88 MB), onnxruntime'ın WASM'i (~21 MB) ve ses
+   * dosyaları transformers.js tarafından ZATEN kendi Cache API deposunda
+   * tutuluyor. Burada ikinci bir kopya almak hiçbir şey kazandırmıyor:
+   * canlı sitede ölçtüm, aynı 88 MB iki ayrı önbellekte duruyordu ve
+   * toplam 200 MB'a çıkmıştı.
+   *
+   * Üstelik zararlı: tarayıcının depolama kotası dolunca önbellekler
+   * topluca siliniyor, yani işe yarayan kopya da gidiyor.
+   */
+  if (
+    /huggingface\.co|\/onnx\/|\.onnx($|\?)|ort-wasm.*\.wasm|\/voices\/.*\.bin/i.test(url.href)
+  ) {
     return;
   }
 
