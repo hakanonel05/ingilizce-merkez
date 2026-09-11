@@ -5,6 +5,12 @@ import { defineConfig } from 'vite';
 
 // Reading (Lexis Trainer) -> sitenin KÖKÜ:  /
 export default defineConfig({
+  /* Kokoro ses uretimi ayri bir Worker'da calisiyor ve o worker kokoro-js'i
+     DINAMIK import ediyor (buyuk bir kutuphane, ilk acilista inmesin diye).
+     Vite'in varsayilan worker bicimi IIFE ve kod bolme desteklemiyor:
+     derleme "UMD and IIFE output formats are not supported for
+     code-splitting builds" ile duruyordu. ES modulu bunu cozuyor. */
+  worker: { format: "es" },
   root: path.resolve(__dirname, 'apps/reading'),
   base: '/',
   envDir: __dirname,

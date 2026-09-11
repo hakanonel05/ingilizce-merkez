@@ -25,6 +25,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { onbellegeYaz, onbellektenAl } from '../../../../shared/ses/sesOnbellegi';
+import { kokoroylaHazirla, kokoroyuDurdur, kokoroDurumunuIzle, KokoroDurum } from '../../../../shared/ses/kokoro';
 import { apiFetch } from '../../../../shared/vocab/userKeys';
 
 export type NarrationVoice = 'Kore' | 'Puck' | 'Charon' | 'Aoede' | 'Leda' | 'Orus';
@@ -177,6 +178,8 @@ export interface Narration {
   error: string | null;
   /** Doğal ses alınamadığında bir kez gösterilen açıklama. */
   notice: string | null;
+  /** Kokoro'nun arka plan hazırlığı: durum ve kalan paragraf sayısı. */
+  kokoro: { durum: KokoroDurum; kalan?: number; yuzde?: number };
   play: (fromIndex?: number) => void;
   pause: () => void;
   stop: () => void;
@@ -198,6 +201,7 @@ export function useNarration(passageId: number, paragraphs: string[]): Narration
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
 
+  const voiceRef = useRef<NarrationVoice>('Kore');
   const [voice, setVoiceState] = useState<NarrationVoice>(() => {
     const saved = localStorage.getItem(VOICE_PREF_KEY) as NarrationVoice | null;
     return saved && NARRATION_VOICES.some(v => v.id === saved) ? saved : 'Kore';
@@ -215,12 +219,44 @@ export function useNarration(passageId: number, paragraphs: string[]): Narration
      boyunca cihaz sesine düşülüyordu. Ama hataların çoğu geçici —
      dakikalık limit ~20 saniyede açılıyor. Kullanıcı bir paragrafta
      takılıp sonraki on paragrafı robot sesiyle dinliyordu. */
+  voiceRef.current = voice;
+
   const dogalDurdurmaRef = useRef(0);
   /** Kullanıcı durdurduktan sonra geciken bir isteğin sesi çalmasın. */
   const runIdRef = useRef(0);
 
   const paragraphsRef = useRef(paragraphs);
   paragraphsRef.current = paragraphs;
+
+  /* ARKA PLANDA HAZIRLAMA
+   *
+   * Parça açıldığı anda Kokoro bütün paragrafları üretmeye başlıyor —
+   * kullanıcı metni okurken, kelimelere bakarken, soruları çözerken. Play'e
+   * basıldığında ses hazır oluyor ve ElevenLabs kotasından hiç yenmiyor.
+   *
+   * Ayrı bir iş parçacığında çalışıyor; sayfa donmuyor. Önbellekte zaten
+   * olan paragraflar atlanıyor, yani ikinci kez açılan parça iş üretmiyor.
+   */
+  const [kokoro, setKokoro] = useState<{ durum: KokoroDurum; kalan?: number; yuzde?: number }>({
+    durum: 'kapali',
+  });
+
+  useEffect(() => {
+    return kokoroDurumunuIzle((durum, ayrinti) =>
+      setKokoro({ durum, kalan: ayrinti?.kalan, yuzde: ayrinti?.yuzde })
+    );
+  }, []);
+
+  useEffect(() => {
+    if (!paragraphs.length) return;
+    kokoroylaHazirla((i) => cacheKey(passageId, i, voiceRef.current), paragraphs, voiceRef.current);
+    return () => kokoroyuDurdur();
+    /* voice bilerek bagimlilikta DEGIL: ses degistirilince tum parcayi
+       yeniden uretmek dakikalar suruyor ve kullanici genelde sesi
+       dinlemeye basladiktan sonra degistiriyor. O durumda normal yol
+       (ElevenLabs) devreye giriyor. */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [passageId, paragraphs.length]);
 
   /**
    * playFrom kendi kendini cagiriyor (bir paragraf bitince sonraki).
@@ -464,6 +500,8 @@ export function useNarration(passageId: number, paragraphs: string[]): Narration
     speed,
     error,
     notice,
+    /** Arka plan ses hazırlığı: ekranda "hazırlanıyor" göstermek için. */
+    kokoro,
     play,
     pause,
     stop,
