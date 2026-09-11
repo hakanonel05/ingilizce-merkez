@@ -1,4 +1,5 @@
 import { apiFetch } from './userKeys';
+import { onbellegeYaz, onbellektenAl } from '../../../../shared/ses/sesOnbellegi';
 
 /* DOĞAL SESLENDİRME — katmanların ortak yardımcısı
  * ============================================================================
@@ -19,66 +20,18 @@ import { apiFetch } from './userKeys';
  *
  * ÖNBELLEK — bunun asıl sebebi para. Gölgeleme katmanında aynı cümle arka
  * arkaya onlarca kez dinleniyor; her seferinde yeniden üretmek her seferinde
- * yeniden faturalanmak demek. Üretilen ses hem bellekte hem IndexedDB'de
- * saklanıyor, aynı metin+ses+profil bir daha sunucuya gitmiyor.
+ * yeniden faturalanmak demek. Üretilen ses shared/ses/sesOnbellegi üzerinden
+ * tarayıcıda kalıcı saklanıyor; aynı metin+ses+profil bir daha sunucuya
+ * gitmiyor — sayfa yenilense de, ertesi gün açılsa da.
  */
 
 export type OkumaProfili = 'hikaye' | 'cumle' | 'kelime' | 'sohbet';
 
-/** Bellek içi önbellek: aynı sekmede anında. */
-const bellek = new Map<string, string>();
-
 const anahtar = (metin: string, profil: OkumaProfili, ses?: string) =>
   `${profil}|${ses || '-'}|${metin}`;
 
-/* ---------- IndexedDB: sekme kapansa da kalsın ---------- */
-
-const DB_ADI = 'katmanli-ses';
-const DEPO = 'sesler';
-let dbSozu: Promise<IDBDatabase | null> | null = null;
-
-function db(): Promise<IDBDatabase | null> {
-  if (dbSozu) return dbSozu;
-  dbSozu = new Promise((coz) => {
-    try {
-      const istek = indexedDB.open(DB_ADI, 1);
-      istek.onupgradeneeded = () => {
-        const d = istek.result;
-        if (!d.objectStoreNames.contains(DEPO)) d.createObjectStore(DEPO);
-      };
-      istek.onsuccess = () => coz(istek.result);
-      istek.onerror = () => coz(null);
-    } catch {
-      /* Gizli sekmede ya da depolama kapalıysa önbelleksiz devam. */
-      coz(null);
-    }
-  });
-  return dbSozu;
-}
-
-async function diskteBul(k: string): Promise<Blob | null> {
-  const d = await db();
-  if (!d) return null;
-  return new Promise((coz) => {
-    try {
-      const istek = d.transaction(DEPO, 'readonly').objectStore(DEPO).get(k);
-      istek.onsuccess = () => coz(istek.result || null);
-      istek.onerror = () => coz(null);
-    } catch {
-      coz(null);
-    }
-  });
-}
-
-async function diskeYaz(k: string, blob: Blob): Promise<void> {
-  const d = await db();
-  if (!d) return;
-  try {
-    d.transaction(DEPO, 'readwrite').objectStore(DEPO).put(blob, k);
-  } catch {
-    /* Kota dolduysa önbelleksiz devam — ses yine çalışıyor. */
-  }
-}
+/* Kalıcı önbellek ortak modülde: reading uygulaması da aynısını kullanıyor,
+   iki ayrı kopya tutmanın anlamı yok. */
 
 /* ---------- tarayıcı sesi (yedek) ---------- */
 
@@ -111,15 +64,8 @@ async function sesAdresi(
 ): Promise<string> {
   const k = anahtar(metin, profil, ses);
 
-  const hazir = bellek.get(k);
+  const hazir = await onbellektenAl(k);
   if (hazir) return hazir;
-
-  const diskten = await diskteBul(k);
-  if (diskten) {
-    const adres = URL.createObjectURL(diskten);
-    bellek.set(k, adres);
-    return adres;
-  }
 
   const res = await apiFetch('/api/speak', {
     method: 'POST',
@@ -143,10 +89,7 @@ async function sesAdresi(
   const baytlar = Uint8Array.from(atob(veri.audio), (c) => c.charCodeAt(0));
   const blob = new Blob([baytlar], { type: veri.mimeType || 'audio/wav' });
 
-  void diskeYaz(k, blob);
-  const adres = URL.createObjectURL(blob);
-  bellek.set(k, adres);
-  return adres;
+  return onbellegeYaz(k, blob);
 }
 
 export interface OkumaSecenekleri {

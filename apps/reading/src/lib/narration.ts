@@ -24,6 +24,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { onbellegeYaz, onbellektenAl } from '../../../../shared/ses/sesOnbellegi';
 import { apiFetch } from '../../../../shared/vocab/userKeys';
 
 export type NarrationVoice = 'Kore' | 'Puck' | 'Charon' | 'Aoede' | 'Leda' | 'Orus';
@@ -107,17 +108,19 @@ export function warmUpDeviceVoices(): void {
 /* =====================================================================
    SES ÖNBELLEĞİ
 
-   Aynı paragrafı ikinci kez dinlemek (geri sarmak, duraklatıp devam
-   etmek) yeni bir istek üretmesin diye üretilen sesler parça
-   kimliğine göre bellekte tutuluyor. Sayfa yenilenince silinir; ses
-   dosyalarını kalıcı saklamak birkaç megabaytlık bir depolama
-   yükü getirir ve buna değmiyor.
+   Üretilen sesler artık SAYFA YENİLENİNCE SİLİNMİYOR; tarayıcının
+   kalıcı deposunda kalıyorlar (shared/ses/sesOnbellegi).
+
+   Burada önceden "kalıcı saklamak birkaç megabaytlık bir yük getirir ve
+   buna değmiyor" yazıyordu. O karar maliyet bilinmeden verilmiş: ses
+   üretimi saniyede 32 token harcıyor ve ücretsiz katmanda dakikada
+   yalnızca ~3 istek hakkı var. Bir parçayı ertesi gün tekrar açmak
+   bütün paragrafları yeniden ürettiriyordu — hem bekleme hem kota.
+   Birkaç megabaytlık tarayıcı deposu bunun yanında çok ucuz.
    ===================================================================== */
 
-const audioCache = new Map<string, string>();
-
 function cacheKey(passageId: number, index: number, voice: string): string {
-  return `${passageId}|${index}|${voice}`;
+  return `ses|${passageId}|${index}|${voice}`;
 }
 
 /** Bir paragrafın sesini üretir ve çalınabilir bir blob adresi döndürür. */
@@ -129,7 +132,7 @@ async function fetchParagraphAudio(
   signal: AbortSignal
 ): Promise<string> {
   const key = cacheKey(passageId, index, voice);
-  const cached = audioCache.get(key);
+  const cached = await onbellektenAl(key);
   if (cached) return cached;
 
   const res = await apiFetch('/api/speak', {
@@ -152,10 +155,9 @@ async function fetchParagraphAudio(
   // base64 -> Blob: <audio src="data:..."> uzun metinlerde adres
   // uzunluğu sınırlarına takılıyor, blob URL'i takılmıyor.
   const bytes = Uint8Array.from(atob(data.audio), c => c.charCodeAt(0));
-  const url = URL.createObjectURL(new Blob([bytes], { type: data.mimeType || 'audio/wav' }));
+  const blob = new Blob([bytes], { type: data.mimeType || 'audio/wav' });
 
-  audioCache.set(key, url);
-  return url;
+  return onbellegeYaz(key, blob);
 }
 
 export interface Narration {
