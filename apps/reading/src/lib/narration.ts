@@ -120,12 +120,24 @@ export function warmUpDeviceVoices(): void {
    Birkaç megabaytlık tarayıcı deposu bunun yanında çok ucuz.
    ===================================================================== */
 
-/* Anahtarin basindaki surum, uretim ayari degisince eski kayitlarin
-   sessizce calinmasini onluyor. Kokoro'nun okuma hizi 1.0'dan 0.9'a
-   indirildiginde onbellekteki hizli kayitlar gecersiz kaldi; surumu
-   artirmak bunlari bir defada devre disi birakiyor. */
+/* SES_SURUMU — üretim ayarı değişince eski kayıtları devre dışı bırakır.
+ *
+ * Önbellek kalıcı (IndexedDB), yani bir paragrafın sesi bir kez üretilince
+ * aylarca orada duruyor. Üretim ayarını değiştirdiğimizde eski kayıtlar
+ * sessizce çalınmaya devam eder ve değişiklik hiç duyulmaz. Sürümü
+ * artırmak bunların hepsini bir defada geçersiz kılıyor.
+ *
+ * Geçmiş:
+ *   ses   ilk sürüm
+ *   ses2  Kokoro okuma hızı 1.0 -> 0.9
+ *   ses3  Kokoro okuma hızı 0.9 -> 0.75 (ölçüldü: dakikada 151 kelime)
+ *
+ * Kokoro üretimini etkileyen bir ayarı değiştirirsen burayı da artır.
+ */
+const SES_SURUMU = 'ses3';
+
 function cacheKey(passageId: number, index: number, voice: string): string {
-  return `ses2|${passageId}|${index}|${voice}`;
+  return `${SES_SURUMU}|${passageId}|${index}|${voice}`;
 }
 
 /** Bir paragrafın sesini üretir ve çalınabilir bir blob adresi döndürür. */

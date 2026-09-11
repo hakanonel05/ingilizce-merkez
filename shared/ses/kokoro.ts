@@ -38,13 +38,22 @@ const SES_ESLESME: Record<string, string> = {
 
 /* OKUMA HIZI
  *
- * Kokoro varsayilan 1.0 hizda gercek bir anlaticidan daha tempolu okuyor;
- * kullanici canli testte "biraz hizli" dedi. 0.9 hem ElevenLabs'in okuma
- * profiline yaklasiyor hem de yabanci dil calisan biri icin takip edilebilir
- * kaliyor. Arayuzdeki 0,75x-1,5x dugmeleri bunun uzerine calma hizi olarak
- * biniyor, yani isteyen yine hizlandirabiliyor.
+ * Tahminle degil olcumle secildi. Ayni paragrafi alti hizda urettim ve
+ * dakikada kac kelime okundugunu saydim (canli sitede ve yerelde ayni
+ * sayilar cikti):
+ *
+ *     1.00 -> 207 wpm      0.85 -> 186 wpm      0.75 -> 151 wpm
+ *     0.90 -> 193 wpm      0.80 -> 169 wpm      0.70 -> 141 wpm
+ *
+ * Sesli kitap anlatimi ~150 wpm; dil calisan biri icin rahat takip araligi
+ * 130-150. Kokoro'nun varsayilani (207) bu araligin epey uzerinde kaliyordu
+ * ve kullanici da dinleyince "biraz hizli" dedi. 0.75 tam anlatim temposuna
+ * denk geliyor.
+ *
+ * Arayuzdeki 0,75x-1,5x dugmeleri bunun uzerine CALMA hizi olarak biniyor,
+ * yani hizli dinlemek isteyen yine hizlandirabiliyor.
  */
-const OKUMA_HIZI = 0.9;
+const OKUMA_HIZI = 0.75;
 
 let isci: Worker | null = null;
 

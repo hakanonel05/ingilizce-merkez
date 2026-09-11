@@ -81,19 +81,22 @@ self.addEventListener('fetch', (event) => {
   }
 
   /*
-   * 1b. SES MODELİ DOSYALARINI PAS GEÇ.
+   * 1b. MODEL VE SES DOSYALARINI PAS GEÇ.
    *
-   * Kokoro'nun modeli (~88 MB), onnxruntime'ın WASM'i (~21 MB) ve ses
-   * dosyaları transformers.js tarafından ZATEN kendi Cache API deposunda
-   * tutuluyor. Burada ikinci bir kopya almak hiçbir şey kazandırmıyor:
-   * canlı sitede ölçtüm, aynı 88 MB iki ayrı önbellekte duruyordu ve
-   * toplam 200 MB'a çıkmıştı.
+   * Kokoro'nun modeli (~88 MB) ve ses dosyaları transformers.js tarafından
+   * ZATEN kendi Cache API deposunda tutuluyor. Burada ikinci bir kopya almak
+   * hiçbir şey kazandırmıyor: canlı sitede ölçtüm, aynı 88 MB iki ayrı
+   * önbellekte duruyordu ve toplam 200 MB'a çıkmıştı.
    *
-   * Üstelik zararlı: tarayıcının depolama kotası dolunca önbellekler
+   * Üstelik zararlı — tarayıcının depolama kotası dolunca önbellekler
    * topluca siliniyor, yani işe yarayan kopya da gidiyor.
+   *
+   * onnxruntime'ın WASM'i (~21 MB) BİLEREK listede değil: onun transformers
+   * deposunda bir kopyası yok, tek kalıcı kopyası burası. Pas geçmek 88 MB
+   * kazandırmak yerine her ziyarette 21 MB yeniden indirtirdi.
    */
   if (
-    /huggingface\.co|\/onnx\/|\.onnx($|\?)|ort-wasm.*\.wasm|\/voices\/.*\.bin/i.test(url.href)
+    /huggingface\.co|\/onnx\/|\.onnx($|\?)|\/voices\/.*\.bin/i.test(url.href)
   ) {
     return;
   }
