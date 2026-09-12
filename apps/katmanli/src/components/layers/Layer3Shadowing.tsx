@@ -12,6 +12,7 @@ import {
   deleteAllRecordings,
   StoredRecording,
 } from '../../lib/recordingStore';
+import { KayitAnalizPaneli } from '../KayitAnalizPaneli';
 
 interface Props {
   lesson: VideoLesson;
@@ -34,6 +35,8 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
   // Ses kaydı
   const [isRecording, setIsRecording] = useState(false);
   const [recordingUrl, setRecordingUrl] = useState<string | null>(null);
+  /* Analiz sesin KENDISINI istiyor; nesne adresi (blob URL) yetmiyor. */
+  const [aktifKayit, setAktifKayit] = useState<{ blob: Blob; createdAt: number } | null>(null);
   const [recordError, setRecordError] = useState<string | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -108,6 +111,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
       return null;
     });
     setHasSavedForCurrent(false);
+    setAktifKayit(null);
 
     if (!current) return;
 
@@ -116,6 +120,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
         const rec = await getRecording(lesson.id, current.id);
         if (cancelled || !rec) return;
         setRecordingUrl(URL.createObjectURL(rec.blob));
+        setAktifKayit({ blob: rec.blob, createdAt: rec.createdAt });
         setHasSavedForCurrent(true);
       } catch (err) {
         console.warn('Kayıt okunamadı:', err);
@@ -137,6 +142,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
         return null;
       });
       setHasSavedForCurrent(false);
+      setAktifKayit(null);
       await refreshList();
     } catch (err) {
       console.warn('Kayıt silinemedi:', err);
@@ -152,6 +158,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
         return null;
       });
       setHasSavedForCurrent(false);
+      setAktifKayit(null);
       await refreshList();
     } catch (err) {
       console.warn('Kayıtlar silinemedi:', err);
@@ -175,6 +182,8 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
           return URL.createObjectURL(blob);
         });
         stream.getTracks().forEach((t) => t.stop());
+        const kayitZamani = Date.now();
+        setAktifKayit({ blob, createdAt: kayitZamani });
 
         // Kaydı kalıcı sakla; sayfa yenilenince kaybolmasın
         if (current) {
@@ -185,7 +194,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
               sentenceId: current.id,
               sentenceText: current.en,
               blob,
-              createdAt: Date.now(),
+              createdAt: kayitZamani,
             });
             setHasSavedForCurrent(true);
             await refreshList();
@@ -368,6 +377,18 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
                   <Save className="w-3.5 h-3.5" />
                   <span>Bu cümlenin kaydı cihazında saklı</span>
                 </p>
+              )}
+
+
+              {/* Kaydın çözümlenmesi: hangi kelime doğru, nerede duraksandı.
+                  Tamamen tarayıcıda çalışıyor; ses cihazdan çıkmıyor. */}
+              {current && (
+                <KayitAnalizPaneli
+                  lessonId={lesson.id}
+                  sentenceId={current.id}
+                  sentenceText={current.en}
+                  kayit={aktifKayit}
+                />
               )}
 
               {/* Kayıtlı cümleler listesi */}

@@ -12,10 +12,12 @@
     "build": "npm run build:reading && npm run build:katmanli",
     "lint": "tsc --noEmit",
     "check:tokens": "node scripts/token-siniflari.mjs",
-    "test:katmanlar": "node scripts/katman-simulasyonu.mjs"
+    "test:katmanlar": "node scripts/katman-simulasyonu.mjs",
+    "test:kayit-analizi": "tsx scripts/kayit-analizi-sinamasi.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
+    "@huggingface/transformers": "^3.8.1",
     "@supabase/supabase-js": "^2.110.8",
     "@tailwindcss/vite": "^4.1.14",
     "@vitejs/plugin-react": "^5.0.4",
