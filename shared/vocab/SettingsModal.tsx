@@ -208,10 +208,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           : 'border-[var(--marker)] bg-[var(--marker-bg)] text-[var(--marker-ink)]'
                       }`}
                     >
-                      {optional
-                        ? 'gerekmiyor'
-                        : serverHas
-                          ? 'sitede var — girmesen de çalışır'
+                      {serverHas
+                        ? 'sitede var — girmesen de çalışır'
+                        : optional
+                          ? 'gerekmiyor'
                           : 'sitede yok — bunu girmen gerek'}
                     </span>
                   )}
