@@ -92,6 +92,10 @@ app.get("/api/settings/status", (_req, res) => {
       groq: !!process.env.GROQ_API_KEY,
       transcript: !!process.env.YOUTUBE_TRANSCRIPT_IO_TOKEN,
       libre: !!process.env.LIBRETRANSLATE_API_KEY,
+      /* Kota kutusu sunucudaki anahtara bağlı. Bu alan olmadığı sürece
+         "anahtar Netlify'da tanımlı ama fonksiyon göremiyor" durumunu
+         ayarlar ekranından teşhis etmek mümkün değildi. */
+      elevenlabs: !!process.env.ELEVENLABS_API_KEY,
     },
   });
 });

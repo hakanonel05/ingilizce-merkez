@@ -118,6 +118,7 @@ export interface ServerKeyStatus {
   groq: boolean;
   transcript: boolean;
   libre: boolean;
+  elevenlabs: boolean;
 }
 
 /**
@@ -137,6 +138,7 @@ export async function fetchServerKeyStatus(): Promise<ServerKeyStatus | null> {
       groq: !!s.groq,
       transcript: !!s.transcript,
       libre: !!s.libre,
+      elevenlabs: !!s.elevenlabs,
     };
   } catch {
     return null;
