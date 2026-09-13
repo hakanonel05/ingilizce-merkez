@@ -2,8 +2,10 @@
  "no": 79,
  "baslik": "Where Happiness Comes From",
  "paragraflar": [
-  "3 1 So many of us strive so hard for material success that you might think there is a clear relationship. between wealth and happiness. The media and our 5 governments encourage us to believe this since they need us to keep earning and - spending to boost economic growth.: 2 Consequently, it comes as a shock for many people - to learn that there is no straightforward 3 relationship between wealth and well-being. Once our basic material needs are satisfied (i.e. regular food, adequate shelter, and financial security), wealth only has a negligible effect on well-being. For example have shown that in general, lottery winners do not become significantly happier than they were before, and that even extremely rich people — such as billionaires — are not significantly happier than others. Studies have shown that American and British people are less content now than they were 50 years ago, although their material wealth is much higher. On an international level, there does appear to be some correlation between wealth and well-being, partly because there are many countries in the world where people’s basic material needs are not: satisfied. But this correlation is not a straightforward: one, since wealthier countries tend to be more, politically stable, peaceful and democratic, with less oppression and more freedom — all of whichch are themselves important factors in well- being. \"3 However, it does appear that there is a relationship between non-materialism and well-being. While possessing wealth and material goods doesn’t lead to happiness, giving these things away actually does. Generosity is strongly associated with well-being. For example, recent studies of people who practise volunteering have shown that they have better psychological and TT aatr SIE mental health and increased life spans. The benefits of volunteering have been found to be greater than fact, even greater than giving up smoking",
-  "So if you really want to enhance your well-being — and as long as material needs are satisfied — don’t try to accumulate money in your bank account, and don't treat yourself to material goods you don’t really need. Be more generous and altruistic; increase the amount of ol money you give to people in need, give more of your pu time to volunteering, or spend more time helping - other people, or behaving more kindly to everyonene around you"
+  "So many of us strive so hard for material success that you might think there is a clear relationship between wealth and happiness. The media and our governments encourage us to believe this since they need us to keep earning and spending to boost economic growth.",
+  "Consequently, it comes as a shock for many people to learn that there is no straightforward relationship between wealth and well-being. Once our basic material needs are satisfied (i.e. regular food, adequate shelter, and financial security), wealth only has a negligible effect on well-being. For example, studies have shown that in general, lottery winners do not become significantly happier than they were before, and that even extremely rich people – such as billionaires – are not significantly happier than others. Studies have shown that American and British people are less content now than they were 50 years ago, although their material wealth is much higher. On an international level, there does appear to be some correlation between wealth and well-being, partly because there are many countries in the world where people's basic material needs are not satisfied. But this correlation is not a straightforward one, since wealthier countries tend to be more politically stable, peaceful and democratic, with less oppression and more freedom – all of which are themselves important factors in well-being.",
+  "However, it does appear that there is a relationship between non-materialism and well-being. While possessing wealth and material goods doesn't lead to happiness, giving these things away actually does. Generosity is strongly associated with well-being. For example, recent studies of people who practise volunteering have shown that they have better psychological and mental health and increased life spans. The benefits of volunteering have been found to be greater than taking up exercise or attending religious services – in fact, even greater than giving up smoking.",
+  "So if you really want to enhance your well-being – and as long as your basic material needs are satisfied – don't try to accumulate money in your bank account, and don't treat yourself to material goods you don't really need. Be more generous and altruistic; increase the amount of money you give to people in need, give more of your time to volunteering, or spend more time helping other people, or behaving more kindly to everyone around you."
  ],
  "sorular": [
   {
@@ -22,20 +24,20 @@
    "soru": "What is the main idea of paragraph 2?",
    "secenekler": [
     "A) There is not so much difference in happiness between very rich people and others.",
-    "B) in some countries, people are less happy than before although they earn more now.",
+    "B) In some countries, people are less happy than before although they earn more now.",
     "C) Even if you win the lottery, it won't make you significantly happier.",
-    "D) There is no clear-cut link between being rich and being happy KGITIM"
+    "D) There is no clear-cut link between being rich and being happy."
    ],
    "cevap": "D"
   },
   {
    "no": 3,
-   "soru": "According to the passage,",
+   "soru": "According to the passage, ----",
    "secenekler": [
     "A) Psychological health, mental health and a long life can only be sustained by volunteering.",
     "B) Acquiring material goods is a way of spending your money that makes you more satisfied and happier.",
-    "C) You will benefit from doing exercises more than volunteering or attending religious services",
-    "D) Spending the money you have on someone other than yourself will make you happier. EXERCISE 3. Choose the correct option according to the text."
+    "C) You will benefit from doing exercises more than volunteering or attending religious services.",
+    "D) Spending the money you have on someone other than yourself will make you happier."
    ],
    "cevap": "D"
   }
@@ -55,7 +57,10 @@
   "eksik-doldurma:7/9",
   "sik-eksik:1"
  ],
- "_sorularDogrulandi": "Soru metinleri ve şıkları sayfa görüntüsünden okundu.",
- "guvenNot": "yapisal-ocr",
- "guven": "ocr-yapisal"
+ "_sorularDogrulandi": "goruntuden",
+ "guven": "goruntuden-birebir",
+ "sayfalar": [
+  220,
+  221
+ ]
 }

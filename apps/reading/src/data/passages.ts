@@ -635,7 +635,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 6,
-        question: "The underlined pronoun \"It\" in paragraph 3 refers to -----.",
+        question: "The underlined pronoun \"It\" in paragraph 3 refers to ----.",
         options: [],
         answer: "Interrailing",
         openEnded: true
@@ -1546,7 +1546,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 5,
-        question: "The underlined pronoun \"one\" in paragraph 2 refers to ------",
+        question: "The underlined pronoun \"one\" in paragraph 2 refers to ----",
         options: [],
         answer: "building",
         openEnded: true
@@ -1668,7 +1668,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 3,
-        question: "The underlined pronoun \"there\" in paragraph 2 refers to ------.",
+        question: "The underlined pronoun \"there\" in paragraph 2 refers to ----.",
         options: [],
         answer: "Kermanshah (or Iran)",
         openEnded: true
@@ -2464,7 +2464,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 6,
-        question: "The underlined pronoun \"It\" in paragraph 3 refers to -----.",
+        question: "The underlined pronoun \"It\" in paragraph 3 refers to ----.",
         options: [],
         answer: "Western Cwm",
         openEnded: true
@@ -5813,7 +5813,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 2,
-        question: "The underlined pronoun \"it\" in paragraph 1 refers to ------.",
+        question: "The underlined pronoun \"it\" in paragraph 1 refers to ----.",
         options: [],
         answer: "Egypt",
         openEnded: true
@@ -5860,7 +5860,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 7,
-        question: "The underlined pronoun \"there\" in paragraph 4 refers to ------.",
+        question: "The underlined pronoun \"there\" in paragraph 4 refers to ----.",
         options: [],
         answer: "deserts",
         openEnded: true
@@ -6008,7 +6008,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 5,
-        question: "The underlined pronoun 'it' in paragraph 4 refers to -----.",
+        question: "The underlined pronoun 'it' in paragraph 4 refers to ----.",
         options: [],
         answer: "(the) project",
         openEnded: true
@@ -6233,7 +6233,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 10,
-        question: "The underlined word 'feast' in paragraph 5 is closest in meaning to -----.",
+        question: "The underlined word 'feast' in paragraph 5 is closest in meaning to ----.",
         options: [
           "A) surprise",
           "B) meal",
@@ -7465,9 +7465,9 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "B2",
     theme: "Synonyms & Cultural Customs",
     paragraphs: [
-      "What are the customs for kissing people in your country? Do you kiss your relatives when you visit them? Do you kiss your friends hello when you meet them? Is it polite to kiss someone in public places in your country? All of these kissing customs depend on where in the world you are. Kissing may seem as universal as language, but in fact, kissing customs differ around the world",
-      "In many places, kisses are used for saying hello. If you are in Europe or South \" America, you will see lots of these greeting kisses. But the kissing customs for greeting people vary from country to country, and traveling to new places can be confusing if soon as you don't know them. Many European men and women say hello with two kisses, one on each cheek. But three kisses are polite in Belgium, and young people in Paris often prefer four. In these countries, you must to start with the right cheek. Starting with your left cheek would be as awkward as sticking out your left hand for a handshake. A variation on the cheek kiss is found in Brazil. When women meet, they put their cheeks together and kiss the air. In some cultures, men kiss each other on the cheeks at some parts of the world, people don't kiss when they meet each other. In fact, kissing in public is considered impolite. In Japan and China, for example, people in public places rarely kiss each other. In most Middle Eastern countries, men and women do not kiss in public, either",
-      "Kisses aren't just for saying hello; people kiss for lots of other reasons as well. For example, a kiss can also be a sign of respect. Some people show respect by kissing religious articles and flags. Others kiss the ground when they come home to a country they love. Europeans J and Latin Americans also use kisses to say - beautiful!” They kiss their fingertips when they see a pretty woman, an expensive car, or a great s soccer play. In other places, people say good-bye by kissing their fingertips and blowing the kiss away. Kisses are associated with - good luck, too. The French started the custom of kissing their cards for good luck before playing, 5 and today, some people kiss a pair of dice before they roll them. The English kissed hurt fingers to make them better, as many mothers still do today. And, of course, people also kiss to make up after a fight"
+      "What are the customs for kissing people in your country? Do you kiss your relatives when you visit them? Do you kiss your friends hello when you meet them? Is it polite to kiss someone in public places in your country? All of these kissing customs depend on where in the world you are. Kissing may seem as universal as language, but in fact, kissing customs differ around the world.",
+      "In many places, kisses are used for saying hello. If you are in Europe or South America, you will see lots of these greeting kisses. But the kissing customs for greeting people vary from country to country, and traveling to new places can be confusing if you don't know them. Many European men and women say hello with two kisses, one on each cheek. But three kisses are polite in Belgium, and young people in Paris often prefer four. In these countries, you must start with the right cheek. Starting with your left cheek would be as awkward as sticking out your left hand for a handshake. A variation on the cheek kiss is found in Brazil. When women meet, they put their cheeks together and kiss the air. In some cultures, men kiss each other on the cheeks at business meetings. It's like shaking hands. In some parts of the world, people don't kiss when they meet each other. In fact, kissing in public is considered impolite. In Japan and China, for example, people in public places rarely kiss each other. In most Middle Eastern countries, men and women do not kiss in public, either.",
+      "Kisses aren't just for saying hello; people kiss for lots of other reasons as well. For example, a kiss can also be a sign of respect. Some people show respect by kissing religious articles and flags. Others kiss the ground when they come home to a country they love. Europeans and Latin Americans also use kisses to say beautiful!\" They kiss their fingertips when they see a pretty woman, an expensive car, or a great soccer play. In other places, people say good-bye by kissing their fingertips and blowing the kiss away. Kisses are associated with good luck, too. The French started the custom of kissing their cards for good luck before playing, and today, some people kiss a pair of dice before they roll them. The English kissed hurt fingers to make them better, as many mothers still do today. And, of course, people also kiss to make up after a fight."
     ],
     vocabulary: [
       { term: "custom", meaning: "gelenek, adet", partOfSpeech: "n", definition: "A traditional way of behaving in a society.", exampleSentence: "Kissing customs differ around the world." },
@@ -7487,7 +7487,7 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "the text. 1. The writer compares kissing with language in order to ——.",
+        question: "The writer compares kissing with language in order to ----.",
         options: [
           "A) inform the reader about their similarities",
           "B) show that kissing is universal to some extent",
@@ -7498,7 +7498,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 2,
-        question: "The word “them” in the text refers to ----,",
+        question: "The word \"them\" in the text refers to ----.",
         options: [
           "A) places",
           "B) people",
@@ -7511,7 +7511,7 @@ export const PASSAGES_DATA: Passage[] = [
         id: 3,
         question: "Which of the following is NOT mentioned as one of the reasons for kissing in paragraph 3?",
         options: [
-          "A) Showing respect bey",
+          "A) Showing respect",
           "B) Understanding religious articles",
           "C) Saying hi and goodbye",
           "D) Becoming friends again after a fight"
@@ -7545,7 +7545,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "A"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 60,
@@ -7553,8 +7553,11 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "B1",
     theme: "Connectors & Vocabulary",
     paragraphs: [
-      ": school but soon as they study at home with g a parent. ad Homeschooling appeared in the 1960s in the U.S.; A philosopher called John Rushdoony was the first person who had this idea in mind. He thought that children needed to learn about religion at school. But schools did not teach them anything regarding religion, so he decided to devise his own education system and teach his kids at home. The idea suddenly became so popular that more and more parents stopped sending their children to school and taught their children at home. Today, home schooling is most popular in Canada, France and the US. Many families in these countries don't send their children to schools and they play an active role in their children’s education. Currently, there are over one million families that school their children at home. 3 Homeschooling is popular and there are three: reasons for it. The first reason is about ’ teachers at schools. People homeschool because. they are not happy with the education in schools. y They think teachers are not good enough. There are, also economic reasons: Some don’t have enough: money for private or even public schools. And the 3 last reason is about safety. Some think schools are not safe places for their children. They think school environment and friends may be dangerous for them",
-      "How can parents teach their children when there is no teacher or a standard program? Home school families use technology to find teaching materials. Many parents use the internet or computer programs to teach standard subjects like math, reading, history, science and grammar. Most of them create their own lesson plans. They regularly meet with other home schooling parents and share their ideas. They help each other to plan good lessons- to make their lesson plans better. 3 o> There are negative opinions about homeschooling. z For some people, it is a terrible idea. They don't like - it because they think homeschooled children can’t GS) socialize, interact with other people easily, and they become unsociable. They also think that parents are not professional teachers. They can't teach their children math, science and literature well. We have to say this is not true. Exam scores show that homeschool children are more successful- they perform better than public school children in standard exams"
+      "Homeschooling is education at home where parents are teachers. In homeschooling, children don't go to school but they study at home with a parent.",
+      "Homeschooling appeared in the 1960s in the U.S. A philosopher called John Rushdoony was the first person who had this idea in mind. He thought that children needed to learn about religion at school. But schools did not teach them anything regarding religion, so he decided to devise his own education system and teach his kids at home. The idea suddenly became so popular that more and more parents stopped sending their children to school and taught their children at home. Today, home schooling is most popular in Canada, France and the US. Many families in these countries don't send their children to schools and they play an active role in their children's education. Currently, there are over one million families that school their children at home.",
+      "Homeschooling is popular and there are three reasons for it. The first reason is about teachers at schools. People homeschool because they are not happy with the education in schools. They think teachers are not good enough. There are also economic reasons: Some don't have enough money for private or even public schools. And the last reason is about safety. Some think schools are not safe places for their children. They think school environment and friends may be dangerous for them.",
+      "How can parents teach their children when there is no teacher or a standard program? Home school families use technology to find teaching materials. Many parents use the internet or computer programs to teach standard subjects like math, reading, history, science and grammar. Most of them create their own lesson plans. They regularly meet with other home schooling parents and share their ideas. They help each other to plan good lessons- to make their lesson plans better.",
+      "There are negative opinions about homeschooling. For some people, it is a terrible idea. They don't like it because they think homeschooled children can't socialize, interact with other people easily, and they become unsociable. They also think that parents are not professional teachers. They can't teach their children math, science and literature well. We have to say this is not true. Exam scores show that homeschool children are more successful- they perform better than public school children in standard exams."
     ],
     vocabulary: [
       { term: "homeschooling", meaning: "evde eğitim", partOfSpeech: "n", definition: "Educating children at home instead of at a school.", exampleSentence: "Homeschooling is education at home." },
@@ -7574,14 +7577,12 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "According to paragraph 2, homeschooling owes its birth to",
+        question: "According to paragraph 2, homeschooling owes its birth to ----.",
         options: [
           "A) the bad education system in Canada, France and the U.S",
-          "B) a philosopher who believed kids should leam religion",
+          "B) a philosopher who believed kids should learn religion",
           "C) American schools which allow kids to learn religion at home",
-          "D) some parents who didn't want their kids to be taught by the state shock/scream/Injury/storm",
-          "E) terrible",
-          "F) unsociable"
+          "D) some parents who didn't want their kids to be taught by the state"
         ],
         answer: "B"
       },
@@ -7592,18 +7593,18 @@ export const PASSAGES_DATA: Passage[] = [
           "A) Economy, friends and exams",
           "B) Teachers, exams and safety",
           "C) Economy, teachers and safety",
-          "D) Safety, parants and teachers"
+          "D) Safety, parents and teachers"
         ],
         answer: "C"
       },
       {
         id: 3,
-        question: "It is stated in the passage that homeschooled children-",
+        question: "It is stated in the passage that homeschooled children ----.",
         options: [
           "A) rarely make friends easily",
           "B) don't study math and science",
           "C) get high scores in the exams",
-          "D) don't like professional teachers EXERCISE 4. Choose the correct option."
+          "D) don't like professional teachers"
         ],
         answer: "C"
       }
@@ -7634,7 +7635,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "A"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 61,
@@ -7642,10 +7643,10 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "B1",
     theme: "Quantifiers & Vocabulary",
     paragraphs: [
-      "Tattoos are in fashion in many countries. On TV you can see a famous actor with a picture on: her arm, or your favourite musician with a word on: his hand. Many sports personalities have: got them on their necks and backs. The most, popular designs are Japanese and Chinese characters and the names of people who we love. i Women often prefer smaller designs like stars,: flowers and men are interested in much bigger 3) images. In the USA, tattoos are very popular. 40% of Americans between the age of 26 and 40 have got a tattoo and 60% of customers in US tattoo shops are women. These people are often professional people like doctors, teachers and lawyers. So, now tattoos are popular with all kinds of people and it's normal to have a tattoo these days",
-      "However, tattoos are not modern. In fact, they are very old in human history. For example, archaeologists found a human in ice from 5000 years ago. He had 57 tattoos on his back, ankles, legs, knees and feet. They were used for many different reasons. In ancient Egypt, people put on tattoos because they were ‘beautiful’. But in ancient",
-      "Rome, tattoos were negative and put on criminals: and prisoners. In India, tattoos were religious.: 3 Inthe 16™ and 17\" century, European sailors arrived in the islands of Polynesia. They saw tattoos for the first time. The people on the islands had tattoos on: their shoulders, chest, backs and legs. Often the tattoos were designs of animals or natural features like a river or a mountain. The European sailors liked them and made their own tattoos. And so the idea travelled to Europe. Tattoos in Polynesia are still important today. They give information about a person's history, their island or their job",
-      "So is there a connection between traditional tattoos and fashionable tattoos? And can you call tattoos a fashion? Chris Rainier of National Geographic is an expert in tattoos. So, he studies the tattoos in detail but he designs tattoos, too. His book Ancient Marks has photos of tattoos from all over the world. Those photos were taken by his friend David K night — a world famous photographer. He thinks people in modern societies often have tattoos pe because they are a connection with the traditional world. x"
+      "Tattoos are in fashion in many countries. On TV you can see a famous actor with a picture on her arm, or your favourite musician with a word on his hand. Many sports personalities have got them on their necks and backs. The most popular designs are Japanese and Chinese characters and the names of people who we love. Women often prefer smaller designs like stars, flowers and men are interested in much bigger images. In the USA, tattoos are very popular. 40% of Americans between the age of 26 and 40 have got a tattoo and 60% of customers in US tattoo shops are women. These people are often professional people like doctors, teachers and lawyers. So, now tattoos are popular with all kinds of people and it's normal to have a tattoo these days.",
+      "However, tattoos are not modern. In fact, they are very old in human history. For example, archaeologists found a human in ice from 5000 years ago. He had 57 tattoos on his back, ankles, legs, knees and feet. They were used for many different reasons. In ancient Egypt, people put on tattoos because they were 'beautiful'. But in ancient Rome, tattoos were negative and put on criminals and prisoners. In India, tattoos were religious.",
+      "In the 16th and 17th century, European sailors arrived in the islands of Polynesia. They saw tattoos for the first time. The people on the islands had tattoos on their shoulders, chest, backs and legs. Often the tattoos were designs of animals or natural features like a river or a mountain. The European sailors liked them and made their own tattoos. And so the idea travelled to Europe. Tattoos in Polynesia are still important today. They give information about a person's history, their island or their job.",
+      "So is there a connection between traditional tattoos and fashionable tattoos? And can you call tattoos a fashion? Chris Rainier of National Geographic is an expert in tattoos. So, he studies the tattoos in detail but he designs tattoos, too. His book Ancient Marks has photos of tattoos from all over the world. Those photos were taken by his friend David Knight – a world famous photographer. He thinks people in modern societies often have tattoos because they are a connection with the traditional world."
     ],
     vocabulary: [
       { term: "in fashion", meaning: "moda, revaçta", partOfSpeech: "phr", definition: "Popular and stylish at a particular time.", exampleSentence: "Tattoos are in fashion in many countries." },
@@ -7665,36 +7666,32 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "the text. 4, 1. According to paragraph 1, King Jigme Singye Wangchuck believes —--.",
+        question: "According to paragraph 1, most people do NOT have tattoos of ----.",
         options: [
           "A) flowers and stars",
           "B) Japanese words",
           "C) large pictures",
-          "D) Chinese celebrities EXERCISE 4. Choose the correct option. 1. popular",
-          "E) from teenagers/surfers/tourists",
-          "F) with people/ceremony",
-          "G) religious",
-          "H) interested"
+          "D) Chinese celebrities"
         ],
         answer: "D"
       },
       {
         id: 2,
-        question: "The word “infirm” in paragraph 2 means ---.",
+        question: "What is the main idea of paragraph 2?",
         options: [
-          "A) affluent",
-          "B) ill",
-          "C) C) satisfied",
-          "D) D) wealthy"
+          "A) Tattoos have been popular since ancient times for various reasons.",
+          "B) The 5000-year-old body of a human with tattoos was found in ice.",
+          "C) Ancient societies used tattoos for decoration of the body too.",
+          "D) Tattoos used to have a very important role in religion and law."
         ],
         answer: "A"
       },
       {
         id: 3,
-        question: "ecitin One can infer from paragraph 3 that —--. vit",
+        question: "Which of the following is TRUE according to paragraph 3?",
         options: [
-          "A) People in Polynesia made tattoos on European sailors bodies.",
-          "B) The Europeans learned tattooing from the Polynesians",
+          "A) People in Polynesia made tattoos on European sailors' bodies.",
+          "B) The Europeans learned tattooing from the Polynesians.",
           "C) There were pictures of river or mountains on animals in Polynesia",
           "D) Tattoo lost its importance in Polynesia today"
         ],
@@ -7702,12 +7699,12 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 4,
-        question: "reliable result",
+        question: "What does \"they\" in paragraph 4 refer to?",
         options: [
           "A) people",
           "B) photos of tattoos",
-          "C) modem societies",
-          "D) tattoos EXERCISE 3. Choose the correct option according to the text."
+          "C) modern societies",
+          "D) tattoos"
         ],
         answer: "D"
       }
@@ -7738,7 +7735,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "A"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 62,
@@ -7846,10 +7843,11 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "B1",
     theme: "Vocabulary & Environment",
     paragraphs: [
-      "3 1 The Plastiki looks like other boats or yachts in Sydney harbour. It's 18 m long, 6 m wide and it - weighs about 12000 kg. It carries a crew of 6 people - and has an average speed of 5 knots. However, when you get near to the Plastiki, you realise there's a difference. It's made of 12500 z recycled plastic bottles. 2 One day, the environmentalist David De Rothschild was reading some information about all the plastic in the seas and oceans. He couldn't believe what he was reading. For example, humans throw away four out of every five plastic bottles that they use and plastic rubbish causes about eighty per cent of the pollution in the sea. Soon afterwards, Rothschild decided that he wanted to help the fight against pollution in the sea. To create publicity for the problem, he started building a boat made of plastic bottles so that everyone would learn and care about it",
-      "As well as building the boat with recycled plastic, it was important for him to make the boat, environmentally-friendly. It uses wind power and: solar energy. The crew make meals with vegetables from the garden at the back of the boat. They can do exercise by using the special exercise 1 bicycle. The energy from the bike provides power for the computers. And if anyone needs to take a shower, the boat's shower uses saltwater from the sea",
-      "De Rothschild sailed the Plastiki across the Pacific Ocean from San Francisco to Sydney. That's 15372 nautical kilometres. On the way, De Rothschild took the special boat through the ‘Great Garbage Patch’. It is a huge area in the Pacific with 3.5 billion wane ak indi! foe kilogrammes of rubbish. You can see every kind of human rubbish here: shoes, toys, bags, toothbrushes, but the worst problem is the plastic. It kills birds and sea life",
-      "The journey wasn't always easy and De Rothschild and his crew had to take care during storms. There were giant ocean waves and winds of over 100 km per hour. The whole journey i took 129 days. Originally, De Rothschild thought the boat could only travel once but it 5 survived so well that he is planning to sail it again a one day. “"
+      "The Plastiki looks like other boats or yachts in Sydney harbour. It's 18 m long, 6 m wide and it weighs about 12000 kg. It carries a crew of 6 people and has an average speed of 5 knots. However, when you get near to the Plastiki, you realise there's a difference. It's made of 12500 recycled plastic bottles.",
+      "One day, the environmentalist David De Rothschild was reading some information about all the plastic in the seas and oceans. He couldn't believe what he was reading. For example, humans throw away four out of every five plastic bottles that they use and plastic rubbish causes about eighty per cent of the pollution in the sea. Soon afterwards, Rothschild decided that he wanted to help the fight against pollution in the sea. To create publicity for the problem, he started building a boat made of plastic bottles so that everyone would learn and care about it.",
+      "As well as building the boat with recycled plastic, it was important for him to make the boat environmentally-friendly. It uses wind power and solar energy. The crew make meals with vegetables from the garden at the back of the boat. They can do exercise by using the special exercise bicycle. The energy from the bike provides power for the computers. And if anyone needs to take a shower, the boat's shower uses saltwater from the sea.",
+      "De Rothschild sailed the Plastiki across the Pacific Ocean from San Francisco to Sydney. That's 15372 nautical kilometres. On the way, De Rothschild took the special boat through the 'Great Garbage Patch'. It is a huge area in the Pacific with 3.5 billion kilogrammes of rubbish. You can see every kind of human rubbish here: shoes, toys, bags, toothbrushes, but the worst problem is the plastic. It kills birds and sea life.",
+      "The journey wasn't always easy and De Rothschild and his crew had to take care during storms. There were giant ocean waves and winds of over 100 km per hour. The whole journey took 129 days. Originally, De Rothschild thought the boat could only travel once but it survived so well that he is planning to sail it again one day."
     ],
     vocabulary: [
       { term: "yacht", meaning: "yat", partOfSpeech: "n", definition: "A large boat used for pleasure or racing.", exampleSentence: "The Plastiki looks like other yachts." },
@@ -7871,9 +7869,9 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "--- income / number / level",
+        question: "In paragraph 1, the author describes the Plastiki to ----.",
         options: [
-          "A) imply that it's the first boat that is made of plastic botties",
+          "A) imply that it's the first boat that is made of plastic bottles",
           "B) point out how easy it is to build it",
           "C) express his great admiration for it",
           "D) tell how it's similar to and different from the other boats"
@@ -7882,7 +7880,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 2,
-        question: "---- glass / paper / cartridge",
+        question: "The phrase \"create publicity\" in the text refers to ----.",
         options: [
           "A) making progress",
           "B) attracting attention",
@@ -7893,48 +7891,45 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 3,
-        question: "---- needs / treatment / offer",
+        question: "What is the main purpose of the second paragraph?",
         options: [
-          "A) to explain how the idea of the Plastik come out",
+          "A) to explain how the idea of the Plastiki come out",
           "B) to give the reasons of environmental pollution",
-          "C) to emphasize human beings effect on pollution",
+          "C) to emphasize human beings' effect on pollution",
           "D) to show Rothschild's interest in the environment"
         ],
         answer: "A"
       },
       {
         id: 4,
-        question: "---- fund / help / food / information",
+        question: "The word \"they\" in the text refers to ----.",
         options: [
           "A) crew",
           "B) sources",
-          "C) meals DJ vegetables WI ANIN BIL KGETIN"
+          "C) meals",
+          "D) vegetables"
         ],
         answer: "A"
       },
       {
         id: 5,
-        question: "--- step / machine",
+        question: "One can infer from paragraph 4 that ----.",
         options: [
           "A) De Rothschild discovered an area with tons of rubbish in the Pacific",
-          "B) the Plastiki did not travel so long on its first joumey",
-          "C) there is not only plastic in the 'Great Garbage Patch",
+          "B) the Plastiki did not travel so long on its first journey",
+          "C) there is not only plastic in the 'Great Garbage Patch'",
           "D) the 'Great Garbage Patch' is visible from San Francisco and Sydney"
         ],
         answer: "C"
       },
       {
         id: 6,
-        question: "-— 10 days 6. -—~ 18 days / medicine / a taxi / medicine / a taxi",
+        question: "What is the author's tone in the text?",
         options: [
           "A) sarcastic",
           "B) narrative",
           "C) encouraging",
-          "D) persuasive EXERCISE 4. Choose the correct option. 1.-income/number/level",
-          "E) harmful",
-          "F) average 2.-glass/paper/cartridge",
-          "G) recycled",
-          "H) honest"
+          "D) persuasive"
         ],
         answer: "B"
       }
@@ -7965,7 +7960,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "B"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 64,
@@ -8486,9 +8481,10 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Vocabulary & Argument",
     paragraphs: [
-      "Which is the most successful animal alive today? Is it the lion, stretching in the midday African sun, or is it some insect reproducing itself in millions, deep in the Amazon rainforest? A good z argument could be made for humans themselves.. But the animal that seems to have made have made the most of its limited opportunities is the - domestic sheep, closely followed follow by - the horse, the pig, the cow, the dog, and all the other creatures. 2 These animals have made a huge progress similar to that of humans. They have escaped the pressures which would have wiped out some of them. In 1860, humans and domesticated animals represented represented about five percent of all plant and animal life, while today they are about twenty percent, according to biologists. The domestic animals, the ones that have made themselves fit in with the existence of humans, are the success stories in the history of animal development",
-      "This is certain to cause an argument because it denies a central claim of the animal rights movement which argues that animals should have - the same right as humans. Domestication ie means humans profiting from animals. Humans have - simply used animals for their own selfish purposes, - using use increasingly cruel methods. The B idea of domestication has actually helped animals survive and develop is a revolutionary, and will probably make the animal S rights movement even angrier. Yet, there is evidence to support it. prams ppp",
-      "But if it was animals that took the first step in the process of domestication, agreeing to live with humans on a voluntary basis, what exactly did they get from it? Biologists argue that the driving force in all animals is the desire to ensure that they and their future generations survive, and if this is right then, wild cows and wild horses would have been wiped out if it were not for domestication. ™"
+      "Which is the most successful animal alive today? Is it the lion, stretching in the midday African sun, or is it some insect reproducing itself in millions, deep in the Amazon rainforest? A good argument could be made for humans themselves. But the animal that seems to have made the most of its limited opportunities is the domestic sheep, closely followed by the horse, the pig, the cow, the dog, and all the other domesticated creatures.",
+      "These animals have made a huge progress similar to that of humans. They have escaped the pressures which would have wiped out some of them. In 1860, humans and domesticated animals represented about five percent of all plant and animal life, while today they are about twenty percent, according to biologists. The domestic animals, the ones that have made themselves fit in with the existence of humans, are the success stories in the history of animal development.",
+      "This is certain to cause an argument because it denies a central claim of the animal rights movement which argues that animals should have the same right as humans. Domestication means humans profiting from animals. Humans have simply used animals for their own selfish purposes, using increasingly cruel methods. The idea of domestication has actually helped animals survive and develop is revolutionary, and will probably make the animal rights movement even angrier. Yet, there is evidence to support it.",
+      "But if it was animals that took the first step in the process of domestication, agreeing to live with humans on a voluntary basis, what exactly did they get from it? Biologists argue that the driving force in all animals is the desire to ensure that they and their future generations survive, and if this is right then, wild cows and wild horses would have been wiped out if it were not for domestication."
     ],
     vocabulary: [
       { term: "successful", meaning: "başarılı", partOfSpeech: "adj", definition: "Achieving a desired result; doing well.", exampleSentence: "Which is the most successful animal alive today?" },
@@ -8510,9 +8506,9 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "rely on (phr.v)",
+        question: "It can be understood from paragraph 2 that ----.",
         options: [
-          "A) the number of domestic animals was far more than that of humans in the 19\" century",
+          "A) the number of domestic animals was far more than that of humans in the 19th century",
           "B) domestic animals have benefited greatly from living with humans",
           "C) animals are more successful than humans in terms of survival strategies",
           "D) people learned how to domesticate animals during the late 19th century"
@@ -8521,9 +8517,9 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 2,
-        question: "depiction (n)",
+        question: "We can understand from paragraph 4 that ----.",
         options: [
-          "A) there has been a fierce confict among biologists over the domestication of animals",
+          "A) there has been a fierce conflict among biologists over the domestication of animals",
           "B) some animals didn't have the opportunity to live with humans and thus became extinct",
           "C) the number of wild animals could have been more if they hadn't started living with humans",
           "D) wild animals could have become extinct if they hadn't been domesticated"
@@ -8568,7 +8564,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "B"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 70,
@@ -8576,10 +8572,10 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Relative Clauses & Vocabulary",
     paragraphs: [
-      "Many places in England claim connections with King: Arthur and his Knights of the Round T able and none wants to share this honour. Yet even today, with all high tech tools of modern archaeology, it is still impossible to know if such a king really existed, or whether the fabulous story of him and his men is just made-up. Similarly, many people wonder if the Round T able, around which he and his Knights gathered, was a real round table",
-      "In fact, Arthur's Round T able exists near Winchester. It was first described 1155 by the French poet Wace, who relied on previous depictions by the guards of the mighty king. Its symbolism developed developed over time; by the 12\" century it had represented the chivalric order associated with Arthur's court. Today it is preserved inside the Great Hall, which is the only part of the former Winchester Castle that remains undamaged",
-      "Certainly there are plenty of references to King Arthur. He is known to be the British leader in the early 6\" century, who led the defense of Britain against Saxon invaders. Arthur had already become a folk hero by the 9t century as a warrior king. But none of the information is very reliable. What is certain is that the idea of honor associated with him was not so popular in that period of British history, known as the Dark Ages",
-      "The significance of the Round T able was that no one person, not even the mighty King Arthur, would be able to sit at the head of such a table. As its name suggests, it has no head, implying that everyone who sits there has equal status. A round table symbolized the concept of equality. The legend states that King Arthur ordered it to be built so that to it would resolve a conflict among his knights with regard to superiority. The Round T able was therefore - built to ensure that all the Knights of the Round T able were equal. -"
+      "Many places in England claim connections with King Arthur and his Knights of the Round Table and none wants to share this honour. Yet even today, with all high tech tools of modern archaeology, it is still impossible to know if such a king really existed, or whether the fabulous story of him and his men is just made-up. Similarly, many people wonder if the Round Table, around which he and his Knights gathered, was a real round table.",
+      "In fact, Arthur's Round Table exists near Winchester. It was first described in 1155 by the French poet Wace, who relied on previous depictions by the guards of the mighty king. Its symbolism developed over time; by the 12th century it had represented the chivalric order associated with Arthur's court. Today it is preserved inside the Great Hall, which is the only part of the former Winchester Castle that remains undamaged.",
+      "Certainly there are plenty of historical references to King Arthur. He is known to be the British leader in the early 6th century, who led the defense of Britain against Saxon invaders. Arthur had already become a folk hero by the 9th century as a warrior king. But none of the information is very reliable. What is certain is that the idea of honor associated with him was not so popular in that period of British history, known as the Dark Ages.",
+      "The significance of the Round Table was that no one person, not even the mighty King Arthur, would be able to sit at the head of such a table. As its name suggests, it has no head, implying that everyone who sits there has equal status. A round table symbolized the concept of equality. The legend states that King Arthur ordered it to be built so that it would resolve a conflict among his knights with regard to superiority. The Round Table was therefore built to ensure that all the Knights of the Round Table were equal."
     ],
     vocabulary: [
       { term: "claim", meaning: "iddia etmek", partOfSpeech: "v", definition: "To say that something is true or yours.", exampleSentence: "Many places claim connections with King Arthur." },
@@ -8601,24 +8597,18 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "rely on (phr.v)",
+        question: "We can understand from paragraph 1 that ----.",
         options: [
-          "A) many archaeologists from different parts of Britain are stil carrying out excavations",
+          "A) many archaeologists from different parts of Britain are still carrying out excavations",
           "B) most British people do not believe in the legend of King Arthur and his Knights of the Round Table",
           "C) we may never be sure of the existence of King Arthur and the Round Table",
-          "D) archaeologists using cutting-edge technology fools can accurately tell whether the legend is true 5.",
-          "E) mighty",
-          "F) impossible --status/rights/pay/treatment/opportunities",
-          "G) historical",
-          "H) equal a conflict/matter/crisis/dispute/problem",
-          "I) claim",
-          "J) resolve"
+          "D) archaeologists using cutting-edge technology tools can accurately tell whether the legend is true"
         ],
         answer: "C"
       },
       {
         id: 2,
-        question: "depiction (n)",
+        question: "According to paragraph 2, although historical references about King Arthur exist, ----.",
         options: [
           "A) Saxon invaders destroyed most of them",
           "B) most historians disagree on their authenticity",
@@ -8629,12 +8619,12 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 3,
-        question: "associated with (v)",
+        question: "Paragraph 4 is mainly about ----.",
         options: [
           "A) how the Round Table was constructed",
           "B) the importance and symbolism of the Round Table",
           "C) the issues King Arthur and his Knights discussed",
-          "D) how King Arthur became such a mighty ruler AAKİN DİL EĞİTİM www.shivcht.com"
+          "D) how King Arthur became such a mighty ruler"
         ],
         answer: "B"
       }
@@ -8665,7 +8655,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "B"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 71,
@@ -8673,7 +8663,8 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "B2",
     theme: "Comparison & Vocabulary",
     paragraphs: [
-      "Bollywood and Hollywood are two internationally recognized film industries. Hollywood is basically the entire American film industry distributing movies worldwide. It's named after a district in California which became the centre of movie studios in the early 1900s. It was established WWI and is considered to be the world’s leading and influential film industry. Both Hollywood movies and stars are recognized by many people around the world. Hollywood movies are made on a large scale. They usually involve elements of blood, violence, and other controversial themes. In terms of revenue, Hollywood dominates the sales. The industry earns more money by utilising a franchise system apart from revenue from the actual film. The movie is often tied with various other media such as TV networks and magazines. In terms of worldwide cinema, Hollywood gets around 75 per cent of all movie revenues. 2 On the other hand part of the Hindi cinema industry. The term “Bollywood” was coined and popularized during the 1970s, when Hindi cinema surpassed Hollywood. The name is a combination of Bombay and Hollywood. Movies created by Bollywood are often family-oriented and appeal to human sensitivity. The dominant themes in these movies are musicals with large casts and several song and dance sequences. A major criticism of Bollywood movies is that they have a predictable and consistent plot. In addition, plots lack creativity and a form of escapist entertainment. Another criticism is that Bollywood replicates plots from Hollywood movies. Just as Tv pre Hollywood, Bollywood also produces and distributes its films internationally but does not get the same attention as Hollywood. The Bollywood industry produces more films than Hollywood but spends less on production. A movie's success or earnings is reliant on the theater revenues and music videos that the movie produces"
+      "Bollywood and Hollywood are two internationally recognized film industries. Hollywood is basically the entire American film industry distributing movies worldwide. It's named after a district in California which became the centre of movie studios in the early 1900s. It was established before WWI and is considered to be the world's leading and influential film industry. Both Hollywood movies and stars are recognized by many people around the world. Hollywood movies are made on a large scale. They usually involve elements of blood, violence, and other controversial themes. In terms of revenue, Hollywood dominates the sales. The industry earns more money by utilising a franchise system apart from revenue from the actual film. The movie is often tied with various other media such as TV networks and magazines. In terms of worldwide cinema, Hollywood gets around 75 per cent of all movie revenues.",
+      "On the other hand, Bollywood is one part of the Hindi cinema industry. The term “Bollywood” was coined and popularized during the 1970s, when Hindi cinema surpassed Hollywood. The name is a combination of Bombay and Hollywood. Movies created by Bollywood are often family-oriented and appeal to human sensitivity. The dominant themes in these movies are musicals with large casts and several song and dance sequences. A major criticism of Bollywood movies is that they have a predictable and consistent plot. In addition, plots lack creativity and a form of escapist entertainment. Another criticism is that Bollywood replicates plots from Hollywood movies. Just as Hollywood, Bollywood also produces and distributes its films internationally but does not get the same attention as Hollywood. The Bollywood industry produces more films than Hollywood but spends less on production. A movie's success or earnings is reliant on the theater revenues and music videos that the movie produces."
     ],
     vocabulary: [
       { term: "recognized", meaning: "tanınan, bilinen", partOfSpeech: "adj", definition: "Widely known and accepted.", exampleSentence: "They are two internationally recognized industries." },
@@ -8695,27 +8686,29 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "the text. 1. According to paragraph 1, Hollywood ----.",
+        question: "According to paragraph 1, Hollywood ----.",
         options: [
           "A) is criticized harshly due largely to the controversial themes of its films",
-          "B) revenue",
-          "C) criticism"
+          "B) gets a huge share of its revenues from other countries",
+          "C) became the most important movie industry during 19th century",
+          "D) gets almost three quarters of the global film revenues"
         ],
         answer: "D"
       },
       {
         id: 2,
-        question: "revenues 2. Which of the following is FALSE about Bollywood films?",
+        question: "Which of the following is FALSE about Bollywood films?",
         options: [
           "A) There is no variety in terms of their themes.",
-          "C) G) A huge sum of money is spent on them.",
-          "D) Its easy to guess what will happen while"
+          "B) They are just copies of Hollywood films.",
+          "C) A huge sum of money is spent on them.",
+          "D) It's easy to guess what will happen while watching them."
         ],
         answer: "C"
       },
       {
         id: 3,
-        question: "watching them. ial 3. The aim of the author is to ----.",
+        question: "The aim of the author is to ----.",
         options: [
           "A) criticize Bollywood film industry",
           "B) compare Hollywood and Bollywood",
@@ -8751,7 +8744,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "A"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 72,
@@ -8759,9 +8752,10 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "B2",
     theme: "Vocabulary & Connectors",
     paragraphs: [
-      ") 1 Scuba diving is a type of underwater diving. Divers use a self-contained underwater breathing apparatus; called scuba. Since humans are not designed to see and breathe underwater, scuba diving requires some vital equipment. Scuba divers breathe with the help of a regulator. There is another; other regulator called an octopus. It is used in case of emergency situations. Divers also wear a pressure gauge showing how much air is left in the air tank. Becoming a certified need to about the safety of diving. Moreover, they must practise diving skills first in a closed water area",
-      "Scuba diving first became become possible with the development of the Aqualung by Jacques Cousteau in the early 1940s. Articles in popular magazines about Cousteau and his underwater exploration methods brought attention to scuba diving. Owing to high cost of the equipment, diving couldn't become a widely available sport until years later",
-      "There are many safety issues to consider when diving. For example, when the time going down deeper in the water, a diver must be careful to equalize the pressure in his ears. This is done by holding the nose and blowing very gently. Otherwise, the extreme pressure can cause damage to the middle ear and sinuses. Decompression sickness is a major concern for divers. The deeper a diver goes, the more pressure the water puts on the volume of the air inside his lungs. And, the deeper a dive, the more nitrogen gas goes into the diver's blood. For safety reasons, a diver must measure the length of his dive based on its depth so as not to exceed a safe amount of nitrogen absorption. When divers rise to the surface, they must carry on breathing and rise no faster than the air bubbles around them. For very deep dives, they must stop and decompress at certain levels. Therefore, the highly pressurized air in the diver's lungs has time to leave the body before it expands"
+      "Scuba diving is a type of underwater diving. Divers use a self-contained underwater breathing apparatus called scuba. Since humans are not designed to see and breathe underwater, scuba diving requires some vital equipment. Scuba divers breathe with the help of a regulator. There is another regulator called an octopus. It is used in case of emergency situations. Divers also wear a pressure gauge showing how much air is left in the air tank. Becoming a certified diver requires taking a series of lessons. New divers need to learn about the safety of diving. Moreover, they must practise diving skills first in a closed water area.",
+      "Scuba diving first became possible with the development of the Aqualung by Jacques Cousteau in the early 1940s. Articles in popular magazines about Cousteau and his underwater exploration methods brought attention to scuba diving. Owing to the high cost of the equipment, diving couldn't become a widely available sport until years later.",
+      "There are many safety issues to consider when diving. For example, when going down deeper in the water, a diver must be careful to equalize the pressure in his ears. This is done by holding the nose and blowing very gently. Otherwise, the extreme pressure can cause damage to the middle ear and sinuses. Decompression sickness is a major concern for divers. The deeper a diver goes, the more pressure the water puts on the volume of the air inside his lungs. And, the deeper a dive, the more nitrogen gas goes into the diver's blood. For safety reasons, a diver must measure the length of his dive based on its depth so as not to exceed a safe amount of nitrogen absorption.",
+      "When divers rise to the surface, they must carry on breathing and rise no faster than the air bubbles around them. For very deep dives, they must stop and decompress at certain levels. Therefore, the highly pressurized air in the diver's lungs has time to leave the body before it expands."
     ],
     vocabulary: [
       { term: "underwater", meaning: "su altı", partOfSpeech: "adj", definition: "Below the surface of the water.", exampleSentence: "Scuba diving is a type of underwater diving." },
@@ -8841,7 +8835,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "B"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 73,
@@ -8849,8 +8843,9 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Vocabulary & Cause-Effect",
     paragraphs: [
-      "Recent research has revealed that all languages have a common ancestor. Some scientists studied 504 modern languages, from English to Mandarin Chinese, and discovered that every language on Earth has stemmed from a dialect people spoke in Africa in prehistoric times. According to the researchers, they began to speak for the first time approximately 100,000 years ago and this was the first language in the world. However, it is not spoken any more. Early humans then left Africa, moving across Europe, Asia, them which then altered along the way. 2 Most scientists agree that the first humans came from Africa, but some believe languages developed at different times in different parts of the world and there is no connection between them. Thus, this research is important as it suggests this is not the case. It suggests that all languages must originate from the same place — somewhere in Africa. The scientists made this discovery by looking at how many different sounds there were in various languages across the world. They discovered that the number of sounds that languages had was different in different continents. Then, they compared them with the ones in Africa, and found out that if a spoken language was a long way from Africa, it didn’t have many sounds. However other hand, if a language was close to Africa, it had a lot of sounds. For example As a result For example, Hadza, which is spoken in Tanzania, has 69 sounds, English has about 45 sounds, and Mandarin Chinese has 32 sounds",
-      "So it seems that thousands of years ago, as human beings were moving further away from Africa, they used fewer sounds in their languages. So it seems the first language was African! Interestingly, some African languages have a large number of sounds. For instance, Xu, a South African language, has 141 G different sounds. While some languages - that are far away from Africa have many sounds, Bandjalang, an Australian language, has merely sixteen sounds. 2"
+      "Recent research has revealed that all languages have a common ancestor. Some scientists studied 504 modern languages, from English to Mandarin Chinese, and discovered that every language on Earth has stemmed from a dialect people spoke in Africa in prehistoric times. According to the researchers, they began to speak for the first time approximately 100,000 years ago and this was the first language in the world. However, it is not spoken any more. Early humans then left Africa, moving across Europe, Asia, and America, taking their language with them which then altered along the way.",
+      "Most scientists agree that the first humans came from Africa, but some believe languages developed at different times in different parts of the world and there is no connection between them. Thus, this research is important as it suggests this is not the case. It suggests that all languages must originate from the same place – somewhere in Africa. The scientists made this discovery by looking at how many different sounds there were in various languages across the world. They discovered that the number of sounds that languages had was different in different continents. Then, they compared them with the ones in Africa, and found out that if a spoken language was a long way from Africa, it didn't have many sounds. On the other hand, if a language was close to Africa, it had a lot of sounds. For example, Hadza, which is spoken in Tanzania, has 69 sounds, English has about 45 sounds, and Mandarin Chinese has 32 sounds.",
+      "So it seems that thousands of years ago, as human beings were moving further away from Africa, they used fewer sounds in their languages. So it seems the first language was African! Interestingly, some African languages have a large number of sounds. For instance, Xu, a South African language, has 141 different sounds. While some languages that are far away from Africa have many sounds, Bandjalang, an Australian language, has merely sixteen sounds."
     ],
     vocabulary: [
       { term: "research", meaning: "araştırma", partOfSpeech: "n", definition: "A careful study to discover facts.", exampleSentence: "Recent research has revealed this." },
@@ -8872,34 +8867,34 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "overwhelming (adj)",
+        question: "Which of the following is TRUE about the first language mentioned in paragraph 1?",
         options: [
-          "A) It is still a prevalent language in various parts of Africa",
-          "B) It has never undergone any changes since people started speaking it. EXERCISE 4. Choose the correct option. knowledge/practice/good 1.",
-          "C) various",
-          "D) common"
+          "A) It is still a prevalent language in various parts of Africa.",
+          "B) It has never undergone any changes since people started speaking it.",
+          "C) It is the language from which all languages have originated.",
+          "D) African people immigrated to other parts of the world to spread their language."
         ],
         answer: "C"
       },
       {
         id: 2,
-        question: "calculate (v)",
+        question: "Which of the following is the finding of the research mentioned in paragraph 2?",
         options: [
           "A) The farther away you move from Africa, the fewer sounds you find in a language.",
           "B) People in different continents actually speak similar languages.",
           "C) It is extremely difficult to find out the origins of the very first language.",
-          "D) The number of the sounds in different languages shows no similarities at all ARIN BIL EGITEN A"
+          "D) The number of the sounds in different languages shows no similarities at all."
         ],
         answer: "A"
       },
       {
         id: 3,
-        question: "definitely (v)",
+        question: "What could be the best title of the passage?",
         options: [
           "A) The Reasons behind the Changes to Languages",
           "B) The Father of All Languages: African",
           "C) Various Studies into the Evolution of Languages",
-          "D) Recent Research Methods implemented by Scientists EXERCISE 3. Choose the correct option according to the text."
+          "D) Recent Research Methods Implemented by Scientists"
         ],
         answer: "B"
       }
@@ -8930,7 +8925,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "B"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 74,
@@ -8938,7 +8933,8 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Vocabulary & Contrast",
     paragraphs: [
-      "An overwhelming majority of the people who appear most often and most gloriously in the history books are great conquerors and soldiers, whereas the people who really helped civilization develop are almost never mentioned at all instance, we do not know who first treated a broken leg, or calculated the length of a year, or grew crops; however addition, we do know all about the killers and destroyers. They could be great indeed, but we must note that they are definitely not the most civilized ones. It is true that fighting is a part of the nature of all living things, but can we say the same for war-fighting? Animals fight; so do savages; hence, to be good at fighting is to be good in the way in which an animal or a savage is good, but it is not to be civilized. People fight to settle quarrels. Fighting means killing, and civilized people ought to be able to find some way of settling their disputes other than of by seeing which side can kill off the greater number of the other side, and then saying that the side which has killed most has won. 2 On the whole, that is what the story of mankind has been like. But we must not expect too much. After all, the race of men has only just started. From the point of view of evolution, human beings are just babies of a few months old. Suppose that we calculate the whole past of living creatures on Earth as one hundred years; then the whole past of man works out to about one month, and during that month there have been civilizations for between about seven or eight hours, we may able to estimate his future, that is to say, the whole period between now and when the sun grows too cold to maintain life any longer on the earth, at about one hundred thousand years. Thus mankind is only at the outset of its civilized life"
+      "An overwhelming majority of the people who appear most often and most gloriously in the history books are great conquerors and soldiers, whereas the people who really helped civilization develop are almost never mentioned at all. For instance, we do not know who first treated a broken leg, or calculated the length of a year, or grew crops; however, we do know all about the killers and destroyers. They could be great indeed, but we must note that they are definitely not the most civilized ones. It is true that fighting is a part of the nature of all living things, but can we say the same for war-fighting? Animals fight; so do savages; hence, to be good at fighting is to be good in the way in which an animal or a savage is good, but it is not to be civilized. People fight to settle quarrels. Fighting means killing, and civilized people ought to be able to find some way of settling their disputes other than by seeing which side can kill off the greater number of the other side, and then saying that the side which has killed most has won.",
+      "On the whole, that is what the story of mankind has been like. But we must not expect too much. After all, the race of men has only just started. From the point of view of evolution, human beings are just babies of a few months old. Suppose that we calculate the whole past of living creatures on Earth as one hundred years; then the whole past of man works out to about one month, and during that month there have been civilizations for between about seven and eight hours. Taking man's civilized past at about seven or eight hours, we may estimate his future, that is to say, the whole period between now and when the sun grows too cold to maintain life any longer on the earth, at about one hundred thousand years. Thus mankind is only at the outset of its civilized life."
     ],
     vocabulary: [
       { term: "overwhelming", meaning: "ezici, çok büyük", partOfSpeech: "adj", definition: "Very great in amount or effect.", exampleSentence: "The overwhelming majority are soldiers and conquerors." },
@@ -8961,21 +8957,21 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "overwhelming (adj)",
+        question: "What is the main idea of paragraph 1?",
         options: [
           "A) Some authors of history books are critical of the people who changed history, particularly conquerors and soldiers.",
           "B) Conquerors and soldiers have been our most famous men, but they did not help civilization forward.",
           "C) Great conquerors and soldiers are mostly in history books because fighting is a part of human nature.",
-          "D) Animals and humans are similar to each other since both species fight in order to maintain their lives. ABIN BIL EGITEN EXERCISE 4. Choose the correct option."
+          "D) Animals and humans are similar to each other since both species fight in order to maintain their lives."
         ],
         answer: "B"
       },
       {
         id: 2,
-        question: "calculate (v)",
+        question: "Why does the author make the calculation in paragraph 2?",
         options: [
           "A) To show how the human race has been cruel to each other.",
-          "B) To ilustrate the different stages that human beings have gone through.",
+          "B) To illustrate the different stages that human beings have gone through.",
           "C) To underline that he is pessimistic about the future of the human race.",
           "D) To emphasize that human beings are at the beginning of their civilization."
         ],
@@ -8983,12 +8979,12 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 3,
-        question: "definitely (v)",
+        question: "The author's tone in the passage is ----.",
         options: [
           "A) informative",
           "B) optimistic",
           "C) critical",
-          "D) impartial 050-420 AKIN (25460 BIL COTTEN www.acoal.com"
+          "D) impartial"
         ],
         answer: "C"
       }
@@ -9019,7 +9015,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "A"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 75,
@@ -9027,9 +9023,9 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "B2",
     theme: "Vocabulary & Comparison",
     paragraphs: [
-      "» use of his or her intelligence. Such \" religious books as the Koran and the Bible - discuss faith as a form of happiness. The British <) scientist Charles Darwin believed that all species were formed in a way so as to enjoy happiness. People throughout history may have had different ideas about happiness. Today, however, many people are still searching for its meaning",
-      "But how do you study something like happiness? You could start with the World Database of Happiness. This set of information includes how to define and measure happiness. Some findings are not surprising. For example, the database suggests that married people are happier than single ones. People who like to be S) with other people are happier than 3 unsocial people. Yet other findings - are less expected: people with children are equally as ’ happy as couples without children. And i wealthier people are only a little happier A than poorer people. Moreover, people living in strongly democratic and affluent countries: are happier than those who do not. This database 3 also shows that studying happiness no longer involves just theories and ideas. Economists, psychiatrists, and doctors are finding ways of understanding happiness by examining real sets of information",
-      "There is also an increasing amount of medical research on the physical qualities of happiness. Doctors can now look at happiness in a person's brain utilizing a method called MRI. For example, an MRI can show how one area of a person's brain is stimulated when he or she is shown happy pictures. A different area of the brain becomes active when the person sees pictures of terrible subjects. This p> research may lead to better insight into depression and other mental problems"
+      "From the ancient Greeks and Romans to current day writers and professors, the debate about happiness continues. What makes someone feel happy? The Greek philosopher Aristotle once said that a person's happiness stems from the use of his or her intelligence. Such religious books as the Koran and the Bible discuss faith as a form of happiness. The British scientist Charles Darwin believed that all species were formed in a way so as to enjoy happiness. People throughout history may have had different ideas about happiness. Today, however, many people are still searching for its meaning.",
+      "But how do you study something like happiness? You could start with the World Database of Happiness. This set of information includes how to define and measure happiness. Some findings are not surprising. For example, the database suggests that married people are happier than single ones. People who like to be with other people are happier than unsocial people. Yet other findings are less expected: people with children are equally as happy as couples without children. And wealthier people are only a little happier than poorer people. Moreover, people living in strongly democratic and affluent countries are happier than those who do not. This database also shows that studying happiness no longer involves just theories and ideas. Economists, psychiatrists, and doctors are finding ways of understanding happiness by examining real sets of information.",
+      "There is also an increasing amount of medical research on the physical qualities of happiness. Doctors can now look at happiness in a person's brain utilizing a method called MRI. For example, an MRI can show how one area of a person's brain is stimulated when he or she is shown happy pictures. A different area of the brain becomes active when the person sees pictures of terrible subjects. This research may lead to better insight into depression and other mental problems."
     ],
     vocabulary: [
       { term: "debate", meaning: "tartışma", partOfSpeech: "n", definition: "A discussion about a subject where people disagree.", exampleSentence: "The debate about happiness continues." },
@@ -9051,11 +9047,11 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "the text. 1. Paragraph 1 is mainly concerned with the —--,",
+        question: "Paragraph 1 is mainly concerned with the ----.",
         options: [
           "A) various ideas of happiness",
           "B) methods of finding happiness",
-          "C) famous philasaphers wha studied happiness",
+          "C) famous philosophers who studied happiness",
           "D) living organisms in pursuit of happiness"
         ],
         answer: "A"
@@ -9064,8 +9060,8 @@ export const PASSAGES_DATA: Passage[] = [
         id: 2,
         question: "Which of the following is FALSE according to paragraph 2?",
         options: [
-          "A) People residing in well-off countries are happier",
-          "B) Exarrining happiness is no longer theoretical.",
+          "A) People residing in well-off countries are happier.",
+          "B) Examining happiness is no longer theoretical.",
           "C) People from certain professions are less happy than others.",
           "D) Maintaining a regular relationship with someone makes you happier."
         ],
@@ -9073,14 +9069,12 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 3,
-        question: "have had bitter experiences.",
+        question: "We can understand from the research mentioned in paragraph 3 that ----.",
         options: [
           "A) Some people who participated in the research have had bitter experiences.",
           "B) Research findings may provide useful information about mental disorders.",
-          "C) MRI is the only way of studying happiness and mental illnesses",
-          "D) The methods utilized in the research have been unsatisfactory so far.",
-          "E) affluent",
-          "F) mental www.okmat.com 085-420 AKN (1546)"
+          "C) MRI is the only way of studying happiness and mental illnesses.",
+          "D) The methods utilized in the research have been unsatisfactory so far."
         ],
         answer: "B"
       }
@@ -9111,7 +9105,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "B"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 76,
@@ -9119,9 +9113,10 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Third Conditional & Vocabulary",
     paragraphs: [
-      "The sinking of the Titanic on its maiden voyage has fascinated all over the world for more than hundred years. It has been a matter of many research studies, books, films and so on. Regardless of genre of product, millions of people have burst into tears as they are all about a different aspect of the appalling disaster. It is a story surrounded by mystery and speculation. Here are some possible scenarios",
-      "The regulations controlling the number of lifeboats that a ship should carry were inadequate in addition to the obsolete regulations. In line with of these regulations, the Titanic only had to have 16 lifeboats. Nobody would have died on April 14th,1912, if the Titanic had had enough lifeboats for all the passengers",
-      "A small ship called the Californian was only 20 kilometres away from the Titanic at the time of the disaster. It had to stop for the night owing to of the icebergs. It was so near that the two ships could see each other's lights. The radio operator had gone away from the radio and thus thus since he didn’t hear the distress call. Later sailors saw the Titanic's distress flares in the sky and woke up the captain but he didn't do anything as he didn't think it was something important. If the Californian had realized the Titanic was sinking, it would have rescued. The captain of the Californian was later blamed for not going to help the Titanic and his reputation was destroyed. IL Eiri 4 Although they had received several warnings of icebergs from other ships in the area, the Titanic was going at top speed. The captain of the Titanic, like as other captains, was under great commercial pressure to make the Atlantic crossing as quickly as possible. Another criticism of captain Smith is that he was not on the bridge at the time of the collision. Perhaps if he had been there, he would have had time to devise a plan to avoid the disaster. Captain Smith and the ship's h designer Thomas Andrews both drowned. 2"
+      "The sinking of the Titanic on its maiden voyage has fascinated people all over the world for more than hundred years. It has been a matter of many research studies, books, films and so on. Regardless of genre of product, millions of people have burst into tears as they are all about a different aspect of the appalling disaster. It is a story surrounded by mystery and speculation. Here are some possible scenarios.",
+      "The regulations controlling the number of lifeboats that a ship should carry were inadequate in addition to the obsolete regulations. In line with these regulations, the Titanic only had to have 16 lifeboats. Nobody would have died on April 14th, 1912, if the Titanic had had enough lifeboats for all the passengers.",
+      "A small ship called the Californian was only 20 kilometres away from the Titanic at the time of the disaster. It had to stop for the night owing to the icebergs. It was so near that the two ships could see each other's lights. The radio operator had gone away from the radio and thus he didn't hear the distress call. Later sailors saw the Titanic's distress flares in the sky and woke up the captain but he didn't do anything as he didn't think it was something important. If the Californian had realized the Titanic was sinking, it would have rescued everybody. The captain of the Californian was later blamed for not going to help the Titanic and his reputation was destroyed.",
+      "Although they had received several warnings of icebergs from other ships in the area, the Titanic was going at top speed. The captain of the Titanic, like other captains, was under great commercial pressure to make the Atlantic crossing as quickly as possible. Another criticism of captain Smith is that he was not on the bridge at the time of the collision. Perhaps if he had been there, he would have had time to devise a plan to avoid the disaster. Captain Smith and the ship's designer Thomas Andrews both drowned."
     ],
     vocabulary: [
       { term: "maiden voyage", meaning: "ilk sefer", partOfSpeech: "n", definition: "A ship's first journey.", exampleSentence: "The Titanic sank on its maiden voyage." },
@@ -9144,12 +9139,12 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "the text, 1. According to paragraph 1, Canadian government is unwilling to limit logging since it ----.",
+        question: "Which of the following is TRUE about the disaster mentioned in paragraph 1?",
         options: [
-          "A) is actually to the benefit of all species",
-          "B) brings considerable benefits to the nation",
-          "C) causes only a little destruction of forests",
-          "D) gives no harm to the citizens at all"
+          "A) The number of research studies is inadequate.",
+          "B) Many people have lost their interest in the disaster.",
+          "C) The disaster is the most horrifying one in history.",
+          "D) It is still unclear why the disaster occurred."
         ],
         answer: "D"
       },
@@ -9166,14 +9161,12 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 3,
-        question: "the cultivation of this plant",
+        question: "The author's primary purpose is to ----.",
         options: [
           "A) criticise the individuals causing the disaster",
           "B) underline the importance of the disaster",
           "C) outline some potential causes of the disaster",
-          "D) warm the officials against potential future disasters EXERCISE 4. Choose the correct option. 1.a method/way/plan/strategy",
-          "E) rescue",
-          "F) devise EXERCISE 3. Choose the correct option according to the text."
+          "D) warn the officials against potential future disasters"
         ],
         answer: "C"
       }
@@ -9204,7 +9197,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "A"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 77,
@@ -9212,7 +9205,9 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Passive Voice & Vocabulary",
     paragraphs: [
-      "0) 1 Every second, about 1 hectare of the world's rainforest is destroyed. In a year, that - adds up to 31 million hectares. This alarming rate of: destruction has serious consequences for 3 the environment. Scientists estimate that 137 species of plant and animal become extinct every day due to. Logging, however, provides jobs, profits, taxes for the government and affordable products of all kinds for consumers, so the Canadian government is reluctant to restrict or control 2 Much of Canada's forestry production much of the world's wood pulp and newsprint paper. If these paper products could be produced in some other way, Canadian forests could be preserved. Recently, a possible alternative way of producing paper has been suggested by environmentalists: a plant called hemp. Hemp has been cultivated for thousands of years. For many centuries, it was essential to the economies of many countries as it was used to make the ropes and cables used on sailing ships. Colonial expansion and the establishment of a world-wide trading network wouldn’t have been possible without hemp. Nowadays, scientists suggest that its cultivation should be brought back for the production of paper and pulp. According to its proponents, four times as much paper can be produced from land using hemp rather than of trees, and also the cultivation of hemp on a large scale could reduce the pressure on Canada's forests. 3 However, hemp is illegal in many countries since it is related to the plant from which marijuana is produced. In the late 1930s, a movement to ban the drug marijuana resulted in the eventual banning of the cultivation not only of the plant used to produce the drug, but also of the commercial fiber-producing hemp plant. Nowadays, some people believe that it should not be illegal. They argue that marijuana is not dangerous or addictive. They also point out that marijuana is less pl toxic than alcohol or tobacco. As a result of movement, in 1997, Canada legalized the farming of hemp. -"
+      "Every second, about 1 hectare of the world's rainforest is destroyed. In a year, that adds up to 31 million hectares. This alarming rate of destruction has serious consequences for the environment. Scientists estimate that 137 species of plant and animal become extinct every day due to logging. Logging, however, provides jobs, profits, taxes for the government and affordable products of all kinds for consumers, so the Canadian government is reluctant to restrict or control it.",
+      "Much of Canada's forestry production goes towards making pulp and paper. It supplies much of the world's wood pulp and newsprint paper. If these paper products could be produced in some other way, Canadian forests could be preserved. Recently, a possible alternative way of producing paper has been suggested by environmentalists: a plant called hemp. Hemp has been cultivated for thousands of years. For many centuries, it was essential to the economies of many countries as it was used to make the ropes and cables used on sailing ships. Colonial expansion and the establishment of a world-wide trading network wouldn't have been possible without hemp. Nowadays, scientists suggest that its cultivation should be brought back for the production of paper and pulp. According to its proponents, four times as much paper can be produced from land using hemp rather than trees, and also the cultivation of hemp on a large scale could reduce the pressure on Canada's forests.",
+      "However, hemp is illegal in many countries since it is related to the plant from which marijuana is produced. In the late 1930s, a movement to ban the drug marijuana resulted in the eventual banning of the cultivation not only of the plant used to produce the drug, but also of the commercial fiber-producing hemp plant. Nowadays, some people believe that it should not be illegal. They argue that marijuana is not dangerous or addictive. They also point out that marijuana is less toxic than alcohol or tobacco. As a result of this movement, in 1997, Canada legalized the farming of hemp."
     ],
     vocabulary: [
       { term: "hectare", meaning: "hektar", partOfSpeech: "n", definition: "A unit of area equal to 10,000 square metres.", exampleSentence: "One hectare of rainforest is destroyed every second." },
@@ -9235,7 +9230,7 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "the text, 1. According to paragraph 1, Canadian government is unwilling to limit logging since it ----.",
+        question: "According to paragraph 1, Canadian government is unwilling to limit logging since it ----.",
         options: [
           "A) is actually to the benefit of all species",
           "B) brings considerable benefits to the nation",
@@ -9246,23 +9241,23 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 2,
-        question: "According to paragraph 2, currently, some people favour the utilization and farming of hemp because ----,",
+        question: "According to paragraph 2, currently, some people favour the utilization and farming of hemp because ----.",
         options: [
           "A) it is a much more affordable plant to grow compared with all other plants",
           "B) an overwhelming majority of Canadians voted for the cultivation of this plant",
-          "C) this plant was beneficial for the scenomy in the previous centuries",
-          "D) considerably more amounts of paper can be produced with the help of this plant EXERCISE 4. Choose the correct option."
+          "C) this plant was beneficial for the economy in the previous centuries",
+          "D) considerably more amounts of paper can be produced with the help of this plant"
         ],
         answer: "D"
       },
       {
         id: 3,
-        question: "the cultivation of this plant",
+        question: "We can understand from paragraph 3 that ----.",
         options: [
           "A) some people cultivated hemp in order to produce large amounts of marijuana",
-          "B) the law regarding hemp has undergane some changes during the 20^{\\\\circ} century",
+          "B) the law regarding hemp has undergone some changes during the 20th century",
           "C) an overwhelming majority of Canadians voted for the legalization of the farming of hemp",
-          "D) Canadian government had no choice but make changes to the use of alcohol and tobacco products EXERCISE 3. Choose the correct option according to the text."
+          "D) Canadian government had no choice but make changes to the use of alcohol and tobacco products"
         ],
         answer: "B"
       }
@@ -9293,7 +9288,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "B"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 78,
@@ -9301,8 +9296,9 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "B2",
     theme: "Vocabulary & Present Simple",
     paragraphs: [
-      ") 1 The Eskimo people have a very interesting life style. They live in small bands, under a leader respected for his ability to provide for the group. Only the most personal property is considered private and collaboration is very important. For example, any equipment that they aren't currently using must go to a neighbour who needs it. In the past, the division of labour between the sexes was strict. Men hunted, whereas women took care of the homes. However, today women take part in hunting as / too as much as men. Eskimos make use of various types of houses. Among some Eskimo groups, the snow hut, known as the igloo, is used as a winter residence. 2 As for their eating habits, Eskimos eat a wide variety of food. They consume fish, seals, whales, and other sea mammals. Meat, fat and fish make up a large part of their diet. Vegetables are rarely consumed because they are scarce. They don't waste any food as they depend on fishing and hunting. They sometimes eat berries, roots, stems and some other parts of plants",
-      "Their education takes place within the family and the community circle. By constant exposure to their parents and other adults in the community, children learn all they need to live successfully. The Eskimo of old did not have a written language, so skills and knowledge were passed down by word of mouth. After a successful hunt, for example, the details were shared with the community. The children, boys in particular, listened to reports of the hunters and learned from them. Hunters were like teachers to them. They would describe in detail the location where they spotted the animal and tell about the animal's behaviour and how they responded to that behaviour. Besides listening to the hunters' stories, the children would observe the behaviours of animals. As opposed to the noisy children of modern society, being silent is something Eskimo children are taught as it is a necessity for hunting. Moreover contrast, they learn to memorize the landscape and thus know the region just like an adult"
+      "The Eskimo people have a very interesting life style. They live in small bands, under a leader respected for his ability to provide for the group. Only the most personal property is considered private and collaboration is very important. For example, any equipment that they aren't currently using must go to a neighbour who needs it. In the past, the division of labour between the sexes was strict. Men hunted, whereas women took care of the homes. However, today women take part in hunting as much as men. Eskimos make use of various types of houses. Among some Eskimo groups, the snow hut, known as the igloo, is used as a winter residence.",
+      "As for their eating habits, Eskimos eat a wide variety of food. They consume fish, seals, whales, and other sea mammals. Meat, fat and fish make up a large part of their diet. Vegetables are rarely consumed because they are scarce. They don't waste any food as they depend on fishing and hunting. They sometimes eat berries, roots, stems and some other parts of plants.",
+      "Their education takes place within the family and the community circle. By constant exposure to their parents and other adults in the community, children learn all they need to live successfully. The Eskimo of old did not have a written language, so skills and knowledge were passed down by word of mouth. After a successful hunt, for example, the details were shared with the community. The children, boys in particular, listened to reports of the hunters and learned from them. Hunters were like teachers to them. They would describe in detail the location where they spotted the animal and tell about the animal's behaviour and how they responded to that behaviour. Besides listening to the hunters' stories, the children would observe the behaviours of animals. As opposed to the noisy children of modern society, being silent is something Eskimo children are taught as it is a necessity for hunting. Moreover, they learn to memorize the landscape and thus know the region just like an adult."
     ],
     vocabulary: [
       { term: "lifestyle", meaning: "yaşam tarzı", partOfSpeech: "n", definition: "The way a person or group lives.", exampleSentence: "Eskimo people have an interesting lifestyle." },
@@ -9324,7 +9320,7 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "the text. 1. We can understand from paragraph 1 that ----. can understand from paragraph that",
+        question: "We can understand from paragraph 1 that ----.",
         options: [
           "A) the cooperation between men and women has decreased",
           "B) Eskimos would prefer to live in igloos throughout the year",
@@ -9335,7 +9331,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 2,
-        question: "did in the past 2. Vegetables constitute only a small part of the Eskimo diet since ----.",
+        question: "Vegetables constitute only a small part of the Eskimo diet since ----.",
         options: [
           "A) meat provides more calories",
           "B) Eskimos don't know how to cultivate them",
@@ -9346,12 +9342,12 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 3,
-        question: "EğirtiN 3. Paragraph 3 is mainly concerned with the ----.",
+        question: "Paragraph 3 is mainly concerned with the ----.",
         options: [
-          "A) strategies Eskimo children leam when hunting",
+          "A) strategies Eskimo children learn when hunting",
           "B) various ways of observing animals",
-          "C) differences between the Eskimos and modem society",
-          "D) education of Eskimo children ANIN DIL EGETINA www.akindl.com"
+          "C) differences between the Eskimos and modern society",
+          "D) education of Eskimo children"
         ],
         answer: "D"
       }
@@ -9382,7 +9378,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "A"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 79,
@@ -9390,8 +9386,10 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Vocabulary & Contrast",
     paragraphs: [
-      "3 1 So many of us strive so hard for material success that you might think there is a clear relationship. between wealth and happiness. The media and our 5 governments encourage us to believe this since they need us to keep earning and - spending to boost economic growth.: 2 Consequently, it comes as a shock for many people - to learn that there is no straightforward 3 relationship between wealth and well-being. Once our basic material needs are satisfied (i.e. regular food, adequate shelter, and financial security), wealth only has a negligible effect on well-being. For example have shown that in general, lottery winners do not become significantly happier than they were before, and that even extremely rich people — such as billionaires — are not significantly happier than others. Studies have shown that American and British people are less content now than they were 50 years ago, although their material wealth is much higher. On an international level, there does appear to be some correlation between wealth and well-being, partly because there are many countries in the world where people’s basic material needs are not: satisfied. But this correlation is not a straightforward: one, since wealthier countries tend to be more, politically stable, peaceful and democratic, with less oppression and more freedom — all of whichch are themselves important factors in well- being. \"3 However, it does appear that there is a relationship between non-materialism and well-being. While possessing wealth and material goods doesn’t lead to happiness, giving these things away actually does. Generosity is strongly associated with well-being. For example, recent studies of people who practise volunteering have shown that they have better psychological and TT aatr SIE mental health and increased life spans. The benefits of volunteering have been found to be greater than fact, even greater than giving up smoking",
-      "So if you really want to enhance your well-being — and as long as material needs are satisfied — don’t try to accumulate money in your bank account, and don't treat yourself to material goods you don’t really need. Be more generous and altruistic; increase the amount of ol money you give to people in need, give more of your pu time to volunteering, or spend more time helping - other people, or behaving more kindly to everyonene around you"
+      "So many of us strive so hard for material success that you might think there is a clear relationship between wealth and happiness. The media and our governments encourage us to believe this since they need us to keep earning and spending to boost economic growth.",
+      "Consequently, it comes as a shock for many people to learn that there is no straightforward relationship between wealth and well-being. Once our basic material needs are satisfied (i.e. regular food, adequate shelter, and financial security), wealth only has a negligible effect on well-being. For example, studies have shown that in general, lottery winners do not become significantly happier than they were before, and that even extremely rich people – such as billionaires – are not significantly happier than others. Studies have shown that American and British people are less content now than they were 50 years ago, although their material wealth is much higher. On an international level, there does appear to be some correlation between wealth and well-being, partly because there are many countries in the world where people's basic material needs are not satisfied. But this correlation is not a straightforward one, since wealthier countries tend to be more politically stable, peaceful and democratic, with less oppression and more freedom – all of which are themselves important factors in well-being.",
+      "However, it does appear that there is a relationship between non-materialism and well-being. While possessing wealth and material goods doesn't lead to happiness, giving these things away actually does. Generosity is strongly associated with well-being. For example, recent studies of people who practise volunteering have shown that they have better psychological and mental health and increased life spans. The benefits of volunteering have been found to be greater than taking up exercise or attending religious services – in fact, even greater than giving up smoking.",
+      "So if you really want to enhance your well-being – and as long as your basic material needs are satisfied – don't try to accumulate money in your bank account, and don't treat yourself to material goods you don't really need. Be more generous and altruistic; increase the amount of money you give to people in need, give more of your time to volunteering, or spend more time helping other people, or behaving more kindly to everyone around you."
     ],
     vocabulary: [
       { term: "strive", meaning: "çabalamak, uğraşmak", partOfSpeech: "v", definition: "To try very hard to achieve something.", exampleSentence: "Many of us strive hard for material success." },
@@ -9427,20 +9425,20 @@ export const PASSAGES_DATA: Passage[] = [
         question: "What is the main idea of paragraph 2?",
         options: [
           "A) There is not so much difference in happiness between very rich people and others.",
-          "B) in some countries, people are less happy than before although they earn more now.",
+          "B) In some countries, people are less happy than before although they earn more now.",
           "C) Even if you win the lottery, it won't make you significantly happier.",
-          "D) There is no clear-cut link between being rich and being happy KGITIM"
+          "D) There is no clear-cut link between being rich and being happy."
         ],
         answer: "D"
       },
       {
         id: 3,
-        question: "According to the passage,",
+        question: "According to the passage, ----",
         options: [
           "A) Psychological health, mental health and a long life can only be sustained by volunteering.",
           "B) Acquiring material goods is a way of spending your money that makes you more satisfied and happier.",
-          "C) You will benefit from doing exercises more than volunteering or attending religious services",
-          "D) Spending the money you have on someone other than yourself will make you happier. EXERCISE 3. Choose the correct option according to the text."
+          "C) You will benefit from doing exercises more than volunteering or attending religious services.",
+          "D) Spending the money you have on someone other than yourself will make you happier."
         ],
         answer: "D"
       }
@@ -9471,7 +9469,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "A"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 80,
@@ -9479,10 +9477,10 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Vocabulary & Future Speculation",
     paragraphs: [
-      "I worrying about. For a start, we live with Al already. The calculations behind your Google searches or your browsing on Amazon are not just running in the background — the software is constantly learning how to respond more rapidly and usefully",
-      "This is remarkable, but it is described as \"narrow\" or \"weak\" Al because it can only work within the guidelines created by its human inventors — a crucial limitation. By contrast, \"general\" or \"strong\" Al which does not exist yet implies a more assertive ability to do things that go beyond the original human intentions, not just to \"think\" but also to improvise. Huge obstacles stand in the way of getting there, like mimicking how a human brain works. For a reality check, we visited NASA engineers working on some of the most capable robots in the world. People working there over - \"I am not concerned about intelligent machines,\" said project leader Brett Kennedy. He said: \"For the foreseeable future, am not concerned, nor do expect to see a robot as intelligent as a human. have first-hand knowledge of how hard it is for us to make a robot that does much of anything. \"To anyone worried about Al, this would be reassuring",
-      "But predicting the future pace of technology is impossible. The key and most momentous milestone — human-machine equality — is called Artificial General Intelligence, and academics are trying to assess when that might arrive and what it would mean. One is Prof Nick Bostrom, who, in his recent book, suggests that there's a 50% chance that computers could reach human-level: intelligence as soon as 2050. The same study says there's a 90% chance of machine-human equality by 2075. Prof Bostrom describes himself as a supporter of Al — because it could help tackle climate change, energy and new medicines — but he also brings up a compelling image of mankind behaving like a curious child who has picked up an unexploded bomb, without realising the dangers. \"Maybe it is decades away, but we are just as immature and naive as this child. We really don't realise the power o of this thing we are creating.\"",
-      "Prof Bostrom is now receiving funding from Elon Musk to explore these issues, and the aim is to z develop a shared approach to safety. We could: imagine a scenario where the technology is unstoppable but the scariest scenarios — of robot destroyers — are somehow evaded because the right steps are taken in advance. But then another quieter, less obvious form of takeover may still be possible. In his latest book, Prof Jerry Kaplan states that \"As we learn to trust these systems to transport us, introduce us to potential mates, customise our news, protect our property, monitor our environment, care for our children and elderly, grow, prepare and serve our food, it will be easy to miss the bigger picture.” Ultimately, there are risks, no doubt. The question is whether the right safeguards can be built in, and soon enough"
+      "Most Hollywood movies on Artificial Intelligence (AI) portray a terrifying future in which machines become so clever that they dominate or even destroy us. And influential figures in this field such as Stephen Hawking and Elon Musk have called for caution. So, does this make the conquest by computers inevitable? With such a heated subject, it's worth trying to distinguish what's plausible from what's too far-fetched to worry about. For a start, we live with AI already. The calculations behind your Google searches or your browsing on Amazon are not just running in the background – the software is constantly learning how to respond more rapidly and usefully.",
+      "This is remarkable, but it is described as \"narrow\" or \"weak\" AI because it can only work within the guidelines created by its human inventors – a crucial limitation. By contrast, \"general\" or \"strong\" AI which does not exist yet implies a more assertive ability to do things that go beyond the original human intentions, not just to \"think\" but also to improvise. Huge obstacles stand in the way of getting there, like mimicking how a human brain works. For a reality check, we visited NASA engineers working on some of the most capable robots in the world. People working there laughed at the notion of a robot army someday taking over - \"I am not concerned about intelligent machines,\" said project leader Brett Kennedy. He said: \"For the foreseeable future, I am not concerned, nor do I expect to see a robot as intelligent as a human. I have first-hand knowledge of how hard it is for us to make a robot that does much of anything. \"To anyone worried about AI, this would be reassuring.",
+      "But predicting the future pace of technology is impossible. The key and most momentous milestone – human-machine equality – is called Artificial General Intelligence, and academics are trying to assess when that might arrive and what it would mean. One is Prof Nick Bostrom, who, in his recent book, suggests that there's a 50% chance that computers could reach human-level intelligence as soon as 2050. The same study says there's a 90% chance of machine-human equality by 2075. Prof Bostrom describes himself as a supporter of AI – because it could help tackle climate change, energy and new medicines – but he also brings up a compelling image of mankind behaving like a curious child who has picked up an unexploded bomb, without realising the dangers. \"Maybe it is decades away, but we are just as immature and naïve as this child. We really don't realise the power of this thing we are creating.\"",
+      "Prof Bostrom is now receiving funding from Elon Musk to explore these issues, and the aim is to develop a shared approach to safety. We could imagine a scenario where the technology is unstoppable but the scariest scenarios – of robot destroyers – are somehow evaded because the right steps are taken in advance. But then another quieter, less obvious form of takeover may still be possible. In his latest book, Prof Jerry Kaplan states that \"As we learn to trust these systems to transport us, introduce us to potential mates, customise our news, protect our property, monitor our environment, care for our children and elderly, grow, prepare and serve our food, it will be easy to miss the bigger picture.\" Ultimately, there are risks, no doubt. The question is whether the right safeguards can be built in, and soon enough."
     ],
     vocabulary: [
       { term: "portray", meaning: "betimlemek, resmetmek", partOfSpeech: "v", definition: "To describe or show someone or something.", exampleSentence: "Movies portray a terrifying AI future." },
@@ -9505,45 +9503,43 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "According to paragraph 2, is the following sentence TRUE or FALSE? “Weak Al has not been realised yet.”",
+        question: "Which of the following is FALSE, according to paragraph 1?",
         options: [
-          "A) thie",
-          "B) False",
-          "A) True",
-          "B) False"
+          "A) Prominent people in the AI field warn against the dangers of artificial intelligence.",
+          "B) Artificial intelligence is already in our lives like the calculations behind Google or Amazon.",
+          "C) Google or Amazon uses a limited AI which does not allow them to adapt for new searches.",
+          "D) It is good to distinguish between reasonable and hard-to-believe AI scenarios."
         ],
         answer: "C"
       },
       {
         id: 2,
-        question: "According to paragraph 3, Prof Nick Bostrom is of the opinion that----.",
+        question: "According to paragraph 2, is the following sentence TRUE or FALSE? \"Weak AI has not been realised yet.\"",
         options: [
-          "A) has not been realised yet.\"",
-          "B) True",
-          "C) False"
+          "A) True",
+          "B) False"
         ],
         answer: "B"
       },
       {
         id: 3,
-        question: "eğirTiM of our species",
+        question: "According to paragraph 3, Prof Nick Bostrom is of the opinion that ----.",
         options: [
-          "A) Al is something we should try to achieve in a short period of time",
+          "A) AI is something we should try to achieve in a short period of time",
           "B) achieving machine-human equality will be the end of our species",
-          "C) adults are no different than children when il comes to achieving machine-human equality",
-          "D) mankind isn't able to comprehend the potential complications and dangers",
-          "E) can cause yet"
+          "C) adults are no different than children when it comes to achieving machine-human equality",
+          "D) mankind isn't able to comprehend the potential complications and dangers AI can cause yet"
         ],
         answer: "D"
       },
       {
         id: 4,
-        question: "complications and dangers Al can cause yet What is the text mainly about?",
+        question: "What is the text mainly about?",
         options: [
-          "A) the unpredictability of the consequences of achieving Al",
-          "B) the threats Al can pose",
-          "C) how Al can be achieved",
-          "D) what prominent scientists think about the dangers"
+          "A) the unpredictability of the consequences of achieving AI",
+          "B) the threats AI can pose",
+          "C) how AI can be achieved",
+          "D) what prominent scientists think about the dangers of AI"
         ],
         answer: "A"
       }
@@ -9574,7 +9570,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "A"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 81,
@@ -9582,10 +9578,10 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Vocabulary & Medical Ethics",
     paragraphs: [
-      "We all strive to prevent death — but at what cost does it become too expensive? Human life is so precious; it seems rude to put a price on it. Yet addition, that is the morbid decision that health services, everywhere, inevitably have to make. They have limited money to spend on sick and dying people, and whenever a new drug becomes available, they have to make a choice: will the few gained months, or years, be worth the money it costs?",
-      "Our gut instincts may seem obvious: we should do all that we can to buy more time for the people we love. Recently, Dominic Wilkinson, a medical ethicist, has written a thought-provoking article questioning these assumptions and asks us all to consider just has much we should be willing to pay for a longer life. To better understand the ways we currently calculate the price of life, a closer look at his argument is needed. At the moment, drugs for terminal illnesses tend to be judged on two things — by how much they extend the lifespan, and the quality of life of the patient. From these calculations, a health service can then start to set a price on how a drug is worth the cost. The UK's recommendations, for example, are about £20,000 to £30,000 ($30,000 to $45,000) for each additional year of good health, once it has been adjusted to take into account the quality of life. This inevitably means whether some drugs have been rejected by the National Health Service (NHS), because they are simply too expensive: the breast cancer drug Kadycla, for instance, only extends the lifespan by about six months for a cost of £95,000. that quality of life during those few months is equal to that of a healthy person, it still hugely overstretches the limit",
-      "Campaigners argue that the pharmaceutical companies should lower the costs of such treatments, and that health services should also invest more and more money in drugs Even if will buy terminally ill patients some more precious time. But the inevitable sacrifice is that this money will be taken away from other areas of care, that mental health services or help for people with disabilities — measures that may be crucial for improving the quality of life for people at the start or middle of their lives",
-      "“Although it's very understandable such as buy more expensive drugs for the terminally ill, don’t think it reflects the views of the general public or to want of the patients,” Wilkonson says. “Nor is it clearly the right ethical approach.” those the population ages, and healthcare grows ever more advanced — and expensive, these issues will only become more pressing. The eminent American surgeon Atul Guwande has long questioned whether it is better to - stretch out the lifespan, As of oo increasing the comfort of our available years. He ws even claimed that he instead of refuse all life- w extending health care at the age of 75, rather than pe entering a cycle of ever-more intense treatments to ay draw out his last few years. Few of us may decide to take such a drastic decision, but anyone, at any age, may do well to consider the value of their time g on Earth and would we are doing to make the most of it"
+      "We all strive to prevent death – but at what cost does it become too expensive? Human life is so precious; it seems rude to put a price on it. Yet, that is the morbid decision that health services, everywhere, inevitably have to make. They have limited money to spend on sick and dying people, and whenever a new drug becomes available, they have to make a choice: will the few gained months, or years, be worth the money it costs?",
+      "Our gut instincts may seem obvious: we should do all that we can to buy more time for the people we love. Recently, Dominic Wilkinson, a medical ethicist, has written a thought-provoking article questioning these assumptions and asks us all to consider just how much we should be willing to pay for a longer life. To better understand the ways we currently calculate the price of life, a closer look at his argument is needed. At the moment, drugs for terminal illnesses tend to be judged on two things – by how much they extend the lifespan, and the quality of life of the patient. From these calculations, a health service can then start to set a price on whether a drug is worth the cost. The UK's recommendations, for example, are about £20,000 to £30,000 ($30,000 to $45,000) for each additional year of good health, once it has been adjusted to take into account the quality of life. This inevitably means that some drugs have been rejected by the National Health Service (NHS), because they are simply too expensive: the breast cancer drug Kadycla, for instance, only extends the lifespan by about six months for a cost of £95,000. Even if the quality of life during those few months is equal to that of a healthy person, it still hugely overstretches the limit.",
+      "Campaigners argue that the pharmaceutical companies should lower the costs of such treatments, and that health services should also invest more and more money in drugs that will buy terminally ill patients some more precious time. But the inevitable sacrifice is that this money will be taken away from other areas of care, such as mental health services or help for people with disabilities – measures that may be crucial for improving the quality of life for people at the start or middle of their lives.",
+      "“Although it's very understandable to want to buy more expensive drugs for the terminally ill, I don't think it reflects the views of the general public or those of the patients,” Wilkonson says. “Nor is it clearly the right ethical approach.” As the population ages, and healthcare grows ever more advanced – and expensive, these issues will only become more pressing. The eminent American surgeon Atul Guwande has long questioned whether it is better to stretch out the lifespan, instead of increasing the comfort of our available years. He even claimed that he would refuse all life-extending health care at the age of 75, rather than entering a cycle of ever-more intense treatments to draw out his last few years. Few of us may decide to take such a drastic decision, but anyone, at any age, may do well to consider the value of their time on Earth and what we are doing to make the most of it."
     ],
     vocabulary: [
       { term: "strive", meaning: "çabalamak", partOfSpeech: "v", definition: "To try very hard to do something.", exampleSentence: "We all strive to prevent death." },
@@ -9619,12 +9615,12 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 2,
-        question: "people choose similar people.",
+        question: "According to paragraph 3, why is it a sacrifice to take the money from other areas of care?",
         options: [
-          "A) Health services would be able to provide life- extending drugs for people who are going to die.",
+          "A) Health services would be able to provide life-extending drugs for people who are going to die.",
           "B) Pharmaceutical companies would lose a lot of money if they lower the costs of life-extending treatments.",
-          "C) The money would be taken from mental health services, which will make the people in need suffer",
-          "D) You would be helping people who are at the end of their lives at the cost of people who will live. AKIN DIE EĞİTİN"
+          "C) The money would be taken from mental health services, which will make the people in need suffer.",
+          "D) You would be helping people who are at the end of their lives at the cost of people who will live."
         ],
         answer: "D"
       },
@@ -9641,14 +9637,12 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 4,
-        question: "they are generally mistaken.",
+        question: "The passage is mainly about ----.",
         options: [
           "A) how we can increase the comfort of our available years instead of waiting to be sick",
-          "B) the health services system in the UK and how it works for terminally people",
+          "B) the health services system in the UK and how it works for terminally ill people",
           "C) whether it is worth trying to extend the lives of terminally ill people",
-          "D) how much il costs and should cost to extend the: life of terminally ill people EXERCISE 4. Choose the correct option. 1.control/power/access/ a degree/ experience",
-          "E) measure",
-          "F) gain"
+          "D) how much it costs and should cost to extend the life of terminally ill people"
         ],
         answer: "C"
       }
@@ -9679,7 +9673,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "B"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 82,
@@ -9687,10 +9681,11 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Vocabulary & Cause-Effect",
     paragraphs: [
-      "“The heart wants what it wants.” Emily Dickinson wrote that. But why? Is it as magical as romantics believe? Is it inexplicable? This theme is evident beyond these pop culture references. But this is psychology, and we seek to know the “why” beneath the surface explanation. Most people would like to attribute attraction to some mystical force that brings people together. But there are some scientific explanations",
-      "There are deeper, more psychoanalytic aspects of attraction. In the excellent book, A General Theory of Love, the authors discuss how memory formation in our childhood leads to attraction to others later in life. Basically, we form strong memories from our early childhood experiences. These unconscious memories guide our attraction to others. We may not understand why we are attracted to someone, but we nonetheless are. This theory explains how people find themselves attracted to someone who proves to be unhealthy for them",
-      "The next aspect of attraction I'd like to discuss is the psychoanalytic idea of projection. A projection is an internal ideal, thought process, or state that is attributed to another person. in other words, the individual has an idea, unconsciously, of how they want and need their ideal mate to be, and they place these attributes and qualities into another individual. They then observe their potential partner's behaviour, and relate it to their ideal. If they do not realise that they are projecting, they then believe they have found their soul mate. however, as they come to know the person better, the partner begins to fall short of their expectations — falling short of expectations so consistently that s / he decides the other cannot be the ideal, and often the search for the real soul mate begins again. This pattern of disappointment will continue until though an individual realises the reality of projection, and does not give in to the fantasy that they have found their soul mate. 4 Earlier, the subtle ways that opposites attract was mentioned mentioned. For this, there is a psychological theory called compensation. In compensation, one overdoes an aspect where they feel insecure. For example, they might buy big trucks when they do not feel very manly. Compensation in regard to attraction is similar, although well as it relates more to the choice in a partner than a weakness. Carl Jung identified El Fr 5 [rem personality traits that people tend to favour: introvert or extrovert, feeling or thinking and intuition or sensing. It is often contended that people tend to choose a partner that helps bring them into balance. For example, outgoing, social people often pair with quieter, more reserved types. This may often be a function of compensation, which has contributed to the attraction and emotional attachment",
-      "Another aspect of relationships that a many prefer to ignore is the bargaining process that a many go through unconsciously. This is not an x3 external, but an internal event. Each. person entering a relationship is aware of the - attributes that they bring to the table. These can a include attractiveness, financial security, a quality of sweetness, intelligence, being a giving person,. being attentive, considerate, and so on. Knowing what attributes one brings to the table, the individual wants a comparable partner. This does not mean that one necessarily wants someone exactly as attractive, nice, financially secure, and so on as he is, but it means that he wants an equal or slightly better bargain in line with what he values. Otherwise, this person might just end up getting dumped"
+      "“The heart wants what it wants.” Emily Dickinson wrote that. But why? Is it as magical as romantics believe? Is it inexplicable? This theme is evident beyond these pop culture references. But this is psychology, and we seek to know the “why” beneath the surface explanation. Most people would like to attribute attraction to some mystical force that brings people together. But there are some scientific explanations.",
+      "There are deeper, more psychoanalytic aspects of attraction. In the excellent book, A General Theory of Love, the authors discuss how memory formation in our childhood leads to attraction to others later in life. Basically, we form strong memories from our early childhood experiences. These unconscious memories guide our attraction to others. We may not understand why we are attracted to someone, but we nonetheless are. This theory explains how people find themselves attracted to someone who proves to be unhealthy for them.",
+      "The next aspect of attraction I'd like to discuss is the psychoanalytic idea of projection. A projection is an internal ideal, thought process, or state that is attributed to another person. In other words, the individual has an idea, unconsciously, of how they want and need their ideal mate to be, and they place these attributes and qualities into another individual. They then observe their potential partner's behaviour, and relate it to their ideal. If they do not realise that they are projecting, they then believe they have found their soul mate. However, as they come to know the person better, the partner begins to fall short of their expectations – falling short of expectations so consistently that s/he decides the other cannot be the ideal, and often the search for the real soul mate begins again. This pattern of disappointment will continue until an individual realises the reality of projection, and does not give in to the fantasy that they have found their soul mate.",
+      "Earlier, the subtle ways that opposites attract was mentioned. For this, there is a psychological theory called compensation. In compensation, one overdoes an aspect where they feel insecure. For example, they might buy big trucks when they do not feel very manly. Compensation in regard to attraction is similar, although it relates more to the choice in a partner than a weakness. Carl Jung identified personality traits that people tend to favour: introvert or extrovert, feeling or thinking and intuition or sensing. It is often contended that people tend to choose a partner that helps bring them into balance. For example, outgoing, social people often pair with quieter, more reserved types. This may often be a function of compensation, which has contributed to the attraction and emotional attachment.",
+      "Another aspect of relationships that many prefer to ignore is the bargaining process that many go through unconsciously. This is not an external, but an internal event. Each person entering a relationship is aware of the attributes that they bring to the table. These can include attractiveness, financial security, a quality of sweetness, intelligence, being a giving person, being attentive, considerate, and so on. Knowing what attributes one brings to the table, the individual wants a comparable partner. This does not mean that one necessarily wants someone exactly as attractive, nice, financially secure, and so on as he is, but it means that he wants an equal or slightly better bargain in line with what he values. Otherwise, this person might just end up getting dumped."
     ],
     vocabulary: [
       { term: "magical", meaning: "büyülü", partOfSpeech: "adj", definition: "Wonderful and mysterious, as if by magic.", exampleSentence: "Is attraction as magical as romantics believe?" },
@@ -9712,7 +9707,7 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "Which of the following can be inferred from paragraph 17",
+        question: "Which of the following can be inferred from paragraph 1?",
         options: [
           "A) Emily Dickinson believed that we love the people we love for some specific reasons.",
           "B) Scientific explanations don't fully explain why people choose similar people.",
@@ -9734,10 +9729,10 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 3,
-        question: "In paragraph 4, the author gives the example of social people pairing with quieter types in order to",
+        question: "In paragraph 4, the author gives the example of social people pairing with quieter types in order to ----.",
         options: [
           "A) further explain that people choose their partners with opposite personality traits",
-          "B) exemplify how compensation can cominate and ruin people's lives easily",
+          "B) exemplify how compensation can dominate and ruin people's lives easily",
           "C) emphasise the importance of compensation and feeling insecure in a relationship",
           "D) show how imbalanced relationships are formed in terms of the personality traits Jung identified"
         ],
@@ -9745,16 +9740,12 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 4,
-        question: "According to paragraph 5, bargaining is a process where.",
+        question: "According to paragraph 5, bargaining is a process where ----.",
         options: [
           "A) one enters a relationship with some attributes that s/he expects to receive in mind",
           "B) individuals choose better partners than themselves and feel insecure",
-          "C) many prefer their partner to have a lower self- steem",
-          "D) people want the other person to have as equal attributes as they provide EXERCISE 4. Choose the correct option. 1.feeling/desire/need 2.",
-          "E) unconscious",
-          "F) considerate -change/difference/distinction/shift/rights",
-          "G) fixed",
-          "H) fundamental"
+          "C) many prefer their partner to have a lower self-steem",
+          "D) people want the other person to have as equal attributes as they provide"
         ],
         answer: "D"
       }
@@ -9785,7 +9776,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "B"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 83,
@@ -9793,10 +9784,10 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Vocabulary & Argument",
     paragraphs: [
-      "The idea that students learn differently depending on 3) their personal preference for visual, auditory or kinaesthetic learning styles is actually just a myth. In fact, it's considered a neuromyth, which is characterised by a misunderstanding, 2 misreading, or misquoting of scientifically established. facts. Other examples of neuromyths - include the idea we only use 10% of our brain, or that ” drinking less than six to eight glasses of water a day z will cause the brain to shrink the most popular and influential myth is that a student learns most effectively when 3) they are taught in their preferred learning style, writes Paul J ones, professor of neuroscience at Bristol University. Indeed, studies have shown strong cross-cultural belief in this concept. In 2012, researchers asked 242 teachers from the UK and the Netherlands whether various neuromyths were scientifically correct. The concept of auditory, visual, and kinaesthetic learning styles was the most trusted myth: Some 93% of UK teachers and 96% of Dutch teachers believed it was true",
-      "In December, Philip Newton, professor at Swansea University’s College of Medicine, searched searched for articles about “learning styles” freely available on research databases and on the Internet to get a sense of the impression a teacher might get if they did a quick search on the subject. He found that, though studies “do not really engage” with evidence showing that the idea of learning styles is a myth, 94% of current research papers start with a positive view of 3 learning styles. “Learning styles do not work, yet yet - moreover the current research literature is full of, papers which advocate their use. This undermines ’ education as a research field and likely has a negative impact on students,” he wrote in his paper",
-      "The aforementioned evidence against learning styles & is compelling. In 2004, Frank Smith, a professor of: education at the University of London, conducted conducted research on the 13 3) most popular models of learning styles, and he found there wasn't sufficient evidence to adapt teaching techniques to various learning styles. Despite the dominance of the learning styles concept “from kindergarten to graduate school,” and a “thriving industry” devoted to so many guidebooks for teachers, Smith found there wasn’t rigorous and sufficient evidence for the concept",
-      "In his paper on the subject, J ones argues that this false belief is not a result of fraud, but of “uniformed interpretations of genuine scientific facts.” This is why how a false belief became so widely-held. The assumption behind learning myths seems to be based on the scientific fact that different regions of the cortex have different roles in visual, auditory, and sensory processing, so students should learn differently “according to which part of their brain works better.” - However, writes J ones, “the brain's po interconnectivity makes such an assumption 2 unreliable.” Neuromyths arise, J ones argues, partly @ due to the technical language barrier that that makes understanding neuroscience papers hey difficult for non-experts, and due to the oversimplification of complicated scientific ideas.. These myths are then “promoted by victims of their - own wishful thinking,” who are sincere but deluded in their belief that some eccentric theory will “revolutionise science and society,” he writes. And these myths can flourish in cultures where beliefs about the brain are not subject to ongoing scientific scrutiny — it's rare, after all, thata classroom’s teaching methods are rigorously and scientifically tested by an observer. And finally, it seems that many people simply want to believe in these learning myths"
+      "The idea that students learn differently depending on their personal preference for visual, auditory or kinaesthetic learning styles is actually just a myth. In fact, it's considered a neuromyth, which is characterised by a misunderstanding, misreading, or misquoting of scientifically established facts. Other examples of neuromyths include the idea we only use 10% of our brain, or that drinking less than six to eight glasses of water a day will cause the brain to shrink. Perhaps the most popular and influential myth is that a student learns most effectively when they are taught in their preferred learning style, writes Paul Jones, professor of neuroscience at Bristol University. Indeed, studies have shown strong cross-cultural belief in this concept. In 2012, researchers asked 242 teachers from the UK and the Netherlands whether various neuromyths were scientifically correct. The concept of auditory, visual, and kinaesthetic learning styles was the most trusted myth: Some 93% of UK teachers and 96% of Dutch teachers believed it was true.",
+      "In December, Philip Newton, professor at Swansea University's College of Medicine, searched for articles about “learning styles” freely available on research databases and on the Internet to get a sense of the impression a teacher might get if they did a quick search on the subject. He found that, though studies “do not really engage” with evidence showing that the idea of learning styles is a myth, 94% of current research papers start with a positive view of learning styles. “Learning styles do not work, yet the current research literature is full of papers which advocate their use. This undermines education as a research field and likely has a negative impact on students,” he wrote in his paper.",
+      "The aforementioned evidence against learning styles is compelling. In 2004, Frank Smith, a professor of education at the University of London, conducted research on the 13 most popular models of learning styles, and he found there wasn't sufficient evidence to adapt teaching techniques to various learning styles. Despite the dominance of the learning styles concept “from kindergarten to graduate school,” and a “thriving industry” devoted to so many guidebooks for teachers, Smith found there wasn't rigorous and sufficient evidence for the concept.",
+      "In his paper on the subject, Jones argues that this false belief is not a result of fraud, but of “uniformed interpretations of genuine scientific facts.” This is why how a false belief became so widely-held. The assumption behind learning myths seems to be based on the scientific fact that different regions of the cortex have different roles in visual, auditory, and sensory processing, so students should learn differently “according to which part of their brain works better.” However, writes Jones, “the brain's interconnectivity makes such an assumption unreliable.” Neuromyths arise, Jones argues, partly due to the technical language barrier that makes understanding neuroscience papers difficult for non-experts, and due to the oversimplification of complicated scientific ideas. These myths are then “promoted by victims of their own wishful thinking,” who are sincere but deluded in their belief that some eccentric theory will “revolutionise science and society,” he writes. And these myths can flourish in cultures where beliefs about the brain are not subject to ongoing scientific scrutiny – it's rare, after all, that a classroom's teaching methods are rigorously and scientifically tested by an observer. And finally, it seems that many people simply want to believe in these learning myths."
     ],
     vocabulary: [
       { term: "preference", meaning: "tercih", partOfSpeech: "n", definition: "A greater liking for one thing over another.", exampleSentence: "People believe in a preference for learning styles." },
@@ -9820,7 +9811,7 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "ve Yayıncılık Hizmetleri 3. According to paragraph 3, Philip Newton searched for “learning styles\" on the Internet in order to ——.",
+        question: "According to paragraph 1, a \"neuromyth\" is ----.",
         options: [
           "A) the misinterpretation of the data discovered through experimentation",
           "B) the misconception that our brain's capacity is only 10%",
@@ -9831,34 +9822,34 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 2,
-        question: "talk about the evidence regarding this subject",
+        question: "According to paragraph 3, which of the following is TRUE?",
         options: [
           "A) The dominance of the brain hemisphere is very effective and important in learning.",
-          "B) If you drink six to eight glasses of water a day. your brain will continue to develop and grow.",
-          "C) The most effective way to teach a student isn't necessarily through their selected learning style",
-          "D) The British and Dutch teachers don't seem to agree on the different learning styles issue. AKIN BEL SCITIN"
+          "B) If you drink six to eight glasses of water a day, your brain will continue to develop and grow.",
+          "C) The most effective way to teach a student isn't necessarily through their selected learning style.",
+          "D) The British and Dutch teachers don't seem to agree on the different learning styles issue."
         ],
         answer: "C"
       },
       {
         id: 3,
-        question: "this subject with a casual search What is the main idea of paragraph 4?",
+        question: "According to paragraph 3, Philip Newton searched for \"learning styles\" on the Internet in order to ----.",
         options: [
-          "A) keep up with the teachers doing searches on the Internet on 'learning styles\"",
-          "B) show teachers that studies on the Intemel do not talk about the evidence regarding this subject",
-          "C) prove that 94% of the contemporary papers support the \"leaming styles theory",
-          "D) understand what a teacher can find and leam on this subject with a casual search"
+          "A) keep up with the teachers doing searches on the Internet on \"learning styles\"",
+          "B) show teachers that studies on the Internet do not talk about the evidence regarding this subject",
+          "C) prove that 94% of the contemporary papers support the \"learning styles\" theory",
+          "D) understand what a teacher can find and learn on this subject with a casual search"
         ],
         answer: "D"
       },
       {
         id: 4,
-        question: "learn differently",
+        question: "What is the main idea of paragraph 4?",
         options: [
           "A) what happens when people believe a neuromyth genuinely",
-          "B) how students should be given the opportunity to leam differently",
+          "B) how students should be given the opportunity to learn differently",
           "C) why an erroneous assumption is so popular among people",
-          "D) the difficulty of understanding neuroscience papers for peoplo EXERCISE 4. Choose the correct option"
+          "D) the difficulty of understanding neuroscience papers for people"
         ],
         answer: "C"
       }
@@ -9889,7 +9880,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "B"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 84,
@@ -9897,10 +9888,10 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Vocabulary & Conditionals",
     paragraphs: [
-      ". the fountain of youth, but their new supplement could change how you get older. Say 5 someone came up to you selling a dietary » supplement — a pill that you take once a day — that - could boost your energy, improve your body’s ability to repair its DNA, and keep you healthier as you get older. It might better sound like a ao scam, or more likely just another in a sea of d confusing, undifferentiated claims that which make up the $20-billion-dollar supplement industry. But let's say that someone is Massachusetts Institute Technology or MIT's Lenny Guarente, one of the world’s leading scientists in the field of aging research. And he’s being advised by five Nobel Prize winners and two dozen other top researchers in their fields. You might pay a little more attention",
-      "Co-founding a supplement company seems an unlikely career move for someone like Guarente, a man whose is one of the most well- respected scientists in his field. Mostly, for him, his getting involved in Elysium Health is a decision born out of opportunity and frustration. The opportunity is the chance to make a difference by translating findings in the booming field of aging - research directly to consumers today. The frustration is that doing this has taken - so long in the first place. \"My biggest hope is that we. can make something that is currently - unavailable to people available, and that it will have z a positive impact on their health,\" Guarente; says",
-      "Elysium Health actually had its beginnings in conversations between its other two, younger co- founders, Eric Marcotulli and Dan Alminana, who were then tech investors and gym buddies. They're both quite health-conscious, and they knew they couldn’t halt the march of aging and all the ailments that come with it. Far pit ESirim more than diet or anything else people can control, the biggest risk factor for many of the diseases that kill us — including diabetes, cancer, and cardiovascular disease — is simply getting older. And there is nothing to stop it. If anything, Elysium might make more people aware that aging is becoming something that we may one day treat",
-      "Elysium explicitly wants to avoid the charlatan feel of the countless \"anti-aging\" products on the market today. It isn’t selling the pill as a key to a longer life x or to preventing any particular disease, since though a since there isn't any evidence the pill will do that. A - press release the company put out with its launch or hardly mentions aging at all. They also want to appeal to young people too, who don’t necessarily care about aging, but may want to feel healthier and more energetic. Instead, the founders talk about enhancing basic biological functions: improving DNA repair, cellular detoxification, energy production, and protein function. \"We have no interest in being an anti-aging company and extending lifespan,” says Marcotulli. \"For us, this is about increasing healthspan, not lifespan.”"
+      "Elysium Health, a drug company, hasn't discovered the fountain of youth, but their new supplement could change how you get older. Say someone came up to you selling a dietary supplement – a pill that you take once a day – that could boost your energy, improve your body's ability to repair its DNA, and keep you healthier as you get older. It might sound like a scam, or more likely just another in a sea of confusing, undifferentiated claims that make up the $20-billion-dollar supplement industry. But let's say that someone is Massachusetts Institute Technology or MIT's Lenny Guarente, one of the world's leading scientists in the field of aging research. And he's being advised by five Nobel Prize winners and two dozen other top researchers in their fields. You might pay a little more attention.",
+      "Co-founding a supplement company seems an unlikely career move for someone like Guarente, a man who is one of the most well-respected scientists in his field. Mostly, for him, his getting involved in Elysium Health is a decision born out of opportunity and frustration. The opportunity is the chance to make a difference by translating findings in the booming field of aging research directly to consumers today. The frustration is that doing this has taken so long in the first place. \"My biggest hope is that we can make something that is currently unavailable to people available, and that it will have a positive impact on their health,\" Guarente says.",
+      "Elysium Health actually had its beginnings in conversations between its other two, younger co-founders, Eric Marcotulli and Dan Alminana, who were then tech investors and gym buddies. They're both quite health-conscious, and they knew they couldn't halt the march of aging and all the ailments that come with it. Far more than diet or anything else people can control, the biggest risk factor for many of the diseases that kill us – including diabetes, cancer, and cardiovascular disease – is simply getting older. And there is nothing to stop it. If anything, Elysium might make more people aware that aging is becoming something that we may one day treat.",
+      "Elysium explicitly wants to avoid the charlatan feel of the countless \"anti-aging\" products on the market today. It isn't selling the pill as a key to a longer life or to preventing any particular disease, since there isn't any evidence the pill will do that. A press release the company put out with its launch hardly mentions aging at all. They also want to appeal to young people too, who don't necessarily care about aging, but may want to feel healthier and more energetic. Instead, the founders talk about enhancing basic biological functions: improving DNA repair, cellular detoxification, energy production, and protein function. \"We have no interest in being an anti-aging company and extending lifespan,\" says Marcotulli. \"For us, this is about increasing healthspan, not lifespan.\""
     ],
     vocabulary: [
       { term: "supplement", meaning: "takviye, ek gıda", partOfSpeech: "n", definition: "A substance taken to add to your diet.", exampleSentence: "Their new supplement could change how you age." },
@@ -9924,26 +9915,18 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "According to paragraph 2, Guarente ----.",
+        question: "Which of the following can be inferred from paragraph 1?",
         options: [
           "A) The author seems to think that this new pill is most likely a trick to get people's money.",
-          "B) Elysium Health is bying to convince people that they don't have to get older.",
+          "B) Elysium Health is trying to convince people that they don't have to get older.",
           "C) The author appears to take this new pill more seriously than other pills on the market.",
-          "D) Elysium Health most probably is one of the fraud companies promising youth. 5.",
-          "E) pil",
-          "F) opportunity",
-          "G) attention",
-          "H) aging -economy/market/industry/field",
-          "I) countless",
-          "J) booming 6.-offort/decision/attempt",
-          "K) conscious",
-          "L) frustrated www.akindl.com"
+          "D) Elysium Health most probably is one of the fraud companies promising youth."
         ],
         answer: "C"
       },
       {
         id: 2,
-        question: "eradicate aging",
+        question: "According to paragraph 2, Guarente ----.",
         options: [
           "A) appears to have taken a different path than is expected of him",
           "B) seems confident that Elysium Health will eradicate aging",
@@ -9954,11 +9937,11 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 3,
-        question: "industry by recruiting eminent scientists 3. The word “halt' in paragraph 3 The word “ha/f\" in paragraph 3 is closest in is closest in meaning to —--.",
+        question: "The word \"halt\" in paragraph 3 is closest in meaning to ----.",
         options: [
-          "A) acquiru",
-          "B) convey",
-          "C) prevent",
+          "A) acquire",
+          "B) prevent",
+          "C) convey",
           "D) substitute"
         ],
         answer: "B"
@@ -9968,10 +9951,9 @@ export const PASSAGES_DATA: Passage[] = [
         question: "The passage mainly talks about the ----.",
         options: [
           "A) emergence of a new company with a new pill that can make people feel young",
-          "B) problems aging research has encountered and is still encountering",
-          "C) inefficiency of the pills pharmaceutical companies sell people with high hopes EXERCISE 4. Choose the correct option. 1. confidence/morale/sales / production",
-          "D) boost",
-          "E) release"
+          "B) necessity of performing extensive tests before launching a new product",
+          "C) problems aging research has encountered and is still encountering",
+          "D) inefficiency of the pills pharmaceutical companies sell people with high hopes"
         ],
         answer: "A"
       }
@@ -10002,7 +9984,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "A"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 85,
@@ -10010,7 +9992,10 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "B2",
     theme: "Past Simple & Vocabulary",
     paragraphs: [
-      "Isaac Newton rose to become the most influential scientist of the 17th century, with his ideas becoming the foundation of modern physics, after very humble 4 beginnings. However, did an apple really fall on Newton's head and spur him on to - figure out gravity? Historians say there is likely not even a small amount of truth to the story. >» 2 Sir Isaac Newton was born, premature and tiny, in: 1642 in England. It's said that he didn’t excel at school, but he ended up studying law at Trinity College Cambridge, part of Cambridge University. Meanwhile, he worked as a servant to pay his bills and kept a journal about his ideas, but what got Newton interested in math? He bought a book on the subject and couldn’t it. Yet, after getting his bachelor's degree in 1665; he studied math, physics, optics and astronomy on his own (due to Cambridge’s being closed for a couple of years due to the plague known as the Black Death). By 1666, he had completed his early work on his three laws of motion. Later, he got his master's degree. His laws are still used by physics students today. For example, an object will remain in a state of inactivity unless moved by a force, or for every action, there is an equal and opposite reaction. 3 While though he's best known for his work on gravity, Newton was an inventor, too, but more with ideas than physical inventions. He did invent reflecting lenses for telescopes, which produced clearer images in a smaller telescope compared to the refracting models of the time. In his later years, he developed anti- counterfeiting measures for coins, including the ridges you see on quarters today. Among his biggest \"inventions\" was calculus. Yes, that's right. Mere math and algebra weren't enough to explain explained the ideas in his head, so he helped invent calculus. German mathematician Gottfried Leibniz is typically credited with developing it independently at about the same AL CRIA] cere time. It's also said that Newton invented a cat door so that cats could get in, but the truth of that one is a bit sketchy. There is no actual evidence that he really did invent it. 4 Urged by astronomer Edmond Halley (who was studying his now-famous comet), Newton continued to study his notion of gravity and G) apply it to the motions of the Earth, Sun and Moon. It all led to his seminal work, publisheded in 1687, called the Principia — considered by many as the greatest science book ever written. - Newton's research stopped in 1679 when he had a nervous breakdown. Later, after he recovered, he spoke out against King James Il, who wanted only Roman Catholics to be in powerful: governmental and academic positions. When King James ll was later driven out of England, Newton was elected to Parliament. He had a second breakdown in 1693, and then retired from research. Isaac Newton died in 1727"
+      "Isaac Newton rose to become the most influential scientist of the 17th century, with his ideas becoming the foundation of modern physics, after very humble beginnings. However, did an apple really fall on Newton's head and spur him on to figure out gravity? Historians say there is likely not even a small amount of truth to the story.",
+      "Sir Isaac Newton was born, premature and tiny, in 1642 in England. It's said that he didn't excel at school, but he ended up studying law at Trinity College Cambridge, part of Cambridge University. Meanwhile, he worked as a servant to pay his bills and kept a journal about his ideas, but what got Newton interested in math? He bought a book on the subject and couldn't even comprehend it. Yet, after getting his bachelor's degree in 1665; he studied math, physics, optics and astronomy on his own (due to Cambridge's being closed for a couple of years due to the plague known as the Black Death). By 1666, he had completed his early work on his three laws of motion. Later, he got his master's degree. His laws are still used by physics students today. For example, an object will remain in a state of inactivity unless moved by a force, or for every action, there is an equal and opposite reaction.",
+      "While he's best known for his work on gravity, Newton was an inventor, too, but more with ideas than physical inventions. He did invent reflecting lenses for telescopes, which produced clearer images in a smaller telescope compared to the refracting models of the time. In his later years, he developed anti-counterfeiting measures for coins, including the ridges you see on quarters today. Among his biggest \"inventions\" was calculus. Yes, that's right. Mere math and algebra weren't enough to explain the ideas in his head, so he helped invent calculus. German mathematician Gottfried Leibniz is typically credited with developing it independently at about the same time. It's also said that Newton invented a cat door so that his cats could get in, but the truth of that one is a bit sketchy. There is no actual evidence that he really did invent it.",
+      "Urged by astronomer Edmond Halley (who was studying his now-famous comet), Newton continued to study his notion of gravity and apply it to the motions of the Earth, Sun and Moon. It all led to his seminal work, published in 1687, called the Principia — considered by many as the greatest science book ever written. Newton's research stopped in 1679 when he had a nervous breakdown. Later, after he recovered, he spoke out against King James II, who wanted only Roman Catholics to be in powerful governmental and academic positions. When King James II was later driven out of England, Newton was elected to Parliament. He had a second breakdown in 1693, and then retired from research. Isaac Newton died in 1727."
     ],
     vocabulary: [
       { term: "influential", meaning: "etkili, nüfuzlu", partOfSpeech: "adj", definition: "Having a lot of influence on others.", exampleSentence: "He was the most influential scientist of his century." },
@@ -10034,29 +10019,29 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "According to paragraph 3, —.",
+        question: "According to paragraph 1, historians believe that ----.",
         options: [
-          "A) moat probably there was never an apple falling on Newton's head and inspiring him to figure out gravity",
+          "A) most probably there was never an apple falling on Newton's head and inspiring him to figure out gravity",
           "B) Newton figured out gravity long before his encounter with an apple, but he chose to tell that story",
           "C) gravity is a matter of physics and it would be discovered without Newton's ideas all the same",
-          "D) because nobody was curious about gravity at the Ilme, his contemporaries didn't take Newtom seriously"
+          "D) because nobody was curious about gravity at the time, his contemporaries didn't take Newton seriously"
         ],
         answer: "A"
       },
       {
         id: 2,
-        question: "controversial issue and hasn't been proven either way",
+        question: "According to paragraph 2, which of the following is FALSE?",
         options: [
-          "A) In physics, students still utilise the three laws of motion that were put forward by Newton in the 17 century.",
-          "B) Newton studied law in Trinity College and worked to pay his bils at the same time.",
+          "A) In physics, students still utilise the three laws of motion that were put forward by Newton in the 17th century.",
+          "B) Newton studied law in Trinity College and worked to pay his bills at the same time.",
           "C) The plague prevented Newton from continuing at Cambridge and made him study on his own.",
-          "D) Newton chose to study on his own because Cambridge didn't accept him as a student. AKIN OIL EGITIM ARIS DIL ECITIM"
+          "D) Newton chose to study on his own because Cambridge didn't accept him as a student."
         ],
         answer: "D"
       },
       {
         id: 3,
-        question: "credited with inventing the cat door on his own 4. According to paragraph 4, Principia —.",
+        question: "According to paragraph 3, ----.",
         options: [
           "A) Newton and Leibniz worked together to invent calculus, although they were in different countries",
           "B) whether Newton invented the cat door is a controversial issue and hasn't been proven either way",
@@ -10067,14 +10052,12 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 4,
-        question: "Catholics by King James i! and Newton got punished",
+        question: "According to paragraph 4, Principia ----.",
         options: [
-          "A) may be the greatest science book ever written: however, at the time it wasn't appreciated enough",
+          "A) may be the greatest science book ever written; however, at the time it wasn't appreciated enough",
           "B) was considered as something against Roman Catholics by King James II and Newton got punished",
           "C) was written as a result of Newton's continuing studies and his application of his studies to the real world",
-          "D) caused Newton to have a nervous breakdown because of the many hours he put into it while writing EXERCISE 4. Choose the correct option. 1. a/n considerable/large/enormous",
-          "E) gravity",
-          "F) amount"
+          "D) caused Newton to have a nervous breakdown because of the many hours he put into it while writing"
         ],
         answer: "C"
       }
@@ -10105,7 +10088,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "B"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 86,
@@ -10113,10 +10096,11 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Relative Clauses & Vocabulary",
     paragraphs: [
-      "During the Cold War, Americans were digging holes. Lots of holes. Holes that were filled with bottled water and non-perishable food and tons and tons of concrete shelters where people could stay if Soviet bombers dropped nuclear weapons all over the country. In 1961, President Kennedy pressed Americans to protect themselves from nuclear fallout by building bomb shelters. The shelters were supposed to their inhabitants from blast pressure. The reality was those shelters wouldn't do a thing to protect people from a full-scale nuclear attack. 2 Most people are familiar with the black- and-yellow fallout shelter signs left on buildings from the Cold War era. They were put in place by the Office of Civil Defense, which was established by President Harry Truman to educate people about how to protect in the instance of a nuclear attack. Scientists knew, however, that nuclear detonations also released deadly gamma rays, which could be obstructed with enough concrete and distance underground. Radiation can literally blow over very quickly, depending on the size of the blast, so the country, or even the whole affected city, wouldn't burn forever. But again, that was only if you weren't directly hit by the blast",
-      "The fallout shelter was one of the thickest safety blankets ever wrapped around the collective shoulders of terrified citizens. American culture embraced these ineffective methods, believing a concrete box — or even a school desk — would be enough to survive survived a full-scale nuclear attack. Typically, the shelters were \"draconian — dark, dank and dangerous,\" said Cham Dallas, director of the Institute for Disaster Management at the University of Georgia, in a phone interview. In movies like B last from the Past, however, the bunker was romanticized as a sophisticated underground oasis, stocked with power, food, water and activities",
-      "\"I think the shelter systems, public and private, were all part of a great defeat in a way,\" said Irwin Redlener, Clinical Professor of Health Policy. We thought that massive attack by a nuclear war would be survivable. But it just wasn't. It was just not going to be possible.\" One theory about the origin of the fallout shelter is that the U.S. wanted it to look like it was too expensive to destroy plans were meant to send a message to the other side that they'd survive. However, if long as the Soviet Union had ever called this bluff, its nuclear payload would have killed millions",
-      "Nuclear blasts create shockwaves and high-speed wind that which can tear the walls off a house. Then comes the radiation. Some radiation, alpha particles, can't penetrate your skin. But another he form, called gamma rays, are deadly and strong enough to radiate through a lot of mediums, but not necessarily thick concrete. If a single Tsar Bomb, a 50 megaton thermonuclear a bomb, fell on New York City, over 10 million people would be killed or injured. If the full nuclear - power of both sides of the war were exercised, - nothing would survive. The surface would be radioactive for who knows how long. In 1961, the Soviet Union detonated the Tsar Bombs which had an explosive force of 50 million tons of TNT. By comparison, the bomb that hit Nagasaki, the \"Fat Man,\" had a force of only around 20,000 tons. To understand the extent of the Tsar's devastating power, consider what a bomb roughly 500 times weaker did. Those nukes are still around. Today, the U.S. has a stockpile of around 7,100 nuclear weapons. Russia has around 7,700. Take cover!"
+      "During the Cold War, Americans were digging holes. Lots of holes. Holes that were filled with bottled water and non-perishable food and tons and tons of concrete shelters where people could stay if Soviet bombers dropped nuclear weapons all over the country. In 1961, President Kennedy pressed Americans to protect themselves from nuclear fallout by building bomb shelters. The shelters were supposed to protect their inhabitants from blast pressure. The reality was those shelters wouldn't do a thing to protect people from a full-scale nuclear attack.",
+      "Most people are familiar with the black-and-yellow fallout shelter signs left on buildings from the Cold War era. They were put in place by the Office of Civil Defense, which was established by President Harry Truman to educate people about how to protect themselves in the instance of a nuclear attack. Scientists knew, however, that nuclear detonations also released deadly gamma rays, which could be obstructed with enough concrete and distance underground. Radiation can literally blow over very quickly, depending on the size of the blast, so the country, or even the whole affected city, wouldn't burn forever. But again, that was only if you weren't directly hit by the blast.",
+      "The fallout shelter was one of the thickest safety blankets ever wrapped around the collective shoulders of terrified citizens. American culture embraced these ineffective methods, believing a concrete box — or even a school desk — would be enough to survive a full-scale nuclear attack. Typically, the shelters were \"draconian — dark, dank and dangerous,\" said Cham Dallas, director of the Institute for Disaster Management at the University of Georgia, in a phone interview. In movies like Blast from the Past, however, the bunker was romanticized as a sophisticated underground oasis, stocked with power, food, water and activities.",
+      "\"I think the shelter systems, public and private, were all part of a great defeat in a way,\" said Irwin Redlener, Clinical Professor of Health Policy. We thought that massive attack by a nuclear war would be survivable. But it just wasn't. It was just not going to be possible.\" One theory about the origin of the fallout shelter is that the U.S. wanted it to look like it was too expensive to destroy. Evacuation plans were meant to send a message to the other side that they'd survive. However, if the Soviet Union had ever called this bluff, its nuclear payload would have killed millions.",
+      "Nuclear blasts create shockwaves and high-speed wind that can tear the walls off a house. Then comes the radiation. Some radiation, alpha particles, can't penetrate your skin. But another form, called gamma rays, are deadly and strong enough to radiate through a lot of mediums, but not necessarily thick concrete. If a single Tsar Bomb, a 50 megaton thermonuclear bomb, fell on New York City, over 10 million people would be killed or injured. If the full nuclear power of both sides of the war were exercised, nothing would survive. The surface would be radioactive for who knows how long. In 1961, the Soviet Union detonated the Tsar Bombs which had an explosive force of 50 million tons of TNT. By comparison, the bomb that hit Nagasaki, the \"Fat Man,\" had a force of only around 20,000 tons. To understand the extent of the Tsar's devastating power, consider what a bomb roughly 500 times weaker did. Those nukes are still around. Today, the U.S. has a stockpile of around 7,100 nuclear weapons. Russia has around 7,700. Take cover!"
     ],
     vocabulary: [
       { term: "dig", meaning: "kazmak", partOfSpeech: "v", definition: "To make a hole in the ground.", exampleSentence: "Americans were digging holes for shelters." },
@@ -10140,7 +10124,7 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "Which of the following is TRUE, according to paragraphs 1 and 27",
+        question: "Which of the following is TRUE, according to paragraphs 1 and 2?",
         options: [
           "A) The holes the Americans dug helped them protect themselves from the nuclear attacks during the 60s.",
           "B) President Kennedy knew that the only solution to survive a nuclear attack was to build bomb shelters",
@@ -10160,7 +10144,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 3,
-        question: "What does \"it\" in paragraph 4 refer to?",
+        question: "What does \"It\" in paragraph 4 refer to?",
         options: [
           "A) ducking under the desk",
           "B) a great defeat",
@@ -10171,9 +10155,9 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 4,
-        question: "The author mentions the \"Fat Man\", the bomb that hit Nagasaki in order to",
+        question: "The author mentions the \"Fat Man\", the bomb that hit Nagasaki in order to ----.",
         options: [
-          "A) exemplify how disastrous it would be if Tsar Bombs hit Amenca",
+          "A) exemplify how disastrous it would be if Tsar Bombs hit America",
           "B) show that TNT is the strongest explosive that ever existed",
           "C) convince the readers that Nagasaki suffered much more than the USA",
           "D) tell what will happen if today America and Russia decide to use their weaponry"
@@ -10187,7 +10171,7 @@ export const PASSAGES_DATA: Passage[] = [
           "A) What Kennedy Did to Save America's Image",
           "B) How Americans Survived a Nuclear Blast in the 60s",
           "C) Two Cold War Enemies: the USA and Russia",
-          "D) The Great Lie of the American Fallout Shelter EXERCISE 3. Choose the correct option according to the test."
+          "D) The Great Lie of the American Fallout Shelter"
         ],
         answer: "D"
       }
@@ -10218,7 +10202,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "B"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 87,
@@ -10226,8 +10210,9 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "B2",
     theme: "Past Simple & Vocabulary",
     paragraphs: [
-      "It may come as a surprise to current Milton Hershey. success came with the manufacture of caramel. After the failure of his Philadelphia store, - Milton headed for Denver, where he learned the art of manufacturer who insisted on using fresh milk in z made the caramels especially tasty. After a time in Denver, Milton once again attempted to open his own and New York City. Finally, in 1886, he went to Lancaster, Pennsylvania, where which he raised the money necessary to try again. In 1887, Hershey established the Lancaster Caramel Company, which quickly became an outstanding success. Utilizing a caramel recipe which he had obtained during his previous travels, his company soared to the top. It was this business that established him as a candy maker, and set the stage for future accomplishments. In 1893, Milton attended the Chicago International Exposition, where he saw a display of equipment was captivating. He immediately purchased it for his Lancaster candy factory and began producing chocolate, which he used for 3) coating his caramels. By the next year, production had grown grown to include cocoa, ’ Chocolate Company was born in 1894 as a p subsidiary of the Lancaster Caramel Company. Six. years later, Milton sold the caramel company, however, he retained the rights and the. equipment, to make chocolate. He believed that a large, lucrative market of chocolate 3 consumers was waiting for someone to produce a reasonably priced candy. 2 Using the money from the sale of the Lancaster Caramel Company, Hershey initially acquired farm land roughly 30 miles northwest of Lancaster, near his birthplace of Derry Church. There, he could obtain the large supplies of fresh milk needed to perfect and produce fine milk chocolate. Excited be excited by the potential of milk chocolate, which at that time was a luxury product, Hershey was determined to develop a formula for milk chocolate and market and sell it to the American public. Through trial and error, he created his own formula for milk chocolate. The first Hershey Bar was produced 1900. Hershey's Kisses were developed in 1907, and re the Hershey Bar with almonds was introduced in 1908. On March 2, 1903, he began constructing what was to become the world’s largest — chocolate manufacturing company, only he didn't - know that it would become such a z success. The facility, completed in 1905, was b designed to manufacture chocolate using the latest a mass production techniques. Hershey's Milk Chocolate quickly became the first nationally marketed product of its kind",
-      "The area where the factory is located is now known as Hershey, Pennsylvania. Within the first decades of its existence, the town of Hershey thrived, as did the chocolate business. A bank, a school, churches, a department store, even a park and a trolley system all appeared in short order; the town soon even had a zoo. Today, a visit to the area reveals the Hershey Medical Center, the Milton Hershey School, and Hershey's Chocolate World, Ø a theme park where visitors are greeted by a giant Peanut Butter Cup. All of these things — and a huge number of happy chocolate lovers— were made possible because a single-minded, decisive caramel maker visited the Chicago pe Exposition of 1893!"
+      "It may come as a surprise to current Milton Hershey fans, but his first candy-making success came with the manufacture of caramel. After the failure of his Philadelphia store, Milton headed for Denver, where he learned the art of making caramels. There, he took a job with a local manufacturer who insisted on using fresh milk in making his caramels; Milton saw that this made the caramels especially tasty. After a time in Denver, Milton once again attempted to open his own candy-making businesses, in Chicago, New Orleans, and New York City. Finally, in 1886, he went to Lancaster, Pennsylvania, where he raised the money necessary to try again. In 1887, Hershey established the Lancaster Caramel Company, which quickly became an outstanding success. Utilizing a caramel recipe which he had obtained during his previous travels, his company soared to the top. It was this business that established him as a candy maker, and set the stage for future accomplishments. In 1893, Milton attended the Chicago International Exposition, where he saw a display of German chocolate-making implements. The equipment was captivating. He immediately purchased it for his Lancaster candy factory and began producing chocolate, which he used for coating his caramels. By the next year, production had grown to include cocoa, sweet chocolate, and baking chocolate. The Hershey Chocolate Company was born in 1894 as a subsidiary of the Lancaster Caramel Company. Six years later, Milton sold the caramel company, however, he retained the rights and the equipment, to make chocolate. He believed that a large, lucrative market of chocolate consumers was waiting for someone to produce a reasonably priced candy.",
+      "Using the money from the sale of the Lancaster Caramel Company, Hershey initially acquired farm land roughly 30 miles northwest of Lancaster, near his birthplace of Derry Church. There, he could obtain the large supplies of fresh milk needed to perfect and produce fine milk chocolate. Excited by the potential of milk chocolate, which at that time was a luxury product, Hershey was determined to develop a formula for milk chocolate and market and sell it to the American public. Through trial and error, he created his own formula for milk chocolate. The first Hershey Bar was produced in 1900. Hershey's Kisses were developed in 1907, and the Hershey Bar with almonds was introduced in 1908. On March 2, 1903, he began constructing what was to become the world's largest chocolate manufacturing company, only he didn't know that it would become such a success. The facility, completed in 1905, was designed to manufacture chocolate using the latest mass production techniques. Hershey's Milk Chocolate quickly became the first nationally marketed product of its kind.",
+      "The area where the factory is located is now known as Hershey, Pennsylvania. Within the first decades of its existence, the town of Hershey thrived, as did the chocolate business. A bank, a school, churches, a department store, even a park and a trolley system all appeared in short order; the town soon even had a zoo. Today, a visit to the area reveals the Hershey Medical Center, the Milton Hershey School, and Hershey's Chocolate World, a theme park where visitors are greeted by a giant Peanut Butter Cup. All of these things — and a huge number of happy chocolate lovers— were made possible because a single-minded, decisive caramel maker visited the Chicago Exposition of 1893!"
     ],
     vocabulary: [
       { term: "manufacture", meaning: "imalat, üretim", partOfSpeech: "n", definition: "The making of goods, especially in factories.", exampleSentence: "His success came with the manufacture of caramel." },
@@ -10255,7 +10240,8 @@ export const PASSAGES_DATA: Passage[] = [
         options: [
           "A) outstanding",
           "B) captivating",
-          "C) subsidiary"
+          "C) subsidiary",
+          "D) lucrative"
         ],
         answer: "B"
       },
@@ -10272,7 +10258,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 3,
-        question: "According to paragraph 2 and 3, we understand that",
+        question: "According to paragraph 2 and 3, we understand that ----.",
         options: [
           "A) Milton Snavely Hershey was a man who didn't stop following his ambitions",
           "B) Hershey's Chocolate World and Lancaster Caramel Company were very profitable",
@@ -10283,14 +10269,12 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 4,
-        question: "The passage mainly deals with-",
+        question: "The passage mainly deals with ----.",
         options: [
           "A) a description of the process of manufacturing Hershey's Chocolates",
           "B) a comparison of the quality of Hershey's Chocolates to other brands",
           "C) the telling of the unexpected success of Hershey's Chocolate World",
-          "D) the narration of the founding of the Hershey Chocolate Company EXERCISE 4. Choose the correct option. 1. heart/kidney/market/power...",
-          "E) failure",
-          "F) theme"
+          "D) the narration of the founding of the Hershey Chocolate Company"
         ],
         answer: "D"
       }
@@ -10321,7 +10305,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "A"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 88,
@@ -10329,12 +10313,12 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Vocabulary & Passive",
     paragraphs: [
-      "Located in the South Pacific between Chile and Tahiti, Easter Island is one of the most isolated inhabited islands in the world. The first islanders found a green island, filled with giant palms which they used to build boats and housing. The plants they brought with them did well in the rich volcanic soil and by AD 1550 population on the island hit a high of between 7000 and 9000. Here, in isolation some 2,300 miles west of South America and 1,100 miles from the nearest neighbouring island, the first islanders developed a distinct architectural and artistic culture",
-      "For reasons still unknown, they began carving giant statues out of volcanic rock. These monuments, known as moai are some of the most incredible ancient relics ever discovered. The people of Easter Island called themselves the Rapa Nui. Where did they come from and why did they disappear? Science has learned much about the enigma of Easter Island and has put to rest some of the more bizarre theories, though questions and controversies remain",
-      "Darwin pointed out how groups of animals living in remote places eventually take on unique characteristics and eventually turn into distinct species. Such is the case with the people of Easter Island. Unique as a culture, the Rapa Nui left clues as to their origins in their language, art, and beliefs. Contemporary archaeologists think it's an open and shut case: the first and only people ever to live on Easter Island were from an individual group of Polynesians. Upon finding Easter, they had no contact with any other races until of course, that fateful day in 1722 when, on Easter Sunday, Dutch commander Jacob Roggeveen, became the first European to \"discover\" the island. What his crew witnessed and recorded once on the island has fuelled about the origins of the Rapa Nui ever since",
-      "The Rapa Nui’s mysterious moai statues stand in silence but speak volumes about the achievements of their creators. The stone blocks, carved into head-and-torso figures, average 13 feet (4 meters) tall and 14 tons. The effort to construct these monuments and move them around the island must have been considerable but no one aig rs i pe knows exactly why the Rapa Nui people undertook such an incredible task. Most scholars suspect that the moai were created to honour ancestors, chiefs, or other important personages. However, no written and little oral history exists on the island, so it's impossible to be certain. This culture reached its zenith during the 10\" to 16th centuries, when the Rapa Nui carved and erected some 900 moai across the island",
-      "Itis generally thought that the Rapa Nui's collapse 3 resulted from an environmental catastrophe of their were first settled; estimates range from A.D. 800 to a 1200. It's also not clear how quickly the i island ecosystem was wrecked — but a major factor appears to be the cutting of millions of giant palms to ud clear fields or make fires. It is possible that Polynesian rats, arriving with human settlers, may have eaten have eaten enough seeds to help to destroy the trees. Either way, loss of the trees exposed the island's rich volcanic soils to serious erosion. When Europeans arrived in 1722, they found the island mostly infertile and its inhabitants few",
-      "Today's tourists are numerous, and most visit the Rano Raraku quarry, which yielded the stones used for almost all of the island’s moai. The Rapa Nui's ancient inhabitants left the quarry in a fascinating condition — it is home to some 400 statues, which appear in all stages of completion. Meanwhile, across the entire island, many moai are reversing the creation process and deteriorating rapidly from priceless carvings back into plain rock. The volcanic stone is subject to weathering. Therefore, intensive conservation efforts are needed to help preserve the Rapa Nui's stone legacy in its present state"
+      "Located in the South Pacific between Chile and Tahiti, Easter Island is one of the most isolated inhabited islands in the world. The first islanders found a green island, filled with giant palms which they used to build boats and housing. The plants they brought with them did well in the rich volcanic soil and by AD 1550 population on the island hit a high of between 7000 and 9000. Here, in isolation some 2,300 miles west of South America and 1,100 miles from the nearest neighbouring island, the first islanders developed a distinct architectural and artistic culture.",
+      "For reasons still unknown, they began carving giant statues out of volcanic rock. These monuments, known as moai are some of the most incredible ancient relics ever discovered. The people of Easter Island called themselves the Rapa Nui. Where did they come from and why did they disappear? Science has learned much about the enigma of Easter Island and has put to rest some of the more bizarre theories, though questions and controversies remain.",
+      "Darwin pointed out how groups of animals living in remote places eventually take on unique characteristics and eventually turn into distinct species. Such is the case with the people of Easter Island. Unique as a culture, the Rapa Nui left clues as to their origins in their language, art, and beliefs. Contemporary archaeologists think it's an open and shut case: the first and only people ever to live on Easter Island were from an individual group of Polynesians. Upon finding Easter, they had no contact with any other races until of course, that fateful day in 1722 when, on Easter Sunday, Dutch commander Jacob Roggeveen, became the first European to \"discover\" the island. What his crew witnessed and recorded once on the island has fuelled speculation about the origins of the Rapa Nui ever since.",
+      "The Rapa Nui's mysterious moai statues stand in silence but speak volumes about the achievements of their creators. The stone blocks, carved into head-and-torso figures, average 13 feet (4 meters) tall and 14 tons. The effort to construct these monuments and move them around the island must have been considerable but no one knows exactly why the Rapa Nui people undertook such an incredible task. Most scholars suspect that the moai were created to honour ancestors, chiefs, or other important personages. However, no written and little oral history exists on the island, so it's impossible to be certain. This culture reached its zenith during the 10th to 16th centuries, when the Rapa Nui carved and erected some 900 moai across the island.",
+      "It is generally thought that the Rapa Nui's collapse resulted from an environmental catastrophe of their own making. It's not clear when the islands were first settled; estimates range from A.D. 800 to 1200. It's also not clear how quickly the island ecosystem was wrecked – but a major factor appears to be the cutting of millions of giant palms to clear fields or make fires. It is possible that Polynesian rats, arriving with human settlers, may have eaten enough seeds to help to destroy the trees. Either way, loss of the trees exposed the island's rich volcanic soils to serious erosion. When Europeans arrived in 1722, they found the island mostly infertile and its inhabitants few.",
+      "Today's tourists are numerous, and most visit the Rano Raraku quarry, which yielded the stones used for almost all of the island's moai. The Rapa Nui's ancient inhabitants left the quarry in a fascinating condition – it is home to some 400 statues, which appear in all stages of completion. Meanwhile, across the entire island, many moai are reversing the creation process and deteriorating rapidly from priceless carvings back into plain rock. The volcanic stone is subject to weathering. Therefore, intensive conservation efforts are needed to help preserve the Rapa Nui's stone legacy in its present state."
     ],
     vocabulary: [
       { term: "isolated", meaning: "izole, yalıtılmış", partOfSpeech: "adj", definition: "Far away from other places.", exampleSentence: "Easter Island is one of the most isolated islands." },
@@ -10358,11 +10342,12 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "EĞİTİ 3. According to Darwin, -—.,",
+        question: "According to paragraph 1, Easter Island ----.",
         options: [
-          "A) could be easily reached from Chile and Tahiti by bost",
+          "A) could be easily reached from Chile and Tahiti by boat",
           "B) provided the material to build boats and houses on the island",
-          "C) had various kinds of plants when the first islanders came )was home to a noticeable structural and aesthetic culture in the 1100s"
+          "C) had various kinds of plants when the first islanders came",
+          "D) was home to a noticeable structural and aesthetic culture in the 1100s"
         ],
         answer: "B"
       },
@@ -10390,9 +10375,9 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 4,
-        question: "destruction upon themselves.",
+        question: "Which one of the following is FALSE according to paragraph 5?",
         options: [
-          "A) As the overcutting of trees led to erosion, the Rapa Nul were left with an infertile island.",
+          "A) As the overcutting of trees led to erosion, the Rapa Nui were left with an infertile island.",
           "B) The Rapa Nui most probably brought their own destruction upon themselves.",
           "C) Clearing fields and making fires may have contributed to the overcutting of trees.",
           "D) Rats may have played a role in ruining the ecosystem of the island."
@@ -10401,14 +10386,12 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 5,
-        question: "ecosystem of the island. 5. It can be inferred from paragraph 6 that ----. that ----.",
+        question: "It can be inferred from paragraph 6 that ----.",
         options: [
           "A) the Rapa Nui were very careful about completing all their statues",
           "B) tourists visiting the island try to help preserve the statues",
-          "C) if nothing is done to preserve the moal, they will again be ordinary rocks",
-          "D) in their present state, the moai have fallen apert because of weather conditions EXERCISE 4. Choose the correct option. 1.community/area/island",
-          "E) contemporary",
-          "F) isolated"
+          "C) if nothing is done to preserve the moai, they will again be ordinary rocks",
+          "D) in their present state, the moai have fallen apart because of weather conditions"
         ],
         answer: "C"
       }
@@ -10439,7 +10422,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "A"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 89,
@@ -10447,10 +10430,12 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "B2",
     theme: "Past Simple & Vocabulary",
     paragraphs: [
-      "Benjamin Franklin was born on January 17, 1706 in Boston, Massachusetts. He was one of ten children born to Josiah Franklin, a soap maker, and his wife 3) Abiah Folger. Josiah wanted Benjamin to enterer the clergy but could not afford to send him for; schooling. Consequently, when d Benjamin was twelve, he helped his brother James who was a printer and taught Benjamin about the job.. Benjamin worked extremely hard at formatting the text - and composing publications. When Benjamin was, fifteen, his brother printed the first editorial newspaper. in Boston. Unlike as other publications: throughout Boston that simply reprinted events, James’ newspaper, called The New England Courant, printed articles and editorial columns. Benjamin was very interested in his brother's newspaper and wanted to help him write it.. So, he thought of a plan. He would write under an anonymous pen-name and slip the articles under the door at night. He chose the name Silence Dogood. Articles written by Silence Dogood became very popular. People throughout Boston wanted to know who she was. She spoke out about issues abroad and the poor treatment of women. Finally, after 16 letters, Benjamin confessed to James that he was Silence Dogood. James was very angry and jealous of the attention Benjamin received. 2 Nevertheless, the paper continued. James’ editorials became increasingly critical of the Puritan leadership within Boston, especially for their support of the smallpox inoculation (which the Franklins believed made people sicker). Due to of his criticisms, the police put James in prison and Benjamin was left in charge of publication. When James was released from jail, he beat Benjamin, even though he had been quite successful in the publication business. In 1723, Benjamin ran away and eventually ended up in Philadelphia, Pennsylvania, where he met Deborah Read. While in Philadelphia, Benjamin lived with her family and soon found work as an apprentice printer. Franklin was an excellent printer and was sent the governor of Pennsylvania to London to purchase font types and printing supplies. In exchange for his service, the governor promised to help Benjamin start his own printing business. In the meantime, Benjamin and Deborah had grown very close, and she had begun to suggest they should get married. Benjamin felt unprepared, and left for England. Unfortunately, the governor had lied about helping him, and Benjamin was forced to work in London for several months. Deborah married another man while he was gone. 3 Upon his return to Philadelphia, Benjamin borrowed money and started his own printing business. He worked extremely hard and soon received some government printing contracts. Benjamin's business became very successful and he became well-known throughout Philadelphia. In 1730, he married Deborah Read, whose husband had left her. a",
-      "In the meantime, Benjamin was also carrying out » science experiments. He had already invented the - Franklin Stove, which was effective in keeping large houses warm in the winter, as well as bifocal glasses. He soon became interested in the concept of electricity. In 1752, Franklin devised a simple experiment to see if that if electricity could be harnessed from a storm. He succeeded and gained international fame",
-      "Soon Benjamin turned to politics to satisfy his strong desire to learn. He soon became the colonial representative for Pennsylvania, Massachusetts, Georgia and New Jersey in England. He stayed in England for 18 years, enjoying the life of a wealthy diplomat. Although he begged his wife to join him in England, she refused and eventually died while Benjamin was in England",
-      "Benjamin Franklin then came home to join the cause for independence. He was elected a member of the Continental Congress and helped Thomas Jefferson draft the Declaration of - Independence. After he signed The Declaration of Independence, Franklin set sail for France as BR America’s ambassador. Franklin's charm and persuasion were successful in convincing the French a to sign the 1778 Treaty of Alliance, which \" which asserted France's intention to aid the colonies in their quest for independence, and secure loans for military supplies. In 1783, Franklin attended the signing of the Treaty of Paris, which ended the Revolutionary War. After returning from France, Franklin became a member of the Constitutional Convention and signed the Constitution in 1787. He died three years later on April 17, 1790. Twenty thousand people attended his funeral"
+      "Benjamin Franklin was born on January 17, 1706 in Boston, Massachusetts. He was one of ten children born to Josiah Franklin, a soap maker, and his wife Abiah Folger. Josiah wanted Benjamin to enter the clergy but could not afford to send him for schooling. Consequently, when Benjamin was twelve, he helped his brother James who was a printer and taught Benjamin about the job. Benjamin worked extremely hard at formatting the text and composing publications. When Benjamin was fifteen, his brother printed the first editorial newspaper in Boston. Unlike other publications throughout Boston that simply reprinted events, James' newspaper, called The New England Courant, printed articles and editorial columns. Benjamin was very interested in his brother's newspaper and wanted to help him write it. ______ So, he thought of a plan. He would write under an anonymous pen-name and slip the articles under the door at night. He chose the name Silence Dogood. Articles written by Silence Dogood became very popular. People throughout Boston wanted to know who she was. She spoke out about issues abroad and the poor treatment of women. Finally, after 16 letters, Benjamin confessed to James that he was Silence Dogood. James was very angry and jealous of the attention Benjamin received.",
+      "Nevertheless, the paper continued. James' editorials became increasingly critical of the Puritan leadership within Boston, especially for their support of the smallpox inoculation (which the Franklins believed made people sicker). Due to his criticisms, the police put James in prison and Benjamin was left in charge of publication. When James was released from jail, he beat Benjamin, even though he had been quite successful in the publication business. In 1723, Benjamin ran away and eventually ended up in Philadelphia, Pennsylvania, where he met Deborah Read. While in Philadelphia, Benjamin lived with her family and soon found work as an apprentice printer. Franklin was an excellent printer and was sent by the governor of Pennsylvania to London to purchase font types and printing supplies. In exchange for his service, the governor promised to help Benjamin start his own printing business. In the meantime, Benjamin and Deborah had grown very close, and she had begun to suggest they should get married. Benjamin felt unprepared, and left for England. Unfortunately, the governor had lied about helping him, and Benjamin was forced to work in London for several months. Deborah married another man while he was gone.",
+      "Upon his return to Philadelphia, Benjamin borrowed money and started his own printing business. He worked extremely hard and soon received some government printing contracts. Benjamin's business became very successful and he became well-known throughout Philadelphia. In 1730, he married Deborah Read, whose husband had left her.",
+      "In the meantime, Benjamin was also carrying out science experiments. He had already invented the Franklin Stove, which was effective in keeping large houses warm in the winter, as well as bifocal glasses. He soon became interested in the concept of electricity. In 1752, Franklin devised a simple experiment to see if electricity could be harnessed from a storm. He succeeded and gained international fame.",
+      "Soon Benjamin turned to politics to satisfy his strong desire to learn. He soon became the colonial representative for Pennsylvania, Massachusetts, Georgia and New Jersey in England. He stayed in England for 18 years, enjoying the life of a wealthy diplomat. Although he begged his wife to join him in England, she refused and eventually died while Benjamin was in England.",
+      "Benjamin Franklin then came home to join the cause for independence. He was elected a member of the Continental Congress and helped Thomas Jefferson draft the Declaration of Independence. After he signed The Declaration of Independence, Franklin set sail for France as America's ambassador. Franklin's charm and persuasion were successful in convincing the French to sign the 1778 Treaty of Alliance, which asserted France's intention to aid the colonies in their quest for independence, and secure loans for military supplies. In 1783, Franklin attended the signing of the Treaty of Paris, which ended the Revolutionary War. After returning from France, Franklin became a member of the Constitutional Convention and signed the Constitution in 1787. He died three years later on April 17, 1790. Twenty thousand people attended his funeral."
     ],
     vocabulary: [
       { term: "clergy", meaning: "din adamları, ruhban sınıfı", partOfSpeech: "n", definition: "People who lead religious services.", exampleSentence: "Josiah wanted Benjamin to enter the clergy." },
@@ -10474,7 +10459,7 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "Which one of these sentences best fits the space in paragraph 17",
+        question: "Which one of these sentences best fits the space in paragraph 1?",
         options: [
           "A) However, James was not always content with the articles his brother Benjamin wrote.",
           "B) Unfortunately, he knew James would not allow a 15-year-old boy to write articles.",
@@ -10485,23 +10470,23 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 2,
-        question: "It is stated in paragraph 2 that Benjamin Franklin",
+        question: "It is stated in paragraph 2 that Benjamin Franklin ----.",
         options: [
           "A) was sent to London to set up a publishing company",
-          "B) was unwilling to marry Deborah because she chaated on him",
-          "C) took over the family business when James was under amest",
-          "D) had to stay in Pennsylvania because of the govemor"
+          "B) was unwilling to marry Deborah because she cheated on him",
+          "C) took over the family business when James was under arrest",
+          "D) had to stay in Pennsylvania because of the governor"
         ],
         answer: "B"
       },
       {
         id: 3,
-        question: "The word \"harnessed\" in paragraph 5 is closest in meaning to",
+        question: "The word \"harnessed\" in paragraph 5 is closest in meaning to----.",
         options: [
           "A) consumed",
-          "B) saved",
-          "C) charged with",
-          "D) made use of EXERCISE 4, Choose the correct option."
+          "B) charged with",
+          "C) saved",
+          "D) made use of"
         ],
         answer: "A"
       }
@@ -10532,7 +10517,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "B"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 90,
@@ -10540,10 +10525,11 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Vocabulary & Digital Reading",
     paragraphs: [
-      "A research paper has determined that when it comes to looking at the “big picture”, the human brain is more capable of inferring broader ideas and themes from words printed on paper than those appearing on a digital screen. Between smartphones, work desktops, tablets and laptops, sometimes the only time we are ever really away from a digital screen is when your head hits a pillow. As a result of these ubiquitous glowing screens, two professors from Carnegie Mellon University and Dartmouth College set out to question whether people are affected by our digital habits. Their unnerving conclusion suggests that the AMOLEDs and LCDs of this world actually cause their readers to enter a form of tunnel vision that effectively hampers their mental ability to think ‘outside the box’",
-      "Professors Geoff Kaufman and Mary Flanagan conducted a series of tests, documented in a recent research paper. The tests compared various everyday screen-based tech — including a tablet (an iPad 2) and a laptop screen / monitor — with text printed on ordinary paper. (I) The pair's tests were designed examine the possible differences in cognitive patterns between “digital and non-digital platforms.” (II) A group of 77 subjects were tasked with various quizzes that involved problem solving and basic literary analysis. (Ill) The results across four different tests all pointed to the same conclusion that people are more likely to consider abstract ideas (or, for want of a better phrase, read between the lines) on paper. (IV) 3 “Digital screens almost seem to create a sort of tunnel vision where people are focusing on just the information they're getting this moment, not the broader context,” Kaufman told The Washington Post. “On the iPad, they seemed not to focus or show consideration for the long-term effects of their decisions. And they just lost the game much more often.” As an example, one experiment vere ge py involved a surprise exam based on a short story by author David Sedaris. A PDF and paper version was then split between two sample groups who were then subjected to a surprise mock exam consisting of 24 multiple-choice questions",
-      "The questions were split to measure the participants’ “memory of specific details presented in the bo narrative”, but also their “understanding of higher- oh level inferences that the author intended readers to glean from the story”. Kaufman and Flanagan note i. that a pattern emerged that saw the 2 digital guinea pigs score higher on memory-based,, factual questions, while the » traditional paper-based subjects “exhibited higher scores on the inference items”. Another lab test asked the participants to judge which vehicle was better from a specification list for two separate cars, with one being objectively superior. When faced with an “information overload”, the non- digital half again prevailed, with 66% choosing the correct car, whereas only 43% of the laptop users chose the right answer",
-      "Should we abandon our screens? The researchers stress in the paper that their research model took into account the possible differences between the two platforms by keeping the font-size and layout the same for both printed and digital text. They also point out that “lack of familiarity with mobile devices” excuse would not be enough to affect the results negatively. So does this mean we should abandon E our screens immediately? Kaufman seems to think a this would be a bit drastic, yet he did say J how his own habits could benefit those looking to 5 avoid digital-blinkers. ps. What is the main idea of paragraph 1? lives, they almost never part with them till they go to bed. a larger perspective than it is on a digital screen. that scientists now are conducting research on this issue. as much as words printed on paper do.. The following sentence can be added to paragraph 2. Choose position I, II, lll or IV. “On the other hand, the research seems to show that passages displayed on a screen are analysed by the human brain in a mostly “factual” capacity; possibly as a result of lazy habits that digital screens inspire, such as “skimming” and “quick-scanning.”"
+      "A research paper has determined that when it comes to looking at the \"big picture\", the human brain is more capable of inferring broader ideas and themes from words printed on paper than those appearing on a digital screen. Between smartphones, work desktops, tablets and laptops, sometimes the only time we are ever really away from a digital screen is when your head hits a pillow. As a result of these ubiquitous glowing screens, two professors from Carnegie Mellon University and Dartmouth College set out to question whether people are affected by our digital habits. Their unnerving conclusion suggests that the AMOLEDs and LCDs of this world actually cause their readers to enter a form of tunnel vision that effectively hampers their mental ability to think 'outside the box'.",
+      "Professors Geoff Kaufman and Mary Flanagan conducted a series of tests, documented in a recent research paper. The tests compared various everyday screen-based tech – including a tablet (an iPad 2) and a laptop screen / monitor – with text printed on ordinary paper. (I) The pair's tests were designed to examine the possible differences in cognitive patterns between \"digital and non-digital platforms.\" (II) A group of 77 subjects were tasked with various quizzes that involved problem solving and basic literary analysis. (III) The results across four different tests all pointed to the same conclusion that people are more likely to consider abstract ideas (or, for want of a better phrase, read between the lines) on paper. (IV)",
+      "\"Digital screens almost seem to create a sort of tunnel vision that people are focusing on just the information they're getting this moment, not the broader context,\" Kaufman told The Washington Post. \"On the iPad, they seemed not to focus or show consideration for the long-term effects of their decisions. And they just lost the game much more often.\" As an example, one experiment involved a surprise exam based on a short story by author David Sedaris. A PDF and paper version was then split between two sample groups who were then subjected to a surprise mock exam consisting of 24 multiple-choice questions.",
+      "The questions were split to measure the participants' \"memory of specific details presented in the narrative\", but also their \"understanding of higher-level inferences that the author intended readers to glean from the story\". Kaufman and Flanagan note that a pattern emerged that saw the digital guinea pigs score higher on memory-based, factual questions, while the traditional paper-based subjects \"exhibited higher scores on the inference items\". Another lab test asked the participants to judge which vehicle was better from a specification list for two separate cars, with one being objectively superior. When faced with an \"information overload\", the non-digital half again prevailed, with 66% choosing the correct car, whereas only 43% of the laptop users chose the right answer.",
+      "Should we abandon our screens? The researchers stress in the paper that their research model took into account the possible differences between the two platforms by keeping the font-size and layout the same for both printed and digital text. They also point out that \"lack of familiarity with mobile devices\" excuse would not be enough to affect the results negatively. So does this mean we should abandon our screens immediately? Kaufman seems to think this would be a bit drastic, yet he did say how his own habits could benefit those looking to avoid digital-blinkers."
     ],
     vocabulary: [
       { term: "determine", meaning: "belirlemek, saptamak", partOfSpeech: "v", definition: "To discover the facts about something.", exampleSentence: "A research paper has determined this." },
@@ -10577,15 +10563,12 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 2,
-        question: "a larger perspective than it is on a digital screen.",
+        question: "The following sentence can be added to paragraph 2. Choose position I, II, III or IV. \"On the other hand, the research seems to show that passages displayed on a screen are analysed by the human brain in a mostly \"factual\" capacity; possibly as a result of lazy habits that digital screens inspire, such as \"skimming\" and \"quick-scanning.\"\"",
         options: [
           "A) 1",
-          "B) li",
-          "C) IV EXERCISE 4. Choose the correct option. 1. come to/ arrive at /reach a/n",
-          "D) overload",
-          "E) conclusion 2.-picture/image/disorder/task",
-          "F) mental",
-          "G) drastic"
+          "B) II",
+          "C) III",
+          "D) IV"
         ],
         answer: "D"
       }
@@ -10616,7 +10599,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "A"
       },
     ],
-    sourceFidelity: "ocr-yapisal"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 91,
@@ -10644,7 +10627,7 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "It is mentioned in the paragraph that artificial intelligence -------.",
+        question: "It is mentioned in the paragraph that artificial intelligence ----.",
         options: [
           "A) needs to be enhanced to meet the needs of our modern life",
           "B) dates back to the emergence of computers",
@@ -10656,7 +10639,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 2,
-        question: "We can understand from the passage that for a machine -----.",
+        question: "We can understand from the passage that for a machine ----.",
         options: [
           "A) performing intricate tasks is still challenging",
           "B) humans have become a nuisance and obstacle",
@@ -10668,7 +10651,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 3,
-        question: "As we learn from the passage one of the concerns stated by the writer is that ------.",
+        question: "As we learn from the passage one of the concerns stated by the writer is that ----.",
         options: [
           "A) one day the industry and the banking system may fail",
           "B) most smart devices may become redundant in the near future",
@@ -10680,7 +10663,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 4,
-        question: "The best title for the passage could be -----",
+        question: "The best title for the passage could be ----",
         options: [
           "A) The rising power of artificial intelligence",
           "B) Humans versus machines",
@@ -10747,7 +10730,7 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "The writers asserts that Bitcoin ------.",
+        question: "The writers asserts that Bitcoin ----.",
         options: [
           "A) has not become a medium of exchange in trade yet",
           "B) has not become a complete trustworthy asset so far",
@@ -10759,7 +10742,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 2,
-        question: "As we learn from the passage, one of the things that remains unknown is -------.",
+        question: "As we learn from the passage, one of the things that remains unknown is ----.",
         options: [
           "A) what Bitcoin's current market value is",
           "B) how exchangeable Bitcoin is",
@@ -10783,7 +10766,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 4,
-        question: "According to the passage,, -------.",
+        question: "According to the passage,, ----.",
         options: [
           "A) Bitcoin has been a challenge to governments",
           "B) the value of Bitcoin is volatile due to its speculative nature",
@@ -10850,7 +10833,7 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "It has been suggested in the passage that in the early days of the diesel engine, the new invention ------.",
+        question: "It has been suggested in the passage that in the early days of the diesel engine, the new invention ----.",
         options: [
           "A) was used widely in a great variety of fields",
           "B) was nothing more than a frustration",
@@ -10862,7 +10845,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 2,
-        question: "According to the passage, diesel engines were preferable in Europe partly because -------.",
+        question: "According to the passage, diesel engines were preferable in Europe partly because ----.",
         options: [
           "A) these engines proved to be far efficient than others only in trains and factories",
           "B) they were much easier to install on passenger cars",
@@ -10886,7 +10869,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 4,
-        question: "We can learn from the passage that -------.",
+        question: "We can learn from the passage that ----.",
         options: [
           "A) the death of Rudolf Diesel is mainly related with his military deals",
           "B) car manufacturers in the 1950s and 1960s were unable to foresee the fruits of the diesel engines",
@@ -10898,7 +10881,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 5,
-        question: "The passage is mainly about -----.",
+        question: "The passage is mainly about ----.",
         options: [
           "A) The life and death of Rudolph Diesel",
           "B) What is a diesel engine?",
@@ -10965,7 +10948,7 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "We learn from the paragraph that lawns are plants that ------.",
+        question: "We learn from the paragraph that lawns are plants that ----.",
         options: [
           "A) shaped the design of ancient castles in Europe",
           "B) require extreme effort to plant as they need much available land",
@@ -10977,7 +10960,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 2,
-        question: "According to the passage, apart from being a way of showing off, -------.",
+        question: "According to the passage, apart from being a way of showing off, ----.",
         options: [
           "A) lawns still provide grazing lands for villagers in France",
           "B) lawns are vital for trees to flourish in an open field",
@@ -11001,7 +10984,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 4,
-        question: "The village farmers' attitude towards growing lawns sounds -----.",
+        question: "The village farmers' attitude towards growing lawns sounds ----.",
         options: [
           "A) hesitant",
           "B) satirical",
@@ -11068,7 +11051,7 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "According to the passage, the new discovery -----.",
+        question: "According to the passage, the new discovery ----.",
         options: [
           "A) has strengthened the already known facts about the upper Amazon Basin",
           "B) is too poor to become an evidence for the ancient Amazon society",
@@ -11171,7 +11154,7 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "It is mentioned in the paragraph that one reason why the QR code is preferable is that -----.",
+        question: "It is mentioned in the paragraph that one reason why the QR code is preferable is that ----.",
         options: [
           "A) it can store information in a minute space compared to the barcode",
           "B) you don't necessarily have to use them in supermarket chains",
@@ -11183,7 +11166,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 2,
-        question: "According to the writer, ---------.",
+        question: "According to the writer, ----.",
         options: [
           "A) manufacturers should cease to print barcodes on their products",
           "B) there are more similarities than differences between the QR and the barcode",
@@ -11195,7 +11178,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 3,
-        question: "It is stated in the passage that the barcode ------.",
+        question: "It is stated in the passage that the barcode ----.",
         options: [
           "A) can be provided with more flexibility if it is designed as the QR code",
           "B) owed its success to its use in supermarket checkout systems",
@@ -11207,7 +11190,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 4,
-        question: "The writer emphasizes that ------.",
+        question: "The writer emphasizes that ----.",
         options: [
           "A) a barcode should be designed to hold information both horizontally and vertically",
           "B) the concept of QR code will hardly catch on due to its rigidity",
@@ -11275,7 +11258,7 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "We learn from the passage that Goodyear -----.",
+        question: "We learn from the passage that Goodyear ----.",
         options: [
           "A) developed his method of developing tires with several inventors",
           "B) is widely regarded as the sole creator of tires",
@@ -11311,7 +11294,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 4,
-        question: "We can understand from the passage that -----.",
+        question: "We can understand from the passage that ----.",
         options: [
           "A) before Charles Goodyear, the pioneers of the tire technology were seen as Michelin and Dunlop",
           "B) when a mixture of rubber and sulfur is dropped on a stove, it never melts",
@@ -11379,7 +11362,7 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "According to the passage, what makes a satire and parody distinct is -------.",
+        question: "According to the passage, what makes a satire and parody distinct is ----.",
         options: [
           "A) their use and magnitude of exaggeration of telling events",
           "B) the range of audience and the effect of humor",
@@ -11391,7 +11374,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 2,
-        question: "It is indicated in the passage that -------.",
+        question: "It is indicated in the passage that ----.",
         options: [
           "A) a satire may not always lead to a desired result",
           "B) both a parody and satire could be misleading for the general audience",
@@ -11403,7 +11386,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 3,
-        question: "We can understand from the passage that ------",
+        question: "We can understand from the passage that ----",
         options: [
           "A) satirical essays are usually regarded as harassment by politicians",
           "B) unless dealt properly, the message in a satire may not last for long",
@@ -11415,7 +11398,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 4,
-        question: "The best title for this passage could be ------",
+        question: "The best title for this passage could be ----",
         options: [
           "A) Parody and satire are actually the same thing",
           "B) An overall outlook into a satire",
@@ -11483,7 +11466,7 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "We learn from the passage that Sugar ------.",
+        question: "We learn from the passage that Sugar ----.",
         options: [
           "A) was the main and the sole commodity imported from the colonies to Europe",
           "B) became a source of conflict between the Spanish and the English",
@@ -11495,7 +11478,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 2,
-        question: "We can conclude from the passage that -------.",
+        question: "We can conclude from the passage that ----.",
         options: [
           "A) if it had not been for the sugar cane production, European slave trade would not have been so extensive",
           "B) the Spanish had nothing to do with the massacre of the inhabitants of the West Indies",
@@ -11519,7 +11502,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 4,
-        question: "It is stated in the passage that -----.",
+        question: "It is stated in the passage that ----.",
         options: [
           "A) sugar plantation and slavery had no connection whatsoever",
           "B) a collaboration among European slave traders had to be established",
@@ -11531,7 +11514,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 5,
-        question: "The tone of the writer can be described as ------.",
+        question: "The tone of the writer can be described as ----.",
         options: [
           "A) apprehensive",
           "B) realistic",
@@ -11543,7 +11526,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 6,
-        question: "The best title for the passage could be -----.",
+        question: "The best title for the passage could be ----.",
         options: [
           "A) A brief history of sugar",
           "B) The history of slavery in the West Indies",
@@ -11612,7 +11595,7 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "We learn from the passage that tea ------.",
+        question: "We learn from the passage that tea ----.",
         options: [
           "A) was heavily taxed by the Americans against the British crown",
           "B) has untied people and nation in a peaceful manner",
@@ -11624,7 +11607,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 2,
-        question: "It is stated in the passage that due to the immense demand for tea, ------.",
+        question: "It is stated in the passage that due to the immense demand for tea, ----.",
         options: [
           "A) the British had a hard time meeting the demand and funding it",
           "B) people in Britain had turned to opium that was imported from China",
@@ -11648,7 +11631,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 4,
-        question: "The overall aim of the writer is to -------.",
+        question: "The overall aim of the writer is to ----.",
         options: [
           "A) give us a glimpse of the history of tea",
           "B) tell about the causes behind both the opium wars and liberation of the American continent",

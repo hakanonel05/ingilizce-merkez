@@ -2,26 +2,27 @@
  "no": 74,
  "baslik": "Civilization and History",
  "paragraflar": [
-  "An overwhelming majority of the people who appear most often and most gloriously in the history books are great conquerors and soldiers, whereas the people who really helped civilization develop are almost never mentioned at all instance, we do not know who first treated a broken leg, or calculated the length of a year, or grew crops; however addition, we do know all about the killers and destroyers. They could be great indeed, but we must note that they are definitely not the most civilized ones. It is true that fighting is a part of the nature of all living things, but can we say the same for war-fighting? Animals fight; so do savages; hence, to be good at fighting is to be good in the way in which an animal or a savage is good, but it is not to be civilized. People fight to settle quarrels. Fighting means killing, and civilized people ought to be able to find some way of settling their disputes other than of by seeing which side can kill off the greater number of the other side, and then saying that the side which has killed most has won. 2 On the whole, that is what the story of mankind has been like. But we must not expect too much. After all, the race of men has only just started. From the point of view of evolution, human beings are just babies of a few months old. Suppose that we calculate the whole past of living creatures on Earth as one hundred years; then the whole past of man works out to about one month, and during that month there have been civilizations for between about seven or eight hours, we may able to estimate his future, that is to say, the whole period between now and when the sun grows too cold to maintain life any longer on the earth, at about one hundred thousand years. Thus mankind is only at the outset of its civilized life"
+  "An overwhelming majority of the people who appear most often and most gloriously in the history books are great conquerors and soldiers, whereas the people who really helped civilization develop are almost never mentioned at all. For instance, we do not know who first treated a broken leg, or calculated the length of a year, or grew crops; however, we do know all about the killers and destroyers. They could be great indeed, but we must note that they are definitely not the most civilized ones. It is true that fighting is a part of the nature of all living things, but can we say the same for war-fighting? Animals fight; so do savages; hence, to be good at fighting is to be good in the way in which an animal or a savage is good, but it is not to be civilized. People fight to settle quarrels. Fighting means killing, and civilized people ought to be able to find some way of settling their disputes other than by seeing which side can kill off the greater number of the other side, and then saying that the side which has killed most has won.",
+  "On the whole, that is what the story of mankind has been like. But we must not expect too much. After all, the race of men has only just started. From the point of view of evolution, human beings are just babies of a few months old. Suppose that we calculate the whole past of living creatures on Earth as one hundred years; then the whole past of man works out to about one month, and during that month there have been civilizations for between about seven and eight hours. Taking man's civilized past at about seven or eight hours, we may estimate his future, that is to say, the whole period between now and when the sun grows too cold to maintain life any longer on the earth, at about one hundred thousand years. Thus mankind is only at the outset of its civilized life."
  ],
  "sorular": [
   {
    "no": 1,
-   "soru": "overwhelming (adj)",
+   "soru": "What is the main idea of paragraph 1?",
    "secenekler": [
     "A) Some authors of history books are critical of the people who changed history, particularly conquerors and soldiers.",
     "B) Conquerors and soldiers have been our most famous men, but they did not help civilization forward.",
     "C) Great conquerors and soldiers are mostly in history books because fighting is a part of human nature.",
-    "D) Animals and humans are similar to each other since both species fight in order to maintain their lives. ABIN BIL EGITEN EXERCISE 4. Choose the correct option."
+    "D) Animals and humans are similar to each other since both species fight in order to maintain their lives."
    ],
    "cevap": "B"
   },
   {
    "no": 2,
-   "soru": "calculate (v)",
+   "soru": "Why does the author make the calculation in paragraph 2?",
    "secenekler": [
     "A) To show how the human race has been cruel to each other.",
-    "B) To ilustrate the different stages that human beings have gone through.",
+    "B) To illustrate the different stages that human beings have gone through.",
     "C) To underline that he is pessimistic about the future of the human race.",
     "D) To emphasize that human beings are at the beginning of their civilization."
    ],
@@ -29,12 +30,12 @@
   },
   {
    "no": 3,
-   "soru": "definitely (v)",
+   "soru": "The author's tone in the passage is ----.",
    "secenekler": [
     "A) informative",
     "B) optimistic",
     "C) critical",
-    "D) impartial 050-420 AKIN (25460 BIL COTTEN www.acoal.com"
+    "D) impartial"
    ],
    "cevap": "C"
   }
@@ -53,6 +54,10 @@
   "kalan-numara:4",
   "eksik-doldurma:13/17"
  ],
- "guvenNot": "yapisal-ocr",
- "guven": "ocr-yapisal"
+ "guven": "goruntuden-birebir",
+ "sayfalar": [
+  210,
+  211
+ ],
+ "_sorularDogrulandi": "goruntuden"
 }

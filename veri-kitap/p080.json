@@ -2,53 +2,51 @@
  "no": 80,
  "baslik": "How safe can artificial intelligence be?",
  "paragraflar": [
-  "I worrying about. For a start, we live with Al already. The calculations behind your Google searches or your browsing on Amazon are not just running in the background — the software is constantly learning how to respond more rapidly and usefully",
-  "This is remarkable, but it is described as \"narrow\" or \"weak\" Al because it can only work within the guidelines created by its human inventors — a crucial limitation. By contrast, \"general\" or \"strong\" Al which does not exist yet implies a more assertive ability to do things that go beyond the original human intentions, not just to \"think\" but also to improvise. Huge obstacles stand in the way of getting there, like mimicking how a human brain works. For a reality check, we visited NASA engineers working on some of the most capable robots in the world. People working there over - \"I am not concerned about intelligent machines,\" said project leader Brett Kennedy. He said: \"For the foreseeable future, am not concerned, nor do expect to see a robot as intelligent as a human. have first-hand knowledge of how hard it is for us to make a robot that does much of anything. \"To anyone worried about Al, this would be reassuring",
-  "But predicting the future pace of technology is impossible. The key and most momentous milestone — human-machine equality — is called Artificial General Intelligence, and academics are trying to assess when that might arrive and what it would mean. One is Prof Nick Bostrom, who, in his recent book, suggests that there's a 50% chance that computers could reach human-level: intelligence as soon as 2050. The same study says there's a 90% chance of machine-human equality by 2075. Prof Bostrom describes himself as a supporter of Al — because it could help tackle climate change, energy and new medicines — but he also brings up a compelling image of mankind behaving like a curious child who has picked up an unexploded bomb, without realising the dangers. \"Maybe it is decades away, but we are just as immature and naive as this child. We really don't realise the power o of this thing we are creating.\"",
-  "Prof Bostrom is now receiving funding from Elon Musk to explore these issues, and the aim is to z develop a shared approach to safety. We could: imagine a scenario where the technology is unstoppable but the scariest scenarios — of robot destroyers — are somehow evaded because the right steps are taken in advance. But then another quieter, less obvious form of takeover may still be possible. In his latest book, Prof Jerry Kaplan states that \"As we learn to trust these systems to transport us, introduce us to potential mates, customise our news, protect our property, monitor our environment, care for our children and elderly, grow, prepare and serve our food, it will be easy to miss the bigger picture.” Ultimately, there are risks, no doubt. The question is whether the right safeguards can be built in, and soon enough"
+  "Most Hollywood movies on Artificial Intelligence (AI) portray a terrifying future in which machines become so clever that they dominate or even destroy us. And influential figures in this field such as Stephen Hawking and Elon Musk have called for caution. So, does this make the conquest by computers inevitable? With such a heated subject, it's worth trying to distinguish what's plausible from what's too far-fetched to worry about. For a start, we live with AI already. The calculations behind your Google searches or your browsing on Amazon are not just running in the background – the software is constantly learning how to respond more rapidly and usefully.",
+  "This is remarkable, but it is described as \"narrow\" or \"weak\" AI because it can only work within the guidelines created by its human inventors – a crucial limitation. By contrast, \"general\" or \"strong\" AI which does not exist yet implies a more assertive ability to do things that go beyond the original human intentions, not just to \"think\" but also to improvise. Huge obstacles stand in the way of getting there, like mimicking how a human brain works. For a reality check, we visited NASA engineers working on some of the most capable robots in the world. People working there laughed at the notion of a robot army someday taking over - \"I am not concerned about intelligent machines,\" said project leader Brett Kennedy. He said: \"For the foreseeable future, I am not concerned, nor do I expect to see a robot as intelligent as a human. I have first-hand knowledge of how hard it is for us to make a robot that does much of anything. \"To anyone worried about AI, this would be reassuring.",
+  "But predicting the future pace of technology is impossible. The key and most momentous milestone – human-machine equality – is called Artificial General Intelligence, and academics are trying to assess when that might arrive and what it would mean. One is Prof Nick Bostrom, who, in his recent book, suggests that there's a 50% chance that computers could reach human-level intelligence as soon as 2050. The same study says there's a 90% chance of machine-human equality by 2075. Prof Bostrom describes himself as a supporter of AI – because it could help tackle climate change, energy and new medicines – but he also brings up a compelling image of mankind behaving like a curious child who has picked up an unexploded bomb, without realising the dangers. \"Maybe it is decades away, but we are just as immature and naïve as this child. We really don't realise the power of this thing we are creating.\"",
+  "Prof Bostrom is now receiving funding from Elon Musk to explore these issues, and the aim is to develop a shared approach to safety. We could imagine a scenario where the technology is unstoppable but the scariest scenarios – of robot destroyers – are somehow evaded because the right steps are taken in advance. But then another quieter, less obvious form of takeover may still be possible. In his latest book, Prof Jerry Kaplan states that \"As we learn to trust these systems to transport us, introduce us to potential mates, customise our news, protect our property, monitor our environment, care for our children and elderly, grow, prepare and serve our food, it will be easy to miss the bigger picture.\" Ultimately, there are risks, no doubt. The question is whether the right safeguards can be built in, and soon enough."
  ],
  "sorular": [
   {
    "no": 1,
-   "soru": "According to paragraph 2, is the following sentence TRUE or FALSE? “Weak Al has not been realised yet.”",
+   "soru": "Which of the following is FALSE, according to paragraph 1?",
    "secenekler": [
-    "A) thie",
-    "B) False",
-    "A) True",
-    "B) False"
+    "A) Prominent people in the AI field warn against the dangers of artificial intelligence.",
+    "B) Artificial intelligence is already in our lives like the calculations behind Google or Amazon.",
+    "C) Google or Amazon uses a limited AI which does not allow them to adapt for new searches.",
+    "D) It is good to distinguish between reasonable and hard-to-believe AI scenarios."
    ],
    "cevap": "C"
   },
   {
    "no": 2,
-   "soru": "According to paragraph 3, Prof Nick Bostrom is of the opinion that----.",
+   "soru": "According to paragraph 2, is the following sentence TRUE or FALSE? \"Weak AI has not been realised yet.\"",
    "secenekler": [
-    "A) has not been realised yet.\"",
-    "B) True",
-    "C) False"
+    "A) True",
+    "B) False"
    ],
    "cevap": "B"
   },
   {
    "no": 3,
-   "soru": "eğirTiM of our species",
+   "soru": "According to paragraph 3, Prof Nick Bostrom is of the opinion that ----.",
    "secenekler": [
-    "A) Al is something we should try to achieve in a short period of time",
+    "A) AI is something we should try to achieve in a short period of time",
     "B) achieving machine-human equality will be the end of our species",
-    "C) adults are no different than children when il comes to achieving machine-human equality",
-    "D) mankind isn't able to comprehend the potential complications and dangers",
-    "E) can cause yet"
+    "C) adults are no different than children when it comes to achieving machine-human equality",
+    "D) mankind isn't able to comprehend the potential complications and dangers AI can cause yet"
    ],
    "cevap": "D"
   },
   {
    "no": 4,
-   "soru": "complications and dangers Al can cause yet What is the text mainly about?",
+   "soru": "What is the text mainly about?",
    "secenekler": [
-    "A) the unpredictability of the consequences of achieving Al",
-    "B) the threats Al can pose",
-    "C) how Al can be achieved",
-    "D) what prominent scientists think about the dangers"
+    "A) the unpredictability of the consequences of achieving AI",
+    "B) the threats AI can pose",
+    "C) how AI can be achieved",
+    "D) what prominent scientists think about the dangers of AI"
    ],
    "cevap": "A"
   }
@@ -67,6 +65,10 @@
   "kalan-numara:2",
   "eksik-doldurma:10/14"
  ],
- "guvenNot": "yapisal-ocr",
- "guven": "ocr-yapisal"
+ "guven": "goruntuden-birebir",
+ "sayfalar": [
+  222,
+  223
+ ],
+ "_sorularDogrulandi": "goruntuden"
 }

@@ -2,16 +2,17 @@
  "no": 69,
  "baslik": "Why People Started Domesticating Animals",
  "paragraflar": [
-  "Which is the most successful animal alive today? Is it the lion, stretching in the midday African sun, or is it some insect reproducing itself in millions, deep in the Amazon rainforest? A good z argument could be made for humans themselves.. But the animal that seems to have made have made the most of its limited opportunities is the - domestic sheep, closely followed follow by - the horse, the pig, the cow, the dog, and all the other creatures. 2 These animals have made a huge progress similar to that of humans. They have escaped the pressures which would have wiped out some of them. In 1860, humans and domesticated animals represented represented about five percent of all plant and animal life, while today they are about twenty percent, according to biologists. The domestic animals, the ones that have made themselves fit in with the existence of humans, are the success stories in the history of animal development",
-  "This is certain to cause an argument because it denies a central claim of the animal rights movement which argues that animals should have - the same right as humans. Domestication ie means humans profiting from animals. Humans have - simply used animals for their own selfish purposes, - using use increasingly cruel methods. The B idea of domestication has actually helped animals survive and develop is a revolutionary, and will probably make the animal S rights movement even angrier. Yet, there is evidence to support it. prams ppp",
-  "But if it was animals that took the first step in the process of domestication, agreeing to live with humans on a voluntary basis, what exactly did they get from it? Biologists argue that the driving force in all animals is the desire to ensure that they and their future generations survive, and if this is right then, wild cows and wild horses would have been wiped out if it were not for domestication. ™"
+  "Which is the most successful animal alive today? Is it the lion, stretching in the midday African sun, or is it some insect reproducing itself in millions, deep in the Amazon rainforest? A good argument could be made for humans themselves. But the animal that seems to have made the most of its limited opportunities is the domestic sheep, closely followed by the horse, the pig, the cow, the dog, and all the other domesticated creatures.",
+  "These animals have made a huge progress similar to that of humans. They have escaped the pressures which would have wiped out some of them. In 1860, humans and domesticated animals represented about five percent of all plant and animal life, while today they are about twenty percent, according to biologists. The domestic animals, the ones that have made themselves fit in with the existence of humans, are the success stories in the history of animal development.",
+  "This is certain to cause an argument because it denies a central claim of the animal rights movement which argues that animals should have the same right as humans. Domestication means humans profiting from animals. Humans have simply used animals for their own selfish purposes, using increasingly cruel methods. The idea of domestication has actually helped animals survive and develop is revolutionary, and will probably make the animal rights movement even angrier. Yet, there is evidence to support it.",
+  "But if it was animals that took the first step in the process of domestication, agreeing to live with humans on a voluntary basis, what exactly did they get from it? Biologists argue that the driving force in all animals is the desire to ensure that they and their future generations survive, and if this is right then, wild cows and wild horses would have been wiped out if it were not for domestication."
  ],
  "sorular": [
   {
    "no": 1,
-   "soru": "rely on (phr.v)",
+   "soru": "It can be understood from paragraph 2 that ----.",
    "secenekler": [
-    "A) the number of domestic animals was far more than that of humans in the 19\" century",
+    "A) the number of domestic animals was far more than that of humans in the 19th century",
     "B) domestic animals have benefited greatly from living with humans",
     "C) animals are more successful than humans in terms of survival strategies",
     "D) people learned how to domesticate animals during the late 19th century"
@@ -20,9 +21,9 @@
   },
   {
    "no": 2,
-   "soru": "depiction (n)",
+   "soru": "We can understand from paragraph 4 that ----.",
    "secenekler": [
-    "A) there has been a fierce confict among biologists over the domestication of animals",
+    "A) there has been a fierce conflict among biologists over the domestication of animals",
     "B) some animals didn't have the opportunity to live with humans and thus became extinct",
     "C) the number of wild animals could have been more if they hadn't started living with humans",
     "D) wild animals could have become extinct if they hadn't been domesticated"
@@ -56,7 +57,10 @@
   "eksik-doldurma:16/20",
   "sik-eksik:1"
  ],
- "_sorularDogrulandi": "Soru metinleri ve şıkları sayfa görüntüsünden okundu.",
- "guvenNot": "yapisal-ocr",
- "guven": "ocr-yapisal"
+ "_sorularDogrulandi": "goruntuden",
+ "guven": "goruntuden-birebir",
+ "sayfalar": [
+  200,
+  201
+ ]
 }

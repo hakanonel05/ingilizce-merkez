@@ -2,14 +2,14 @@
  "no": 59,
  "baslik": "Kissing",
  "paragraflar": [
-  "What are the customs for kissing people in your country? Do you kiss your relatives when you visit them? Do you kiss your friends hello when you meet them? Is it polite to kiss someone in public places in your country? All of these kissing customs depend on where in the world you are. Kissing may seem as universal as language, but in fact, kissing customs differ around the world",
-  "In many places, kisses are used for saying hello. If you are in Europe or South \" America, you will see lots of these greeting kisses. But the kissing customs for greeting people vary from country to country, and traveling to new places can be confusing if soon as you don't know them. Many European men and women say hello with two kisses, one on each cheek. But three kisses are polite in Belgium, and young people in Paris often prefer four. In these countries, you must to start with the right cheek. Starting with your left cheek would be as awkward as sticking out your left hand for a handshake. A variation on the cheek kiss is found in Brazil. When women meet, they put their cheeks together and kiss the air. In some cultures, men kiss each other on the cheeks at some parts of the world, people don't kiss when they meet each other. In fact, kissing in public is considered impolite. In Japan and China, for example, people in public places rarely kiss each other. In most Middle Eastern countries, men and women do not kiss in public, either",
-  "Kisses aren't just for saying hello; people kiss for lots of other reasons as well. For example, a kiss can also be a sign of respect. Some people show respect by kissing religious articles and flags. Others kiss the ground when they come home to a country they love. Europeans J and Latin Americans also use kisses to say - beautiful!” They kiss their fingertips when they see a pretty woman, an expensive car, or a great s soccer play. In other places, people say good-bye by kissing their fingertips and blowing the kiss away. Kisses are associated with - good luck, too. The French started the custom of kissing their cards for good luck before playing, 5 and today, some people kiss a pair of dice before they roll them. The English kissed hurt fingers to make them better, as many mothers still do today. And, of course, people also kiss to make up after a fight"
+  "What are the customs for kissing people in your country? Do you kiss your relatives when you visit them? Do you kiss your friends hello when you meet them? Is it polite to kiss someone in public places in your country? All of these kissing customs depend on where in the world you are. Kissing may seem as universal as language, but in fact, kissing customs differ around the world.",
+  "In many places, kisses are used for saying hello. If you are in Europe or South America, you will see lots of these greeting kisses. But the kissing customs for greeting people vary from country to country, and traveling to new places can be confusing if you don't know them. Many European men and women say hello with two kisses, one on each cheek. But three kisses are polite in Belgium, and young people in Paris often prefer four. In these countries, you must start with the right cheek. Starting with your left cheek would be as awkward as sticking out your left hand for a handshake. A variation on the cheek kiss is found in Brazil. When women meet, they put their cheeks together and kiss the air. In some cultures, men kiss each other on the cheeks at business meetings. It's like shaking hands. In some parts of the world, people don't kiss when they meet each other. In fact, kissing in public is considered impolite. In Japan and China, for example, people in public places rarely kiss each other. In most Middle Eastern countries, men and women do not kiss in public, either.",
+  "Kisses aren't just for saying hello; people kiss for lots of other reasons as well. For example, a kiss can also be a sign of respect. Some people show respect by kissing religious articles and flags. Others kiss the ground when they come home to a country they love. Europeans and Latin Americans also use kisses to say beautiful!\" They kiss their fingertips when they see a pretty woman, an expensive car, or a great soccer play. In other places, people say good-bye by kissing their fingertips and blowing the kiss away. Kisses are associated with good luck, too. The French started the custom of kissing their cards for good luck before playing, and today, some people kiss a pair of dice before they roll them. The English kissed hurt fingers to make them better, as many mothers still do today. And, of course, people also kiss to make up after a fight."
  ],
  "sorular": [
   {
    "no": 1,
-   "soru": "the text. 1. The writer compares kissing with language in order to ——.",
+   "soru": "The writer compares kissing with language in order to ----.",
    "secenekler": [
     "A) inform the reader about their similarities",
     "B) show that kissing is universal to some extent",
@@ -20,7 +20,7 @@
   },
   {
    "no": 2,
-   "soru": "The word “them” in the text refers to ----,",
+   "soru": "The word \"them\" in the text refers to ----.",
    "secenekler": [
     "A) places",
     "B) people",
@@ -33,7 +33,7 @@
    "no": 3,
    "soru": "Which of the following is NOT mentioned as one of the reasons for kissing in paragraph 3?",
    "secenekler": [
-    "A) Showing respect bey",
+    "A) Showing respect",
     "B) Understanding religious articles",
     "C) Saying hi and goodbye",
     "D) Becoming friends again after a fight"
@@ -51,6 +51,9 @@
   "supheli": 3
  },
  "_not": "Gövde sayfa görüntülerinden yerel OCR ile okundu ve sayfanın YAPISINA göre ayıklandı: EXERCISE 2 yönergesinden sonra başlar, EXERCISE 3 başlığında biter; paragraf sınırları kitabın kendi paragraf numaralarından. Boşluk doldurma seçenekleri kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Sorular ve cevaplar kitabın anahtarından. GÖZLE DOĞRULANMADI.",
- "guvenNot": "yapisal-ocr",
- "guven": "ocr-yapisal"
+ "guven": "goruntuden-birebir",
+ "sayfalar": [
+  180
+ ],
+ "_sorularDogrulandi": "goruntuden"
 }

@@ -2,13 +2,14 @@
  "no": 78,
  "baslik": "The Eskimo",
  "paragraflar": [
-  ") 1 The Eskimo people have a very interesting life style. They live in small bands, under a leader respected for his ability to provide for the group. Only the most personal property is considered private and collaboration is very important. For example, any equipment that they aren't currently using must go to a neighbour who needs it. In the past, the division of labour between the sexes was strict. Men hunted, whereas women took care of the homes. However, today women take part in hunting as / too as much as men. Eskimos make use of various types of houses. Among some Eskimo groups, the snow hut, known as the igloo, is used as a winter residence. 2 As for their eating habits, Eskimos eat a wide variety of food. They consume fish, seals, whales, and other sea mammals. Meat, fat and fish make up a large part of their diet. Vegetables are rarely consumed because they are scarce. They don't waste any food as they depend on fishing and hunting. They sometimes eat berries, roots, stems and some other parts of plants",
-  "Their education takes place within the family and the community circle. By constant exposure to their parents and other adults in the community, children learn all they need to live successfully. The Eskimo of old did not have a written language, so skills and knowledge were passed down by word of mouth. After a successful hunt, for example, the details were shared with the community. The children, boys in particular, listened to reports of the hunters and learned from them. Hunters were like teachers to them. They would describe in detail the location where they spotted the animal and tell about the animal's behaviour and how they responded to that behaviour. Besides listening to the hunters' stories, the children would observe the behaviours of animals. As opposed to the noisy children of modern society, being silent is something Eskimo children are taught as it is a necessity for hunting. Moreover contrast, they learn to memorize the landscape and thus know the region just like an adult"
+  "The Eskimo people have a very interesting life style. They live in small bands, under a leader respected for his ability to provide for the group. Only the most personal property is considered private and collaboration is very important. For example, any equipment that they aren't currently using must go to a neighbour who needs it. In the past, the division of labour between the sexes was strict. Men hunted, whereas women took care of the homes. However, today women take part in hunting as much as men. Eskimos make use of various types of houses. Among some Eskimo groups, the snow hut, known as the igloo, is used as a winter residence.",
+  "As for their eating habits, Eskimos eat a wide variety of food. They consume fish, seals, whales, and other sea mammals. Meat, fat and fish make up a large part of their diet. Vegetables are rarely consumed because they are scarce. They don't waste any food as they depend on fishing and hunting. They sometimes eat berries, roots, stems and some other parts of plants.",
+  "Their education takes place within the family and the community circle. By constant exposure to their parents and other adults in the community, children learn all they need to live successfully. The Eskimo of old did not have a written language, so skills and knowledge were passed down by word of mouth. After a successful hunt, for example, the details were shared with the community. The children, boys in particular, listened to reports of the hunters and learned from them. Hunters were like teachers to them. They would describe in detail the location where they spotted the animal and tell about the animal's behaviour and how they responded to that behaviour. Besides listening to the hunters' stories, the children would observe the behaviours of animals. As opposed to the noisy children of modern society, being silent is something Eskimo children are taught as it is a necessity for hunting. Moreover, they learn to memorize the landscape and thus know the region just like an adult."
  ],
  "sorular": [
   {
    "no": 1,
-   "soru": "the text. 1. We can understand from paragraph 1 that ----. can understand from paragraph that",
+   "soru": "We can understand from paragraph 1 that ----.",
    "secenekler": [
     "A) the cooperation between men and women has decreased",
     "B) Eskimos would prefer to live in igloos throughout the year",
@@ -19,7 +20,7 @@
   },
   {
    "no": 2,
-   "soru": "did in the past 2. Vegetables constitute only a small part of the Eskimo diet since ----.",
+   "soru": "Vegetables constitute only a small part of the Eskimo diet since ----.",
    "secenekler": [
     "A) meat provides more calories",
     "B) Eskimos don't know how to cultivate them",
@@ -30,12 +31,12 @@
   },
   {
    "no": 3,
-   "soru": "EğirtiN 3. Paragraph 3 is mainly concerned with the ----.",
+   "soru": "Paragraph 3 is mainly concerned with the ----.",
    "secenekler": [
-    "A) strategies Eskimo children leam when hunting",
+    "A) strategies Eskimo children learn when hunting",
     "B) various ways of observing animals",
-    "C) differences between the Eskimos and modem society",
-    "D) education of Eskimo children ANIN DIL EGETINA www.akindl.com"
+    "C) differences between the Eskimos and modern society",
+    "D) education of Eskimo children"
    ],
    "cevap": "D"
   }
@@ -54,6 +55,10 @@
   "kalan-numara:6",
   "eksik-doldurma:9/17"
  ],
- "guvenNot": "yapisal-ocr",
- "guven": "ocr-yapisal"
+ "guven": "goruntuden-birebir",
+ "sayfalar": [
+  218,
+  219
+ ],
+ "_sorularDogrulandi": "goruntuden"
 }

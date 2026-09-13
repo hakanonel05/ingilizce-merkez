@@ -2,32 +2,35 @@
  "no": 71,
  "baslik": "Bollywood and Hollywood",
  "paragraflar": [
-  "Bollywood and Hollywood are two internationally recognized film industries. Hollywood is basically the entire American film industry distributing movies worldwide. It's named after a district in California which became the centre of movie studios in the early 1900s. It was established WWI and is considered to be the world’s leading and influential film industry. Both Hollywood movies and stars are recognized by many people around the world. Hollywood movies are made on a large scale. They usually involve elements of blood, violence, and other controversial themes. In terms of revenue, Hollywood dominates the sales. The industry earns more money by utilising a franchise system apart from revenue from the actual film. The movie is often tied with various other media such as TV networks and magazines. In terms of worldwide cinema, Hollywood gets around 75 per cent of all movie revenues. 2 On the other hand part of the Hindi cinema industry. The term “Bollywood” was coined and popularized during the 1970s, when Hindi cinema surpassed Hollywood. The name is a combination of Bombay and Hollywood. Movies created by Bollywood are often family-oriented and appeal to human sensitivity. The dominant themes in these movies are musicals with large casts and several song and dance sequences. A major criticism of Bollywood movies is that they have a predictable and consistent plot. In addition, plots lack creativity and a form of escapist entertainment. Another criticism is that Bollywood replicates plots from Hollywood movies. Just as Tv pre Hollywood, Bollywood also produces and distributes its films internationally but does not get the same attention as Hollywood. The Bollywood industry produces more films than Hollywood but spends less on production. A movie's success or earnings is reliant on the theater revenues and music videos that the movie produces"
+  "Bollywood and Hollywood are two internationally recognized film industries. Hollywood is basically the entire American film industry distributing movies worldwide. It's named after a district in California which became the centre of movie studios in the early 1900s. It was established before WWI and is considered to be the world's leading and influential film industry. Both Hollywood movies and stars are recognized by many people around the world. Hollywood movies are made on a large scale. They usually involve elements of blood, violence, and other controversial themes. In terms of revenue, Hollywood dominates the sales. The industry earns more money by utilising a franchise system apart from revenue from the actual film. The movie is often tied with various other media such as TV networks and magazines. In terms of worldwide cinema, Hollywood gets around 75 per cent of all movie revenues.",
+  "On the other hand, Bollywood is one part of the Hindi cinema industry. The term “Bollywood” was coined and popularized during the 1970s, when Hindi cinema surpassed Hollywood. The name is a combination of Bombay and Hollywood. Movies created by Bollywood are often family-oriented and appeal to human sensitivity. The dominant themes in these movies are musicals with large casts and several song and dance sequences. A major criticism of Bollywood movies is that they have a predictable and consistent plot. In addition, plots lack creativity and a form of escapist entertainment. Another criticism is that Bollywood replicates plots from Hollywood movies. Just as Hollywood, Bollywood also produces and distributes its films internationally but does not get the same attention as Hollywood. The Bollywood industry produces more films than Hollywood but spends less on production. A movie's success or earnings is reliant on the theater revenues and music videos that the movie produces."
  ],
  "sorular": [
   {
    "no": 1,
-   "soru": "the text. 1. According to paragraph 1, Hollywood ----.",
+   "soru": "According to paragraph 1, Hollywood ----.",
    "secenekler": [
     "A) is criticized harshly due largely to the controversial themes of its films",
-    "B) revenue",
-    "C) criticism"
+    "B) gets a huge share of its revenues from other countries",
+    "C) became the most important movie industry during 19th century",
+    "D) gets almost three quarters of the global film revenues"
    ],
    "cevap": "D"
   },
   {
    "no": 2,
-   "soru": "revenues 2. Which of the following is FALSE about Bollywood films?",
+   "soru": "Which of the following is FALSE about Bollywood films?",
    "secenekler": [
     "A) There is no variety in terms of their themes.",
-    "C) G) A huge sum of money is spent on them.",
-    "D) Its easy to guess what will happen while"
+    "B) They are just copies of Hollywood films.",
+    "C) A huge sum of money is spent on them.",
+    "D) It's easy to guess what will happen while watching them."
    ],
    "cevap": "C"
   },
   {
    "no": 3,
-   "soru": "watching them. ial 3. The aim of the author is to ----.",
+   "soru": "The aim of the author is to ----.",
    "secenekler": [
     "A) criticize Bollywood film industry",
     "B) compare Hollywood and Bollywood",
@@ -51,6 +54,10 @@
   "kalan-numara:6",
   "eksik-doldurma:14/20"
  ],
- "guvenNot": "yapisal-ocr",
- "guven": "ocr-yapisal"
+ "guven": "goruntuden-birebir",
+ "sayfalar": [
+  204,
+  205
+ ],
+ "_sorularDogrulandi": "goruntuden"
 }
