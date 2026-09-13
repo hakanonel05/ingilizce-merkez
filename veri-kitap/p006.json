@@ -1,0 +1,191 @@
+{
+ "no": 6,
+ "sayfalar": [
+  75,
+  76,
+  77
+ ],
+ "paragraflar": [
+  "Sign language is a language for deaf people. Deaf people often use sign languages because they cannot hear any sounds. They do not understand anything when someone speaks to them. They can use sign languages more easily than spoken languages. They use their hands to communicate. Some deaf people also look at a speaker's lips and understand a spoken language. This is called \"lip-reading\". Very few people can lip-read well because it is hard to learn. So most deaf people use a sign language.",
+  "People sometimes learn a sign language from their family, especially if their parents are deaf. But most deaf children have hearing parents. Their parents use spoken languages so they must learn a sign language from other deaf people. They meet other deaf people at school. Sometimes deaf people go to a special school to learn a sign language or buy a sign language workbook with an interactive DVD.",
+  "Sign languages are not new. In old books, we see stories about deaf people and sign language. In the western world, people did the first research studies on sign languages in the 17th century. In 1620, in Spain, the priest, Juan Pablo Bonet, wrote a book about teaching deaf people to speak. Bonet created the language of signs. Then, a French educator called Abbé Charles-Michel de l-Épée designed a finger-spelling alphabet in the 18th century. After Épée created the alphabet, he became very famous. People started to call him the \"Father of the Deaf\". Today, many people still use his alphabet in many countries.",
+  "There is not one single sign language for all deaf people around the world. There are many sign languages. Usually there is a different sign language in each country, but these sign languages are not related to spoken languages. They are independent. According to research, there are about 137 sign languages in the world. These sign languages are not totally different from each other. They can have very similar grammar rules and alphabets. But they are not the same. Different sign languages can use different hand shapes to make words and sentences."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "According to paragraph 1, only a small number of people are able to read people's lips since ----.",
+   "secenekler": [
+    "A) many deaf people prefer a sign language",
+    "B) it is a difficult task to acquire this skill",
+    "C) majority of people speak too fast for them"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 2,
+   "soru": "The underlined pronoun 'it' in paragraph 1 refers to ----",
+   "secenekler": [],
+   "cevap": "lip-reading (or being able to lip-read well)",
+   "acikUclu": true
+  },
+  {
+   "no": 3,
+   "soru": "Which of the following is TRUE about deaf people according to paragraph 2?",
+   "secenekler": [
+    "A) They have to go to a special school to learn sign language.",
+    "B) They can learn a sign language from their families better.",
+    "C) They can learn a sign language using books and technology."
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 4,
+   "soru": "The main purpose of paragraph 3 is to ----.",
+   "secenekler": [
+    "A) give a brief history of sign languages",
+    "B) compare some scholars teaching different sign languages",
+    "C) explain the different uses of sign languages in some countries"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 5,
+   "soru": "Which of the following is FALSE according to paragraph 3?",
+   "secenekler": [
+    "A) No scientific studies on sign languages were carried out until the 17th century.",
+    "B) People are still practising a sign language by making use of the work of Épée.",
+    "C) Épée made use of Bonet's book while creating his finger-spelling alphabet."
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 6,
+   "soru": "We can understand from paragraph 4 that ----.",
+   "secenekler": [
+    "A) People from different countries use identical sign languages",
+    "B) The grammar rules of sign languages are completely different",
+    "C) There is no connection between sign and spoken languages"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 7,
+   "soru": "It is stated in the passage that ----.",
+   "secenekler": [
+    "A) there are differences and similarities among sign languages throughout the world",
+    "B) each country has its own sets of sign language grammar rules",
+    "C) hand shapes of different sign languages show similarities to each other"
+   ],
+   "cevap": "A"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "sign (n)",
+   "tr": "işaret, simge"
+  },
+  {
+   "en": "deaf (adj)",
+   "tr": "işitme engelli"
+  },
+  {
+   "en": "sound (n)",
+   "tr": "ses"
+  },
+  {
+   "en": "understand (v)",
+   "tr": "anlamak, idrak etmek"
+  },
+  {
+   "en": "speak (v)",
+   "tr": "konuşmak"
+  },
+  {
+   "en": "communicate (v)",
+   "tr": "iletişime geçmek"
+  },
+  {
+   "en": "speaker (n)",
+   "tr": "konuşucu"
+  },
+  {
+   "en": "lip (n)",
+   "tr": "dudak"
+  },
+  {
+   "en": "well (adv)",
+   "tr": "iyi, iyice, güzelce"
+  },
+  {
+   "en": "research (n)",
+   "tr": "araştırma"
+  },
+  {
+   "en": "study (n)",
+   "tr": "çalışma"
+  },
+  {
+   "en": "century (n)",
+   "tr": "yüzyıl"
+  },
+  {
+   "en": "priest (n)",
+   "tr": "rahip"
+  },
+  {
+   "en": "educator (n)",
+   "tr": "eğitimci"
+  },
+  {
+   "en": "finger (n)",
+   "tr": "parmak"
+  },
+  {
+   "en": "call (v)",
+   "tr": "aramak, çağırmak"
+  },
+  {
+   "en": "related to (adj)",
+   "tr": "ile ilgili, ilişkili, bağlı"
+  },
+  {
+   "en": "independent (adj)",
+   "tr": "bağımsız, ayrı"
+  },
+  {
+   "en": "totally (adv)",
+   "tr": "tamamen"
+  },
+  {
+   "en": "similar (adj)",
+   "tr": "benzer"
+  },
+  {
+   "en": "grammar (n)",
+   "tr": "dilbilgisi"
+  },
+  {
+   "en": "rule (n)",
+   "tr": "kural"
+  },
+  {
+   "en": "hand (n)",
+   "tr": "el"
+  },
+  {
+   "en": "shape (n)",
+   "tr": "şekil"
+  },
+  {
+   "en": "word (n)",
+   "tr": "sözcük"
+  },
+  {
+   "en": "sentence (n)",
+   "tr": "tümce, cümle"
+  }
+ ],
+ "_not": "1. paragrafta 'it' alti cizili.",
+ "guven": "goruntuden-birebir"
+}

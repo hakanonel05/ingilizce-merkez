@@ -1,0 +1,178 @@
+{
+ "no": 31,
+ "sayfalar": [
+  129,
+  130
+ ],
+ "paragraflar": [
+  "Doctors make people healthier. When people get ill, doctors figure out why. People are examined and listened to by them. People's health problems are identified by doctors, and doctors do tests to see what is wrong. They give people medicine and other kinds of treatment. Patients are advised about going on a diet and so on. There are many kinds of doctors. Family and general practitioners are often the first doctors that people go to when they get sick. Common problems are treated by these doctors. Patients are sent to visit other doctors by other doctors. These are normally called specialists. Specialists are experts in specific types of health problems. For example, internists focus on problems with internal organs. Paediatricians care for children and babies. Surgeons perform operations, like fixing broken bones or transplanting organs. Most doctors are doctors of medicine (M.D.). All kinds of diseases and injuries are treated by them. Some doctors are doctors of osteopathic medicine (D.O.). They focus on muscles and bones. Long hours are worked by doctors, at all times of day and night. About 3 out of 10 physicians worked more than 60 hours a week in 2008. But doctors who work in small offices often have more time off. Doctors sometimes have to hurry up to the hospital to deal with emergencies."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "We can understand from the passage that ----.",
+   "secenekler": [
+    "A) doctors working in small offices often handle emergencies",
+    "B) ordinary illnesses are treated by doctors called internists",
+    "C) patients are advised by their doctors to see other doctors"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "The underlined word 'identified' in the passage is closest in meaning to ----.",
+   "secenekler": [
+    "A) classified",
+    "B) considered",
+    "C) diagnosed"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 3,
+   "soru": "Which of the following is FALSE about doctors?",
+   "secenekler": [
+    "A) Most physicians worked over 60 hours weekly in 2008.",
+    "B) People usually consult general practitioners first.",
+    "C) Majority of doctors are doctors of medicine (M.D.)."
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 4,
+   "soru": "The underlined word 'deal with' in the passage is closest in meaning to ----.",
+   "secenekler": [
+    "A) tackle",
+    "B) clarify",
+    "C) discuss"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 5,
+   "soru": "Which of the following could be the best title for the passage?",
+   "secenekler": [
+    "A) Difficulties of Being a Doctor",
+    "B) Various Kinds of Doctors",
+    "C) Why Doctors Work Long Hours"
+   ],
+   "cevap": "B"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "ill (adj)",
+   "tr": "hasta"
+  },
+  {
+   "en": "internal (adj)",
+   "tr": "iç"
+  },
+  {
+   "en": "figure out (phr. v)",
+   "tr": "çözmek, anlamak"
+  },
+  {
+   "en": "organ (n)",
+   "tr": "organ"
+  },
+  {
+   "en": "examine (v)",
+   "tr": "muayene etmek"
+  },
+  {
+   "en": "care for (phr. v)",
+   "tr": "bakmak, bakımını üstlenmek"
+  },
+  {
+   "en": "identify (v)",
+   "tr": "belirlemek, teşhis etmek"
+  },
+  {
+   "en": "surgeon (n)",
+   "tr": "cerrah"
+  },
+  {
+   "en": "wrong (adj)",
+   "tr": "yanlış"
+  },
+  {
+   "en": "perform (v)",
+   "tr": "icra etmek, uygulamak, yerine getirmek, yapmak"
+  },
+  {
+   "en": "treatment (n)",
+   "tr": "tedavi"
+  },
+  {
+   "en": "operation (n)",
+   "tr": "ameliyat"
+  },
+  {
+   "en": "advise (v)",
+   "tr": "tavsiye vermek"
+  },
+  {
+   "en": "fix (v)",
+   "tr": "tamir etmek, onarmak, düzeltmek"
+  },
+  {
+   "en": "kind (n)",
+   "tr": "tür, çeşit"
+  },
+  {
+   "en": "broken (adj)",
+   "tr": "kırık, kırılmış"
+  },
+  {
+   "en": "general (adj)",
+   "tr": "genel"
+  },
+  {
+   "en": "bone (n)",
+   "tr": "kemik"
+  },
+  {
+   "en": "practitioner (n)",
+   "tr": "doktor, pratisyen hekim"
+  },
+  {
+   "en": "transplant (v)",
+   "tr": "organ nakli yapmak"
+  },
+  {
+   "en": "specialist (n)",
+   "tr": "uzman"
+  },
+  {
+   "en": "muscle (n)",
+   "tr": "kas"
+  },
+  {
+   "en": "specific (adj)",
+   "tr": "özel, belirli, kendine has"
+  },
+  {
+   "en": "hurry up (phr. v)",
+   "tr": "acele etmek"
+  },
+  {
+   "en": "example (n)",
+   "tr": "örnek"
+  },
+  {
+   "en": "deal with (phr. v)",
+   "tr": "baş etmek, ilgilenmek"
+  },
+  {
+   "en": "focus on (phr. v)",
+   "tr": "odaklanmak"
+  },
+  {
+   "en": "emergency (n)",
+   "tr": "acil durum"
+  }
+ ],
+ "_not": "Sözlük 119. sayfada (g129), başlığı 'PASSIVE / 1 – PRESENT Passive / READING 31 Basic Vocabulary'. Parça tek paragraf; 'identified' ve 'deal with' altı çizili ve kalın.",
+ "guven": "goruntuden-birebir"
+}

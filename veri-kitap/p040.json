@@ -1,0 +1,139 @@
+{
+ "no": 40,
+ "sayfalar": [
+  148,
+  149
+ ],
+ "paragraflar": [
+  "Alexander Graham Bell who was a Scottish-born American was a scientist and inventor. He is most famous for his work on the development of the telephone. Alexander Graham Bell was born on March 3, 1847, in Edinburgh and he went to school there and in London. In 1870, Bell moved to Canada with his family, and the next year he moved to the United States to teach. First his mother didn't want to move to the United States but she went with Bell in the end because she wanted to be with her son. There Bell started a system called Visible Speech which first his father developed. They used this system to teach deaf-mute children. \"Deaf-mute children\" cannot hear and speak. In 1872, Bell started a school in Boston to educate teachers of the deaf.",
+  "Bell was always excited about sending speech, and in 1875 he made a simple receiver which could turn electricity into sound. There were other people as well. These people worked on the same thing, one of whom was an Italian-American, Antonio Meucci. Some people say Bell invented the telephone first, but other people say that Meucci was the first person. But the people at the patent office gave Bell a patent for the telephone on March 7, 1876. So a second person couldn't get a patent for it. The telephone developed quickly. In a year there was the first telephone call in Connecticut and Bell started the Bell Telephone Company in 1877. In 1888, Bell started the National Geographic Society, the president of which was him between 1896 and 1904. He also helped to start its gazette. Bell died on August 2, 1922, at his home in Nova Scotia."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "Which of the following is TRUE about Graham Bell according to paragraph 1?",
+   "secenekler": [
+    "A) He received his education in the United States.",
+    "B) He came up with the idea of a system called Visible Speech.",
+    "C) He started teaching in a school after he went to Canada."
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 2,
+   "soru": "According to paragraph 1, Bell's mother eventually decided to go to the US because ----.",
+   "secenekler": [
+    "A) she did not want to leave Bell alone there",
+    "B) Bell would have better opportunities there",
+    "C) Bell was planning to found a school there"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 3,
+   "soru": "Why did Bell establish a special school in Boston according to paragraph 1?",
+   "secenekler": [
+    "A) To improve the system that he started in the United States",
+    "B) To provide education for the students called deaf-mute",
+    "C) To give training to instructors of hearing-impaired people"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 4,
+   "soru": "We can understand from paragraph 2 that ----.",
+   "secenekler": [
+    "A) Meucci got the patent for the telephone just after Graham Bell",
+    "B) there was a controversy over who first invented the telephone",
+    "C) Graham Bell started working on the telephone before Meucci"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 5,
+   "soru": "It is stated in paragraph 2 that ----.",
+   "secenekler": [
+    "A) Bell founded his own firm a year after he got the patent",
+    "B) Bell Telephone Company developed rapidly in just one year",
+    "C) the very first telephone call was made in the year 1876"
+   ],
+   "cevap": "A"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "work (n)",
+   "tr": "çalışma, iş"
+  },
+  {
+   "en": "speech (n)",
+   "tr": "konuşma"
+  },
+  {
+   "en": "development (n)",
+   "tr": "gelişim, gelişme"
+  },
+  {
+   "en": "receiver (n)",
+   "tr": "alıcı"
+  },
+  {
+   "en": "telephone (n)",
+   "tr": "telefon"
+  },
+  {
+   "en": "electricity (n)",
+   "tr": "elektrik"
+  },
+  {
+   "en": "Canada (n)",
+   "tr": "Kanada"
+  },
+  {
+   "en": "American (adj)",
+   "tr": "Amerikalı"
+  },
+  {
+   "en": "system (n)",
+   "tr": "sistem"
+  },
+  {
+   "en": "patent (n)",
+   "tr": "patent"
+  },
+  {
+   "en": "develop (v)",
+   "tr": "geliştirmek"
+  },
+  {
+   "en": "quickly (adv)",
+   "tr": "hızlı bir şekilde, hızlıca"
+  },
+  {
+   "en": "deaf-mute (n)",
+   "tr": "sağır-dilsiz kişi"
+  },
+  {
+   "en": "national (adj)",
+   "tr": "ulusal"
+  },
+  {
+   "en": "educate (v)",
+   "tr": "eğitmek, öğretmek"
+  },
+  {
+   "en": "society (n)",
+   "tr": "cemiyet, topluluk"
+  },
+  {
+   "en": "excited (adj)",
+   "tr": "heyecanlı, coşkulu"
+  },
+  {
+   "en": "gazette (n)",
+   "tr": "gazete"
+  }
+ ],
+ "_not": "Sözlük 138. sayfada (g148), parça ve sorular 139. sayfada (g149). 'Visible Speech' kitapta italik.",
+ "guven": "goruntuden-birebir"
+}

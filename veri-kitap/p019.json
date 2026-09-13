@@ -1,0 +1,372 @@
+{
+ "no": 19,
+ "sayfalar": [
+  100,
+  104,
+  105
+ ],
+ "paragraflar": [
+  "Mount Everest is the world's highest mountain and it is 8850 meters above sea level. Edmund Hillary and Tenzing Norgay became the first people to reach the top of it in 1953. In 1978, Reinhold Messner and Peter Habeler climbed the mountain without bottled oxygen for the first time. Since people first started climbing, 3100 climbers have made more than 5100 climbs. Two thousand and two hundred have reached the top but almost 200 have lost their lives on the slopes of Mount Everest.",
+  "In the 1990s, successful climbers started organising group tours for climbers. It costs about 40,000 Euros to get guides to help during an expedition. Most climbers try climbing Everest during April and May. Climbing is very difficult from December to March because of low temperatures. In June and September, the \"monsoon\" brings storms and a lot of rain and snowfall. A typical journey takes about two months. Climbers often fly to Nepal's capital, Katmandu, and spend a few days there because they need to buy food and clothes, and get travel visas. Then they go to Lukla, a small town at 2800 meters above sea level.",
+  "All in all, there are about fifteen different routes to the top of Mount Everest. Climbers use five different camps. Base Camp is located at 5364 meters. During the spring, there are about 300 people with doctors and scientists in the area. After Base Camp, climbers must pass through the Khumbu Icefall. This part is extremely dangerous. Ice has killed many mountaineers. Another dangerous area is Western Cwm, a valley with little wind and too much sunlight. It can be extremely hot and uncomfortable. The last part of the climb is the Hillary Step at 8440 meters above sea level. Only one climber can go up or down at a time. At this point, climbers often lose their concentration because of the very low temperatures and the thin air.",
+  "Since 1953, more and more tourists have begun to tour the Himalayas. They have brought the region a lot of money. Today local people have good jobs and there are new hospitals and famous stores in the area, but visitors have also left a lot of waste on the mountain. A lot of trees are cut down every year. Today the government and some organisations are working hard to protect the environment around Everest.",
+  "Mount Everest is an extremely dangerous place. Temperatures at the top are around 36 degrees below zero, and storms come up suddenly. The greatest Everest tragedy occurred in 1996, when eight people died in one day. Most people say the disaster happened because of altitude sickness and a sudden storm, but some climbers think that it was the guide's mistake."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "According to paragraph 1, until 1978 ----.",
+   "secenekler": [
+    "A) Mount Everest was an unpopular place for climbers",
+    "B) only one climber tried to climb Mount Everest",
+    "C) people used bottled oxygen to climb Mount Everest"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "The underlined word 'expedition' in paragraph 2 is closest meaning to ----.",
+   "secenekler": [
+    "A) study",
+    "B) journey",
+    "C) training"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 3,
+   "soru": "We can understand from paragraph 2 that the most suitable time of the year to climb Mount Everest is between ----.",
+   "secenekler": [
+    "A) December and March",
+    "B) June and September",
+    "C) April and May"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 4,
+   "soru": "According to paragraph 2, people generally stay in Katmandu for a few days in order to ----.",
+   "secenekler": [
+    "A) avoid extreme weather conditions",
+    "B) do some shopping for necessary things",
+    "C) apply for a visa in a small town called Lukla"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 5,
+   "soru": "We can understand from paragraph 3 that there are some ----.",
+   "secenekler": [
+    "A) specialists during a certain period in the main camp",
+    "B) climbers competing with each other in different camps",
+    "C) places for climbers to stay if their climb is unsuccessful"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 6,
+   "soru": "The underlined pronoun \"It\" in paragraph 3 refers to -----.",
+   "secenekler": [],
+   "acikUclu": true,
+   "cevap": "Western Cwm"
+  },
+  {
+   "no": 7,
+   "soru": "Which of the following is TRUE about the Hillary Step?",
+   "secenekler": [
+    "A) People start their climb there.",
+    "B) Climbers' focus get better there.",
+    "C) It is the highest part of the climb."
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 8,
+   "soru": "It is stated in paragraph 4 that ----.",
+   "secenekler": [
+    "A) tourism in the Himalayas has some pros and cons as well",
+    "B) the local people complain about the visitors in the region",
+    "C) the government is trying to save the environment on its own"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 9,
+   "soru": "We can understand from paragraph 5 that ----.",
+   "secenekler": [
+    "A) disasters often occur due to the mistakes of careless guides",
+    "B) climbing Mount Everest is not risky if climbers are careful",
+    "C) people have differing opinions about the tragedy in 1996"
+   ],
+   "cevap": "C"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "high (adj)",
+   "tr": "yüksek"
+  },
+  {
+   "en": "journey (n)",
+   "tr": "seyahat"
+  },
+  {
+   "en": "above (prep)",
+   "tr": "yukarıda, üzerinde"
+  },
+  {
+   "en": "often (adv)",
+   "tr": "sıklıkla, genellikle"
+  },
+  {
+   "en": "sea (n)",
+   "tr": "deniz"
+  },
+  {
+   "en": "visa (n)",
+   "tr": "vize"
+  },
+  {
+   "en": "level (n)",
+   "tr": "seviye"
+  },
+  {
+   "en": "town (n)",
+   "tr": "şehir, kasaba"
+  },
+  {
+   "en": "reach (v)",
+   "tr": "ulaşmak, erişmek"
+  },
+  {
+   "en": "route (n)",
+   "tr": "güzergah, rota"
+  },
+  {
+   "en": "without (prep)",
+   "tr": "-meksizin, -siz"
+  },
+  {
+   "en": "be located",
+   "tr": "bulunmak, yer almak"
+  },
+  {
+   "en": "slope (n)",
+   "tr": "eğim, yokuş"
+  },
+  {
+   "en": "spring (n)",
+   "tr": "bahar"
+  },
+  {
+   "en": "successful (adj)",
+   "tr": "başarılı"
+  },
+  {
+   "en": "scientist (n)",
+   "tr": "bilim insanı"
+  },
+  {
+   "en": "climber (n)",
+   "tr": "tırmanıcı"
+  },
+  {
+   "en": "area (n)",
+   "tr": "bölge, alan"
+  },
+  {
+   "en": "organise (v)",
+   "tr": "düzenlemek, organize etmek"
+  },
+  {
+   "en": "pass (v)",
+   "tr": "geçmek"
+  },
+  {
+   "en": "tour (n)",
+   "tr": "tur"
+  },
+  {
+   "en": "extremely (adv)",
+   "tr": "son derece, aşırı derecede, çok"
+  },
+  {
+   "en": "cost (v)",
+   "tr": "mal olmak, değerinde olmak"
+  },
+  {
+   "en": "dangerous (adj)",
+   "tr": "tehlikeli"
+  },
+  {
+   "en": "Euro (n)",
+   "tr": "Avro"
+  },
+  {
+   "en": "mountaineer (n)",
+   "tr": "dağcı"
+  },
+  {
+   "en": "guide (n)",
+   "tr": "rehber"
+  },
+  {
+   "en": "valley (n)",
+   "tr": "vadi"
+  },
+  {
+   "en": "expedition (n)",
+   "tr": "gezi, keşif gezisi"
+  },
+  {
+   "en": "wind (n)",
+   "tr": "rüzgar"
+  },
+  {
+   "en": "April (n)",
+   "tr": "Nisan"
+  },
+  {
+   "en": "sunlight (n)",
+   "tr": "güneş ışığı"
+  },
+  {
+   "en": "May (n)",
+   "tr": "Mayıs"
+  },
+  {
+   "en": "hot (adj)",
+   "tr": "sıcak"
+  },
+  {
+   "en": "December (n)",
+   "tr": "Aralık"
+  },
+  {
+   "en": "uncomfortable (adj)",
+   "tr": "rahatsız, rahatsız edici"
+  },
+  {
+   "en": "March (n)",
+   "tr": "Mart"
+  },
+  {
+   "en": "point (n)",
+   "tr": "nokta"
+  },
+  {
+   "en": "temperature (n)",
+   "tr": "ısı"
+  },
+  {
+   "en": "concentration (n)",
+   "tr": "konsantrasyon, odaklanma"
+  },
+  {
+   "en": "June (n)",
+   "tr": "Haziran"
+  },
+  {
+   "en": "thin (adj)",
+   "tr": "ince"
+  },
+  {
+   "en": "September (n)",
+   "tr": "Eylül"
+  },
+  {
+   "en": "air (n)",
+   "tr": "hava"
+  },
+  {
+   "en": "monsoon (n)",
+   "tr": "muson"
+  },
+  {
+   "en": "region (n)",
+   "tr": "bölge, alan"
+  },
+  {
+   "en": "bring (v)",
+   "tr": "getirmek"
+  },
+  {
+   "en": "local (adj)",
+   "tr": "yerli, yerel"
+  },
+  {
+   "en": "rain (n)",
+   "tr": "yağmur"
+  },
+  {
+   "en": "waste (n)",
+   "tr": "çöp, atık"
+  },
+  {
+   "en": "snowfall (n)",
+   "tr": "kar yağışı"
+  },
+  {
+   "en": "cut down (phr. v)",
+   "tr": "kesmek"
+  },
+  {
+   "en": "typical (adj)",
+   "tr": "tipik, normal"
+  },
+  {
+   "en": "government (n)",
+   "tr": "hükümet"
+  },
+  {
+   "en": "organisation (n)",
+   "tr": "kuruluş, organizasyon"
+  },
+  {
+   "en": "occur (v)",
+   "tr": "meydana gelmek"
+  },
+  {
+   "en": "protect (v)",
+   "tr": "korumak"
+  },
+  {
+   "en": "disaster (n)",
+   "tr": "felaket"
+  },
+  {
+   "en": "environment (n)",
+   "tr": "çevre"
+  },
+  {
+   "en": "altitude (n)",
+   "tr": "irtifa, rakım"
+  },
+  {
+   "en": "below (prep)",
+   "tr": "altında, aşağısında"
+  },
+  {
+   "en": "sickness (n)",
+   "tr": "hastalık"
+  },
+  {
+   "en": "suddenly (adv)",
+   "tr": "aniden"
+  },
+  {
+   "en": "sudden (adj)",
+   "tr": "ani"
+  },
+  {
+   "en": "tragedy (n)",
+   "tr": "trajedi, felaket"
+  },
+  {
+   "en": "mistake (n)",
+   "tr": "hata, yanlışlık"
+  }
+ ],
+ "_not": "6. soru açık uçlu; kitabın anahtarı 'Western Cwm'. Sözlük kitabın 92. sayfasında (tarama sırası karışık: basılı 92 = g100).",
+ "guven": "goruntuden-birebir"
+}

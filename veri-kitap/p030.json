@@ -1,0 +1,146 @@
+{
+ "no": 30,
+ "sayfalar": [
+  127,
+  128
+ ],
+ "paragraflar": [
+  "Thousands of years ago, an ancient civilization raised a circle of huge, roughly rectangular stones in a field in what is now Wiltshire, England. Stonehenge has been a mystery ever since. Building began on the site around 3100 B.C. and continued up until about 1600 B.C. No written records exist to explain how or why it was built.",
+  "The biggest of Stonehenge's stones are up to 9 meters tall and weigh 25 tons on average. Scientists believe that they must have been brought from Marlborough Downs, a distance of 32 km to the north. Transporting the stones that distance can't have been easy.",
+  "Smaller stones, referred to as \"bluestones\", weigh up to 4 tons and come from several different sites in western Wales, having been transported as far as 225 km. It's unknown how people in antiquity moved them that far. Scientists speculate that during the last ice age glaciers might have carried these bluestones closer to the Stonehenge area. An earlier theory was that the builders could have used rafts to transport the stones over the water. However, more recent research suggests that this method can't have been used because of the weight of the stones.",
+  "There are a number of theories as to what the site was used for. Archaeologists agree that the site must have had a spiritual significance. It may have originally been a cemetery, according to a new study. After examining bones near the stones, scientists believe that the burials must have taken place at the same time as Stonehenge was built, suggesting that the stones could have been gravestones for religious or political elite."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "According to the passage, the building on the site around Stonehenge ----",
+   "secenekler": [
+    "A) largely consists of rectangular stones",
+    "B) was started by an illiterate community",
+    "C) took far more than a thousand years"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "Scientists believe that it was difficult to ----",
+   "secenekler": [
+    "A) tell why big stones are used in Stonehenge",
+    "B) find enough stones to build Stonehenge",
+    "C) carry the stones in Stonehenge"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 3,
+   "soru": "The only thing researchers agree on is about Stonehenge's ----",
+   "secenekler": [
+    "A) building methods",
+    "B) spiritual significance",
+    "C) building purpose"
+   ],
+   "cevap": "B"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "ancient (adj)",
+   "tr": "antik, eski"
+  },
+  {
+   "en": "exist (v)",
+   "tr": "var olmak"
+  },
+  {
+   "en": "civilization (n)",
+   "tr": "uygarlık"
+  },
+  {
+   "en": "distance (n)",
+   "tr": "mesafe, uzaklık"
+  },
+  {
+   "en": "raise (v)",
+   "tr": "yükseltmek, dikmek"
+  },
+  {
+   "en": "refer to (v)",
+   "tr": "adlandırmak, işaret etmek, olarak bilmek"
+  },
+  {
+   "en": "roughly (adv)",
+   "tr": "kabaca"
+  },
+  {
+   "en": "weigh (v)",
+   "tr": "gelmek (ağırlık)"
+  },
+  {
+   "en": "rectangular (adj)",
+   "tr": "dikdörtgen"
+  },
+  {
+   "en": "antiquity (n)",
+   "tr": "eski çağlar"
+  },
+  {
+   "en": "field (n)",
+   "tr": "alan, saha"
+  },
+  {
+   "en": "speculate (v)",
+   "tr": "varsayımda bulunmak, tahmin etmek"
+  },
+  {
+   "en": "mystery (n)",
+   "tr": "sır, gizem"
+  },
+  {
+   "en": "raft (n)",
+   "tr": "sal"
+  },
+  {
+   "en": "suggest (v)",
+   "tr": "öne / ileri sürmek, göstermek"
+  },
+  {
+   "en": "burials (n)",
+   "tr": "gömme, defin"
+  },
+  {
+   "en": "as to (adv)",
+   "tr": "-e dair, ilişkin"
+  },
+  {
+   "en": "take place (v)",
+   "tr": "olmak, meydana gelmek"
+  },
+  {
+   "en": "spiritual (adj)",
+   "tr": "ruhsal, manevi"
+  },
+  {
+   "en": "grave (n)",
+   "tr": "mezar"
+  },
+  {
+   "en": "significance (n)",
+   "tr": "önem, anlam"
+  },
+  {
+   "en": "religious (adj)",
+   "tr": "dini"
+  },
+  {
+   "en": "bone (n)",
+   "tr": "kemik"
+  },
+  {
+   "en": "elite (n)",
+   "tr": "yüksek sınıf"
+  }
+ ],
+ "_not": "Sozluk sayfa 127'de.",
+ "_sozlukKaynagi": "Kitabın Basic Vocabulary tablosundan, sayfa görüntüsü okunarak.",
+ "guven": "goruntuden-birebir"
+}

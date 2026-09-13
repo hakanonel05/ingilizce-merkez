@@ -1,0 +1,120 @@
+{
+ "no": 32,
+ "sayfalar": [
+  131,
+  132
+ ],
+ "paragraflar": [
+  "In a room at Stanford University, a small animal is being studied now. It is called a gecko. It's amazing because it can move very quickly up and down a tree and it can even walk upside down on ceilings. The scientists are interested in the gecko's feet. The animal's natural design will be used on the robot. They are just one step away from bringing their design to an end and the gecko will help them do that. The metal robot looks very similar to the gecko.",
+  "Animals and plants can teach humans a lot about design and engineering. As a result, many engineers, scientists and designers spend time studying them. Nature helps them to solve their problems. This science is called biomimetics. Bio- means 'studying living things' and mimetics means 'copying the movement of things'.",
+  "Take, for example, whales. Scientists are trying to discover their secret and engineers in Canada are studying the whales' flippers because they help them move so effectively through water. The engineers believe the movement of wind turbines can be improved if small changes are made to the shape."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "One can infer from paragraph 1 that ----.",
+   "secenekler": [
+    "A) scientists have almost completed the design of a robot similar to a gecko",
+    "B) the gecko's secret is hidden in the shape of its body",
+    "C) the difference between a gecko and the robot is the number of their feet"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 2,
+   "soru": "It is clear from the passage that biomimetics is the science of ----.",
+   "secenekler": [
+    "A) observing animal behaviour to see how they differ from humans",
+    "B) studying nature to create modern technology",
+    "C) comparing animals and plants to see what they have in common"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 3,
+   "soru": "What does \"them\" in paragraph 3 refer to?",
+   "secenekler": [
+    "A) flippers",
+    "B) engineers",
+    "C) whales"
+   ],
+   "cevap": "C"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "amazing (adj)",
+   "tr": "büyüleyici"
+  },
+  {
+   "en": "thing (n)",
+   "tr": "şey, eşya, canlılar"
+  },
+  {
+   "en": "move (v)",
+   "tr": "hareket etmek"
+  },
+  {
+   "en": "discover (v)",
+   "tr": "keşfetmek, bulmak"
+  },
+  {
+   "en": "quickly (adv)",
+   "tr": "hızlıca"
+  },
+  {
+   "en": "whales (n)",
+   "tr": "balina"
+  },
+  {
+   "en": "upside down (adv)",
+   "tr": "baş aşağı, ters"
+  },
+  {
+   "en": "flippers (n)",
+   "tr": "palet, yüzgeç"
+  },
+  {
+   "en": "ceilings (n)",
+   "tr": "tavan"
+  },
+  {
+   "en": "effectively (adv)",
+   "tr": "etkin bir şekilde"
+  },
+  {
+   "en": "step (n)",
+   "tr": "adım"
+  },
+  {
+   "en": "through (adv)",
+   "tr": "içinde, içinden"
+  },
+  {
+   "en": "look (v)",
+   "tr": "görünmek"
+  },
+  {
+   "en": "shape (n)",
+   "tr": "şekil"
+  },
+  {
+   "en": "solve (v)",
+   "tr": "çözmek"
+  },
+  {
+   "en": "improve (v)",
+   "tr": "iyileştirmek"
+  },
+  {
+   "en": "mean (v)",
+   "tr": "anlamına gelmek"
+  },
+  {
+   "en": "turbine (n)",
+   "tr": "türbin"
+  }
+ ],
+ "_not": "Sözlük 121. sayfada (g131), başlığı 'Present-Future Passive — READING 32 Basic Vocabulary'. 3. paragrafta 'them' altı çizili ve kalın.",
+ "guven": "goruntuden-birebir"
+}

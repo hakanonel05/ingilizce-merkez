@@ -1,0 +1,118 @@
+{
+ "no": 14,
+ "sayfalar": [
+  92,
+  93
+ ],
+ "paragraflar": [
+  "The Olympic Games are an international sports competition. Over one billion people watch the games on TV. They happen every four years in a different city. Thousands of athletes from all over the world play games in individual sports like athletics and team sports like football.",
+  "People had the first Olympic Games at Olympia, in Greece in 776 B.C. They were called the ancient games. The Olympic Games started because the Greeks wanted to show respect and love for the god Zeus. At that time, only Greek men could join the games. The games consisted of sports like wrestling, boxing, the pentathlon and horse racing. The last event of the games was usually a chariot race.",
+  "When the Romans went to Greece in 140 B.C., the games started to lose their religious meaning. People became more interested in having fun and forgot about their god during the games. So, in 393 A.D. the Roman emperor stopped the event. The modern games began in 1896. The Frenchman Pierre de Coubertin started the games to bring peace and friendship to the young people all over the world.",
+  "Now, the Olympic Games begin with a ceremony. Athletes from many different countries march into the stadium. Greece comes in first and leads the athletes of other countries, because it was the first country to hold the Olympics."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "According to paragraph 1, the Olympic Games ----.",
+   "secenekler": [
+    "A) take place in the same city most of the time",
+    "B) finish at the end of four years",
+    "C) have sports activities with one or more people",
+    "D) are only popular among athletes"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "In the first Olympic Games ----.",
+   "secenekler": [
+    "A) chariot races were at the beginning",
+    "B) people did not use any animals in sports",
+    "C) people prayed to the god Zeus together",
+    "D) women could not enter competitions"
+   ],
+   "cevap": "D"
+  },
+  {
+   "no": 3,
+   "soru": "The Roman Emperor ended the games in 393 A.D. because ----.",
+   "secenekler": [
+    "A) people stopped showing love and respect to their god",
+    "B) he was not interested in Olympic sports anymore",
+    "C) the Olympics became less popular after some time",
+    "D) the Romans did not believe in the Greek god and religion"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 4,
+   "soru": "In the ceremony, only Greek athletes can ----.",
+   "secenekler": [
+    "A) lift the Olympic flag",
+    "B) walk first into the stadium",
+    "C) bring the fire from a town",
+    "D) carry the Olympic rings"
+   ],
+   "cevap": "B"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "international (adj)",
+   "tr": "uluslararası"
+  },
+  {
+   "en": "competition (n)",
+   "tr": "yarışma, müsabaka"
+  },
+  {
+   "en": "individual (adj)",
+   "tr": "bireysel"
+  },
+  {
+   "en": "ancient (adj)",
+   "tr": "antik, eski"
+  },
+  {
+   "en": "respect (n)",
+   "tr": "saygı, hürmet"
+  },
+  {
+   "en": "join (v)",
+   "tr": "katılmak"
+  },
+  {
+   "en": "peace (n)",
+   "tr": "barış"
+  },
+  {
+   "en": "wrestling (n)",
+   "tr": "güreş"
+  },
+  {
+   "en": "boxing (n)",
+   "tr": "boks"
+  },
+  {
+   "en": "religious (adj)",
+   "tr": "dini"
+  },
+  {
+   "en": "meaning (n)",
+   "tr": "anlam"
+  },
+  {
+   "en": "emperor (n)",
+   "tr": "imparator"
+  },
+  {
+   "en": "event (n)",
+   "tr": "organizasyon, müsabaka"
+  },
+  {
+   "en": "march (v)",
+   "tr": "düzenli adımlarla yürümek, ilerlemek"
+  }
+ ],
+ "guven": "goruntuden-birebir"
+}

@@ -1,0 +1,268 @@
+{
+ "no": 42,
+ "sayfalar": [
+  154,
+  155
+ ],
+ "paragraflar": [
+  "Have you ever seen the film Minority Report? It is a very good action film. It tells us about the future of advertising. Detective John Anderton is walking through a shopping mall when the advertisements on the walls start talking to him. They say to him \"Hello, John!\" and tell him about the latest products he should buy. How do they know who he is? And how do they know what his shopping habits are? The answer is RFID—radio frequency identification.",
+  "People use RFID for different reasons. But before that, what is RFID? In 1948, the researcher Harry Stokman came up with the idea. Later in the 1950s, he and his partners thought about it and built a machine. After around twenty years, in 1970, RFID technology became very popular among businesses and they began to benefit from this technology. But let's talk about how this technology works and what it is. Scientists connect small computer chips to objects or clothes. A central computer network can read these chips. For example, your dog is lost and you want to find your dog. RFID can help you. You just put the chip on the animal. Then you can watch it from a distance. RFID has other uses, too. Delta Airlines uses it to track luggage, and the US Department of Defense uses it to count its weapons and vehicles.",
+  "Imagine your clothes have an RFID chip. Every time you enter the shopping mall a machine \"reads\" your name, age, and buying habits. It knows which shampoo you buy, bread you prefer, and what size your feet are. The machine then uses this information and makes you special offers. So this tells us about the connection between RFID and advertising. It sounds like science fiction, but some businesses already use RFID, and one US supermarket company plans to use it in the near future.",
+  "So what might be bad about this technology? The problem is that this technology may affect people's life negatively in the future. The businesses may use RFID to follow people, not products. Your boss, for example, may decide to follow his workers. He may want to learn who spends their time smoking outside or who takes long lunch breaks or what his employees are doing at that moment. Also, employers may decide to follow people, too. For example, they might want to learn which books they read or which political meetings they attend. As all shoppers know that everything costs something."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "Why does the author use the example of the film called \"Minority Report\" in paragraph 1?",
+   "secenekler": [
+    "A) To exemplify the risks of using RFID technology",
+    "B) To show how advertisers deceive consumers",
+    "C) To illustrate how RFID technology works"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "The underlined phrase 'came up with' in paragraph 3 is closest in meaning to ----.",
+   "secenekler": [
+    "A) distributed",
+    "B) found",
+    "C) noticed"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 3,
+   "soru": "It is stated in paragraph 2 that RFID is used to ----.",
+   "secenekler": [
+    "A) monitor the changes in plane routes",
+    "B) locate non-living and living things as well",
+    "C) carry out research in different fields"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 4,
+   "soru": "Paragraph 2 is mainly about the ----.",
+   "secenekler": [
+    "A) various purposes of using RFID",
+    "B) many changes in RFID technology",
+    "C) profound effects of RFID on businesses"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 5,
+   "soru": "The underlined phrase 'track' in paragraph 2 is closest in meaning to ----.",
+   "secenekler": [
+    "A) analyse",
+    "B) advise",
+    "C) follow"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 6,
+   "soru": "It is stated in paragraph 3 that RFID technology ----.",
+   "secenekler": [
+    "A) is being used in many shopping malls at the moment",
+    "B) can be used for marketing purposes in some businesses",
+    "C) may offer smart solutions to your personal problems"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 7,
+   "soru": "We can understand from paragraph 4 that RFID technology can be used to ----.",
+   "secenekler": [
+    "A) gather information about shoppers",
+    "B) manage a business efficiently",
+    "C) violate the private lives of people"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 8,
+   "soru": "The underlined phrase 'attend' in paragraph 4 is closest in meaning to ----.",
+   "secenekler": [
+    "A) join",
+    "B) catch",
+    "C) protect"
+   ],
+   "cevap": "A"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "minority (n)",
+   "tr": "azınlık"
+  },
+  {
+   "en": "weapon (n)",
+   "tr": "silah"
+  },
+  {
+   "en": "report (n)",
+   "tr": "rapor"
+  },
+  {
+   "en": "vehicle (n)",
+   "tr": "araç, vasıta"
+  },
+  {
+   "en": "advertising (n)",
+   "tr": "reklamcılık"
+  },
+  {
+   "en": "imagine (v)",
+   "tr": "hayal etmek, düşlemek, sanmak, farz etmek"
+  },
+  {
+   "en": "detective (n)",
+   "tr": "dedektif"
+  },
+  {
+   "en": "enter (v)",
+   "tr": "girmek, giriş yapmak"
+  },
+  {
+   "en": "shopping mall (n)",
+   "tr": "alışveriş merkezi"
+  },
+  {
+   "en": "shampoo (n)",
+   "tr": "şampuan"
+  },
+  {
+   "en": "advertisement (n)",
+   "tr": "reklam"
+  },
+  {
+   "en": "bread (n)",
+   "tr": "ekmek"
+  },
+  {
+   "en": "habit (n)",
+   "tr": "alışkanlık"
+  },
+  {
+   "en": "prefer (v)",
+   "tr": "tercih etmek, yeğlemek"
+  },
+  {
+   "en": "frequency (n)",
+   "tr": "frekans, sıklık"
+  },
+  {
+   "en": "information (n)",
+   "tr": "bilgi"
+  },
+  {
+   "en": "identification (n)",
+   "tr": "teşhis, kimliğini belirleme"
+  },
+  {
+   "en": "offer (n)",
+   "tr": "teklif, öneri"
+  },
+  {
+   "en": "come up with (phr. v)",
+   "tr": "bulmak (fikir), ileri sürmek, ortaya atmak"
+  },
+  {
+   "en": "connection (n)",
+   "tr": "bağlantı"
+  },
+  {
+   "en": "partner (n)",
+   "tr": "partner, ortak"
+  },
+  {
+   "en": "science fiction (n)",
+   "tr": "bilim kurgu"
+  },
+  {
+   "en": "benefit from (phr. v)",
+   "tr": "-den faydalanmak, yararlanmak"
+  },
+  {
+   "en": "supermarket (n)",
+   "tr": "süpermarket"
+  },
+  {
+   "en": "connect (v)",
+   "tr": "bağlanmak, bağlantı kurmak"
+  },
+  {
+   "en": "affect (v)",
+   "tr": "etkilemek"
+  },
+  {
+   "en": "chip (n)",
+   "tr": "çip"
+  },
+  {
+   "en": "negatively (adv)",
+   "tr": "olumsuz şekilde"
+  },
+  {
+   "en": "object (n)",
+   "tr": "nesne, obje"
+  },
+  {
+   "en": "boss (n)",
+   "tr": "patron"
+  },
+  {
+   "en": "central (adj)",
+   "tr": "merkezi"
+  },
+  {
+   "en": "smoke (v)",
+   "tr": "sigara içmek"
+  },
+  {
+   "en": "network (n)",
+   "tr": "ağ, şebeke"
+  },
+  {
+   "en": "break (n)",
+   "tr": "ara, mola"
+  },
+  {
+   "en": "use (n)",
+   "tr": "kullanım, kullanma"
+  },
+  {
+   "en": "employer (n)",
+   "tr": "işveren"
+  },
+  {
+   "en": "track (v)",
+   "tr": "izlemek, takip etmek, izini sürmek"
+  },
+  {
+   "en": "political (adj)",
+   "tr": "politik"
+  },
+  {
+   "en": "luggage (n)",
+   "tr": "bavul"
+  },
+  {
+   "en": "meeting (n)",
+   "tr": "toplantı, miting"
+  },
+  {
+   "en": "count (v)",
+   "tr": "saymak"
+  },
+  {
+   "en": "shopper (n)",
+   "tr": "alışveriş yapan kimse, müşteri"
+  }
+ ],
+ "_not": "Sozluk sayfa 154'te. Alti cizili: came up with / track (p2), attend (p4). 2. sorunun kitapta 'paragraph 3' demesi dizgi hatasi; kalip korundu.",
+ "_sozlukKaynagi": "Kitabın Basic Vocabulary tablosundan, sayfa görüntüsü okunarak.",
+ "guven": "goruntuden-birebir"
+}

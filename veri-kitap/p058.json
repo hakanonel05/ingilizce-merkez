@@ -1,0 +1,125 @@
+{
+ "no": 58,
+ "sayfalar": [
+  187,
+  188
+ ],
+ "paragraflar": [
+  "Communication is quick and easy with digital technology. But is it making us lazy? Should some things be more personal?",
+  "Julie: 'I'd prefer a phone call to a text message.\" I absolutely hate it when friends cancel by text message. It's so rude. My friend Sara and I planned to go to the cinema tonight. But I'm pretty sure she'll cancel – she generally does so. I'm waiting for her text message now.",
+  "Gin: \"Facebook means I don't forget anything.\" I'm really into Facebook. It's especially useful for birthdays, that kind of thing. Every time I check my Facebook page, it tells me whose birthday it is. Therefore, I never forget and I can just write a message on their wall. And when people have big news – maybe a new baby or something – you can write a comment straight away.",
+  "Marc: \"Writing a blog is a lot easier than sending emails.\" I'm studying in New York, away from my family. While I'm here, I'm writing a blog and thus my friends and family at home know my news. I particularly like putting all my photos on there because people leave comments. Most of my friends use Facebook. However, I prefer writing a blog. It's fairly easy to do and it's far quicker than writing 50 separate emails.",
+  "Claudio: \"I just send an instant message.\" I normally communicate with people by instant message as they're free. I've even finished relationships with girlfriends by IM. In fact, I mainly do that. I know it's not the best thing to do – but it's better than a lot of shouting and crying. Some of my friends don't even send a message. Instead, they just stop all communication and wait for her to realise they're not interested."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "If Julie's friends cancel an event by text message, she doesn't like it because she ----.",
+   "secenekler": [
+    "A) hates checking texts",
+    "B) doesn't enjoy calling people",
+    "C) thinks it is not polite"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "Gin is interested in Facebook because ----.",
+   "secenekler": [
+    "A) she can upload photos there",
+    "B) she always announces big news on her wall",
+    "C) it helps her to remember important dates"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 3,
+   "soru": "Claudio generally prefers IM when he wants to ----.",
+   "secenekler": [
+    "A) finish his relationships with his girlfriends",
+    "B) shout at people",
+    "C) do the best things for his friends and family"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 4,
+   "soru": "Claudio's friends finish their relationship by ---- their girlfriends.",
+   "secenekler": [
+    "A) texting",
+    "B) stopping communication with",
+    "C) sending e-mails to"
+   ],
+   "cevap": "B"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "prefer (v)",
+   "tr": "tercih etmek"
+  },
+  {
+   "en": "thus (adv)",
+   "tr": "o halde, böyle(ce), bu yüzden"
+  },
+  {
+   "en": "absolutely (adv)",
+   "tr": "kesinlikle, mutlak surette, tamamıyla"
+  },
+  {
+   "en": "particularly (adv)",
+   "tr": "özellikle, bilhassa, açıkça"
+  },
+  {
+   "en": "pretty (adv)",
+   "tr": "hayli, çok"
+  },
+  {
+   "en": "put (v)",
+   "tr": "koymak, yerleştirmek"
+  },
+  {
+   "en": "especially (adv)",
+   "tr": "özellikler, bilhassa"
+  },
+  {
+   "en": "fairly (adv)",
+   "tr": "oldukça"
+  },
+  {
+   "en": "therefore (adv)",
+   "tr": "dolayısıyla, bu yüzden, bunun sonucunda"
+  },
+  {
+   "en": "separate (adj)",
+   "tr": "ayrı, farklı"
+  },
+  {
+   "en": "comment (n)",
+   "tr": "yorum"
+  },
+  {
+   "en": "instant (adj)",
+   "tr": "çabuk, derhal"
+  },
+  {
+   "en": "straight away (adv)",
+   "tr": "derhal, hemen"
+  },
+  {
+   "en": "even (adv)",
+   "tr": "hattâ, bile, dahi"
+  },
+  {
+   "en": "realise (v)",
+   "tr": "farketmek, anlamak"
+  },
+  {
+   "en": "instead (adv)",
+   "tr": "yerine"
+  }
+ ],
+ "_not": "Sozluk sayfa 187'de. 3. paragrafta 'I never forget and I can just write a message on their wall' alti cizili, 'just' kalin.",
+ "_sozlukKaynagi": "Kitabın Basic Vocabulary tablosundan, sayfa görüntüsü okunarak.",
+ "guven": "goruntuden-birebir"
+}

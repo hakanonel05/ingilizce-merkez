@@ -1,0 +1,155 @@
+{
+ "no": 28,
+ "sayfalar": [
+  123,
+  124
+ ],
+ "paragraflar": [
+  "How life appeared on Earth is a tricky question to answer because we lack conclusive evidence. According to one theory, life may have come with meteors in the form of bacteria. Bacteria can withstand excessive heat. Thus, they must have travelled vast distances in space and arrived on earth. To others, life must have originated on earth with the interaction of various chemicals. They believe that something must have caused these chemicals to interact. Changing climate, pressure, gravity or oxygen levels might have caused life on earth to appear."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "It is clearly stated in the passage that there are ----.",
+   "secenekler": [
+    "A) many studies into different forms of bacteria from space",
+    "B) some people who believe life began on Earth by chance",
+    "C) different theories about the beginning of life on Earth"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "The underlined word 'conclusive' in the passage is closest in meaning to ----.",
+   "secenekler": [
+    "A) detailed",
+    "B) ambiguous",
+    "C) certain"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 3,
+   "soru": "We can understand from the passage that ----.",
+   "secenekler": [
+    "A) bacteria have the potential to destroy other life forms",
+    "B) different factors may have triggered life to start on Earth",
+    "C) one of the theories is more probable than the other"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 4,
+   "soru": "The underlined word 'withstand' in the passage is closest in meaning to ----.",
+   "secenekler": [
+    "A) resist",
+    "B) support",
+    "C) suffer"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 5,
+   "soru": "Which of the following could be the best title for the passage?",
+   "secenekler": [
+    "A) Recent Studies into the History of Mankind",
+    "B) Theories on How Life Came into Existence on Earth",
+    "C) Disadvantages of Having a Lack of Evidence"
+   ],
+   "cevap": "B"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "appear (v)",
+   "tr": "ortaya çıkmak, belirmek"
+  },
+  {
+   "en": "vast (adj)",
+   "tr": "engin, muazzam, büyük"
+  },
+  {
+   "en": "tricky (adj)",
+   "tr": "aldatıcı, karmaşık"
+  },
+  {
+   "en": "distance (n)",
+   "tr": "mesafe"
+  },
+  {
+   "en": "answer (v)",
+   "tr": "cevap vermek, yanıtlamak"
+  },
+  {
+   "en": "space (n)",
+   "tr": "uzay"
+  },
+  {
+   "en": "lack (v)",
+   "tr": "eksik olmak, yoksun kalmak"
+  },
+  {
+   "en": "originate (v)",
+   "tr": "kaynaklanmak, başlamak"
+  },
+  {
+   "en": "conclusive (adj)",
+   "tr": "kesin, nihai"
+  },
+  {
+   "en": "interaction (n)",
+   "tr": "etkileşim"
+  },
+  {
+   "en": "theory (n)",
+   "tr": "teori"
+  },
+  {
+   "en": "various (adj)",
+   "tr": "çeşitli, muhtelif, farklı"
+  },
+  {
+   "en": "meteor (n)",
+   "tr": "meteor"
+  },
+  {
+   "en": "chemical (adj)",
+   "tr": "kimyasal"
+  },
+  {
+   "en": "form (n)",
+   "tr": "biçim, şekil"
+  },
+  {
+   "en": "interact (v)",
+   "tr": "etkileşime geçmek"
+  },
+  {
+   "en": "bacteria (n)",
+   "tr": "bakteri"
+  },
+  {
+   "en": "pressure (n)",
+   "tr": "basınç"
+  },
+  {
+   "en": "withstand (v)",
+   "tr": "dayanmak, direnmek"
+  },
+  {
+   "en": "gravity (n)",
+   "tr": "yerçekimi"
+  },
+  {
+   "en": "excessive (adj)",
+   "tr": "aşırı, fazla"
+  },
+  {
+   "en": "oxygen (n)",
+   "tr": "oksijen"
+  }
+ ],
+ "_not": "Parca tek paragraf. Sozluk sayfa 123'te. 'conclusive' ve 'withstand' kitapta kalin/alti cizili.",
+ "_sozlukKaynagi": "Kitabın Basic Vocabulary tablosundan, sayfa görüntüsü okunarak.",
+ "guven": "goruntuden-birebir"
+}

@@ -1,0 +1,260 @@
+{
+ "no": 50,
+ "sayfalar": [
+  170,
+  172,
+  173
+ ],
+ "paragraflar": [
+  "What do three hearts, eight arms and one huge brain mean? It means an octopus, a creature that can do surprising things. Octopuses are extremely intelligent. They even know a few things to get them out of dangerous situations, for example, when they are afraid of a sea animal. Octopuses don't have teeth or sharp claws to fight for themselves. When they are afraid of a sea animal, they hide themselves in the sand on the bottom of the ocean floor. How do they do that? Well, the octopus is like a chameleon because it can change the colour of its skin to match the sand. This colour change happens in less than a minute. When the colour of the sand and the colour of the octopus are the same, sea animals cannot see it.",
+  "Some octopuses like to stay in more shallow water – not deep water – where there are rocks and coral. They can fit themselves into small spaces between the rocks to get away from sea animals. An octopus can also hide by shooting ink. An octopus uses a part of its body called a siphon to shoot ink into the water. The ink forms a cloud which hides the octopus. It's like a magician doing magic.",
+  "That's not all! If a sea animal attacks an octopus, the octopus can actually make itself look like a very dangerous sea snake. It will hide itself in the sand but keep two arms above the sand. It will change the colour of those arms to match a sea snake. But if there's no time to hide? If an octopus is in trouble, it can break off one of its arms which will then change colours and go around the water to surprise the sea animal. So the octopus swims away to a safe place. But don't worry. The octopus's arm will grow again.",
+  "There is one kind of octopus which is blue-ringed octopus. It has poison so it is not safe to be around it. The blue-ringed octopus is small; it can fit in the palm of your hand. Bigger sea animals can think it is an easy meal, but they need to stay away. The blue-ringed octopus which can kill very big sea animals, even humans is very poisonous."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "We can understand from paragraph 1 that the octopus is ----.",
+   "secenekler": [
+    "A) able to alter its colour much faster than a chameleon",
+    "B) capable of doing some tricks to avoid risky conditions",
+    "C) by far the cleverest sea animal throughout the world"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 2,
+   "soru": "Which of the following is FALSE about the octopus according to paragraph 1?",
+   "secenekler": [
+    "A) It can shift its colour under sixty seconds.",
+    "B) The size of its brain is extremely large.",
+    "C) It has very strong arms and teeth as well."
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 3,
+   "soru": "According to paragraph 2, octopuses ----.",
+   "secenekler": [
+    "A) never live in deep water",
+    "B) can hide in an ink cloud",
+    "C) cannot shoot ink deep water"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 4,
+   "soru": "Why does the author give the example of a magician at the end of paragraph 2?",
+   "secenekler": [
+    "A) To give an example of tricks famous magicians perform",
+    "B) To show the similarities between magicians and octopuses",
+    "C) To emphasize the incredible tricks octopuses can perform"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 5,
+   "soru": "The underlined word 'forms' in paragraph 2 is closest in meaning to ----.",
+   "secenekler": [
+    "A) builds",
+    "B) changes",
+    "C) destroys"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 6,
+   "soru": "We can understand from paragraph 3 that octopuses are capable of ----.",
+   "secenekler": [
+    "A) growing some extra body parts to scare animals",
+    "B) imitating the behaviours of other sea animals",
+    "C) swimming rapidly under enormous pressure"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 7,
+   "soru": "What happens when an octopus breaks off one of its arms according to paragraph 3?",
+   "secenekler": [
+    "A) Sea animals get afraid and they go away.",
+    "B) The octopus gets the chance to escape.",
+    "C) The octopus swims more quickly than usual."
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 8,
+   "soru": "Which of the following is FALSE about the blue-ringed octopus?",
+   "secenekler": [
+    "A) It is quite a tiny sea animal.",
+    "B) Big sea animals can easily hunt it.",
+    "C) It has a lethal substance that causes death."
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 9,
+   "soru": "The underlined pronoun 'they' in paragraph 4 refers to ----.",
+   "secenekler": [
+    "A) bigger sea animals",
+    "B) humans",
+    "C) blue-ringed octopuses"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 10,
+   "soru": "Which of the following could be the best title of the passage?",
+   "secenekler": [
+    "A) The Interesting Features of Different Kinds of Octopuses",
+    "B) Octopuses and How They Defeat Their Deadliest Enemies",
+    "C) The Similarities between Octopuses and Magicians"
+   ],
+   "cevap": "A"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "heart (n)",
+   "tr": "kalp"
+  },
+  {
+   "en": "brain (n)",
+   "tr": "beyin"
+  },
+  {
+   "en": "octopus (n)",
+   "tr": "ahtapot"
+  },
+  {
+   "en": "creature (n)",
+   "tr": "varlık, yaratık, hayvan"
+  },
+  {
+   "en": "surprising (adj)",
+   "tr": "şaşırtıcı"
+  },
+  {
+   "en": "know (v)",
+   "tr": "bilmek"
+  },
+  {
+   "en": "tooth (n)",
+   "tr": "diş"
+  },
+  {
+   "en": "sharp (adj)",
+   "tr": "keskin"
+  },
+  {
+   "en": "claw (n)",
+   "tr": "pençe"
+  },
+  {
+   "en": "sand (n)",
+   "tr": "kum"
+  },
+  {
+   "en": "bottom (n)",
+   "tr": "dip, alt, taban"
+  },
+  {
+   "en": "ocean (n)",
+   "tr": "okyanus"
+  },
+  {
+   "en": "floor (n)",
+   "tr": "zemin, yer, taban"
+  },
+  {
+   "en": "chameleon (n)",
+   "tr": "bukalemun"
+  },
+  {
+   "en": "colour (n)",
+   "tr": "renk"
+  },
+  {
+   "en": "shallow (adj)",
+   "tr": "sığ, yüzeysel"
+  },
+  {
+   "en": "deep (adj)",
+   "tr": "derin"
+  },
+  {
+   "en": "rock (n)",
+   "tr": "kaya"
+  },
+  {
+   "en": "coral (n)",
+   "tr": "mercan"
+  },
+  {
+   "en": "fit into (phr. v)",
+   "tr": "sığmak, sığdırmak"
+  },
+  {
+   "en": "get away from (phr. v)",
+   "tr": "uzak tutmak, uzaklaştırmak"
+  },
+  {
+   "en": "shoot (v)",
+   "tr": "fırlatmak, atmak, ateş etmek"
+  },
+  {
+   "en": "ink (n)",
+   "tr": "mürekkep"
+  },
+  {
+   "en": "form (v)",
+   "tr": "şekillendirmek, oluşturmak, biçimlendirmek"
+  },
+  {
+   "en": "cloud (n)",
+   "tr": "bulut"
+  },
+  {
+   "en": "magician (n)",
+   "tr": "sihirbaz"
+  },
+  {
+   "en": "attack (v)",
+   "tr": "saldırmak"
+  },
+  {
+   "en": "snake (n)",
+   "tr": "yılan"
+  },
+  {
+   "en": "trouble (n)",
+   "tr": "sorun, bela, problem"
+  },
+  {
+   "en": "surprise (v)",
+   "tr": "şaşırtmak"
+  },
+  {
+   "en": "swim (v)",
+   "tr": "yüzmek"
+  },
+  {
+   "en": "poison (n)",
+   "tr": "zehir"
+  },
+  {
+   "en": "palm (n)",
+   "tr": "avuç, avuç içi"
+  },
+  {
+   "en": "stay away (phr. v)",
+   "tr": "uzak durmak"
+  },
+  {
+   "en": "poisonous (adj)",
+   "tr": "zehirli"
+  }
+ ],
+ "_not": "2. paragrafta 'forms', 4. paragrafta 'they' alti cizili.",
+ "guven": "goruntuden-birebir"
+}

@@ -1,0 +1,133 @@
+{
+ "no": 37,
+ "sayfalar": [
+  140,
+  143
+ ],
+ "paragraflar": [
+  "People who can use both of their hands equally well are called ambidextrous. Ambidexterity can be extremely advantageous to athletes whose sports require an equal amount of dexterity in both hands, and sometimes feet, as well.",
+  "Ambidexterity is beneficial for artists as well. The famous artist Michelangelo who painted the ceiling of the Sistine Chapel was able to substitute one hand for the other when one of his hands got tired. Another famous artist from the 1800s, Landseer, was able to work on two completely different drawings at the same time, one with each hand, which must have enabled him to complete his work faster.",
+  "Perhaps even more extraordinary were the skills of the 20th U.S. president, James Garfield, who never failed to amaze all who witnessed it. Garfield was not only able to write different things with two hands at the same time is quite a success but he could write in Greek with the left hand and in Latin with the right.",
+  "Speaking of Greek, the Greeks were aware of the great benefits of ambidexterity in both sports and in battle. They even created a style of writing which combined right to left and left to right eye movement. In addition to being more efficient, it was believed by some that this type of reading might help to balance the two hemispheres of the brain which some believe is necessary for true ambidexterity."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "Ambidextrous people can use ---- hands skillfully.",
+   "secenekler": [
+    "A) both",
+    "B) neither",
+    "C) each"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 2,
+   "soru": "The underlined word \"substitute\" in the passage is closest in meaning to ----.",
+   "secenekler": [
+    "A) spend",
+    "B) write",
+    "C) exchange"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 3,
+   "soru": "According to the passage Michelangelo ----.",
+   "secenekler": [
+    "A) had to use both hands because of his job",
+    "B) could work on two drawings at the same time",
+    "C) Hans and his family live in the countryside."
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 4,
+   "soru": "James Garfield was an extraordinary ambidextruous because he ----.",
+   "secenekler": [
+    "A) read and write Greek and Latin",
+    "B) became the first US President with ambidexterity",
+    "C) write in two different languages at the same time"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 5,
+   "soru": "Ambidexterity is believed to ----.",
+   "secenekler": [
+    "A) balance the hemispheres of the brain",
+    "B) combine different learning skills",
+    "C) bring little sports and in battle"
+   ],
+   "cevap": "A"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "ambidexterity (n)",
+   "tr": "her iki elini de maharetle kullanabilme"
+  },
+  {
+   "en": "equally (adv)",
+   "tr": "eşit derecede"
+  },
+  {
+   "en": "extremely (adv)",
+   "tr": "aşırı şekilde, çok"
+  },
+  {
+   "en": "require (v)",
+   "tr": "gerektirmek"
+  },
+  {
+   "en": "dexterity (n)",
+   "tr": "hüner, maharet"
+  },
+  {
+   "en": "beneficial (adj)",
+   "tr": "faydalı, yararlı"
+  },
+  {
+   "en": "completely (adv)",
+   "tr": "tamamen, bütünüyle"
+  },
+  {
+   "en": "amount (n)",
+   "tr": "miktar"
+  },
+  {
+   "en": "enable (v)",
+   "tr": "olanak sağlamak, mümkün kılmak"
+  },
+  {
+   "en": "extraordinary (adj)",
+   "tr": "sıradışı"
+  },
+  {
+   "en": "witness (v)",
+   "tr": "tanıklık etmek"
+  },
+  {
+   "en": "success (n)",
+   "tr": "başarı"
+  },
+  {
+   "en": "combine (v)",
+   "tr": "birleştirmek"
+  },
+  {
+   "en": "balance (v)",
+   "tr": "dengelemek"
+  },
+  {
+   "en": "hemisphere (n)",
+   "tr": "yarımküre, lob"
+  },
+  {
+   "en": "efficient (adj)",
+   "tr": "etkili, etkin, verimli"
+  }
+ ],
+ "_not": "3. sorunun C sikki ve 4. sorunun ifadesi kitapta boyle basili (dizgi hatalari korundu). 'substitute' alti cizili.",
+ "guven": "goruntuden-birebir"
+}

@@ -1,0 +1,152 @@
+{
+ "no": 55,
+ "sayfalar": [
+  181,
+  182
+ ],
+ "kitapKusuru": "Kitabin cevap anahtari bu parca icin yalnizca UC cevap veriyor (PASSAGE 1.C 2.C 3.B) ama sayfada DORT soru basili. 4. sorunun cevabi kitapta yok; bos birakildi. Ayrica anahtarin 2. ve 3. cevaplari metinle ortusmuyor gibi duruyor — gene de kitapta ne yaziyorsa o alindi, duzeltilmedi.",
+ "paragraflar": [
+  "Alex Sheshunoff is a writer and Sarah Kalish is a lawyer. They both had good jobs and an apartment in Iowa city. However, one day they decided to build a new home for themselves. Most people would probably look locally, perhaps in the nicer neighbourhoods. They didn't even try Iowa and immediately, they planned to find a place in paradise so as to create their home.",
+  "For Alex, it was fairly easy to choose an island with everything he wanted. As a keen scuba diver, Alex first visited the Palau group of islands years ago on account of the beautiful ocean. He continued to go back there from time to time so this seemed like a good choice for paradise. The islands are about 7,500 kilometres west of Hawaii. That's why, they are difficult to reach. However, they have green forests with interesting wildlife as well as being surrounded by a blue ocean full of colourful fish. In the end, Alex and Sarah chose one island in particular – Angaur.",
+  "Angaur is only thirteen kilometres around with a population of about 150 people. Before they could start to work on the house, they had to get permission from the head of the island – an 83-year-old woman. She was worried they intended to develop the area for other tourists but Alex said, 'We would like to build a simple house.' They agreed on the rent of $100 a month for twenty years. The head of the island was happy. So, she said, 'Angaur welcomes you.'",
+  "Then the real work began. Alex and Sarah didn't want to pay for a construction company. Therefore, they taught themselves a lot about building. They also had a lot of friends in Iowa. They came out to help and in return got a free holiday by the beach. The local people of Anguar also worked for the couple and after many months of hard work and a final visit from the head of the island, their dream house was ready."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "Which one is FALSE about Alex and Sarah?",
+   "secenekler": [
+    "A) Alex and Sarah had good jobs in Iowa city.",
+    "B) They had an apartment in Iowa city.",
+    "C) They wanted to have a house in Iowa city.",
+    "D) They planned to build a new house."
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "It is clearly stated that Alex ----.",
+   "secenekler": [
+    "A) couldn't easily move to another place",
+    "B) liked to dive in the lake with his friends",
+    "C) did not like going to the Palau islands",
+    "D) chose Angaur as a paradise with Sarah"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 3,
+   "soru": "After Alex talked with the head of the island, she ----.",
+   "secenekler": [
+    "A) started to build the house with them",
+    "B) agreed with Alex about the tourist hotel",
+    "C) let Alex and Sarah build their place there",
+    "D) got rent from Alex for the tourist hotel"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 4,
+   "soru": "After Alex's and Sarah's friends came from Iowa to help the couple, ----.",
+   "secenekler": [
+    "A) Alex and Sarah paid some extra money to them for their work",
+    "B) they had the chance to eat very large plates of delicious meat",
+    "C) local people of the island invited them to the beach events",
+    "D) they got the chance to have a free holiday near the beach"
+   ],
+   "cevap": null
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "neighbourhood (n)",
+   "tr": "muhit, civar"
+  },
+  {
+   "en": "island (n)",
+   "tr": "ada"
+  },
+  {
+   "en": "even (adv)",
+   "tr": "bile, hatta"
+  },
+  {
+   "en": "permission (n)",
+   "tr": "izin"
+  },
+  {
+   "en": "immediately (adv)",
+   "tr": "derhal, hemen"
+  },
+  {
+   "en": "head (n)",
+   "tr": "yönetici, başkan"
+  },
+  {
+   "en": "paradise (n)",
+   "tr": "cennet"
+  },
+  {
+   "en": "intend (v)",
+   "tr": "amaçlamak, planlamak"
+  },
+  {
+   "en": "create (v)",
+   "tr": "yaratmak, oluşturmak"
+  },
+  {
+   "en": "develop (v)",
+   "tr": "geliştirmek"
+  },
+  {
+   "en": "fairly (adv)",
+   "tr": "oldukça"
+  },
+  {
+   "en": "simple (adj)",
+   "tr": "basit, alelade"
+  },
+  {
+   "en": "choose (v)",
+   "tr": "seçmek"
+  },
+  {
+   "en": "ocean (n)",
+   "tr": "okyanus"
+  },
+  {
+   "en": "scuba diver (n)",
+   "tr": "balıkadam, dalışçı"
+  },
+  {
+   "en": "welcome (v)",
+   "tr": "hoş karşılama"
+  },
+  {
+   "en": "seem (v)",
+   "tr": "gibi görünmek"
+  },
+  {
+   "en": "construction (n)",
+   "tr": "inşa"
+  },
+  {
+   "en": "wildlife (n)",
+   "tr": "yaban, vahşi doğa"
+  },
+  {
+   "en": "in return (adv)",
+   "tr": "karşılığında"
+  },
+  {
+   "en": "surround (v)",
+   "tr": "çevrelemek, sarmak"
+  },
+  {
+   "en": "dream (n)",
+   "tr": "rüya, hayal"
+  }
+ ],
+ "_not": "Sozluk sayfa 181'de. Kitapta 'Anguar' ve 'Angaur' yazimlari karisik kullanilmis; oldugu gibi birakildi. Sözlük 171. sayfada (g181) okundu.",
+ "guven": "goruntuden-birebir"
+}

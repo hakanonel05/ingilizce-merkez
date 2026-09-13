@@ -13,6 +13,12 @@ export interface ComprehensionQuestion {
   question: string;
   options: string[];
   answer: string; // e.g. 'A', 'B', 'C', 'D'
+  /**
+   * Kitapta bazı sorular şıksız: "The underlined pronoun 'it' refers to ----"
+   * gibi, cevabı metinden yazarak veriliyor. Bunlarda options boş kalıyor ve
+   * answer harf değil, cevabın kendisi ("Egypt", "(the) project").
+   */
+  openEnded?: boolean;
 }
 
 export interface VocabularyExercise {
@@ -32,6 +38,15 @@ export interface Passage {
   vocabulary: VocabularyWord[];
   questions: ComprehensionQuestion[];
   exercises: VocabularyExercise[];
+  /**
+   * Parça metninin kitaptan hangi yolla alındığı. Veri kalitesi her parçada
+   * aynı değil; hangisinin gözle doğrulandığı görünür kalsın diye duruyor.
+   *   "goruntuden-birebir" — sayfa görüntüsü okunup birebir yazıldı
+   *   "ocr-uzlastirma"     — iki OCR çıkarımı uzlaştırıldı, gözle görülmedi
+   */
+  sourceFidelity?: 'goruntuden-birebir' | 'ocr-uzlastirma';
+  /** Sözlük kitabın kendi Türkçe listesinden mi, uygulamanın eski verisinden mi. */
+  vocabularySource?: 'kitap' | 'uygulama';
   isGenerated?: boolean;
   /**
    * Uretilen hikayeyi hangi modelin yazdigi (ornek: "Llama 4" ya da

@@ -1,0 +1,162 @@
+{
+ "no": 9,
+ "sayfalar": [
+  81,
+  82
+ ],
+ "paragraflar": [
+  "Our last trip was to Windsor Castle. Windsor Castle is one of the Queen's homes, but she only stays there at weekends. We were there on a Monday, so the Queen and her family weren't there. They were at Buckingham Palace, the Queen's home in London. There were many beautiful chairs and carpets in Windsor Castle, but my favourite thing was Queen Mary's doll's house. It was a gift from the people of England to the Queen Mary, the wife of George V, in the 1920s. Most doll's houses are toys for children, but Queen Mary wasn't a child at the time. She was an adult. The doll's house and the items in it were miniature copies of Windsor Castle and the real things in it – furniture, curtains, lamps, bottles of wines and even toilet paper! The miniatures were amazing. I guess doll's houses aren't only for children."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "It is stated in the passage that the doll's house ----.",
+   "secenekler": [
+    "A) in Windsor Castle is the largest in England",
+    "B) was a present to the Queen of England",
+    "C) includes mini figures of people of England"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 2,
+   "soru": "Which of the following is FALSE about Queen Mary?",
+   "secenekler": [
+    "A) She stays at Windsor Castle for two days in a week.",
+    "B) She got the doll's house when she was only a kid.",
+    "C) English people gave her the doll's house in the early 1900s."
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 3,
+   "soru": "We can understand from the passage that the author ----.",
+   "secenekler": [
+    "A) thought that the doll's houses were just for kids",
+    "B) didn't enjoy some parts of her trip to the castle",
+    "C) had the chance to meet the Queen at the palace"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 4,
+   "soru": "The underlined word 'items' in the passage is closest in meaning to ----.",
+   "secenekler": [
+    "A) gifts",
+    "B) objects",
+    "C) dolls"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 5,
+   "soru": "Which of the following could be the best title for the passage?",
+   "secenekler": [
+    "A) Buckingham Palace",
+    "B) The Royal Family",
+    "C) Tour to Windsor Castle"
+   ],
+   "cevap": "C"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "trip (n)",
+   "tr": "yolculuk, gezi"
+  },
+  {
+   "en": "Monday (n)",
+   "tr": "Pazartesi"
+  },
+  {
+   "en": "palace (n)",
+   "tr": "saray"
+  },
+  {
+   "en": "beautiful (adj)",
+   "tr": "güzel"
+  },
+  {
+   "en": "chair (n)",
+   "tr": "sandalye"
+  },
+  {
+   "en": "carpet (n)",
+   "tr": "halı"
+  },
+  {
+   "en": "castle (n)",
+   "tr": "kale"
+  },
+  {
+   "en": "but (conj)",
+   "tr": "ama"
+  },
+  {
+   "en": "thing (n)",
+   "tr": "şey, nesne"
+  },
+  {
+   "en": "doll (n)",
+   "tr": "oyuncak bebek"
+  },
+  {
+   "en": "wife (n)",
+   "tr": "eş (kadın)"
+  },
+  {
+   "en": "child (n)",
+   "tr": "çocuk"
+  },
+  {
+   "en": "adult (n)",
+   "tr": "yetişkin"
+  },
+  {
+   "en": "item (n)",
+   "tr": "madde, parça"
+  },
+  {
+   "en": "miniature (adj)",
+   "tr": "minyatür, küçük"
+  },
+  {
+   "en": "copy (n)",
+   "tr": "kopya"
+  },
+  {
+   "en": "real (adj)",
+   "tr": "gerçek"
+  },
+  {
+   "en": "furniture (n)",
+   "tr": "mobilya"
+  },
+  {
+   "en": "curtain (n)",
+   "tr": "perde"
+  },
+  {
+   "en": "lamp (n)",
+   "tr": "lamba"
+  },
+  {
+   "en": "bottle (n)",
+   "tr": "şişe"
+  },
+  {
+   "en": "wine (n)",
+   "tr": "şarap"
+  },
+  {
+   "en": "amazing (adj)",
+   "tr": "büyüleyici, muhteşem"
+  },
+  {
+   "en": "guess (v)",
+   "tr": "sanmak, tahmin etmek"
+  }
+ ],
+ "_not": "'items' kitapta alti cizili. Parca tek paragraf.",
+ "guven": "goruntuden-birebir"
+}

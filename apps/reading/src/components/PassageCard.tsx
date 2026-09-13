@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { addWordToVocabBank, getAllCards, VOCAB_CHANGED_EVENT, readingPassageLessonId } from '../lib/vocabBank';
 import { SelectionToCard } from '../../../../shared/vocab/SelectionToCard';
 import { useNarration } from '../lib/narration';
+import { acikUcluDogruMu } from '../lib/acikUcluCevap';
 import NarrationBar from './NarrationBar';
 
 interface PassageCardProps {
@@ -167,6 +168,19 @@ export default function PassageCard({
     }));
   };
 
+  /**
+   * Kitaptaki şıksız sorular yazarak cevaplanıyor. Şıklı sorularda kutuda
+   * harf (A/B/C) duruyor, burada cevabın kendisi duruyor; ikisi de aynı
+   * comprehensionAnswers'ta tutuluyor, ayrımı sorunun openEnded alanı veriyor.
+   */
+  const writeComprehensionAnswer = (questionId: number, text: string) => {
+    if (comprehensionSubmitted) return;
+    setComprehensionAnswers(prev => ({
+      ...prev,
+      [questionId]: text
+    }));
+  };
+
   // Handle exercise answer click
   const selectExerciseOption = (exerciseId: number, optionLetter: string) => {
     if (exercisesSubmitted) return;
@@ -181,7 +195,10 @@ export default function PassageCard({
     let score = 0;
     const gradedResults: GradedQuestionResult[] = passage.questions.map(q => {
       const selected = comprehensionAnswers[q.id] || '';
-      const isCorrect = selected === q.answer;
+      // Şıklı soruda harf karşılaştırılıyor, şıksızda cevabın metni.
+      const isCorrect = q.openEnded
+        ? acikUcluDogruMu(selected, q.answer)
+        : selected === q.answer;
       if (isCorrect) score++;
       return {
         questionId: q.id,
@@ -456,7 +473,6 @@ export default function PassageCard({
                 <div className="divide-y divide-hairline">
                   {passage.questions.map((q, qIndex) => {
                     const selected = comprehensionAnswers[q.id];
-                    const isCorrect = q.options.find(o => o.startsWith(selected))?.startsWith(q.answer);
 
                     return (
                       <div key={q.id} className="space-y-3">
@@ -465,6 +481,32 @@ export default function PassageCard({
                           <h3 className="text-[15px] font-medium leading-relaxed text-ink">{q.question}</h3>
                         </div>
 
+                        {/* Kitapta şıksız basılmış sorular: cevap yazılıyor. */}
+                        {q.openEnded ? (
+                          <div className="space-y-2 pl-6">
+                            <input
+                              type="text"
+                              value={selected ?? ''}
+                              disabled={comprehensionSubmitted}
+                              onChange={e => writeComprehensionAnswer(q.id, e.target.value)}
+                              placeholder="Cevabı metinden yaz"
+                              className={`w-full rounded-xl border px-4 py-3 text-[13px] text-ink
+                                placeholder:text-ink-3 transition-colors duration-150
+                                focus:border-accent focus:outline-none disabled:cursor-default
+                                ${comprehensionSubmitted
+                                  ? acikUcluDogruMu(selected ?? '', q.answer)
+                                    ? 'border-ok bg-ok-soft'
+                                    : 'border-danger bg-danger-soft'
+                                  : 'border-hairline bg-paper'}`}
+                            />
+                            {comprehensionSubmitted && (
+                              <p className="text-[12px] text-ink-2">
+                                Kitabın cevabı:{' '}
+                                <span className="font-medium text-ink">{q.answer}</span>
+                              </p>
+                            )}
+                          </div>
+                        ) : (
                         <div className="space-y-2 pl-6">
                           {q.options.map(option => {
                             const optionLetter = option.trim().charAt(0); // A, B, C, D
@@ -505,6 +547,7 @@ export default function PassageCard({
                             );
                           })}
                         </div>
+                        )}
                       </div>
                     );
                   })}
@@ -531,7 +574,12 @@ export default function PassageCard({
                   {!comprehensionSubmitted ? (
                     <button
                       onClick={submitComprehensionQuiz}
-                      disabled={Object.keys(comprehensionAnswers).length < passage.questions.length}
+                      // Yazarak cevaplanan sorularda kutu boşaltılınca da anahtar
+                      // duruyor; o yüzden anahtar saymak yetmiyor, dolu olanı say.
+                      disabled={
+                        passage.questions.filter(q => (comprehensionAnswers[q.id] ?? '').trim()).length
+                        < passage.questions.length
+                      }
                       className="w-full rounded-xl bg-accent px-5 py-2.5 text-[13px] font-medium text-white
                         transition-colors duration-150 hover:bg-accent-700
                         disabled:cursor-not-allowed disabled:bg-paper-3 disabled:text-ink-3

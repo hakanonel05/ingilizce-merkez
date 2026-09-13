@@ -1,0 +1,157 @@
+{
+ "no": 10,
+ "sayfalar": [
+  83,
+  84
+ ],
+ "paragraflar": [
+  "The ancient Egyptian civilization lasted for more than 3000 years, longer than any other civilization in human history. Ancient Egypt depended on the waters of the River Nile, which flows through harsh and arid desert. Egyptians were able to cultivate only the land on the banks of the Nile to support life. The rest of Egypt was, and is, desert. The Nile gave the civilization of Egypt its life.",
+  "The ancient Egyptians were among the first people to develop a system of writing. They believed it was significant to write down what was happening. The best-known of the systems of Egyptian writing (there were more than three) is the system using hieroglyphs, a mixture of pictures and 'glyphs' or symbols.",
+  "Egyptians believed that there was life after death, so they preserved and buried a dead person's body in a tomb with his / her possessions. They did this so that the dead person could use them in the life after death.",
+  "Kings or the pharaohs as well as queens ruled Egypt. There were two kingdoms in Egypt. While the land in Lower Egypt was richer and more fertile, most of the land in Upper Egypt was dry desert."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "Which of the following is FALSE according to paragraph 1?",
+   "secenekler": [
+    "A) Much of Egypt was arid land.",
+    "B) The Nile was significant for Egyptians.",
+    "C) Egypt is the oldest civilization in history."
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "The underlined pronoun \"its\" in paragraph 1 refers to ----.",
+   "secenekler": [
+    "A) Egypt",
+    "B) The Nile",
+    "C) desert"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 3,
+   "soru": "We can understand from paragraph 2 that ----.",
+   "secenekler": [
+    "A) Egyptians developed the first ever writing system",
+    "B) some other civilizations had writing systems",
+    "C) it was difficult to record history at the time"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 4,
+   "soru": "According to paragraph 3, Egyptians buried people's belongings with them since ----.",
+   "secenekler": [
+    "A) the Pharaohs wanted them to do so",
+    "B) they believed people would continue to live",
+    "C) they were afraid thieves could steal them"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 5,
+   "soru": "The underlined word 'ruled' in paragraph 4 is closest in meaning to ----.",
+   "secenekler": [
+    "A) reigned",
+    "B) ignored",
+    "C) confirmed"
+   ],
+   "cevap": "A"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "last (v)",
+   "tr": "sürmek, devam etmek"
+  },
+  {
+   "en": "ancient (adj)",
+   "tr": "antik, eski"
+  },
+  {
+   "en": "civilization (n)",
+   "tr": "uygarlık, medeniyet"
+  },
+  {
+   "en": "depend on (v)",
+   "tr": "bağlı olmak, bel bağlamak, inanmak, güvenmek"
+  },
+  {
+   "en": "harsh (adj)",
+   "tr": "katı, sıkı, sert"
+  },
+  {
+   "en": "arid (adv)",
+   "tr": "kurak, çorak"
+  },
+  {
+   "en": "cultivate (v)",
+   "tr": "ekip biçmek, toprağı işlemek"
+  },
+  {
+   "en": "bank (n)",
+   "tr": "kıyı, yaka"
+  },
+  {
+   "en": "support (v)",
+   "tr": "destek olmak"
+  },
+  {
+   "en": "among (prep)",
+   "tr": "arasında"
+  },
+  {
+   "en": "develop (v)",
+   "tr": "geliştirmek"
+  },
+  {
+   "en": "significant (adj)",
+   "tr": "önemli"
+  },
+  {
+   "en": "preserve (v)",
+   "tr": "korumak, muhafaza etmek"
+  },
+  {
+   "en": "bury (v)",
+   "tr": "gömmek"
+  },
+  {
+   "en": "tomb (n)",
+   "tr": "mezar, lahit, türbe"
+  },
+  {
+   "en": "possessions (n pl.)",
+   "tr": "mal mülk, eşya"
+  },
+  {
+   "en": "as well as (conj)",
+   "tr": "yanı sıra"
+  },
+  {
+   "en": "so that (conj)",
+   "tr": "-sın diye (amaç)"
+  },
+  {
+   "en": "while (conj)",
+   "tr": "-se de, -e karşın, -e rağmen, iken (zıtlık)"
+  },
+  {
+   "en": "rule (v)",
+   "tr": "hüküm sürmek, egemen olmak"
+  },
+  {
+   "en": "fertile (adj)",
+   "tr": "verimli, bereketli"
+  },
+  {
+   "en": "land (n)",
+   "tr": "arazi, toprak"
+  }
+ ],
+ "_not": "1. paragrafta 'its', 4. paragrafta 'ruled' alti cizili.",
+ "guven": "goruntuden-birebir"
+}

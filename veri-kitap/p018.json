@@ -1,0 +1,149 @@
+{
+ "no": 18,
+ "sayfalar": [
+  98,
+  99
+ ],
+ "paragraflar": [
+  "An ecosystem's diversity and its health are directly tied together. The web of relationships in a complex environment such as a rainforest means that many species depend on each other. Genetic diversity among individuals in populations better equips organisms to deal with disaster or disease.",
+  "Unfortunately, human activity has had an adverse impact on Earth's biodiversity. As the human population grows, so does the amount of land it requires for food. Also, humanity's constantly-growing population requires more land for transportation and housing. As humans convert Amazon rainforests into cropland or harm the natural habitats of many species, the ecosystem's ability to sustain itself decreases. In some cases, some species have faced extinction. For example, humans have been overhunting some fish species and thus their populations have been in rapid decline over the last century.",
+  "Modern agriculture has also damaged biodiversity. Farmers around the world have adopted standardized varieties of crops such as bananas, soy, corn, and rice. As farmers replace local varieties by the new standard, the genetic diversity of these species decreases and some useful genes have already disappeared altogether from the population. Ultimately, the species have become less adept at fighting diseases, and the removal of some beneficial genes has hindered their ability to withstand environmental changes."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "One can understand from paragraph 1 that genetic diversity ----.",
+   "secenekler": [
+    "A) is closely associated with ecosystem's well-being",
+    "B) prevents species from becoming extinct",
+    "C) may cause some species to destroy others"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 2,
+   "soru": "The underlined word 'amount' in paragraph 2 is closest in meaning to ----.",
+   "secenekler": [
+    "A) offer",
+    "B) quantity",
+    "C) damage"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 3,
+   "soru": "Paragraph 2 is mainly about the ----.",
+   "secenekler": [
+    "A) causes of the mass destruction of the rainforests",
+    "B) main reasons why some species become extinct",
+    "C) unfavourable effects of human activity on biodiversity"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 4,
+   "soru": "It is clearly stated in paragraph 3 that new farming methods have ----.",
+   "secenekler": [
+    "A) given some harm to genetic diversity",
+    "B) helped farmers produce more crops",
+    "C) increased the number of diseases"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 5,
+   "soru": "The underlined word 'replace' in paragraph 3 is closest in meaning to ----.",
+   "secenekler": [
+    "A) use",
+    "B) need",
+    "C) change"
+   ],
+   "cevap": "C"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "diversity (n)",
+   "tr": "çeşitlilik"
+  },
+  {
+   "en": "convert (v)",
+   "tr": "dönüştürmek"
+  },
+  {
+   "en": "species (n pl.)",
+   "tr": "tür, türler"
+  },
+  {
+   "en": "sustain (v)",
+   "tr": "sürdürmek, muhafaza etmek"
+  },
+  {
+   "en": "depend on (n)",
+   "tr": "bağlı olmak, bel bağlamak, güvenmek, inanmak"
+  },
+  {
+   "en": "extinction (n)",
+   "tr": "nesli tükenme, yok olma"
+  },
+  {
+   "en": "among (prep)",
+   "tr": "arasında, içinde"
+  },
+  {
+   "en": "adopt (v)",
+   "tr": "benimsemek"
+  },
+  {
+   "en": "equip (v)",
+   "tr": "donatmak, teçhiz etmek"
+  },
+  {
+   "en": "thus (conj)",
+   "tr": "böylece, bu yüzden"
+  },
+  {
+   "en": "deal with (v)",
+   "tr": "ele almak, ilgilenmek, baş etmek"
+  },
+  {
+   "en": "ultimately (adv)",
+   "tr": "sonunda, sonuçta, nihayetinde"
+  },
+  {
+   "en": "adverse (adj)",
+   "tr": "olumsuz, ters, kötü"
+  },
+  {
+   "en": "adept (adj)",
+   "tr": "becerikli, hünerli, mahir"
+  },
+  {
+   "en": "impact (n)",
+   "tr": "etki"
+  },
+  {
+   "en": "hinder (v)",
+   "tr": "engellemek, ket vurmak"
+  },
+  {
+   "en": "require (v)",
+   "tr": "ihtiyacı olmak, gerek duymak, gerektirmek"
+  },
+  {
+   "en": "removal (n)",
+   "tr": "ortadan kaldırma, yok etme, çıkarma"
+  },
+  {
+   "en": "as (conj)",
+   "tr": "-dıkça, -dikçe"
+  },
+  {
+   "en": "withstand (v)",
+   "tr": "karşı koymak, direnmek, dayanmak"
+  }
+ ],
+ "_not": "Sozluk sayfa 98'de; ayri gecise birakildi. 'amount' (p2) ve 'replace' (p3) alti cizili.",
+ "_sozlukKaynagi": "Kitabın Basic Vocabulary tablosundan, sayfa görüntüsü okunarak.",
+ "guven": "goruntuden-birebir"
+}

@@ -1,0 +1,139 @@
+{
+ "no": 33,
+ "sayfalar": [
+  133,
+  134
+ ],
+ "paragraflar": [
+  "The Titanic was built in 1912. It was designed in a new way and it was thought to be unsinkable. Because of this, it wasn't given enough lifeboats for the passengers and crew. The ship was damaged by a collision with a huge iceberg and it sank very fast. A total of 1,513 people were drowned that day. Because of this disaster, a lot of magazines were printed in many languages, new international safety laws were passed and Ice Patrol was established. In 1985 the wreck was located on the sea bed and the ship was explored. Several successful films have been made about the Titanic since then, and the most recent was released in 1997."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "It is stated in the passage that the Titanic disaster ----.",
+   "secenekler": [
+    "A) caused many explorers to look for the Titanic",
+    "B) caused some rules and regulations to change",
+    "C) resulted in the changes in future ship designs"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 2,
+   "soru": "The remains of the Titanic were ----.",
+   "secenekler": [
+    "A) found accidentally",
+    "B) discovered by Ice Patrol",
+    "C) never explored in detail"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 3,
+   "soru": "There weren't plenty of lifeboats on the Titanic since ----.",
+   "secenekler": [
+    "A) there weren't any international laws related to lifeboats",
+    "B) they thought the number of lifeboats would be enough",
+    "C) the designers of the ship thought it would never sink"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 4,
+   "soru": "The underlined word 'collision' in the passage is closest in meaning to ----.",
+   "secenekler": [
+    "A) failure",
+    "B) struggle",
+    "C) crash"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 5,
+   "soru": "Which of the following is FALSE about the Titanic disaster?",
+   "secenekler": [
+    "A) Few movies about the disaster have been successful.",
+    "B) The remains of the ship were discovered in 1985.",
+    "C) The Titanic went under the ocean very rapidly."
+   ],
+   "cevap": "A"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "unsinkable (adj)",
+   "tr": "batmaz"
+  },
+  {
+   "en": "drown (v)",
+   "tr": "boğmak, (suda) boğulmak"
+  },
+  {
+   "en": "lifeboat (n)",
+   "tr": "cankurtaran filikası"
+  },
+  {
+   "en": "print (v)",
+   "tr": "basmak, yayınlamak"
+  },
+  {
+   "en": "passenger (n)",
+   "tr": "yolcu"
+  },
+  {
+   "en": "international (adj)",
+   "tr": "uluslararası"
+  },
+  {
+   "en": "crew (n)",
+   "tr": "mürettebat"
+  },
+  {
+   "en": "safety (n)",
+   "tr": "güvenlik"
+  },
+  {
+   "en": "ship (n)",
+   "tr": "gemi"
+  },
+  {
+   "en": "law (n)",
+   "tr": "yasa"
+  },
+  {
+   "en": "collision (n)",
+   "tr": "çarpışma, çarpma"
+  },
+  {
+   "en": "establish (v)",
+   "tr": "kurmak, oluşturmak"
+  },
+  {
+   "en": "iceberg (n)",
+   "tr": "buzdağı"
+  },
+  {
+   "en": "wreck (n)",
+   "tr": "enkaz"
+  },
+  {
+   "en": "sink (v)",
+   "tr": "batmak"
+  },
+  {
+   "en": "explore (v)",
+   "tr": "keşfetmek, incelemek, araştırmak"
+  },
+  {
+   "en": "fast (adv)",
+   "tr": "hızlıca, hızlı bir şekilde"
+  },
+  {
+   "en": "recent (adj)",
+   "tr": "yeni, yeni tarihli, son günlerdeki"
+  }
+ ],
+ "_not": "Parca tek paragraf. Sozluk sayfa 133'te. 'collision' alti cizili.",
+ "_sozlukKaynagi": "Kitabın Basic Vocabulary tablosundan, sayfa görüntüsü okunarak.",
+ "guven": "goruntuden-birebir"
+}

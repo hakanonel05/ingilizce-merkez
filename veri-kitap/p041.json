@@ -1,0 +1,248 @@
+{
+ "no": 41,
+ "sayfalar": [
+  151,
+  152,
+  153
+ ],
+ "paragraflar": [
+  "Dreams are pictures, sounds and feelings that happen during sleep. They are often similar to real life in some ways, but they can also be very strange. In dreams, we mostly dream about our thoughts and wishes.",
+  "In history, people have had many explanations for dreams. In ancient Greece, people thought that dreaming was a kind of contact with the gods. Sometimes they believed that dreams showed the future. Many scientists have done research on dreams. The most famous expert on dreaming is Sigmund Freud, an Austrian doctor. At the end of the 19th century, he found that our mind is a place where we keep our thoughts and wishes. In dreams, we act out these wishes.",
+  "Dreaming is an activity of the brain and it produces electrical waves in the brain. We have dreams when brain waves are especially fast. There are five stages in our sleep. In the first stage, we do not sleep very deeply and we wake up easily. During the other stages, our sleep gets deeper and deeper. At the fourth stage, REM (Rapid Eye Movement) sleep begins. We have most dreams during REM sleep. During REM, our heart rate and breathing get faster. Blood pressure goes up and the brain starts to work but the body does not. That is, we don't act out our dreams because the body is inactive and we can't move it. We can have almost seven REM sleeps in one night.",
+  "Everyone dreams. If you think that you never dream, you are wrong. Most of the time, we cannot remember our dreams and think that we don't dream. This is because dreams usually do not have a strong effect on us. So it is difficult to remember them. Also, dreams are never the same and each dream has different details. We can't remember them if they are not repeated. So we forget them easily.",
+  "Most people cannot control their dreams, they just happen. Very few people experience something called \"lucid dreaming\". In a lucid dream, people know that they are dreaming. They try to control their dreams and enjoy this experience. It is possible to do anything that the dreamer wants, such as flying, traveling back in time and meeting yourself as a child. Lucid dreamers know that everything is possible because it all depends on your imagination."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "The author's purpose in paragraph 1 is to ----.",
+   "secenekler": [
+    "A) inform the reader about the reasons why we dream",
+    "B) compare the real-life experiences and dreams",
+    "C) provide the reader with the effects of dreams"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 2,
+   "soru": "Which of the following is TRUE about ancient Greeks in paragraph 2?",
+   "secenekler": [
+    "A) They believed that dreams revealed their past mistakes.",
+    "B) They thought they communicated with gods in their dreams.",
+    "C) They had a discussion about the explanation of the dreams."
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 3,
+   "soru": "The underlined word 'stages' in paragraph 3 is closest in meaning to ----.",
+   "secenekler": [
+    "A) amounts",
+    "B) positions",
+    "C) steps"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 4,
+   "soru": "It is stated in paragraph 3 that ----.",
+   "secenekler": [
+    "A) our brain becomes active in the later periods of our sleep",
+    "B) we remember the dreams we have during REM sleep better",
+    "C) we are able to move our body during some sleep periods"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 5,
+   "soru": "Which of the following is FALSE according to paragraph 3?",
+   "secenekler": [
+    "A) Our heart beats more quickly than usual during REM sleep.",
+    "B) REM sleep is divided into different periods of sleep.",
+    "C) Our brain generates electrical waves while dreaming."
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 6,
+   "soru": "The underlined pronoun 'it' in paragraph 3 refers to ----.",
+   "secenekler": [
+    "A) blood pressure",
+    "B) the brain",
+    "C) the body"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 7,
+   "soru": "It is stated in paragraph 4 that it is hard to recall our dreams since ----.",
+   "secenekler": [
+    "A) majority of us often sleep too deeply",
+    "B) we usually prefer to forget them quickly",
+    "C) they generally don't have a major impact"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 8,
+   "soru": "Paragraph 4 is mainly about ----.",
+   "secenekler": [
+    "A) different beliefs and ideas about dreams",
+    "B) the reasons for forgetting dreams",
+    "C) the factors affecting the way we dream"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 9,
+   "soru": "According to paragraph 5, ----.",
+   "secenekler": [
+    "A) a small number of people can manipulate their dreams",
+    "B) lucid dreamers are usually imaginative people",
+    "C) lucid dreamers enjoy travelling back in time more than flying"
+   ],
+   "cevap": "A"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "feeling (n)",
+   "tr": "his, duygu"
+  },
+  {
+   "en": "movement (n)",
+   "tr": "hareket"
+  },
+  {
+   "en": "sleep (n)",
+   "tr": "uyku"
+  },
+  {
+   "en": "begin (v)",
+   "tr": "başlamak"
+  },
+  {
+   "en": "strange (adj)",
+   "tr": "garip, tuhaf"
+  },
+  {
+   "en": "rate (n)",
+   "tr": "oran"
+  },
+  {
+   "en": "thought (n)",
+   "tr": "düşünce"
+  },
+  {
+   "en": "breathe (v)",
+   "tr": "nefes almak"
+  },
+  {
+   "en": "wish (n)",
+   "tr": "arzu, dilek"
+  },
+  {
+   "en": "blood (n)",
+   "tr": "kan"
+  },
+  {
+   "en": "explanation (n)",
+   "tr": "açıklama"
+  },
+  {
+   "en": "inactive (adj)",
+   "tr": "pasif, hareketsiz, aktif olmayan"
+  },
+  {
+   "en": "Greece (n)",
+   "tr": "Yunanistan"
+  },
+  {
+   "en": "dream (v)",
+   "tr": "rüya görmek"
+  },
+  {
+   "en": "contact (n)",
+   "tr": "iletişim, irtibat"
+  },
+  {
+   "en": "effect (n)",
+   "tr": "etki, tesir"
+  },
+  {
+   "en": "do (v)",
+   "tr": "yapmak"
+  },
+  {
+   "en": "detail (n)",
+   "tr": "ayrıntı, detay"
+  },
+  {
+   "en": "Austrian (adj)",
+   "tr": "Avusturyalı"
+  },
+  {
+   "en": "repeat (v)",
+   "tr": "tekrarlamak, tekrar etmek"
+  },
+  {
+   "en": "mind (n)",
+   "tr": "zihin"
+  },
+  {
+   "en": "control (v)",
+   "tr": "kontrol etmek, denetlemek"
+  },
+  {
+   "en": "wave (n)",
+   "tr": "dalga"
+  },
+  {
+   "en": "lucid dream (n)",
+   "tr": "bilinçli rüya, kontrol edilebilir rüya"
+  },
+  {
+   "en": "stage (n)",
+   "tr": "evre, aşama"
+  },
+  {
+   "en": "experience (n)",
+   "tr": "deneyim, tecrübe"
+  },
+  {
+   "en": "fast (adj)",
+   "tr": "hızlı, süratli, çabuk"
+  },
+  {
+   "en": "possible (adj)",
+   "tr": "mümkün, olası"
+  },
+  {
+   "en": "deeply (adv)",
+   "tr": "derinden, derin bir şekilde"
+  },
+  {
+   "en": "dreamer (n)",
+   "tr": "rüya gören kimse"
+  },
+  {
+   "en": "rapid (adj)",
+   "tr": "hızlı, çabuk"
+  },
+  {
+   "en": "depend on (phr. v.)",
+   "tr": "bağlı olmak"
+  },
+  {
+   "en": "eye (n)",
+   "tr": "göz"
+  },
+  {
+   "en": "imagination (n)",
+   "tr": "hayal gücü"
+  }
+ ],
+ "_not": "Sozluk sayfa 151'de. 3. paragrafta 'stages' ve 'it' alti cizili.",
+ "_sozlukKaynagi": "Kitabın Basic Vocabulary tablosundan, sayfa görüntüsü okunarak.",
+ "guven": "goruntuden-birebir"
+}

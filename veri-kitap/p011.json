@@ -1,0 +1,117 @@
+{
+ "no": 11,
+ "sayfalar": [
+  85,
+  86
+ ],
+ "paragraflar": [
+  "Bruce Lee was born in 1940. His father was a comedian in the Chinese opera and an actor in Cantonese films. When Bruce was born, Mr. and Mrs. Lee were on tour with the opera company in the United States. His mother was a housewife. A nurse at the hospital gave him the name \"Bruce\". In the beginning, he did not like this name, but when he began to study at secondary school, he started to use it.",
+  "Lee went to high school in Washington. There, he worked as a part time waiter in a restaurant. He needed to work because his family had financial problems when he was in high school. After high school, he started studying philosophy. While he was a student, he also taught the Wing Chun style of martial arts. During the years when he was at university, Lee met his future wife Linda Emery. After he graduated from university, he opened his own martial-arts school in Seattle.",
+  "Bruce Lee's first film was The Birth of Mankind. He appeared in this film in 1946, when he was only six years old. He appeared in about 20 films as a child actor. Later in the 1960s, Bruce started to make his own movies. He made three very successful films with director Raymond Chow. The names of these films were The Big Boss, Fist of Fury and The Way of the Dragon. His last film was Enter the Dragon and it made more than 200 million US dollars. It was the most successful film he made. Many people liked it so much because the fight scenes were very exciting. Shortly before the release of this film, he died at the age of 33."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "Which of the following is TRUE according to paragraph 1?",
+   "secenekler": [
+    "A) Both Bruce's parents were actors.",
+    "B) Bruce always disliked his name.",
+    "C) Bruce used his name in secondary school."
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "According to paragraph 2, Bruce had to start working since ----.",
+   "secenekler": [
+    "A) he wanted to earn his own money",
+    "B) his parents didn't have enough money",
+    "C) he needed money to study at university"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 3,
+   "soru": "According to paragraph 2, when he was at university, Bruce ----.",
+   "secenekler": [
+    "A) attended a course on martial arts",
+    "B) decided to set up his own business",
+    "C) gave training to people on Wing Chung"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 4,
+   "soru": "According to paragraph 3, before Bruce made his own movies, he ----.",
+   "secenekler": [
+    "A) acted in films as a child actor",
+    "B) worked with many famous directors",
+    "C) was the assistant of Raymond Chow"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 5,
+   "soru": "We can understand from paragraph 3 that ----.",
+   "secenekler": [
+    "A) Bruce made 200 million dollars out of all his films",
+    "B) Bruce's last film was more popular than the others",
+    "C) Bruce was unable to complete his last film"
+   ],
+   "cevap": "C"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "when (conj)",
+   "tr": "-dığında, -dığı zaman"
+  },
+  {
+   "en": "while (conj)",
+   "tr": "iken"
+  },
+  {
+   "en": "on tour (adv)",
+   "tr": "turnede"
+  },
+  {
+   "en": "martial arts (n)",
+   "tr": "dövüş sporu, dövüş sanatları"
+  },
+  {
+   "en": "in the beginning (adv)",
+   "tr": "başlangıçta, başlarda"
+  },
+  {
+   "en": "during (prep)",
+   "tr": "boyunca, süresince, sırasında, esnasında"
+  },
+  {
+   "en": "as (prep)",
+   "tr": "olarak"
+  },
+  {
+   "en": "own (adj)",
+   "tr": "kendinin, kendisinin"
+  },
+  {
+   "en": "after (conj)",
+   "tr": "sonra"
+  },
+  {
+   "en": "scene (n)",
+   "tr": "sahne"
+  },
+  {
+   "en": "graduate (v)",
+   "tr": "mezun olmak"
+  },
+  {
+   "en": "release (n)",
+   "tr": "piyasaya sürmek / çıkarmak"
+  }
+ ],
+ "_not": "Film adlari kitapta italik: The Birth of Mankind, The Big Boss, Fist of Fury, The Way of the Dragon, Enter the Dragon. SOZLUK EKSIK — s85 okunacak.",
+ "_sozlukKaynagi": "Kitabın Basic Vocabulary tablosundan, sayfa görüntüsü okunarak.",
+ "guven": "goruntuden-birebir"
+}

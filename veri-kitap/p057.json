@@ -1,0 +1,147 @@
+{
+ "no": 57,
+ "sayfalar": [
+  185,
+  186
+ ],
+ "paragraflar": [
+  "Yes Man is the best book I've ever read. It's true story of a year in the life of author, Danny Wallace. Before Danny Wallace became the 'Yes Man', his life was boring and he felt old. So he decided to make things more exciting. He started saying 'yes' to every question people asked him. And he did it for a whole year. As of the day he started, it completely changed his life and he had all kinds of adventures. It's a fantastic story. The moment I finished the book, I wanted to change my life like Danny Wallace. So I took some holiday from work, and became a 'Yes Man' for a week. This is what happened.",
+  "Day One: I started on Saturday morning. At 10 am, I got my first question. I saw a poster in the window of a travel agent's. It said, \"Tired?\" (Yes – I slept badly the night before, so I was tired). Under this, it said, \"Do you need a holiday?\" (Yes, definitely.) Therefore, I went in. The travel agent asked me \"Where do you want to go?\" But before I could answer, she said, \"Somewhere hot?\" I don't like hot weather, yet I said, \"Yes.\" \"A beach holiday? Perhaps in Greece? I don't like the beach. Nevertheless, I said, \"Yes.\" \"What kind of accommodation? A hotel? Or a …\" I hate hotels, but before she could continue, I said, \"Yes.\" Five minutes later everything was ready. My flight was the next day.",
+  "Day Two: I arrived at my hotel on the island of Zante at lunchtime. It was very, very hot. I just wanted to check in and unpack my suitcase, but the receptionist said, \"We have a minibus to the beach in ten minutes. Do you want to go?\" You know the answer I gave her. It was about 40°C at the beach. Luckily, I brought suntan lotion. A man came towards me: \"Sunglasses? Do you want sunglasses?\" I had some in my bag, but I said, \"Yes.\" Five minutes later, another man came: \"Beautiful hat, sir?\" I tried not to look at him. Three hours later, I had two pairs of sunglasses, three hats, a watch and a woman's necklace. It was difficult to carry all my new things back to the minibus. I decided: no trips tomorrow, just rest. After I got back, the receptionist asked, \"Did you like the beach?\" I didn't, but I said, \"Yes\". \"Oh, there's a water skiing course tomorrow. Do you want me to book a place for you?\" I can't swim very well. Besides, I don't like the sea. I wanted to cry."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "Danny Wallace wanted to ----.",
+   "secenekler": [
+    "A) make a change in his life",
+    "B) continue his boring life",
+    "C) change people's lives"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 2,
+   "soru": "Richard took holiday from work because ----.",
+   "secenekler": [
+    "A) his job was quite tiring",
+    "B) he needed a change",
+    "C) he wanted to write a book"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 3,
+   "soru": "When Richard first arrived at the hotel, he wanted to ----.",
+   "secenekler": [
+    "A) have lunch on the island of Zante",
+    "B) go to the beach",
+    "C) take his clothes out of his suitcase"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 4,
+   "soru": "How did Richard feel at the end of the second day?",
+   "secenekler": [
+    "A) relaxed",
+    "B) unhappy",
+    "C) rude"
+   ],
+   "cevap": "B"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "ever (adv)",
+   "tr": "herhangi bir zamanda, daha önce"
+  },
+  {
+   "en": "flight (n)",
+   "tr": "uçuş"
+  },
+  {
+   "en": "boring (adj)",
+   "tr": "sıkıcı"
+  },
+  {
+   "en": "suntan lotion (n)",
+   "tr": "güneş losyonu"
+  },
+  {
+   "en": "exciting (adj)",
+   "tr": "heyecan verici"
+  },
+  {
+   "en": "yet (adv)",
+   "tr": "ancak, ama, fakat"
+  },
+  {
+   "en": "as of (adv)",
+   "tr": "-den / -dan itibaren"
+  },
+  {
+   "en": "towards (adv)",
+   "tr": "-e doğru"
+  },
+  {
+   "en": "completely (adv)",
+   "tr": "tamamen"
+  },
+  {
+   "en": "another (adj)",
+   "tr": "farklı / başka bir"
+  },
+  {
+   "en": "kind (adj)",
+   "tr": "tür, çeşit"
+  },
+  {
+   "en": "pair (n)",
+   "tr": "çift"
+  },
+  {
+   "en": "definitely (adv)",
+   "tr": "kesinlikle"
+  },
+  {
+   "en": "necklace (n)",
+   "tr": "gerdanlık, kolye"
+  },
+  {
+   "en": "therefore (adv)",
+   "tr": "bu sebepten, bu yüzden, bundan dolayı"
+  },
+  {
+   "en": "difficult (adj)",
+   "tr": "zor"
+  },
+  {
+   "en": "perhaps (adv)",
+   "tr": "belki, galiba"
+  },
+  {
+   "en": "trips (n)",
+   "tr": "gezi"
+  },
+  {
+   "en": "nevertheless (adv)",
+   "tr": "ama, yine de, ancak"
+  },
+  {
+   "en": "skiing (n)",
+   "tr": "kayak"
+  },
+  {
+   "en": "accommodation (n)",
+   "tr": "barınma"
+  },
+  {
+   "en": "course (n)",
+   "tr": "kurs, ders"
+  }
+ ],
+ "_not": "Sozluk sayfa 185'te. 'Yes Man' kitapta italik. Metin birinci tekil sahisla yazilmis ama sorularda anlatici 'Richard' diye aniliyor — kitapta boyle.",
+ "_sozlukKaynagi": "Kitabın Basic Vocabulary tablosundan, sayfa görüntüsü okunarak.",
+ "guven": "goruntuden-birebir"
+}

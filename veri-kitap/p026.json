@@ -1,0 +1,103 @@
+{
+ "no": 26,
+ "sayfalar": [
+  120,
+  121
+ ],
+ "konusma": true,
+ "paragraflar": [
+  "Maggie: Hi Tom, have you finished your homework?",
+  "Tom: Oh hi Maggie. No, I haven't.",
+  "Maggie: The deadline is tomorrow you know so you have to submit it tomorrow.",
+  "Tom: I can't make it. I haven't even started it yet. Can we hand it in next week?",
+  "Maggie: I don't know. You'll have to ask Mrs Robinson about that. I think you must finish it by tomorrow. She probably won't accept projects after tomorrow.",
+  "Tom: I've had so many other things to do. I couldn't even start it. I don't know what to do.",
+  "Maggie: Don't worry. I'll help you. It's not very difficult. I finished it in one day.",
+  "Tom: Really? Great!",
+  "Maggie: First, you should read the article that Mrs. Robinson gave us. It's about the Mohican Civilisation. Then, you have to design a poster for a play about them – the Mohicans – for the theatre.",
+  "Tom: Yeah I know but it looks a bit difficult…",
+  "Maggie: Not at all. You don't have to make the poster from scratch and it doesn't have to be a work of art. There are lots of templates on the internet. You can just use one of those designs to make your own poster.",
+  "Tom: Well, I think I can do it. What title shall I use? Can you help me?",
+  "Maggie: Yeah, I can give you some suggestions but you mustn't use the same title as anyone else in our class. You have to create your own title.",
+  "Tom: Okay, I can come up with something I guess.",
+  "Maggie: Alright?",
+  "Tom: Yeah, I've got to go now and make a start on it. I'll follow the project guidelines like you said. Thanks, Maggie.",
+  "Maggie: No problem. Good luck!"
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "According to the text, Tom ----.",
+   "secenekler": [
+    "A) hasn't completed his homework yet",
+    "B) doesn't know the deadline",
+    "C) is sure to finish his homework on time"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 2,
+   "soru": "According to the text, Maggie knows that ----.",
+   "secenekler": [
+    "A) Mrs Robinson won't accept projects after tomorrow",
+    "B) Tom has to hand in the project tomorrow",
+    "C) the project can be submitted next week"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 3,
+   "soru": "According to the text, which of the following is true?",
+   "secenekler": [
+    "A) Maggie has completed her project.",
+    "B) Tom must design the entire poster by himself.",
+    "C) The poster must look great when it's finished."
+   ],
+   "cevap": "A"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "deadline (n)",
+   "tr": "son teslim tarihi"
+  },
+  {
+   "en": "template (n)",
+   "tr": "şablon"
+  },
+  {
+   "en": "submit (v)",
+   "tr": "teslim etmek, sunmak"
+  },
+  {
+   "en": "title (n)",
+   "tr": "başlık"
+  },
+  {
+   "en": "hand in (v)",
+   "tr": "teslim etmek, iletmek"
+  },
+  {
+   "en": "suggestion (n)",
+   "tr": "öneri, tavsiye"
+  },
+  {
+   "en": "civilization (n)",
+   "tr": "medeniyet"
+  },
+  {
+   "en": "create (v)",
+   "tr": "oluşturmak, yaratmak"
+  },
+  {
+   "en": "design (v)",
+   "tr": "tasarlamak"
+  },
+  {
+   "en": "guideline (n)",
+   "tr": "kılavuz, yönerge, talimat"
+  }
+ ],
+ "_not": "Parça bir diyalog; her replik ayrı satır olarak alındı. Sözlük ve parça 110. sayfada (g120), sorular 111. sayfada (g121).",
+ "guven": "goruntuden-birebir"
+}

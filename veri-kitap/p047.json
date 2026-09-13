@@ -1,0 +1,201 @@
+{
+ "no": 47,
+ "sayfalar": [
+  163,
+  164
+ ],
+ "paragraflar": [
+  "Stories can be hard to remember, but a company called StoryCorps helps people save their stories. \"Almost every story gets lost in the end, and we want to end this\" they say. StoryCorps records people telling their stories. We can listen to them anytime. And now StoryCorps is trying something new. It has a special project just for teens. StoryCorps wants teens to be reporters. A reporter's job is to ask questions. Teens will ask their grandparents questions and record their stories. Why? This is because older people have many good stories. We can read fake stories in a book, but theirs are real.",
+  "In the project, teens will ask their grandparents some questions. They will record the answers. This will save the stories. To help with this, StoryCorps has a free app. It lets teens use their phones to make the recordings. StoryCorps wants everyone to hear each other's stories. The company will put the recordings in a big library. The library is in Washington, D.C. There, everyone will be able to listen to the stories of the grandparents.",
+  "As we know, Thanksgiving is a very popular holiday. Families and friends share big meals. Some people travel a long way to be there. So of course, Thanksgiving is a good day to catch up. People cook and eat and relax. They have time to talk. StoryCorps wants teens to be reporters on Thanksgiving Day. Their grandparents might not be there. It is OK. They can ask someone else the questions. StoryCorps has a special name for this project. It is called \"The Great Thanksgiving Listen.\"",
+  "StoryCorps has also asked teachers for help. They need teachers to tell students about the project. Some teachers will make it part of their classes. The questions and stories are fun homework for students. At least Dave Isay believes so. Dave Isay started StoryCorps. He says being a reporter is not hard. Teens just have to be good listeners. They can learn a lot from their grandparents. Then, they can share their stories in their classes.",
+  "Going to the library is just one way to hear StoryCorps stories. People can listen to them on the radio. They will be on a popular radio show every Friday. StoryCorps also make videos from the recordings. They produce a few videos every year, and they use cartoons to act out the stories."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "StoryCorps wants teens to record their grandparents' stories because ----.",
+   "secenekler": [
+    "A) it does not want any stories to get lost",
+    "B) older people may not remember old stories",
+    "C) it wants to give a special job to teenagers"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 2,
+   "soru": "The underlined word 'fake' in paragraph 1 is closest in meaning to ----.",
+   "secenekler": [
+    "A) ancient",
+    "B) fictional",
+    "C) desperate"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 3,
+   "soru": "We can understand from paragraph 2 that ----.",
+   "secenekler": [
+    "A) teens have to prepare the questions on their own",
+    "B) people will reach the stories in any library they want",
+    "C) StoryCorps provides teens with some technology"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 4,
+   "soru": "We can understand from paragraph 3 that Thanksgiving ----.",
+   "secenekler": [
+    "A) is the best time for family members to share stories",
+    "B) is a good opportunity for teens to record stories",
+    "C) is a holiday when many people go on a journey"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 5,
+   "soru": "The underlined pronoun 'it' in paragraph 4 refers to -----.",
+   "secenekler": [],
+   "acikUclu": true,
+   "cevap": "(the) project"
+  },
+  {
+   "no": 6,
+   "soru": "Dave Isay is of the opinion that ----.",
+   "secenekler": [
+    "A) teachers must include the project in the school curriculum",
+    "B) being a reporter brings many responsibilities to students",
+    "C) the project is a kind of enjoyable assignment for students"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 7,
+   "soru": "According to David Isay, young people ----.",
+   "secenekler": [
+    "A) can learn many things from their elderly relatives",
+    "B) don't have to share the things they learn in classes",
+    "C) are usually more creative in asking good questions"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 8,
+   "soru": "Which of the following is FALSE about StoryCorps stories, according to paragraph 5?",
+   "secenekler": [
+    "A) People can listen to them on the radio once a week.",
+    "B) Film producers make animation movies using them.",
+    "C) There are a variety of ways of reaching them."
+   ],
+   "cevap": "B"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "remember (v)",
+   "tr": "hatırlamak"
+  },
+  {
+   "en": "app (application) (n)",
+   "tr": "uygulama"
+  },
+  {
+   "en": "lost (adj)",
+   "tr": "kayıp, kaybolmuş"
+  },
+  {
+   "en": "hear (v)",
+   "tr": "duymak"
+  },
+  {
+   "en": "record (v)",
+   "tr": "kaydetmek"
+  },
+  {
+   "en": "library (n)",
+   "tr": "kütüphane"
+  },
+  {
+   "en": "listen (v)",
+   "tr": "dinlemek"
+  },
+  {
+   "en": "share (v)",
+   "tr": "paylaşmak"
+  },
+  {
+   "en": "try (v)",
+   "tr": "denemek, çabalamak"
+  },
+  {
+   "en": "meal (n)",
+   "tr": "öğün, yemek"
+  },
+  {
+   "en": "special (adj)",
+   "tr": "özel"
+  },
+  {
+   "en": "catch up (phr. v)",
+   "tr": "yetişmek, bilgilendirmek"
+  },
+  {
+   "en": "project (n)",
+   "tr": "proje"
+  },
+  {
+   "en": "relax (v)",
+   "tr": "rahatlamak"
+  },
+  {
+   "en": "reporter (n)",
+   "tr": "muhabir"
+  },
+  {
+   "en": "believe (v)",
+   "tr": "inanmak"
+  },
+  {
+   "en": "ask (v)",
+   "tr": "sormak"
+  },
+  {
+   "en": "show (n)",
+   "tr": "gösteri"
+  },
+  {
+   "en": "question (n)",
+   "tr": "soru"
+  },
+  {
+   "en": "video (n)",
+   "tr": "video"
+  },
+  {
+   "en": "grandparents (n)",
+   "tr": "büyükbaba ve büyükanne"
+  },
+  {
+   "en": "recording (n)",
+   "tr": "kayıt"
+  },
+  {
+   "en": "fake (adj)",
+   "tr": "sahte"
+  },
+  {
+   "en": "cartoon (n)",
+   "tr": "çizgi film"
+  },
+  {
+   "en": "free (adj)",
+   "tr": "ücretsiz"
+  },
+  {
+   "en": "act out (phr. v)",
+   "tr": "(rol) canlandırmak"
+  }
+ ],
+ "_not": "Sözlük 153. sayfada (g163), parça ve sorular 154. sayfada (g164). 5. soru açık uçlu; anahtar '(the) project' diyor. Kitap 6. soruda 'Dave Isay', 7. soruda 'David Isay' yazmış; olduğu gibi bırakıldı.",
+ "guven": "goruntuden-birebir"
+}

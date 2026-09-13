@@ -2,6 +2,14 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Passage, CEFRLevel, ExamAttempt, GradedQuestionResult } from '../types';
 import { Timer, Play, Flag, CheckCircle2, XCircle, RotateCcw, ExternalLink } from 'lucide-react';
 
+/**
+ * Sınav çoktan seçmeli: şık düğmelerine basılarak cevaplanıyor.
+ * Kitapta bazı sorular şıksız (cevabı yazılarak veriliyor); onlar burada
+ * hiç cevaplanamaz, boş sayılır ve puanı haksız yere düşürürdü. Bu yüzden
+ * sınav dışında tutuluyorlar — parça içindeki testte zaten soruluyorlar.
+ */
+const sinavSorulari = (p: Passage) => p.questions.filter(q => !q.openEnded);
+
 interface ExamSimulatorProps {
   passages: Passage[];
   onFinishExam: (attempt: ExamAttempt, perPassageResults: { passage: Passage; results: GradedQuestionResult[] }[]) => void;
@@ -33,7 +41,7 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const eligiblePassages = useMemo(
-    () => passages.filter(p => p && !p.isGenerated && p.questions && p.questions.length > 0 && (cefr === 'ALL' || p.cefr === cefr)),
+    () => passages.filter(p => p && !p.isGenerated && p.questions && sinavSorulari(p).length > 0 && (cefr === 'ALL' || p.cefr === cefr)),
     [passages, cefr]
   );
 
@@ -91,7 +99,7 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
 
     examPassages.forEach(p => {
       const pAnswers = answers[p.id] || {};
-      const results: GradedQuestionResult[] = p.questions.map(q => {
+      const results: GradedQuestionResult[] = sinavSorulari(p).map(q => {
         const yourAnswer = pAnswers[q.id] || '';
         const isCorrect = yourAnswer === q.answer;
         if (!yourAnswer) blankCount++;
@@ -108,7 +116,7 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
       perPassage.push({ passage: p, results });
     });
 
-    const totalQuestions = examPassages.reduce((sum, p) => sum + p.questions.length, 0);
+    const totalQuestions = examPassages.reduce((sum, p) => sum + sinavSorulari(p).length, 0);
     const timeTaken = totalDurationSeconds - remainingSeconds;
 
     const finishedAttempt: ExamAttempt = {
@@ -217,7 +225,7 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
       (sum, p) => sum + Object.keys(answers[p.id] || {}).length,
       0
     );
-    const totalQ = examPassages.reduce((sum, p) => sum + p.questions.length, 0);
+    const totalQ = examPassages.reduce((sum, p) => sum + sinavSorulari(p).length, 0);
     const isLowTime = remainingSeconds <= 60;
 
     return (
@@ -273,7 +281,7 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
               </div>
 
               <div className="px-6 py-5 space-y-6">
-                {p.questions.map((q, qIndex) => {
+                {sinavSorulari(p).map((q, qIndex) => {
                   const selected = (answers[p.id] || {})[q.id];
                   return (
                     <div key={q.id} className="space-y-3">

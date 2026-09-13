@@ -1,0 +1,144 @@
+{
+ "no": 34,
+ "sayfalar": [
+  135,
+  136
+ ],
+ "paragraflar": [
+  "In early February 2013, the tallest building in the EU was opened to the public. This structure was originally known as London Bridge Tower but became the Shard, after critics claimed it looked like \"a shard of glass\".",
+  "The Shard was designed in the year 2000 by an Italian architect called Renzo Piano. He is said to have been inspired by church designs across the city of London. In 1998, a property developer called Irvine Sellar purchased a site near London Bridge and later met with Renzo Piano in a restaurant to discuss the redevelopment of the area. It has been reported that Mr Piano at first rejected the idea of designing a tall building, as he believed they were \"statements of arrogance\"; however, he was later persuaded to participate in the project.",
+  "The Shard was constructed around a very strong concrete centre, which contains key building services such as escape routes and 44 lifts. To ensure that people can move around the building efficiently, the offices will be serviced by lifts. The structure is designed to move as much as 20 inches if necessary, so that the centre of the building can withstand forces such as high winds and earthquakes. In total, 11,000 glass panels have been used and the glass exterior is 56,000 square metres. An interesting fact is that the Shard was built using approximately 95% recycled materials."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "It can be understood from the passage that ----.",
+   "secenekler": [
+    "A) no building in Europe is taller than the Shard",
+    "B) the Shard is the totally made of glass",
+    "C) many people objected to the building of the Shard"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 2,
+   "soru": "It is clear from the passage that the designer of the Shard ----.",
+   "secenekler": [
+    "A) had never built any tall building until he agreed to design it",
+    "B) benefitted from the designs of some structures while working for its design",
+    "C) is now running a restaurant which is very close it"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 3,
+   "soru": "It is understood from the passage that while designing the Shard, the designer ----.",
+   "secenekler": [
+    "A) felt worried because of the high number of glass panels",
+    "B) first thought more than 44 escape routes and lifts were necessary",
+    "C) took security and possible risk factors into account"
+   ],
+   "cevap": "C"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "public (n)",
+   "tr": "halk"
+  },
+  {
+   "en": "redevelopment (n)",
+   "tr": "yenileme, yeniden geliştirmek"
+  },
+  {
+   "en": "structure (n)",
+   "tr": "yapı, bina"
+  },
+  {
+   "en": "reject (v)",
+   "tr": "kabul etmemek, karşı çıkmak"
+  },
+  {
+   "en": "claim (v)",
+   "tr": "iddia etmek"
+  },
+  {
+   "en": "arrogance (n)",
+   "tr": "kibir"
+  },
+  {
+   "en": "shard (n)",
+   "tr": "parça"
+  },
+  {
+   "en": "statement (n)",
+   "tr": "ifade"
+  },
+  {
+   "en": "inspire (v)",
+   "tr": "ilham vermek"
+  },
+  {
+   "en": "persuade (v)",
+   "tr": "ikna etmek"
+  },
+  {
+   "en": "church (n)",
+   "tr": "kilise"
+  },
+  {
+   "en": "participate (v)",
+   "tr": "katılmak"
+  },
+  {
+   "en": "property (n)",
+   "tr": "mülk, gayri menkul"
+  },
+  {
+   "en": "concrete (n)",
+   "tr": "beton"
+  },
+  {
+   "en": "developer (n)",
+   "tr": "geliştirici"
+  },
+  {
+   "en": "lift (n)",
+   "tr": "asansör"
+  },
+  {
+   "en": "purchase (v)",
+   "tr": "satın almak"
+  },
+  {
+   "en": "efficiently",
+   "tr": "etkin şekilde"
+  },
+  {
+   "en": "withstand (v)",
+   "tr": "dayanmak, katlanmak"
+  },
+  {
+   "en": "recycle (v)",
+   "tr": "geri dönüşüm yapmak"
+  },
+  {
+   "en": "exterior (n)",
+   "tr": "dış, dış cephe"
+  },
+  {
+   "en": "skyscraper (n)",
+   "tr": "gökdelen"
+  },
+  {
+   "en": "approximately",
+   "tr": "aşağı yukarı, yaklaşık"
+  },
+  {
+   "en": "compose (v)",
+   "tr": "bestelemek"
+  }
+ ],
+ "_not": "Sözlük 125. sayfada (g135), parça ve sorular 126. sayfada (g136).",
+ "guven": "goruntuden-birebir"
+}

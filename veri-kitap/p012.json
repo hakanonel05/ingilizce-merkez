@@ -1,0 +1,192 @@
+{
+ "no": 12,
+ "sayfalar": [
+  87,
+  88
+ ],
+ "paragraflar": [
+  "I just visited Machu Picchu in Peru. It was the best holiday ever! It took four days to climb to the top of the mountain and I was very tired when we finished. But the old Inca city looked much more beautiful than the photos you see in magazines or on TV! At first it was quiet because there weren't many people around; we watched the sunrise and the city looked very mysterious. Then the train arrived, and it got much busier and noisier with lots of tourists taking photos. I took lots of photos too!",
+  "And last week I went to Shanghai. It was amazing! It's huge: in fact, it's the largest city in China with a population of 19 million. We stayed in a hotel in the Bund, the old part of the city, and saw the older, more traditional houses built by the French. Then we visited the newer part of the city and went up the Oriental Pearl Tower. This was the tallest building in Shanghai. However, now there's an even taller one! Yesterday, I bought lots of clothes. They were much cheaper than in London and are all famous designer names!"
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "Which of the following is FALSE according to paragraph 1?",
+   "secenekler": [
+    "A) The city was peaceful at the beginning of the author's trip.",
+    "B) The author spent 4 days to reach the peak of the mountain.",
+    "C) The photos of the old Inca city is prettier than the city itself."
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "We can understand from paragraph 1 that ----.",
+   "secenekler": [
+    "A) the author got bored at the beginning of his visit",
+    "B) the old Inca city is a popular destination for travellers",
+    "C) you can only reach the old Inca city by train"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 3,
+   "soru": "According to paragraph 1, the author felt exhausted after his climb as ----.",
+   "secenekler": [
+    "A) it was the highest mountain in Peru",
+    "B) it took him a long time to climb",
+    "C) the author wasn't used to the climate"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 4,
+   "soru": "It is stated in paragraph 2 that ----.",
+   "secenekler": [
+    "A) Oriental Pearl Tower isn't the tallest structure in Shanghai",
+    "B) Shanghai is by far the most crowded city in the world",
+    "C) the old part of Shanghai is much bigger than the new part"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 5,
+   "soru": "The underlined pronoun \"one\" in paragraph 2 refers to ------",
+   "secenekler": [],
+   "acikUclu": true,
+   "cevap": "building"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "visit (v)",
+   "tr": "ziyaret etmek"
+  },
+  {
+   "en": "Shanghai (n)",
+   "tr": "Şangay"
+  },
+  {
+   "en": "Peru (n)",
+   "tr": "Peru"
+  },
+  {
+   "en": "huge (adj)",
+   "tr": "büyük, kocaman, iri"
+  },
+  {
+   "en": "mountain (n)",
+   "tr": "dağ"
+  },
+  {
+   "en": "population (n)",
+   "tr": "nüfus"
+  },
+  {
+   "en": "old (adj)",
+   "tr": "yaşlı; eski"
+  },
+  {
+   "en": "million (n)",
+   "tr": "milyon"
+  },
+  {
+   "en": "look (v)",
+   "tr": "gibi gözükmek"
+  },
+  {
+   "en": "hotel (n)",
+   "tr": "otel"
+  },
+  {
+   "en": "photo (n)",
+   "tr": "fotoğraf"
+  },
+  {
+   "en": "part (n)",
+   "tr": "kısım, parça"
+  },
+  {
+   "en": "magazine (n)",
+   "tr": "dergi"
+  },
+  {
+   "en": "traditional (adj)",
+   "tr": "geleneksel"
+  },
+  {
+   "en": "quiet (adj)",
+   "tr": "sessiz"
+  },
+  {
+   "en": "French (adj)",
+   "tr": "Fransız"
+  },
+  {
+   "en": "sunrise (n)",
+   "tr": "gün doğumu"
+  },
+  {
+   "en": "tower (n)",
+   "tr": "kule"
+  },
+  {
+   "en": "mysterious (adj)",
+   "tr": "gizemli"
+  },
+  {
+   "en": "tall (adj)",
+   "tr": "uzun"
+  },
+  {
+   "en": "then (adv)",
+   "tr": "daha sonra, (ondan) sonra"
+  },
+  {
+   "en": "building (n)",
+   "tr": "bina"
+  },
+  {
+   "en": "train (n)",
+   "tr": "tren"
+  },
+  {
+   "en": "now (adv)",
+   "tr": "şimdi, şu anda"
+  },
+  {
+   "en": "arrive (v)",
+   "tr": "varmak, ulaşmak"
+  },
+  {
+   "en": "cloth (n)",
+   "tr": "kıyafet"
+  },
+  {
+   "en": "tourist (n)",
+   "tr": "turist"
+  },
+  {
+   "en": "cheap (adj)",
+   "tr": "ucuz"
+  },
+  {
+   "en": "week (n)",
+   "tr": "hafta"
+  },
+  {
+   "en": "famous (adj)",
+   "tr": "ünlü"
+  },
+  {
+   "en": "designer (n)",
+   "tr": "tasarımcı"
+  },
+  {
+   "en": "four (adj)",
+   "tr": "dört"
+  }
+ ],
+ "_not": "5. soru açık uçlu; kitabın cevap anahtarı 'building' diyor. Sözlük kitabın 77. sayfasındaki Basic Vocabulary tablosundan alındı.",
+ "guven": "goruntuden-birebir"
+}

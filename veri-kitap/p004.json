@@ -1,0 +1,103 @@
+{
+ "no": 4,
+ "sayfalar": [
+  72,
+  73
+ ],
+ "paragraflar": [
+  "Everybody knows that India is a huge country with an enormous population (there are around 1.2 billion people in India!). They also know that it has noisy, crowded cities, hot, spicy food, and some wonderful, historical sites, such as the Taj Mahal, a beautiful, white palace which a sultan built because he wanted to remember his wife, a princess who died when she still a young woman.",
+  "There are, however, lots of surprising things about India, too. I've just returned from my first trip to the country, and in this blog, I want to write about some of the things I found out. Did you know, for example, that India is a great place to go if you love music festivals? And I don't mean traditional music. More than half of India's population is under twenty-five and they love pop and rock music. That's why there are so many festivals, a few of which take place in unusual locations such as in deserts or on the sides of mountains. Major Indian cities are becoming popular places for international stars to play, and there is so much local musical talent that there is always a live concert on somewhere.",
+  "I was also amazed to find out that there are between one and two thousand 'marriage detectives' in the country. A lot of marriages are arranged by families in India, and it's important to them to find out as much as they can about the person who their son or daughter is going to marry, so sometimes families hire a detective who checks that their son or daughter's future husband or wife is telling the truth about their family, their job and how much money they have.",
+  "In India, it seems as if everyone reads newspapers. In Europe, young people prefer going online to find out about the world. In India, however, the opposite is true. More and more people are learning to read and they are then getting well-paid jobs which mean they can afford to buy newspapers. As a result, newspapers have never been more popular. I was really surprised!"
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "Which of the following topics does the writer NOT mention in the first paragraph?",
+   "secenekler": [
+    "A) the number of people",
+    "B) the things people eat",
+    "C) the size of the country",
+    "D) the temperature in the cities"
+   ],
+   "cevap": "D"
+  },
+  {
+   "no": 2,
+   "soru": "Why did a sultan build the Taj Mahal?",
+   "secenekler": [
+    "A) To make his wife happy.",
+    "B) To remember his wife.",
+    "C) Because he wanted to live somewhere beautiful.",
+    "D) Because his wife liked white buildings."
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 3,
+   "soru": "What does the writer say about his own experiences of India?",
+   "secenekler": [
+    "A) He's found lots of great places where they do traditional dances.",
+    "B) He's been to India many times and loves it more each time he goes.",
+    "C) He's found out that they have festivals there in strange places.",
+    "D) He's discovered that there aren't many Indian rock stars these days."
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 4,
+   "soru": "Why do more people read newspapers in India these days?",
+   "secenekler": [
+    "A) They are very fashionable in Europe.",
+    "B) They don't have the same access to online media as in Europe.",
+    "C) People have more money now, so newspapers are easier to buy.",
+    "D) Newspapers are better in India now."
+   ],
+   "cevap": "C"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "huge (adj)",
+   "tr": "kocaman, büyük"
+  },
+  {
+   "en": "enormous (adj)",
+   "tr": "çok büyük, muazzam"
+  },
+  {
+   "en": "population (n)",
+   "tr": "nüfus"
+  },
+  {
+   "en": "traditional (adj)",
+   "tr": "geleneksel, alışıldık"
+  },
+  {
+   "en": "unusual (adj)",
+   "tr": "olağandışı, alışılmadık"
+  },
+  {
+   "en": "amazed (adj)",
+   "tr": "şaşkın, şaşırmış, hayretler içinde"
+  },
+  {
+   "en": "marriage (n)",
+   "tr": "evlilik"
+  },
+  {
+   "en": "detective (n)",
+   "tr": "dedektif"
+  },
+  {
+   "en": "afford (v)",
+   "tr": "parası yetmek, satın almaya gücü yetmek"
+  },
+  {
+   "en": "surprised (adj)",
+   "tr": "şaşkın, şaşırmış"
+  }
+ ],
+ "_not": "1. paragraftaki 'when she still a young woman' kitapta böyle yazıyor.",
+ "guven": "goruntuden-birebir"
+}

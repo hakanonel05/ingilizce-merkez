@@ -1,0 +1,62 @@
+{
+ "no": 44,
+ "baslik": "A day in the life of a street musician",
+ "sayfalar": [
+  158
+ ],
+ "paragraflar": [
+  "Susana Martinez is from Argentina, but she's travelling around Europe at the moment. Back home, she is a classical musician who plays the violin in an orchestra, and she's using this skill to make money while she's travelling. Susana is a 'busker'; a street musician who spends her days performing for passers-by in the crowded streets of Europe's big cities.",
+  "Where are you right now?",
+  "At the moment, I'm staying with friends in a suburb of Paris. Every morning, I get up really early before all my friends wake up and I travel to the streets of Montmartre which is near the centre of the city. Then I find a good place to play, put a big hat on the floor in front of me, and get out my violin. Sometimes I sing, too. What I play changes – I play what I think passers-by will be interested in. For example, if it's raining, I play a song about the rain."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "According to paragraph 1, Susana ----.",
+   "secenekler": [
+    "A) can play other instruments as well as violin",
+    "B) doesn't know how to be a 'busker'",
+    "C) is in Europe right now, not in Argentina"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "According to paragraph 2, which of the following is FALSE?",
+   "secenekler": [
+    "A) She doesn't play the same music all day.",
+    "B) She travels to the city centre with her friends every day.",
+    "C) She plays the violin and sometimes sings as well."
+   ],
+   "cevap": "B"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "violin (n)",
+   "tr": "keman"
+  },
+  {
+   "en": "passer-by (n)",
+   "tr": "yoldan geçen kişi"
+  },
+  {
+   "en": "skill (n)",
+   "tr": "yetenek, beceri"
+  },
+  {
+   "en": "crowded (adj)",
+   "tr": "kalabalık"
+  },
+  {
+   "en": "perform (v)",
+   "tr": "icra etmek, yapmak, performans sergilemek"
+  },
+  {
+   "en": "suburb (n)",
+   "tr": "banliyö, kenar mahalle"
+  }
+ ],
+ "_not": "Kitapta 'MIXED READING PASSAGES LEVEL 1' bölümünün ilk parçası; tamamı 148. sayfada (g158). 2. satır ('Where are you right now?') kitapta kalın ara başlık; röportaj biçiminde basılmış. Sorulardaki '2. paragraf' bu ara başlıktan sonraki metni kastediyor.",
+ "guven": "goruntuden-birebir"
+}

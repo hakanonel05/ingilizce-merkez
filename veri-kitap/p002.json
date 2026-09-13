@@ -1,0 +1,144 @@
+{
+ "no": 2,
+ "sayfalar": [
+  68,
+  69
+ ],
+ "paragraflar": [
+  "This year our school is taking part in the programme called \"Let's Save Nature.\" This programme aims at helping both animals and plants in the countryside, beaches and mountains.",
+  "Animals and plants are vanishing because humans are not taking care of them. We are throwing our rubbish in the sea, on the streets, and in the countryside. The animals are getting trapped in the plastic bags, or getting ill since they are eating plastic wrappers. Plants are dying as we are throwing chemicals and rubbish in the forests. Forest fires are also killing thousands of animals and plants.",
+  "Our school is now trying to reverse the adverse effects of pollution on the environment. We are collecting rubbish from the beaches in our city and telling people not to throw rubbish on them. We are also collecting used batteries and other hazardous substances. And you? What are you doing to help animals and plants? Are you littering the beaches and the countryside or are you putting your rubbish in the correct places?"
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "The underlined word 'take part in' in paragraph 1 is closest in meaning to ----.",
+   "secenekler": [
+    "A) cancel",
+    "B) reverse",
+    "C) join"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "According to paragraph 1, the purpose of the programme is to ----.",
+   "secenekler": [
+    "A) cooperate with other schools",
+    "B) support animals and plants",
+    "C) visit beaches and mountains"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 3,
+   "soru": "The underlined word 'vanishing' in paragraph 2 is closest in meaning to ----.",
+   "secenekler": [
+    "A) achieving",
+    "B) spreading",
+    "C) disappearing"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 4,
+   "soru": "It is clear from paragraph 2 that animals are dying due largely to ----.",
+   "secenekler": [
+    "A) environmental pollution",
+    "B) increasing global warming",
+    "C) the scarcity of forests"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 5,
+   "soru": "The underlined word 'adverse' in paragraph 3 is closest in meaning to ----.",
+   "secenekler": [
+    "A) beneficial",
+    "B) negative",
+    "C) favourable"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 6,
+   "soru": "The underlined word 'hazardous' in paragraph 3 is closest in meaning to ----.",
+   "secenekler": [
+    "A) safe",
+    "B) promising",
+    "C) dangerous"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 7,
+   "soru": "The author asks some questions in paragraph 3 in order to ----.",
+   "secenekler": [
+    "A) emphasize the importance of the biological diversity",
+    "B) criticize the environmental policies of the government",
+    "C) raise the readers' awareness about the pollution"
+   ],
+   "cevap": "C"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "take part in (v)",
+   "tr": "-e katılmak, dahil olmak"
+  },
+  {
+   "en": "aim (v)",
+   "tr": "amaçlamak"
+  },
+  {
+   "en": "both ... and",
+   "tr": "hem ... hem de"
+  },
+  {
+   "en": "vanish (v)",
+   "tr": "yok olmak, ortadan kalkmak"
+  },
+  {
+   "en": "take care of (v)",
+   "tr": "ilgilenmek, gözetmek, bakmak"
+  },
+  {
+   "en": "get trapped (v)",
+   "tr": "kapana kısılmak, tuzağa düşmek"
+  },
+  {
+   "en": "wrapper (n)",
+   "tr": "ambalaj"
+  },
+  {
+   "en": "chemicals (n pl.)",
+   "tr": "kimyasal maddeler"
+  },
+  {
+   "en": "reverse (v)",
+   "tr": "tersine döndürmek"
+  },
+  {
+   "en": "adverse (adj)",
+   "tr": "olumsuz, istenmeyen, kötü"
+  },
+  {
+   "en": "effect (n)",
+   "tr": "etki"
+  },
+  {
+   "en": "hazardous (adj)",
+   "tr": "tehlikeli, zararlı"
+  },
+  {
+   "en": "substance (n)",
+   "tr": "madde"
+  },
+  {
+   "en": "litter (v)",
+   "tr": "(yere) çöp atmak"
+  }
+ ],
+ "_not": "Alti cizili kelimeler: taking part in (p1), vanishing (p2), adverse (p3), hazardous (p3).",
+ "guven": "goruntuden-birebir"
+}

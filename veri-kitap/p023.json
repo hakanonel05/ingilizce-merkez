@@ -1,0 +1,140 @@
+{
+ "no": 23,
+ "sayfalar": [
+  115,
+  116
+ ],
+ "paragraflar": [
+  "Technology will allow homes in the future to be \"smart\". Home appliances will communicate with each other and with you. For instance, refrigerators will suggest recipes based on food items you already have. The technology is possible because of tiny information-storing devices called RFID (radio-frequency identification) chips. People already use them in order to keep track of pets and farm animals so that they can find them if they get lost. Future RFID chips will store information about all the items in your fridge. When you need more food, your fridge will tell you to buy it.",
+  "Are you tired of the color or pattern of your walls? In a smart home, you won't have to repaint them. The walls will actually be digital screens, like computer or TV screens. The walls will become clear, like windows, or display colors and patterns. A computer network will link these walls with everything else in your house. This computer \"brain\" will control your entire house. It will also adapt to your preferences. For example, it will set the heat in the house to your favorite temperature. It will also darken the windows at night and lighten them when it's time to wake up.",
+  "Futurologists predict that many homes will have robots in the future. Scientists today are starting to build friendly, intelligent and sociable robots. They will be able to show feelings with their faces, just like humans. They will smile and frown, make eye contact, and speak. These robots will do work around the house such as cooking and cleaning. They will even take care of children and the elderly."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "We can understand from paragraph 1 that people use RFID technology ----.",
+   "secenekler": [
+    "A) only at homes",
+    "B) for several purposes",
+    "C) to buy something"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 2,
+   "soru": "The underlined word 'keep track of' in paragraph 1 is closest in meaning to ----.",
+   "secenekler": [
+    "A) show",
+    "B) lose",
+    "C) follow"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 3,
+   "soru": "It is stated in paragraph 2 that the computer \"brain\" in the house ----.",
+   "secenekler": [
+    "A) will be available in all kinds of houses",
+    "B) gives you suggestions about your home design",
+    "C) can adjust itself according to your needs"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 4,
+   "soru": "According to paragraph 3 robots will ----.",
+   "secenekler": [
+    "A) be smarter and more sociable than humans",
+    "B) be able to display emotions similar to humans",
+    "C) look after people with different kinds of disabilities"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 5,
+   "soru": "The underlined word 'just' in paragraph 3 is closest in meaning to ----.",
+   "secenekler": [
+    "A) only",
+    "B) soon",
+    "C) exactly"
+   ],
+   "cevap": "C"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "allow (v)",
+   "tr": "izin vermek, müsaade etmek"
+  },
+  {
+   "en": "store (v)",
+   "tr": "depolamak, saklamak, biriktirmek"
+  },
+  {
+   "en": "appliance (n)",
+   "tr": "cihaz, aygıt"
+  },
+  {
+   "en": "pattern (n)",
+   "tr": "model, desen"
+  },
+  {
+   "en": "for instance (conj)",
+   "tr": "örneğin"
+  },
+  {
+   "en": "display (v)",
+   "tr": "göstermek, görüntülemek"
+  },
+  {
+   "en": "base on (n)",
+   "tr": "dayanmak, temel almak"
+  },
+  {
+   "en": "link (v)",
+   "tr": "bağlamak, ilişkilendirmek"
+  },
+  {
+   "en": "because of (conj)",
+   "tr": "-den dolayı"
+  },
+  {
+   "en": "entire (adj)",
+   "tr": "tüm, bütün"
+  },
+  {
+   "en": "tiny (adj)",
+   "tr": "küçük, minik"
+  },
+  {
+   "en": "adapt to (v)",
+   "tr": "uyum sağlamak, ayak uydurmak"
+  },
+  {
+   "en": "in order to (conj)",
+   "tr": "-mek / mak için"
+  },
+  {
+   "en": "like / such as (conj)",
+   "tr": "gibi"
+  },
+  {
+   "en": "keep track of (v)",
+   "tr": "takip etmek, izlemek"
+  },
+  {
+   "en": "take care of (v)",
+   "tr": "bakmak, ilgilenmek"
+  },
+  {
+   "en": "so that (conj)",
+   "tr": "-sın diye, -mesi için"
+  },
+  {
+   "en": "(the) elderly (adj)",
+   "tr": "yaşlı(lar)"
+  }
+ ],
+ "_not": "Sözlük kitabın 105. sayfasında (g115). 1. paragrafta 'keep track of', 3. paragrafta 'just' altı çizili ve kalın.",
+ "guven": "goruntuden-birebir"
+}

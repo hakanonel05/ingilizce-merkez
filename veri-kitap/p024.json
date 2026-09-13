@@ -1,0 +1,87 @@
+{
+ "no": 24,
+ "sayfalar": [
+  117
+ ],
+ "paragraflar": [
+  "I often wonder about my future as I am about to finish Secondary School. The number one question on my mind is which profession should I choose? I want a profession that will satisfy me, challenge me, and bring me joy. I believe that a job should be like a hobby. I want to love my work.",
+  "First of all, as soon as I finish Secondary School, I will take the first important exam of my life – the final graduation exam. I will be tested in four different subjects: the English and German languages, biology, and chemistry. After my graduation, I will study at the Medical University to become a doctor.",
+  "But now, I am focusing my attention on finishing my studies. Also, before I have a family, I would like to travel overseas. I want to see countries like Japan, Finland and travel through the African continent. After I finish my education and travels, I plan to get married and have a family. I would like to live with my future family in a quiet, natural countryside setting."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "According to the text, which of the following is true?",
+   "secenekler": [
+    "A) She knows exactly which profession to choose",
+    "B) She only wants a job with a satisfying salary",
+    "C) In the final exam, she will be tested in 2 languages"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "Sally wants to have a family ----.",
+   "secenekler": [
+    "A) after she travels overseas",
+    "B) while she is studying to become a doctor",
+    "C) because she doesn't want to travel alone"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 3,
+   "soru": "According to the text, it can be inferred that ----.",
+   "secenekler": [
+    "A) she doesn't want to be a doctor",
+    "B) she has taken many important exams before",
+    "C) job selection is very important for her"
+   ],
+   "cevap": "C"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "wonder (v)",
+   "tr": "merak etmek, düşünmek"
+  },
+  {
+   "en": "graduation (n)",
+   "tr": "mezuniyet"
+  },
+  {
+   "en": "profession (n)",
+   "tr": "iş, meslek"
+  },
+  {
+   "en": "focus on (v)",
+   "tr": "odaklanmak, bütün dikkatini vermek"
+  },
+  {
+   "en": "satisfy (v)",
+   "tr": "tatmin etmek, memnun etmek, karşılamak"
+  },
+  {
+   "en": "overseas (adv)",
+   "tr": "denizaşırı"
+  },
+  {
+   "en": "challenge (v)",
+   "tr": "meydan okumak, zorlamak"
+  },
+  {
+   "en": "continent (n)",
+   "tr": "kıta"
+  },
+  {
+   "en": "joy (n)",
+   "tr": "neşe, keyif, sevinç"
+  },
+  {
+   "en": "countryside (n)",
+   "tr": "kırsal kesim, sayfiye"
+  }
+ ],
+ "_not": "Parçanın tamamı, sözlüğü ve soruları kitabın 107. sayfasında (g117). Metin birinci tekil şahısla yazılmış ama 2. soruda anlatıcı 'Sally' diye anılıyor — kitapta böyle.",
+ "guven": "goruntuden-birebir"
+}

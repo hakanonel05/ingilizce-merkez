@@ -1,0 +1,131 @@
+{
+ "no": 17,
+ "sayfalar": [
+  100,
+  101
+ ],
+ "paragraflar": [
+  "German automobile-maker Volkswagen (VW) has recently overtaken Toyota to become the world's largest car manufacturer. VW, which also produces Audi, Porsche and Skoda cars produced 10.3 million cars last year, about a hundred thousand more than its Japanese rival. American carmaker General Motors followed Toyota. Toyota has dominated the car market over the last decade but failed to take the lead. Its brief domination has been partly because VW has been involved in a diesel emissions scandal for the past few years. Most of the increase in VW's sales comes from Europe and the Chinese market. In China, VW has sold almost 4 million vehicles. However, sales in the United States and Latin American countries have dropped.",
+  "The German carmaker has undergone turbulent times during the last few years. Yet, it has managed to stabilize its sales. It wants to earn back the trust of its customers, particularly in the United States. That's why, a short time ago Volkswagen agreed to pay billions of dollars in compensation for installing the software that showed wrong emission data in diesel vehicles. Meanwhile, Toyota has stated that its primary goal has never been to become the world's largest car producer. According to a spokesperson, it has always aimed to make good cars."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "It is clearly stated in paragraph 1 that the most successful car maker is ----.",
+   "secenekler": [
+    "A) Volkswagen",
+    "B) Toyota",
+    "C) General Motors"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 2,
+   "soru": "The underlined pronoun 'Its' in paragraph 1 refers to ----.",
+   "secenekler": [
+    "A) Volkswagen's",
+    "B) General Motors'",
+    "C) Toyota's"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 3,
+   "soru": "According to paragraph 1, Toyota has taken control of the market for ten years due in part to the ----.",
+   "secenekler": [
+    "A) dramatic changes in buyer's spending habits",
+    "B) damage to the reputation of Volkswagen",
+    "C) efficient policies the company has implemented"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 4,
+   "soru": "According to paragraph 1, much of the growth in the sales of VW vehicles stems from the ones in ----.",
+   "secenekler": [
+    "A) the USA and Latin American countries",
+    "B) Europe and China"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 5,
+   "soru": "According to paragraph 2, Volkswagen paid a huge amount of money in order to ----.",
+   "secenekler": [
+    "A) regain its reputation among its customers",
+    "B) set up a new software in diesel vehicles",
+    "C) produce the best cars in the market"
+   ],
+   "cevap": "A"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "overtake (v)",
+   "tr": "sollamak, geçmek, arkada bırakmak"
+  },
+  {
+   "en": "particularly (adv)",
+   "tr": "özellikle"
+  },
+  {
+   "en": "rival (n)",
+   "tr": "rakip, hasım, muhalif"
+  },
+  {
+   "en": "compensation (n)",
+   "tr": "tazminat, telafi, karşılama"
+  },
+  {
+   "en": "be involved in (v)",
+   "tr": "dahil olmak, karışmak"
+  },
+  {
+   "en": "meanwhile (adv)",
+   "tr": "bu sırada, bu arada"
+  },
+  {
+   "en": "vehicle (n)",
+   "tr": "araç, taşıt, vasıta"
+  },
+  {
+   "en": "state (v)",
+   "tr": "ifade etmek, belirtmek, bildirmek, söylemek"
+  },
+  {
+   "en": "drop (v)",
+   "tr": "düşmek, azalmak"
+  },
+  {
+   "en": "primary (adj)",
+   "tr": "başlıca, birincil, ana, temel"
+  },
+  {
+   "en": "undergo (v)",
+   "tr": "çekmek (sıkıntı, hastalık, vb.), -e uğramak, başa gelmek"
+  },
+  {
+   "en": "goal (n)",
+   "tr": "hedef, amaç"
+  },
+  {
+   "en": "turbulent (adj)",
+   "tr": "kargaşalı, çalkantılı, problemli"
+  },
+  {
+   "en": "according to (prep)",
+   "tr": "-e göre"
+  },
+  {
+   "en": "manage to (v)",
+   "tr": "başarmak, muvaffak olmak"
+  },
+  {
+   "en": "aim (v)",
+   "tr": "amaçlamak, hedeflemek"
+  }
+ ],
+ "_not": "4. soruda kitapta YALNIZCA iki sik basili (A ve B); ucuncu sik yok. Olduğu gibi birakildi. Sozluk sayfa 100'de.",
+ "_sozlukKaynagi": "Kitabın Basic Vocabulary tablosundan, sayfa görüntüsü okunarak.",
+ "guven": "goruntuden-birebir"
+}

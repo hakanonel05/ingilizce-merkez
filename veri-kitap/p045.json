@@ -1,0 +1,81 @@
+{
+ "no": 45,
+ "sayfalar": [
+  159,
+  160
+ ],
+ "paragraflar": [
+  "It's a rainy Saturday. It's raining a lot and Mary and her family are spending the afternoon at home. Her uncle and aunt are visiting them. Mary and her father are in the living room. Mary is drawing a picture and her father, Mr Harris, is surfing the net. They are also talking.",
+  "Mary's older brother, Peter, is in his bedroom playing computer games. He is a computer fanatic and he spends much time playing on the computer. His little brother, Jim is also in the living room. He is playing with his dinosaurs' collection. Sometimes he teases Mary; he is a really naughty boy.",
+  "Mary's mother, Mrs Harris, is in the kitchen preparing a snack for all of them. She is making some tea and talking to Mary's aunt and uncle – Lucy and Tom. They are from the nearest town and stopped by to say hello. Fluffy, the family cat, is sleeping on the kitchen's sofa. He is a true fluffy cat."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "According to paragraph 1, what is Mary doing?",
+   "secenekler": [
+    "A) She is surfing the net.",
+    "B) She is drawing a picture.",
+    "C) She is visiting her uncle."
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 2,
+   "soru": "According to paragraph 2, which of the following is TRUE about Peter?",
+   "secenekler": [
+    "A) He is playing with dinosaurs.",
+    "B) He is playing with his little brother Jim.",
+    "C) He is playing computer games."
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 3,
+   "soru": "According to paragraph 3, Mrs Harris ----.",
+   "secenekler": [
+    "A) is talking to Mary's aunt and uncle",
+    "B) is watching the cat sleeping",
+    "C) is going to the nearest town"
+   ],
+   "cevap": "A"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "rainy (ad)",
+   "tr": "yağmurlu"
+  },
+  {
+   "en": "naughty (adj)",
+   "tr": "yaramaz"
+  },
+  {
+   "en": "draw (v)",
+   "tr": "resim çizmek"
+  },
+  {
+   "en": "prepare (v)",
+   "tr": "hazırlamak"
+  },
+  {
+   "en": "collection (n)",
+   "tr": "koleksiyon"
+  },
+  {
+   "en": "snack (n)",
+   "tr": "ara öğün, atıştırmalık"
+  },
+  {
+   "en": "tease (v)",
+   "tr": "sataşmak, kızdırmak, takılmak"
+  },
+  {
+   "en": "fluffy (adj)",
+   "tr": "kabarık, pofuduk"
+  }
+ ],
+ "_not": "Sozluk sayfa 159'da.",
+ "_sozlukKaynagi": "Kitabın Basic Vocabulary tablosundan, sayfa görüntüsü okunarak.",
+ "guven": "goruntuden-birebir"
+}

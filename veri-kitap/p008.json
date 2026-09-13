@@ -1,0 +1,210 @@
+{
+ "no": 8,
+ "sayfalar": [
+  79,
+  80
+ ],
+ "paragraflar": [
+  "Yesterday was great for me because my father was back home. My father was in Spain last weekend for his business. It was the first time when we were apart. It was a tiring weekend for him and he was very busy. My mother and I were worried about him because he was afraid of travelling by plane. After a short flight, he was safe and happy because he was not afraid of travelling by plane anymore. When he was in Spain, it was late. He phoned us at night as he was busy. He was there for three days, but it was like a decade. We missed him so much. We were very glad to see him back. There were presents in his bags for us. There was a scarf for my mother. It was silk. There was a camera for me. It was a great gift for me."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "It is stated in the passage that the author's father ----.",
+   "secenekler": [
+    "A) got over his fear at the end of his flight",
+    "B) is a very successful businessperson",
+    "C) bought very expensive gifts for his family"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 2,
+   "soru": "Which of the following is TRUE about the author's father's journey?",
+   "secenekler": [
+    "A) He was away for two days.",
+    "B) His plane journey took long.",
+    "C) He went abroad on business."
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 3,
+   "soru": "The author and the author's mother were nervous since the author's father ----.",
+   "secenekler": [
+    "A) didn't phone until it was late",
+    "B) was scared of flying",
+    "C) was too busy with his work"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 4,
+   "soru": "The underlined word 'apart' in the passage is closest in meaning to ----.",
+   "secenekler": [
+    "A) not alone",
+    "B) not away",
+    "C) not together"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 5,
+   "soru": "Which of the following could be the best title for the passage?",
+   "secenekler": [
+    "A) My Father's Greatest Phobia",
+    "B) My Father's Business Trip",
+    "C) My Father's Dangerous Journey"
+   ],
+   "cevap": "B"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "yesterday (adv)",
+   "tr": "dün"
+  },
+  {
+   "en": "great (adj)",
+   "tr": "harika"
+  },
+  {
+   "en": "because (conj)",
+   "tr": "çünkü"
+  },
+  {
+   "en": "for (prep)",
+   "tr": "için"
+  },
+  {
+   "en": "home (n)",
+   "tr": "ev"
+  },
+  {
+   "en": "Spain (n)",
+   "tr": "İspanya"
+  },
+  {
+   "en": "last (adj)",
+   "tr": "son, geçen"
+  },
+  {
+   "en": "business (n)",
+   "tr": "iş"
+  },
+  {
+   "en": "the first time (n)",
+   "tr": "ilk kez"
+  },
+  {
+   "en": "apart (adj)",
+   "tr": "ayrı"
+  },
+  {
+   "en": "busy (adj)",
+   "tr": "meşgul"
+  },
+  {
+   "en": "very (adv)",
+   "tr": "çok"
+  },
+  {
+   "en": "worried about (adj)",
+   "tr": "(bir konu, kişi) hakkında endişeli"
+  },
+  {
+   "en": "afraid of (adj)",
+   "tr": "-den korkan"
+  },
+  {
+   "en": "plane (n)",
+   "tr": "uçak"
+  },
+  {
+   "en": "travel (v)",
+   "tr": "seyahat etmek"
+  },
+  {
+   "en": "short (adj)",
+   "tr": "kısa"
+  },
+  {
+   "en": "flight (n)",
+   "tr": "uçuş"
+  },
+  {
+   "en": "safe (adj)",
+   "tr": "güvenli, güvende"
+  },
+  {
+   "en": "anymore (adv)",
+   "tr": "artık"
+  },
+  {
+   "en": "phone (v)",
+   "tr": "telefon etmek"
+  },
+  {
+   "en": "night (n)",
+   "tr": "gece"
+  },
+  {
+   "en": "there (adv)",
+   "tr": "orada"
+  },
+  {
+   "en": "day (n)",
+   "tr": "gün"
+  },
+  {
+   "en": "decade (n)",
+   "tr": "on yıl"
+  },
+  {
+   "en": "like (prep)",
+   "tr": "gibi"
+  },
+  {
+   "en": "miss (v)",
+   "tr": "özlemek"
+  },
+  {
+   "en": "glad (adj)",
+   "tr": "mutlu, memnun"
+  },
+  {
+   "en": "see (v)",
+   "tr": "görmek"
+  },
+  {
+   "en": "present (n)",
+   "tr": "hediye, armağan"
+  },
+  {
+   "en": "bag (n)",
+   "tr": "çanta"
+  },
+  {
+   "en": "scarf (n)",
+   "tr": "şal"
+  },
+  {
+   "en": "silk (n)",
+   "tr": "ipek"
+  },
+  {
+   "en": "camera (n)",
+   "tr": "fotoğraf makinesi"
+  },
+  {
+   "en": "gift (n)",
+   "tr": "hediye, armağan"
+  },
+  {
+   "en": "weekend (n)",
+   "tr": "hafta sonu"
+  }
+ ],
+ "_not": "'apart' kitapta alti cizili. Parca tek paragraf.",
+ "guven": "goruntuden-birebir"
+}

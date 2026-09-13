@@ -1,0 +1,276 @@
+{
+ "no": 46,
+ "sayfalar": [
+  161,
+  162,
+  163
+ ],
+ "paragraflar": [
+  "Egypt is a country in Africa. It is in the north part of the continent. The north side of Egypt borders the Mediterranean. The east side of it is along the Red Sea. Sudan is to the south and Libya is to the west. Other countries are on its other sides. Egypt is close to Asia and the Nile, one of the longest rivers in the world, runs through the country. That's why, it is in a very special location. The Nile is the main water source of Egypt. People need water for farming and this comes from the river.",
+  "The capital of Egypt is Cairo. It is a really great city that has been important for a long time. Cairo is the largest city in Africa. If you visit, you will find a very modern place. You will see a lot of cars. There are usually traffic jams during the summer season because of the huge number of tourists and tour buses. You will also see many businesses, schools, and homes.",
+  "About 82 million people live in Egypt. They have a rich history. Long ago, Egyptians made this the greatest place in the world. They built pyramids. These very smart people invented their own ways to farm and they were successful. Egyptians were also wonderful leaders. They built great buildings and set up schools. They invented a special way of writing, too. It was called hieroglyphics. They looked like pictures instead of alphabet letters. Egyptians used hieroglyphics for religious literature on papyrus and wood. You can still see hieroglyphics in Egypt today, but people do not use them to read and write anymore. They are a part of a great history.",
+  "Today most Egyptians live near the banks of the Nile River. It's a great place to live in. In Egypt, there are other parts and they are difficult places to live in because they are deserts. So not many people live there. About half of the Egyptian people live in big cities. The big cities are in the area of the Nile River. If you go to Cairo, the biggest city, you will find millions of people. Unfortunately, there is so much air pollution especially in these big cities. The sky looks almost grey on some days even if the weather is sunny.",
+  "There were a lot of wars in Egypt years ago. These wars caused poverty. Poor people in the cities needed jobs and homes. Egypt still needs to work hard to solve these problems. Education, for example, is one of the most serious problems they have. They need to make the schools better. The school leaders need to make plans to help students learn more.",
+  "Egypt is a great country. It has a wonderful history. It will have a great future because people are working harder. They are working together to make things better."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "Paragraph 1 is mainly about the ----.",
+   "secenekler": [
+    "A) importance of the Nile",
+    "B) location of Egypt",
+    "C) countries bordering Egypt"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 2,
+   "soru": "The underlined pronoun \"it\" in paragraph 1 refers to ------.",
+   "secenekler": [],
+   "acikUclu": true,
+   "cevap": "Egypt"
+  },
+  {
+   "no": 3,
+   "soru": "According to paragraph 2, there is a traffic congestion in Cairo in certain periods of time during the year owing to ----.",
+   "secenekler": [
+    "A) the huge numbers of cars",
+    "B) its very large population",
+    "C) the tourists visiting the city"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 4,
+   "soru": "Which of the following is FALSE about Egyptians according to paragraph 3?",
+   "secenekler": [
+    "A) They developed new farming methods.",
+    "B) They were the most intelligent people.",
+    "C) They invented a set of written characters."
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 5,
+   "soru": "The underlined word 'set up' in paragraph 3 is closest in meaning to ----.",
+   "secenekler": [
+    "A) established",
+    "B) destroyed",
+    "C) selected"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 6,
+   "soru": "Which of the following is FALSE about hieroglyphics, according to paragraph 3?",
+   "secenekler": [
+    "A) They are only used for religious purposes nowadays.",
+    "B) They used to be written on papyrus as well as wood.",
+    "C) Nobody makes use of them any longer at the moment."
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 7,
+   "soru": "The underlined pronoun \"there\" in paragraph 4 refers to ------.",
+   "secenekler": [],
+   "acikUclu": true,
+   "cevap": "deserts"
+  },
+  {
+   "no": 8,
+   "soru": "We can understand from paragraph 4 that ----.",
+   "secenekler": [
+    "A) air pollution is the most serious problem in Cairo",
+    "B) there will be more deserts in Egypt in the future",
+    "C) around 50% of Egypt's population reside in rural areas"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 9,
+   "soru": "It is stated in paragraph 5 that poverty resulted from ----.",
+   "secenekler": [
+    "A) lack of job opportunities in cities",
+    "B) many battles in the history of Egypt",
+    "C) insufficient numbers of schools"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 10,
+   "soru": "We can infer from paragraph 6 that the author is ----.",
+   "secenekler": [
+    "A) optimistic about Egypt's future",
+    "B) doubtful about Egyptian people",
+    "C) sarcastic about Egypt's history"
+   ],
+   "cevap": "A"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "Egypt (n)",
+   "tr": "Mısır"
+  },
+  {
+   "en": "pyramid (n)",
+   "tr": "piramit"
+  },
+  {
+   "en": "north (adj)",
+   "tr": "kuzey"
+  },
+  {
+   "en": "invent (v)",
+   "tr": "icat etmek, yaratmak"
+  },
+  {
+   "en": "continent (n)",
+   "tr": "kıta"
+  },
+  {
+   "en": "wonderful (adj)",
+   "tr": "mükemmel"
+  },
+  {
+   "en": "side (n)",
+   "tr": "yön, taraf, yan"
+  },
+  {
+   "en": "leader (n)",
+   "tr": "lider"
+  },
+  {
+   "en": "border (v)",
+   "tr": "sınır komşusu olmak"
+  },
+  {
+   "en": "set up (phr. v)",
+   "tr": "kurmak, oluşturmak"
+  },
+  {
+   "en": "Mediterranean (n)",
+   "tr": "Akdeniz"
+  },
+  {
+   "en": "alphabet (n)",
+   "tr": "abece"
+  },
+  {
+   "en": "east (n)",
+   "tr": "doğu"
+  },
+  {
+   "en": "letter (n)",
+   "tr": "harf"
+  },
+  {
+   "en": "along (prep)",
+   "tr": "boyunca"
+  },
+  {
+   "en": "religious (adj)",
+   "tr": "dini"
+  },
+  {
+   "en": "close (adj)",
+   "tr": "yakın"
+  },
+  {
+   "en": "papyrus (n)",
+   "tr": "papirüs"
+  },
+  {
+   "en": "long (adj)",
+   "tr": "uzun"
+  },
+  {
+   "en": "wood (n)",
+   "tr": "tahta"
+  },
+  {
+   "en": "main (adj)",
+   "tr": "ana, başlıca"
+  },
+  {
+   "en": "still (adv)",
+   "tr": "hala"
+  },
+  {
+   "en": "source (n)",
+   "tr": "kaynak"
+  },
+  {
+   "en": "near (adj)",
+   "tr": "yakınında, yanında"
+  },
+  {
+   "en": "river (n)",
+   "tr": "nehir"
+  },
+  {
+   "en": "sky (n)",
+   "tr": "gökyüzü"
+  },
+  {
+   "en": "Cairo (n)",
+   "tr": "Kahire"
+  },
+  {
+   "en": "sunny (adj)",
+   "tr": "güneşli"
+  },
+  {
+   "en": "important (adj)",
+   "tr": "önemli"
+  },
+  {
+   "en": "poverty (n)",
+   "tr": "yoksulluk, fakirlik"
+  },
+  {
+   "en": "modern (adj)",
+   "tr": "modern"
+  },
+  {
+   "en": "solve (v)",
+   "tr": "(sorunu) çözmek"
+  },
+  {
+   "en": "car (n)",
+   "tr": "araba"
+  },
+  {
+   "en": "education (n)",
+   "tr": "eğitim"
+  },
+  {
+   "en": "plan (n)",
+   "tr": "plan"
+  },
+  {
+   "en": "serious (adj)",
+   "tr": "ciddi"
+  },
+  {
+   "en": "bus (n)",
+   "tr": "otobüs"
+  },
+  {
+   "en": "rich (adj)",
+   "tr": "zengin"
+  },
+  {
+   "en": "pollution (n)",
+   "tr": "kirlilik"
+  },
+  {
+   "en": "unfortunately (adv)",
+   "tr": "ne yazık ki"
+  }
+ ],
+ "_not": "Sözlük 151. sayfada (g161), parça ve 1-8. sorular 152. sayfada (g162), 9-10. sorular 153. sayfada (g163). 2. ve 7. sorular açık uçlu; anahtar 'Egypt' ve 'deserts' diyor.",
+ "guven": "goruntuden-birebir"
+}

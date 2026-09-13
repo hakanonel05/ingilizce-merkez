@@ -1,0 +1,176 @@
+{
+ "no": 3,
+ "sayfalar": [
+  70,
+  71
+ ],
+ "paragraflar": [
+  "Do you know what is happening around the world these days? Although there are really worrying things happening right now, there are also some good things happening.",
+  "Researchers are finally getting close to achieving sustainable nuclear fusion. Nuclear fusion could be the key to producing almost unlimited energy with only a few by-products other than saltwater. Some countries such as Germany, South Korea and China are achieving record-breaking reactions in their own fusion machines but they still need some time to use them properly.",
+  "We got rid of smallpox in the past. Now, we are getting close to eradicating Guinea Worm parasite. This kind of parasite is a living nightmare that cause a blister to form on people's skin. It results from drinking contaminated water. Now, thanks to an affordable straw filter, we are having only a few recorded cases in the world.",
+  "Nowadays, researchers are working on a drug that can treat autism symptoms. Even though it is too early to early to eradicate this disorder, researchers are getting promising results from clinical trials.",
+  "Scientists are developing a method that helps turn seawater into drinking water. For the time being, the innovative technique is still limited to the lab, but one day we could quickly and easily turn one of our most abundant resources, seawater, into one of our most scarce, clean drinking water."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "According to paragraph 2, although certain countries are working on sustainable nuclear fusion, they ----.",
+   "secenekler": [
+    "A) can't find highly qualified researchers",
+    "B) haven't achieved any promising results",
+    "C) haven't achieved it successfully yet"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "The underlined pronoun 'they' in paragraph 2 refers to ----.",
+   "secenekler": [
+    "A) some countries",
+    "B) record-breaking reactions",
+    "C) fusion machines"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 3,
+   "soru": "It is clear from paragraph 3 that Guinea Worm parasite is caused by ----.",
+   "secenekler": [
+    "A) a skin disease",
+    "B) polluted water",
+    "C) smallpox"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 4,
+   "soru": "According to paragraph 4, researchers ----.",
+   "secenekler": [
+    "A) haven't achieved any encouraging results",
+    "B) need much more time to wipe out autism",
+    "C) may never cure autism symptoms completely"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 5,
+   "soru": "We can understand from paragraph 5 that the new method scientists are using ----.",
+   "secenekler": [
+    "A) aims to meet the energy needs of the society",
+    "B) is the best technique available at the moment",
+    "C) can work only in artificial environments right now"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 6,
+   "soru": "The author's tone in the passage is ----.",
+   "secenekler": [
+    "A) optimistic",
+    "B) sarcastic",
+    "C) pessimistic"
+   ],
+   "cevap": "A"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "although (conj.)",
+   "tr": "-e rağmen, -se de, -sa da"
+  },
+  {
+   "en": "worrying (adj)",
+   "tr": "endişe verici, can sıkıcı"
+  },
+  {
+   "en": "achieve (v)",
+   "tr": "başarmak"
+  },
+  {
+   "en": "sustainable (adj)",
+   "tr": "sürdürülebilir"
+  },
+  {
+   "en": "by-product (n)",
+   "tr": "yan ürün"
+  },
+  {
+   "en": "other than",
+   "tr": "-den başka"
+  },
+  {
+   "en": "such as",
+   "tr": "gibi, örneğin"
+  },
+  {
+   "en": "get rid of (v)",
+   "tr": "kurtulmak, savuşturmak"
+  },
+  {
+   "en": "eradicate (v)",
+   "tr": "kökünü kazımak, yok etmek"
+  },
+  {
+   "en": "result from (v)",
+   "tr": "-den kaynaklanmak"
+  },
+  {
+   "en": "contaminated (adj)",
+   "tr": "kirli, pis"
+  },
+  {
+   "en": "thanks to",
+   "tr": "-in sayesinde, -den dolayı"
+  },
+  {
+   "en": "case (n)",
+   "tr": "vaka, olay"
+  },
+  {
+   "en": "work on (v)",
+   "tr": "üzerinde çalışmak"
+  },
+  {
+   "en": "drug (n)",
+   "tr": "ilaç"
+  },
+  {
+   "en": "treat (v)",
+   "tr": "tedavi etmek"
+  },
+  {
+   "en": "disorder (n)",
+   "tr": "rahatsızlık, bozukluk, hastalık"
+  },
+  {
+   "en": "even though (conj)",
+   "tr": "-e rağmen, -se de, -sa da"
+  },
+  {
+   "en": "promising (adj)",
+   "tr": "umut vadeden, ümit veren"
+  },
+  {
+   "en": "develop (v)",
+   "tr": "geliştirmek"
+  },
+  {
+   "en": "innovative (adj)",
+   "tr": "yenilikçi, çığır açıcı"
+  },
+  {
+   "en": "turn into (v)",
+   "tr": "dönüştürmek"
+  },
+  {
+   "en": "abundant (adj)",
+   "tr": "bol, çok"
+  },
+  {
+   "en": "scarce (adj)",
+   "tr": "kıt, az"
+  }
+ ],
+ "_not": "4. paragraftaki 'too early to early to' kitapta böyle yazıyor — dizgi hatası korundu. 2. paragrafta 'they' altı çizili.",
+ "guven": "goruntuden-birebir"
+}

@@ -1,0 +1,227 @@
+{
+ "no": 1,
+ "sayfalar": [
+  66,
+  67
+ ],
+ "paragraflar": [
+  "The Liverpool City Council wants to clear the city of fat pigeons – a kind of grey bird. They normally live in big cities. In the Liverpool city centre, there are a lot of fat pigeons. The council says that people are feeding the birds. This makes them fat. The pigeons are getting bigger because they need to eat seeds and insects, not the junk food they are eating in the city centre, but people always feed them with junk food so they are getting fatter and fatter.",
+  "The council is telling people this: Because they are feeding the pigeons, a lot of pigeons are staying in the city centre. The council hopes to encourage the birds to move away from the city centre and into parks and open spaces. It means they want birds to go away from the city centre.",
+  "The answer is simple but a little bit expensive because robots will do the job. There are ten robotic birds in the city centre. They are scaring the pigeons away. The council also tells visitors not to give the pigeons any food. The mechanical birds – known as 'robops' – will sit on the tops of buildings. They can move around to different places. They look like peregrine falcons. These are birds that kill pigeons. They are making noises and flapping their wings to scare the pigeons. They hope that the pigeons will go away soon because the city will be the European Capital of Culture in two years."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "Why do pigeons get bigger according to paragraph 1?",
+   "secenekler": [
+    "A) People feed them with seeds and insects.",
+    "B) Pigeons steal people's junk food.",
+    "C) People give them junk food."
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "We can understand from paragraph 2 that the council ----.",
+   "secenekler": [
+    "A) gives people fines for feeding pigeons",
+    "B) wants the birds to leave the city centre",
+    "C) plans to destroy the pigeons in the city centre"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 3,
+   "soru": "Which of the following is FALSE according to paragraph 3?",
+   "secenekler": [
+    "A) Pigeons are afraid of mechanical birds.",
+    "B) Robotic birds are very inexpensive to use.",
+    "C) The council asks people not to feed the pigeons."
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 4,
+   "soru": "It is stated in paragraph 3 that robotic birds ----.",
+   "secenekler": [
+    "A) may scare the visitors in the city centre",
+    "B) give harm to the tops of the buildings",
+    "C) are similar to an enemy of pigeons"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 5,
+   "soru": "According to paragraph 3, robotic birds scare the pigeons by ----.",
+   "secenekler": [
+    "A) producing loud sounds",
+    "B) moving to different locations",
+    "C) damaging the wings of pigeons"
+   ],
+   "cevap": "A"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "city (n)",
+   "tr": "şehir"
+  },
+  {
+   "en": "council (n)",
+   "tr": "meclis, konsey"
+  },
+  {
+   "en": "clear (v)",
+   "tr": "temizlemek"
+  },
+  {
+   "en": "fat (adj)",
+   "tr": "şişman"
+  },
+  {
+   "en": "pigeon (n)",
+   "tr": "güvercin"
+  },
+  {
+   "en": "grey (adj)",
+   "tr": "gri"
+  },
+  {
+   "en": "bird (n)",
+   "tr": "kuş"
+  },
+  {
+   "en": "normally (adv)",
+   "tr": "normalde, genellikle"
+  },
+  {
+   "en": "city centre (n)",
+   "tr": "şehir merkezi"
+  },
+  {
+   "en": "two (adj)",
+   "tr": "iki"
+  },
+  {
+   "en": "seed (n)",
+   "tr": "tohum"
+  },
+  {
+   "en": "insect (n)",
+   "tr": "böcek"
+  },
+  {
+   "en": "junk food (n)",
+   "tr": "abur cubur"
+  },
+  {
+   "en": "hope (v)",
+   "tr": "ümit etmek, ummak"
+  },
+  {
+   "en": "encourage (v)",
+   "tr": "cesaretlendirmek, teşvik etmek"
+  },
+  {
+   "en": "move (v)",
+   "tr": "hareket etmek, taşımak"
+  },
+  {
+   "en": "park (n)",
+   "tr": "park"
+  },
+  {
+   "en": "open (adj)",
+   "tr": "açık"
+  },
+  {
+   "en": "space (n)",
+   "tr": "yer, boşluk"
+  },
+  {
+   "en": "mean (v)",
+   "tr": "anlamına gelmek"
+  },
+  {
+   "en": "go away (phr. v)",
+   "tr": "ayrılmak, uzaklaşmak"
+  },
+  {
+   "en": "answer (n)",
+   "tr": "cevap"
+  },
+  {
+   "en": "expensive (adj)",
+   "tr": "pahalı"
+  },
+  {
+   "en": "robot (n)",
+   "tr": "robot"
+  },
+  {
+   "en": "scare (v)",
+   "tr": "korkutmak"
+  },
+  {
+   "en": "visitor (n)",
+   "tr": "ziyaretçi"
+  },
+  {
+   "en": "give (v)",
+   "tr": "vermek"
+  },
+  {
+   "en": "top (n)",
+   "tr": "üst, tepe"
+  },
+  {
+   "en": "around (adv)",
+   "tr": "etrafında, çevrede"
+  },
+  {
+   "en": "different (adj)",
+   "tr": "farklı"
+  },
+  {
+   "en": "place (n)",
+   "tr": "yer"
+  },
+  {
+   "en": "look like (phr. v)",
+   "tr": "benzemek, gibi gözükmek"
+  },
+  {
+   "en": "falcon (n)",
+   "tr": "doğan"
+  },
+  {
+   "en": "kill (v)",
+   "tr": "öldürmek"
+  },
+  {
+   "en": "noise (n)",
+   "tr": "gürültü, ses"
+  },
+  {
+   "en": "flap (v)",
+   "tr": "(kanat) çırpmak"
+  },
+  {
+   "en": "wing (n)",
+   "tr": "kanat"
+  },
+  {
+   "en": "soon (adv)",
+   "tr": "yakında, kısa süre içinde"
+  },
+  {
+   "en": "capital (n)",
+   "tr": "başkent"
+  },
+  {
+   "en": "culture (n)",
+   "tr": "kültür"
+  }
+ ],
+ "guven": "goruntuden-birebir"
+}

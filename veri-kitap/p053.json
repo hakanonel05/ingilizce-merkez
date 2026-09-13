@@ -1,0 +1,93 @@
+{
+ "no": 53,
+ "sayfalar": [
+  178,
+  179
+ ],
+ "paragraflar": [
+  "Yellowstone National Park is a national park in the United States. It was the first national park in the world. It was called the Yellowstone River because there was a river with the same name in the park. Yellowstone was made a UNESCO World Heritage Site in 1978. Yellowstone National Park is famous for its hot springs. Hot water comes from deep underground throughout the year.",
+  "People have lived in the Yellowstone area for about 11,000 years. Some Native Americans still lived there when the first people came from Europe in 1807. John Colter, an explorer from St. Louis, visited the large area. The western world did not know this area at that time. Three years later, he returned to St. Louis and told the people there that he had discovered a wonderland of hot springs. This area was Yellowstone, but nobody believed him, so Yellowstone still was not a famous place. For the next sixty years, a few other explorers traveled through the area and told the same story about Yellowstone, but the same thing happened to them. Then, three expeditions between 1868 and 1871 visited Yellowstone. At the end of the expeditions they showed the western world that the place was real. One year later, on March 1, 1872, the United States President, Ulysses S. Grant, decided to create the first national park in the world. For the first twenty years, there was no money for the park. So from 1886 to 1916, the US Army took care of it. Then the new National Park Service started to manage the park.",
+  "Millions of people come to see Yellowstone each and every year. This is mostly because of the natural beauty of it. Yellowstone offers many beautiful attractions; for example, hot springs, a deep canyon, a river with many falls, forests, seas, mountains, wilderness and wildlife."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "Which one of the following is TRUE about Yellowstone National Park?",
+   "secenekler": [
+    "A) It gets its name from the hot springs.",
+    "B) There were other national parks before it was opened.",
+    "C) It was not a suitable place to live in the past.",
+    "D) John Colter was impressed by its hot springs."
+   ],
+   "cevap": "D"
+  },
+  {
+   "no": 2,
+   "soru": "Yellowstone National Park was not famous for a long time because ----.",
+   "secenekler": [
+    "A) it took people a long time to explore it",
+    "B) people found the explorers' story unbelievable",
+    "C) the area was too big to walk through",
+    "D) very few people tried to explore the area"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 3,
+   "soru": "Between 1868 and 1871 ----.",
+   "secenekler": [
+    "A) western people went to Yellowstone for hot springs",
+    "B) John Colter made Yellowstone a famous place",
+    "C) more people went to Yellowstone for exploration",
+    "D) everybody already knew about Yellowstone"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 4,
+   "soru": "When you go to Yellowstone today, you CANNOT see ----.",
+   "secenekler": [
+    "A) a deep canyon",
+    "B) the Rocky Mountains",
+    "C) the US army",
+    "D) gray wolves"
+   ],
+   "cevap": "C"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "hot spring (n)",
+   "tr": "kaplıca, sıcak kaynak suyu"
+  },
+  {
+   "en": "underground (n)",
+   "tr": "yeraltı"
+  },
+  {
+   "en": "explorer (n)",
+   "tr": "kaşif"
+  },
+  {
+   "en": "return (v)",
+   "tr": "geri gelmek, dönmek"
+  },
+  {
+   "en": "discover (v)",
+   "tr": "keşfetmek, bulmak"
+  },
+  {
+   "en": "expedition (n)",
+   "tr": "keşif gezisi"
+  },
+  {
+   "en": "take care of (v)",
+   "tr": "ilgilenmek, halletmek"
+  },
+  {
+   "en": "manage (v)",
+   "tr": "yönetmek, idare etmek"
+  }
+ ],
+ "guven": "goruntuden-birebir"
+}

@@ -1,0 +1,131 @@
+{
+ "no": 29,
+ "sayfalar": [
+  125,
+  126
+ ],
+ "paragraflar": [
+  "Helen Keller could neither see nor hear from the time she was a baby. In addition to this, she had some physical handicaps as well. Yet, she was able to overcome these difficulties and become a useful citizen.",
+  "When she was nineteen months old, she was able to walk a little and could say only a few words. One day she fell so ill that her parents had to take her to hospital. There, they learned that she would never be able to see and hear again. In the following years, since she couldn't hear what others said, she couldn't learn how to talk and she was unable to play with other children.",
+  "One day, a specialist called Ann Sullivan decided to help Helen. She started visiting her every day. They would spend hours with each other. She managed to teach 300 words to Helen. After some time, Helen was able to put them into sentences. Then, Helen and her teacher were able to talk to each other. Helen was able to learn to read the books for the blind, too.",
+  "At the age of 20, Helen Keller managed to pass all the difficult entrance examinations to Radcliffe College. She did extremely well in her classes and was able to keep up with the other students. However, in the past, she used to have great difficulty doing these things."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "Which of the following is FALSE about Helen, according to paragraph 1?",
+   "secenekler": [
+    "A) She had difficulties with her hearing and vision.",
+    "B) She had physical disabilities when she was a baby.",
+    "C) She failed to deal with the difficulties she had."
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "The underlined word 'overcome' in paragraph 1 is closest in meaning to ----.",
+   "secenekler": [
+    "A) spread",
+    "B) defeat",
+    "C) involve"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 3,
+   "soru": "According to paragraph 2, Helen's parents took her to hospital since she ----.",
+   "secenekler": [
+    "A) could no longer walk",
+    "B) became very sick",
+    "C) was unable to talk"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 4,
+   "soru": "We can understand from paragraph 3 that Ann Sullivan ----.",
+   "secenekler": [
+    "A) contributed greatly to Helen's education",
+    "B) was better than any other specialist at the time",
+    "C) used sign language to communicate with Helen"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 5,
+   "soru": "The underlined pronoun 'them' in paragraph 3 refers to ----.",
+   "secenekler": [
+    "A) hours",
+    "B) words",
+    "C) books"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 6,
+   "soru": "The underlined word 'extremely' in paragraph 4 is closest in meaning to ----.",
+   "secenekler": [
+    "A) very",
+    "B) almost",
+    "C) exactly"
+   ],
+   "cevap": "A"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "neither … nor",
+   "tr": "ne … ne de"
+  },
+  {
+   "en": "yet",
+   "tr": "fakat, ancak, ama"
+  },
+  {
+   "en": "in addition / in addition to",
+   "tr": "ek olarak, ayrıca"
+  },
+  {
+   "en": "specialist (n)",
+   "tr": "uzman"
+  },
+  {
+   "en": "handicap (n)",
+   "tr": "özür, engel, yetersizlik"
+  },
+  {
+   "en": "each other",
+   "tr": "birbirini, birbirine"
+  },
+  {
+   "en": "overcome (v)",
+   "tr": "üstesinden gelmek"
+  },
+  {
+   "en": "extremely (adv)",
+   "tr": "çok, aşırı, fazlaca"
+  },
+  {
+   "en": "useful (adj)",
+   "tr": "faydalı"
+  },
+  {
+   "en": "keep up with (phr. v)",
+   "tr": "yetişmek, ayak uydurmak, -den geri kalmamak"
+  },
+  {
+   "en": "citizen (n)",
+   "tr": "vatandaş"
+  },
+  {
+   "en": "however (conj)",
+   "tr": "fakat, ancak, ama"
+  },
+  {
+   "en": "as well",
+   "tr": "de, da (=,too)"
+  }
+ ],
+ "_not": "Sözlük 115. sayfada (g125), başlığı 'PAST MODALS — READING 29 Basic Vocabulary'. Parça ve sorular 116. sayfada (g126). Metinde 'overcome', 'them' ve 'extremely' altı çizili ve kalın.",
+ "guven": "goruntuden-birebir"
+}

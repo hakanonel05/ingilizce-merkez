@@ -1,0 +1,243 @@
+{
+ "no": 5,
+ "sayfalar": [
+  74,
+  75
+ ],
+ "paragraflar": [
+  "An Interrail Pass is a type of train ticket. You can use this ticket to travel throughout Europe for a low cost. With an Interrail Pass, you can go to 30 countries by train and you never need to pay extra money for travel. There are two types of Interrail tickets: the Flexi Pass and the Interrail One Pass. You can travel to different European countries with the Flexi Pass, but you can use the Interrail One Pass only in one European country.",
+  "The Interrail became very popular soon after the first travelers used it in 1972. Over 8 million people had travelled with an Interrail Pass by 2011. In 2012, about 200.000 people used Interrail tickets to travel. Today, \"Interrailing\" is a fun activity for young people, especially for university students. They work during the winter and make money for their trips. In the summer, the weather is warmer and there are more activities to do in many European cities, so they mostly travel to European countries in this season.",
+  "Interrail travelers jump on any train and experience total freedom and adventure every year. They discover new countries and cultures in an inexpensive and safe way. They love Interrail because they just sit down and enjoy the view. They meet new people from different countries and build lifelong friendships. Charlotte Clayson, an Interrailer, says \"I love Interrail because you get to meet new people and make friends from different parts of the world. I got back from my Interrail trip two months ago and now I'm planning a trip to Amsterdam to visit a friend. I met him in my hostel in Rome.\" Interrailing can also be more than just travel. It changes some travelers' life. An old Interrailer, Jack Roberts, became a diplomat and started to travel around the world because he never forgot his Interrail adventure from when he was young."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "According to paragraph 1, the Flexi Pass is different from the Interrail One Pass because with a flexi pass you ----.",
+   "secenekler": [
+    "A) travel anywhere in the world",
+    "B) spend much more money",
+    "C) visit different countries in Europe"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "According to paragraph 2, people usually go Interrailing in the summer because ----.",
+   "secenekler": [
+    "A) city life in Europe becomes more fun",
+    "B) train tickets are cheaper than usual",
+    "C) they can make money in Europe"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 3,
+   "soru": "Which one of the following is FALSE about Interrailing, according to paragraph 3?",
+   "secenekler": [
+    "A) It is inexpensive and safe.",
+    "B) It helps you find a job easily.",
+    "C) It helps you make new friends."
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 4,
+   "soru": "Interrailing is important for Jack Roberts since he ----.",
+   "secenekler": [
+    "A) learned about new cultures",
+    "B) made many new friends",
+    "C) decided on his career"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 5,
+   "soru": "The underlined word 'lifelong' in paragraph 3 is closest in meaning to ----.",
+   "secenekler": [
+    "A) temporary",
+    "B) ancient",
+    "C) permanent"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 6,
+   "soru": "The underlined pronoun \"It\" in paragraph 3 refers to -----.",
+   "secenekler": [],
+   "cevap": "Interrailing",
+   "acikUclu": true
+  }
+ ],
+ "_not": "Paragraf 3'te 'lifelong' ve 'It' kitapta alti cizili; 5. ve 6. sorular bunlara ait.",
+ "kelimeler": [
+  {
+   "en": "type (n)",
+   "tr": "tür, tip"
+  },
+  {
+   "en": "ticket (n)",
+   "tr": "bilet"
+  },
+  {
+   "en": "throughout (prep)",
+   "tr": "boyunca, başından sonuna"
+  },
+  {
+   "en": "Europe (n)",
+   "tr": "Avrupa"
+  },
+  {
+   "en": "low (adj)",
+   "tr": "düşük"
+  },
+  {
+   "en": "cost (n)",
+   "tr": "maliyet"
+  },
+  {
+   "en": "country (n)",
+   "tr": "ülke"
+  },
+  {
+   "en": "never (adv)",
+   "tr": "asla, hiçbir zaman"
+  },
+  {
+   "en": "pay (v)",
+   "tr": "ödemek"
+  },
+  {
+   "en": "money (n)",
+   "tr": "para"
+  },
+  {
+   "en": "European (adj)",
+   "tr": "Avrupalı"
+  },
+  {
+   "en": "become (v)",
+   "tr": "olmak, haline gelmek"
+  },
+  {
+   "en": "over (prep)",
+   "tr": "üzerinde, aşkın"
+  },
+  {
+   "en": "about (prep)",
+   "tr": "yaklaşık, hemen hemen"
+  },
+  {
+   "en": "fun (n)",
+   "tr": "eğlence, eğlenme"
+  },
+  {
+   "en": "activity (n)",
+   "tr": "faaliyet, etkinlik"
+  },
+  {
+   "en": "especially (adv)",
+   "tr": "özellikle"
+  },
+  {
+   "en": "university (n)",
+   "tr": "üniversite"
+  },
+  {
+   "en": "during (prep)",
+   "tr": "süresince"
+  },
+  {
+   "en": "winter (n)",
+   "tr": "kış"
+  },
+  {
+   "en": "weather (n)",
+   "tr": "hava"
+  },
+  {
+   "en": "warm (adj)",
+   "tr": "ılık, sıcak"
+  },
+  {
+   "en": "mostly (adv)",
+   "tr": "çoğunlukla"
+  },
+  {
+   "en": "season (n)",
+   "tr": "mevsim"
+  },
+  {
+   "en": "jump (v)",
+   "tr": "zıplamak, atlamak"
+  },
+  {
+   "en": "experience (v)",
+   "tr": "deneyimlemek, yaşamak"
+  },
+  {
+   "en": "total (adj)",
+   "tr": "tamamen, sınırsız"
+  },
+  {
+   "en": "freedom (n)",
+   "tr": "özgürlük"
+  },
+  {
+   "en": "adventure (n)",
+   "tr": "macera"
+  },
+  {
+   "en": "discover (v)",
+   "tr": "keşfetmek, bulmak"
+  },
+  {
+   "en": "inexpensive (adj)",
+   "tr": "ucuz, masrafsız"
+  },
+  {
+   "en": "way (n)",
+   "tr": "yol, yöntem"
+  },
+  {
+   "en": "view (n)",
+   "tr": "manzara, görünüm"
+  },
+  {
+   "en": "lifelong (adj)",
+   "tr": "hayat boyu"
+  },
+  {
+   "en": "relationship (n)",
+   "tr": "ilişki"
+  },
+  {
+   "en": "say (v)",
+   "tr": "söylemek"
+  },
+  {
+   "en": "ago (adv)",
+   "tr": "önce"
+  },
+  {
+   "en": "plan (v)",
+   "tr": "planlamak, tasarlamak"
+  },
+  {
+   "en": "change (v)",
+   "tr": "değiştirmek"
+  },
+  {
+   "en": "world (n)",
+   "tr": "dünya"
+  },
+  {
+   "en": "forget (v)",
+   "tr": "unutmak"
+  },
+  {
+   "en": "young (adj)",
+   "tr": "genç"
+  }
+ ],
+ "guven": "goruntuden-birebir"
+}

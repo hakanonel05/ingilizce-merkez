@@ -1,0 +1,150 @@
+{
+ "no": 22,
+ "sayfalar": [
+  113,
+  114
+ ],
+ "paragraflar": [
+  "In the past, Bill Gates, who is a billionaire philanthropist, made many correct predictions such as the rise of smart phones and social media. And here are his recent predictions about the future of our world.",
+  "He predicts that Africa's agriculture industry will increase productivity by 50% by 2030. Therefore, he says that it will become an entirely self-sufficient continent. Currently, the continent imports roughly $50 billion worth of food each year despite the fact that 70% of residents in sub-Saharan Africa are farmers. In the next 15 years, however, innovations in farming will change this situation.",
+  "He says that that renewable resources like wind and solar energy will power the majority of the world within the next 30 years. If the world can use these cheap and clean sources of energy more, it will do more than halt climate change. It will transform the lives of millions of the poorest families.",
+  "He also predicts that over the next 20 years, majority of factories will have to replace human workers with automated robots. The loss of labour force will probably be in thousands. This figure may change according to which industries automate jobs the most."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "One can understand from paragraph 1 that Bill Gates ----.",
+   "secenekler": [
+    "A) made a huge profit out of his predictions",
+    "B) failed to foresee the future of technology",
+    "C) made a number of accurate predictions"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "According to paragraph 2, Africa will be able to ----.",
+   "secenekler": [
+    "A) increase the number of farmers by 70%",
+    "B) provide food for itself without the help of others",
+    "C) export food to other countries by 2030"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 3,
+   "soru": "According to paragraph 3, which of the following is FALSE about the benefits that sustainable energy sources will bring?",
+   "secenekler": [
+    "A) They will change the lives of impoverished people.",
+    "B) They will have a positive impact on climate change.",
+    "C) They will provide job opportunities for poor people."
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 4,
+   "soru": "The underlined word 'halt' in paragraph 3 is closest in meaning to ----.",
+   "secenekler": [
+    "A) stop",
+    "B) refuse",
+    "C) lose"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 5,
+   "soru": "We can understand from paragraph 4 that ----.",
+   "secenekler": [
+    "A) all factories will depend entirely on robots",
+    "B) some labourers will become unemployed",
+    "C) most professions will become extinct"
+   ],
+   "cevap": "B"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "philanthropist (n)",
+   "tr": "insaniyet perver, toplumsever, hayırsever"
+  },
+  {
+   "en": "resident (n)",
+   "tr": "bir yerde ikamet eden, oturan, sakin"
+  },
+  {
+   "en": "prediction (n)",
+   "tr": "tahmin"
+  },
+  {
+   "en": "however (conj)",
+   "tr": "ama, fakat, ancak"
+  },
+  {
+   "en": "agriculture (n)",
+   "tr": "tarım"
+  },
+  {
+   "en": "innovation (n)",
+   "tr": "yenilik"
+  },
+  {
+   "en": "productivity (n)",
+   "tr": "üretkenlik, verimlilik"
+  },
+  {
+   "en": "majority (n)",
+   "tr": "çoğunluk"
+  },
+  {
+   "en": "therefore (conj)",
+   "tr": "bu yüzden, böylece"
+  },
+  {
+   "en": "halt (v)",
+   "tr": "durmak, durdurmak"
+  },
+  {
+   "en": "entirely (adv)",
+   "tr": "tümüyle, tamamen"
+  },
+  {
+   "en": "transform (v)",
+   "tr": "dönüştürmek"
+  },
+  {
+   "en": "self-sufficient (adj)",
+   "tr": "kendi kendine yeten, kendi kendini idare eden"
+  },
+  {
+   "en": "replace (v)",
+   "tr": "yerine koymak, -in yerini almak, değiştirmek"
+  },
+  {
+   "en": "currently (adv)",
+   "tr": "şu anda"
+  },
+  {
+   "en": "loss (n)",
+   "tr": "kayıp, zayiat, zarar"
+  },
+  {
+   "en": "roughly (adv)",
+   "tr": "yaklaşık olarak, kabaca"
+  },
+  {
+   "en": "labour force (n)",
+   "tr": "işgücü"
+  },
+  {
+   "en": "despite (conj)",
+   "tr": "-e rağmen, karşın"
+  },
+  {
+   "en": "probably (adv)",
+   "tr": "muhtemelen"
+  }
+ ],
+ "_not": "Sozluk sayfa 113'te. 3. paragrafta 'halt' alti cizili; 'He says that that renewable' kitapta boyle yaziyor.",
+ "_sozlukKaynagi": "Kitabın Basic Vocabulary tablosundan, sayfa görüntüsü okunarak.",
+ "guven": "goruntuden-birebir"
+}

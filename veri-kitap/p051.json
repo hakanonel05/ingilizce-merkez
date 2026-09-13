@@ -1,0 +1,133 @@
+{
+ "no": 51,
+ "sayfalar": [
+  174,
+  175
+ ],
+ "paragraflar": [
+  "MADELAINE — My country is one of the poorest countries in the world. Very few people have computers or use the Internet. Some places have no computers because there is no electricity. Other places have electricity, but there are no telephone lines. Even if they have a computer, people can't use the Internet because there is no connection.",
+  "I was very lucky because my school was one of the few high schools that had computers. In my IT (Information Technology) classes, I learned all about how to use computers and different programs. I think computers are important because they help people do their work better.",
+  "Now, I want my parents to get an Internet connection at home, but it costs $20 a month. This is expensive for us. To have the full Internet costs $10 more. That's another reason why so few people in my country use the Internet. In fact, less than 0.1% of the people have an Internet connection in their homes. Most of these users live in or near the capital. We have many cyber cafés here. They are quite expensive – about $3 an hour – but they are very popular. The problem is that sometimes so many customers use the Internet at the same time. It can be so slow!",
+  "SANDY — I can't remember when I first started using a computer. There is one computer in our house for each member of the family. My dad has two – a desktop and a laptop. I don't think this is unusual in my country. The Internet system began in 1982 here and of course we have it at home. We pay about $33 a month.",
+  "We have lots of computers in school, too. I use them for my maths and social studies classes. In fact, every classroom in my country has computers which are connected to the Internet. We have more computers for each schoolchild than any other country. This is great for us because students who can use computers do better in some school subjects.",
+  "There are also many cyber cafés in my country. These are not just in the capital. The first cyber café started in 1995, and now we have over 22,000 around the country. The computers are modern, the connection is fast and it only costs about $1 an hour! I think more than 65% of the population uses the Internet.",
+  "MEG — I use the computer quite a lot now. I remember when we first got computers in my office. We all had training on how to use them. It's great for my work and now it is very difficult to do my job without a computer. In 1999, most of the Internet connections in my country were from office computers, but not anymore. This is because cyber cafés are more popular, and you can find them in almost every city or small town.",
+  "Now, the first reason why cyber cafés are so popular here is they are much cheaper than using the Internet at home. It costs about $30 a month to have access at home, but cafés can be as little as $1 an hour. Another reason is that the cafés are very popular with students. Many schools and universities still don't have computers or the Internet. I think most people in my country use the Internet outside of the home, especially because it is expensive to buy a computer. Only about 15% of the people in my country use the Internet and only 6% have it at home."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "In some parts of Madelaine's country, people cannot connect to the Internet because ----.",
+   "secenekler": [
+    "A) it costs more than $20 for a month",
+    "B) they don't have phone lines",
+    "C) the price of electricity is very high"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 2,
+   "soru": "The underlined pronoun 'they' in paragraph 2 refers to ----.",
+   "secenekler": [
+    "A) IT classes",
+    "B) different programs",
+    "C) computers"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 3,
+   "soru": "Cyber cafés in Madelaine's city ----.",
+   "secenekler": [
+    "A) have become more popular recently",
+    "B) have problems with their customers",
+    "C) might sometimes be too crowded"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 4,
+   "soru": "According to the passage, Sandy ----.",
+   "secenekler": [
+    "A) pays more than Meg for the internet connection at home",
+    "B) learnt to use a computer when she was at high school",
+    "C) needs to use her father's laptop to do her homework"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 5,
+   "soru": "In Meg's country, most of the people ----.",
+   "secenekler": [
+    "A) don't prefer to go to cyber cafés",
+    "B) learn how to use computers at work",
+    "C) don't have Internet access at home"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 6,
+   "soru": "The underlined pronoun 'them' in paragraph 7 refers to ----.",
+   "secenekler": [
+    "A) cyber cafés",
+    "B) Internet connections",
+    "C) office computers"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 7,
+   "soru": "Which of the following is TRUE according to the passage?",
+   "secenekler": [
+    "A) Less than half of the population uses the Internet in Sandy's country.",
+    "B) Very few people have an internet connection at home in Meg's and Madelaine's countries.",
+    "C) Internet connection is always fast in cyber cafés in Madelaine's and Sandy's countries."
+   ],
+   "cevap": "B"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "poor (adj)",
+   "tr": "fakir, yoksul"
+  },
+  {
+   "en": "telephone line (n)",
+   "tr": "telefon hattı"
+  },
+  {
+   "en": "user (n)",
+   "tr": "kullanıcı"
+  },
+  {
+   "en": "quite (adv)",
+   "tr": "oldukça"
+  },
+  {
+   "en": "customer (n)",
+   "tr": "müşteri"
+  },
+  {
+   "en": "slow (adj)",
+   "tr": "yavaş"
+  },
+  {
+   "en": "desktop (n)",
+   "tr": "masaüstü bilgisayar"
+  },
+  {
+   "en": "laptop (n)",
+   "tr": "dizüstü bilgisayar"
+  },
+  {
+   "en": "unusual (adj)",
+   "tr": "olağandışı, alışılmadık"
+  },
+  {
+   "en": "social studies (n)",
+   "tr": "sosyal bilgiler, sosyal bilimler"
+  }
+ ],
+ "_not": "Parca uc kisinin agzindan: MADELAINE (1-3), SANDY (4-6), MEG (7-8). Isimler kitapta ayri baslik olarak basili; paragraf basina eklendi. 'they' (p2) ve 'them' (p7) alti cizili.",
+ "guven": "goruntuden-birebir"
+}

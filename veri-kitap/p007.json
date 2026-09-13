@@ -1,0 +1,208 @@
+{
+ "no": 7,
+ "sayfalar": [
+  77,
+  78,
+  79
+ ],
+ "paragraflar": [
+  "Are you planning to get fit? Never buy an exercise bike. Generally, people buy them and use them for a week and then forget about them. They are helpful when people use them regularly, but you need to be determined. You should exercise often on your bike, but it is not easy. Most people will find it much easier to go for a run around the park.",
+  "Running is also much cheaper than most other sports. You don't need to buy expensive clothes to go running around the park or on the beach. They just need to be comfortable and keep you warm in the winter and cool in the summer. In addition, you only need one piece of equipment. That's your running shoes. Remember that you are not looking for a fashion item. Your shoes do not need to look attractive. Your shoes must keep your feet safe and protect you from injury. They can be expensive, but good quality shoes will be in good condition for a long time. You won't need to buy new ones very often. For good shoes, it's always best to get expert advice, and the best place for that is a sports shop.",
+  "The secret of running is to start slowly, and not to do too much at the beginning. Try to run for ten minutes about three times a week at first. After you do that, you can start to run for a longer time. After a few months, you will start running at a good speed for thirty minutes three or four times a week. Training too hard is not very effective. According to researchers, exercising for too many hours does not help people to get fitter. So you need to find a good exercise routine for yourself and follow it strictly."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "According to paragraph 1, many individuals prefer going running to using exercise bike since running is ----.",
+   "secenekler": [
+    "A) a lot more simple",
+    "B) much more healthy",
+    "C) far less dangerous"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 2,
+   "soru": "We can infer from paragraph 2 that in order to do some sports, you ----.",
+   "secenekler": [
+    "A) need to use some items for a long time",
+    "B) might need to follow the fashion regularly",
+    "C) may have to purchase costly materials"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 3,
+   "soru": "According to paragraph 2, one important thing about running clothes is that ----.",
+   "secenekler": [
+    "A) you need to change them regularly",
+    "B) they must make you feel relaxed",
+    "C) they should protect you from injuries"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 4,
+   "soru": "The underlined pronoun 'They' in paragraph 2 refers to ----.",
+   "secenekler": [],
+   "cevap": "(running) clothes",
+   "acikUclu": true
+  },
+  {
+   "no": 5,
+   "soru": "The underlined word 'advice' in paragraph 3 is closest in meaning to ----.",
+   "secenekler": [
+    "A) treatment",
+    "B) suggestion",
+    "C) cooperation"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 6,
+   "soru": "The author's main purpose in paragraph 3 is to ----.",
+   "secenekler": [
+    "A) compare going running with training hard",
+    "B) give information about recent research into training",
+    "C) inform the reader about the stages of proper running"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 7,
+   "soru": "The underlined word 'strictly' in paragraph 3 is closest in meaning to ----.",
+   "secenekler": [
+    "A) firmly",
+    "B) especially",
+    "C) naturally"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 8,
+   "soru": "The main purpose of the text is to ----.",
+   "secenekler": [
+    "A) inform the reader about the best ways of keeping fit",
+    "B) explain the secrets of running methodologically",
+    "C) raise the awareness of the reader about running"
+   ],
+   "cevap": "C"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "exercise (n)",
+   "tr": "egzersiz"
+  },
+  {
+   "en": "generally (adv)",
+   "tr": "genellikle, çoğunlukla"
+  },
+  {
+   "en": "helpful (adj)",
+   "tr": "yararlı, kullanışlı"
+  },
+  {
+   "en": "regularly (adv)",
+   "tr": "düzenli olarak"
+  },
+  {
+   "en": "determined (adj)",
+   "tr": "azimli, kararlı"
+  },
+  {
+   "en": "easy (adj)",
+   "tr": "kolay"
+  },
+  {
+   "en": "run (n)",
+   "tr": "koşu"
+  },
+  {
+   "en": "run (v)",
+   "tr": "koşmak"
+  },
+  {
+   "en": "beach (n)",
+   "tr": "kumsal, sahil"
+  },
+  {
+   "en": "comfortable (adj)",
+   "tr": "rahat"
+  },
+  {
+   "en": "equipment (n)",
+   "tr": "donanım, malzeme"
+  },
+  {
+   "en": "shoe (n)",
+   "tr": "ayakkabı"
+  },
+  {
+   "en": "look for (phr. v)",
+   "tr": "aramak"
+  },
+  {
+   "en": "fashion (n)",
+   "tr": "moda"
+  },
+  {
+   "en": "attractive (adj)",
+   "tr": "çekici, güzel"
+  },
+  {
+   "en": "injury (n)",
+   "tr": "incinme, sakatlık"
+  },
+  {
+   "en": "quality (n)",
+   "tr": "kalite"
+  },
+  {
+   "en": "expert (n)",
+   "tr": "uzman"
+  },
+  {
+   "en": "advice (n)",
+   "tr": "tavsiye"
+  },
+  {
+   "en": "secret (n)",
+   "tr": "sır, gizli"
+  },
+  {
+   "en": "slowly (adv)",
+   "tr": "yavaşça, yavaş bir şekilde"
+  },
+  {
+   "en": "speed (n)",
+   "tr": "hız"
+  },
+  {
+   "en": "training (n)",
+   "tr": "idman, antrenman"
+  },
+  {
+   "en": "effective (adj)",
+   "tr": "etkili"
+  },
+  {
+   "en": "researcher (n)",
+   "tr": "araştırmacı"
+  },
+  {
+   "en": "routine (n)",
+   "tr": "rutin, alışkanlık"
+  },
+  {
+   "en": "follow (v)",
+   "tr": "takip etmek, izlemek"
+  },
+  {
+   "en": "strictly (adv)",
+   "tr": "sıkı sıkıya, katı bir şekilde"
+  }
+ ],
+ "_not": "2. paragrafta 'They' ve 'advice', 3. paragrafta 'strictly' alti cizili.",
+ "guven": "goruntuden-birebir"
+}

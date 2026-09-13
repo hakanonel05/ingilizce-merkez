@@ -1,0 +1,105 @@
+{
+ "no": 39,
+ "sayfalar": [
+  146,
+  147
+ ],
+ "paragraflar": [
+  "What Mrs. Murphy is doing is the reason why Jeffrey is so worried. Mrs. Murphy is giving her students a \"surprise\" history quiz today, and Jeffrey isn't very happy about it. He has been absent for the past several days, and he's having a lot of trouble answering the questions.",
+  "He doesn't know who the nineteenth president of the United States was. He isn't sure when the Civil War ended. He doesn't remember when California became a state. He has forgotten where George Washington was born. He can't remember how many people signed the Declaration of Independence. He doesn't know where Abraham Lincoln was assassinated. He has forgotten why Washington D.C. was chosen as the capital. And he has no idea what Alexander Graham Bell invented!",
+  "Jeffrey is very upset. He's sure he's going to fail Mrs. Murphy's \"surprise\" history quiz. He doesn't know what to do."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "According to the passage, Jeffrey can't answer the questions as ----.",
+   "secenekler": [
+    "A) other students didn't tell him about the history quiz",
+    "B) Mrs. Murphy always asks very difficult questions",
+    "C) he has been absent from school for a few days"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "According to the passage, Jeffrey isn't sure ----",
+   "secenekler": [
+    "A) when George Washington was born",
+    "B) whether Abraham Lincoln was killed",
+    "C) when the Civil War ended"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 3,
+   "soru": "We can infer from the passage that ----.",
+   "secenekler": [
+    "A) Jeffrey is not a very responsible student",
+    "B) Mrs. Murphy likes giving surprise quizzes",
+    "C) everyone else studied for the quiz"
+   ],
+   "cevap": "A"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "reason (n)",
+   "tr": "sebep"
+  },
+  {
+   "en": "forget (v)",
+   "tr": "unutmak"
+  },
+  {
+   "en": "worried (adj)",
+   "tr": "endişeli"
+  },
+  {
+   "en": "sign (v)",
+   "tr": "imzalamak"
+  },
+  {
+   "en": "quiz (n)",
+   "tr": "sınav"
+  },
+  {
+   "en": "declaration (n)",
+   "tr": "bildiri, ilan"
+  },
+  {
+   "en": "absent (adj)",
+   "tr": "yok, mevcut değil"
+  },
+  {
+   "en": "independence (n)",
+   "tr": "bağımsızlık"
+  },
+  {
+   "en": "several (adv)",
+   "tr": "çeşitli, bir kaç"
+  },
+  {
+   "en": "assassinate (v)",
+   "tr": "suikast yapmak"
+  },
+  {
+   "en": "trouble (n)",
+   "tr": "sıkıntı, problem"
+  },
+  {
+   "en": "invent (v)",
+   "tr": "icat etmek"
+  },
+  {
+   "en": "sure (adj)",
+   "tr": "emin, kesin"
+  },
+  {
+   "en": "remember (v)",
+   "tr": "hatırlamak"
+  }
+ ],
+ "_not": "Sozluk sayfa 146'da.",
+ "_sozlukKaynagi": "Kitabın Basic Vocabulary tablosundan, sayfa görüntüsü okunarak.",
+ "guven": "goruntuden-birebir"
+}

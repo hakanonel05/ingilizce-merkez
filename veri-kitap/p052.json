@@ -1,0 +1,118 @@
+{
+ "no": 52,
+ "sayfalar": [
+  176,
+  177
+ ],
+ "paragraflar": [
+  "American swimmer Diana Nyad is the first person to swim from Cuba to Florida. The 64-year-old woman swam for 53 hours nonstop. It was dangerous not only for the long distance. There were sharks and jellyfish in the waters, too. The woman had no protection. She had no shark cage; she was the first person to swim from Cuba to Florida without one. She worked really hard to be successful. She started her training in the Caribbean in January of 2013. Firstly, she swam for 12 hours nonstop. She eventually worked her way up to 14 hours, 18, 20, and 24 hours.",
+  "Diana tried to swim this distance three times before, but she didn't succeed. And finally she reached her goal on August 31, 2013. She completed her historic 110-mile swim because she never gave up. A 35-person support team helped her during her journey, and they gave her a warm welcome after she got on the beach in Florida. The president, Barack Obama, sent her a message on tweeter saying, \"Congratulations to Diana Nyad. Never give up on your dreams.\" After her success, she appeared on TV for many days. Oprah Winfrey invited Diana to her program for an interview.",
+  "Diana Nyad began swimming seriously in the seventh grade. After her father died, she and her mother moved to Florida. She took lessons for marathon swimming at school and won many school championships there until she became a professional swimmer. She is not only passionate about swimming, she is also interested in writing and playing squash and tennis. She wrote three books, Other Shores, Basic Training for Women and Boss of Me: The Keyshawn Johnson Story. She reads Stephen Hawking books, sings and solves puzzles in her free time."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "Swimming from Cuba to Florida was risky for Diana because ----.",
+   "secenekler": [
+    "A) she was too old to swim",
+    "B) she swam 24 hours non-stop",
+    "C) there were dangerous sea animals",
+    "D) nobody helped her during her journey"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "Which one of the following is TRUE about Diana Nyad?",
+   "secenekler": [
+    "A) She swam 18 hours when she first started.",
+    "B) She finished her journey in Cuba.",
+    "C) Her training started in August",
+    "D) She became famous after her swim."
+   ],
+   "cevap": "D"
+  },
+  {
+   "no": 3,
+   "soru": "Which one of the following is FALSE about Diana Nyad's childhood?",
+   "secenekler": [
+    "A) She lived in Florida alone",
+    "B) Her father died",
+    "C) She had swimming teachers",
+    "D) She was a successful swimmer at school"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 4,
+   "soru": "Diana Nyad ----.",
+   "secenekler": [
+    "A) only likes swimming",
+    "B) is also a writer",
+    "C) plays basketball",
+    "D) is a friend of Stephen Hawking"
+   ],
+   "cevap": "B"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "nonstop (adv)",
+   "tr": "aralıksız, durmaksızın"
+  },
+  {
+   "en": "distance (n)",
+   "tr": "mesafe, uzaklık"
+  },
+  {
+   "en": "shark (n)",
+   "tr": "köpekbalığı"
+  },
+  {
+   "en": "jellyfish (n)",
+   "tr": "denizanası"
+  },
+  {
+   "en": "protection (n)",
+   "tr": "koruma, korunma"
+  },
+  {
+   "en": "cage (n)",
+   "tr": "kafes"
+  },
+  {
+   "en": "interview (n)",
+   "tr": "görüşme, röportaj"
+  },
+  {
+   "en": "eventually (adv)",
+   "tr": "sonunda, neticede"
+  },
+  {
+   "en": "succeed (v)",
+   "tr": "başarılı olmak, başarmak"
+  },
+  {
+   "en": "finally (adv)",
+   "tr": "sonunda, neticede"
+  },
+  {
+   "en": "reach (v)",
+   "tr": "ulaşmak, erişmek"
+  },
+  {
+   "en": "goal (n)",
+   "tr": "amaç, hedef"
+  },
+  {
+   "en": "give up (v)",
+   "tr": "vazgeçmek, bırakmak"
+  },
+  {
+   "en": "passionate (adj)",
+   "tr": "tutkulu, hırslı"
+  }
+ ],
+ "_not": "Kitap adlari italik: Other Shores, Basic Training for Women, Boss of Me: The Keyshawn Johnson Story.",
+ "guven": "goruntuden-birebir"
+}

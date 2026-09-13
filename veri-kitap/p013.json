@@ -1,0 +1,292 @@
+{
+ "no": 13,
+ "sayfalar": [
+  89,
+  90,
+  91
+ ],
+ "paragraflar": [
+  "Doris May Lessing was a British novelist, poet and short story writer. Her parents were both English. They met at the Royal Free Hospital. Her father, Captain Alfred Tayler, was a patient because he had lost his leg in World War I. Her mother, Emily Maude Tayler, was a nurse and took care of him at the hospital.",
+  "After they married, Alfred Tayler and his wife moved to Kermanshah, Iran. He started a job there as a worker for the Imperial Bank of Persia. Doris was born there in 1919. Later, the family moved to the British colony of Southern Rhodesia in 1925 to farm sheep.",
+  "Lessing studied at the Dominican Convent High School in Salisbury. It was a Roman Catholic school for girls. She left school at the age of 14, and taught herself after that. She left home at 15 and worked as a nurse. She started reading about politics and sociology and began writing around this time. She first sold stories to magazines at the age of 16.",
+  "In 1937, Lessing moved to Salisbury to work as a telephone operator. She soon married her first husband, Frank Wisdom. They had two children named John and Jean, before the marriage ended in 1943. After her divorce, Lessing joined the Left Book Club and made new friends. She met her second husband, Gottfried Lessing there. They married soon after she joined the group, and had a child named Peter. This marriage ended in divorce in 1949.",
+  "She went to London for her writing career and communist ideals. Lessing left two young children with their father in South Africa. Peter, from her second marriage, went with her. She always felt sorry for her other children, but she had dreams. She didn't want to spend all of her time with young children.",
+  "Lessing never liked talking about her private life. Instead, she kept diaries and wrote books about her life. She wrote 55 books of fiction, poetry, and nonfiction during her lifetime. She won the Nobel Prize for literature and many other awards.",
+  "During the late 1990s, Lessing started to have some health problems. She couldn't travel and write books for a long time. She died on November 17, 2013, at her home in London at the age of 94."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "According to paragraph 1, Alfred Tayler and Emily Maude Tayler met at a hospital because Emily Maude Tayler ----.",
+   "secenekler": [
+    "A) cared for Alfred Tayler",
+    "B) had a health problem",
+    "C) worked as a doctor"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 2,
+   "soru": "According to paragraph 2, Lessing's parents left Iran in order to ----.",
+   "secenekler": [
+    "A) find better-paid jobs in a big country",
+    "B) join a well-known British company",
+    "C) raise sheep in another country"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 3,
+   "soru": "The underlined pronoun \"there\" in paragraph 2 refers to ------.",
+   "secenekler": [],
+   "acikUclu": true,
+   "cevap": "Kermanshah (or Iran)"
+  },
+  {
+   "no": 4,
+   "soru": "According to paragraph 3, after Lessing left school, she ----.",
+   "secenekler": [
+    "A) started reading about psychology",
+    "B) became her own teacher",
+    "C) sold her poems to magazines"
+   ],
+   "cevap": "B"
+  },
+  {
+   "no": 5,
+   "soru": "Which of the following is TRUE according to paragraph 4?",
+   "secenekler": [
+    "A) She had a total of three children from two marriages.",
+    "B) Doris got married to Gottfried before they joined the club.",
+    "C) Doris's second marriage lasted more than a decade."
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 6,
+   "soru": "According to paragraph 5, Doris moved to London to ----.",
+   "secenekler": [
+    "A) follow her dreams",
+    "B) join the Left Book Club",
+    "C) leave her children"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 7,
+   "soru": "According to paragraph 6, Lessing's books are about ----.",
+   "secenekler": [
+    "A) her private life",
+    "B) her diaries",
+    "C) her life"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 8,
+   "soru": "The underlined word 'awards' in paragraph 6 is closest in meaning to ----.",
+   "secenekler": [
+    "A) benefits",
+    "B) rewards",
+    "C) offers"
+   ],
+   "cevap": "B"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "British (adj)",
+   "tr": "İngiliz"
+  },
+  {
+   "en": "join (v)",
+   "tr": "katılmak"
+  },
+  {
+   "en": "novelist (n)",
+   "tr": "roman yazarı"
+  },
+  {
+   "en": "group (n)",
+   "tr": "grup"
+  },
+  {
+   "en": "poet (n)",
+   "tr": "şair"
+  },
+  {
+   "en": "career (n)",
+   "tr": "kariyer"
+  },
+  {
+   "en": "story (n)",
+   "tr": "hikaye"
+  },
+  {
+   "en": "communist (n)",
+   "tr": "komünist"
+  },
+  {
+   "en": "writer (n)",
+   "tr": "yazar"
+  },
+  {
+   "en": "ideal (n)",
+   "tr": "ideal, amaç"
+  },
+  {
+   "en": "captain (n)",
+   "tr": "kaptan, yüzbaşı"
+  },
+  {
+   "en": "sorry (adj)",
+   "tr": "üzgün"
+  },
+  {
+   "en": "patient (n)",
+   "tr": "hasta"
+  },
+  {
+   "en": "dream (n)",
+   "tr": "hayal, istek"
+  },
+  {
+   "en": "lose (v)",
+   "tr": "kaybetmek"
+  },
+  {
+   "en": "private (adj)",
+   "tr": "özel"
+  },
+  {
+   "en": "leg (n)",
+   "tr": "bacak"
+  },
+  {
+   "en": "instead (adv)",
+   "tr": "yerine"
+  },
+  {
+   "en": "war (n)",
+   "tr": "savaş"
+  },
+  {
+   "en": "keep (v)",
+   "tr": "tutmak, korumak"
+  },
+  {
+   "en": "take care of (phr. v)",
+   "tr": "ilgilenmek, bakmak"
+  },
+  {
+   "en": "diary (n)",
+   "tr": "günlük"
+  },
+  {
+   "en": "marry (v)",
+   "tr": "evlenmek"
+  },
+  {
+   "en": "book (n)",
+   "tr": "kitap"
+  },
+  {
+   "en": "worker (n)",
+   "tr": "işçi"
+  },
+  {
+   "en": "fiction (n)",
+   "tr": "kurgu"
+  },
+  {
+   "en": "Persia (n)",
+   "tr": "İran"
+  },
+  {
+   "en": "poetry (n)",
+   "tr": "şiir"
+  },
+  {
+   "en": "sheep (n)",
+   "tr": "koyun"
+  },
+  {
+   "en": "nonfiction (n)",
+   "tr": "kurgu olmayan"
+  },
+  {
+   "en": "southern (adj)",
+   "tr": "güney"
+  },
+  {
+   "en": "lifetime (n)",
+   "tr": "ömür boyu"
+  },
+  {
+   "en": "Catholic (adj)",
+   "tr": "Katolik"
+  },
+  {
+   "en": "win (v)",
+   "tr": "kazanmak"
+  },
+  {
+   "en": "leave (v)",
+   "tr": "ayrılmak, terk etmek"
+  },
+  {
+   "en": "literature (n)",
+   "tr": "edebiyat"
+  },
+  {
+   "en": "age (n)",
+   "tr": "yaş"
+  },
+  {
+   "en": "award (n)",
+   "tr": "ödül"
+  },
+  {
+   "en": "politics (n)",
+   "tr": "politika"
+  },
+  {
+   "en": "health (n)",
+   "tr": "sağlık"
+  },
+  {
+   "en": "sociology (n)",
+   "tr": "sosyoloji"
+  },
+  {
+   "en": "problem (n)",
+   "tr": "problem"
+  },
+  {
+   "en": "sell (v)",
+   "tr": "satmak"
+  },
+  {
+   "en": "die (v)",
+   "tr": "ölmek"
+  },
+  {
+   "en": "end (v)",
+   "tr": "sonlandırmak, sona erdirmek"
+  },
+  {
+   "en": "November (n)",
+   "tr": "Kasım"
+  },
+  {
+   "en": "divorce (n)",
+   "tr": "boşanma"
+  },
+  {
+   "en": "later (adv)",
+   "tr": "daha sonra"
+  }
+ ],
+ "_not": "3. soru açık uçlu; kitabın anahtarı 'Kermanshah (or Iran)' diyor. Sözlük kitabın 79. sayfasındaki Basic Vocabulary tablosundan.",
+ "guven": "goruntuden-birebir"
+}

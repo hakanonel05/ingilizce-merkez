@@ -1,0 +1,85 @@
+{
+ "no": 15,
+ "sayfalar": [
+  93,
+  94
+ ],
+ "paragraflar": [
+  "Burning Man is a festival that happens every year at Black Rock Desert in northern Nevada. It lasts a week, and it starts on the last Monday in August, and ends on the first Monday in September. The festival is called Burning Man because people set a large wood sculpture of a man on fire on Saturday. Many people go to Burning Man; in 2012 over 55,000 people were there. The Black Rock Desert is not close to any cities or towns, and is very dry, so people bring their own water, food, and shelter.",
+  "Burning Man started in 1986 in San Francisco. An artist named Larry Harvey made a 2.7 meter wooden sculpture of a man, and decided to burn it on a nearby beach. It was a success, so he did it again at the beach the next year, and then again a couple years after that. Each year the sculpture got bigger. In 1987 \"the Man\" was almost 4.6 meters tall, and in 1989 it was almost 12 meters tall. In 1990, the police stopped Harvey from burning the Man because Harvey did not have a permit. Harvey decided to take the sculpture to the desert to burn it. After that, the festival started to take place in that desert.",
+  "The desert was not a good place for a festival, though. It was too big and dangerous. Some people even got lost during the festival. A man called Michael Mike was worried about this situation, so he started a group named the Black Rock Rangers to keep people safe. In 1991, Harvey got a permit from the Bureau of Land Management to hold the festival. The festival was becoming more popular every year. In 1991 about 250 people were there. In 1995 about 4,000 people were there, and in 1997 it was about 10,000. In 2000 attendance was about 25,000, and by 2010 it had reached over 50,000 people. Today, the festival is very large with many people, so sometimes it is called Black Rock City."
+ ],
+ "sorular": [
+  {
+   "no": 1,
+   "soru": "The festival gets its name from a ----.",
+   "secenekler": [
+    "A) desert",
+    "B) man",
+    "C) sculpture",
+    "D) city"
+   ],
+   "cevap": "C"
+  },
+  {
+   "no": 2,
+   "soru": "Which one of the following is TRUE according to paragraph 1?",
+   "secenekler": [
+    "A) The festival begins on the second Monday in August.",
+    "B) People can find their basic needs in the festival area.",
+    "C) 55,000 people go to the festival every year.",
+    "D) The festival area is far from the city center."
+   ],
+   "cevap": "D"
+  },
+  {
+   "no": 3,
+   "soru": "Larry Harvey took the sculpture to the desert because ----.",
+   "secenekler": [
+    "A) the police didn't let him burn it on the beach",
+    "B) it looked more beautiful in the desert",
+    "C) it was too tall to keep on the beach",
+    "D) the beach wasn't big enough for the festival"
+   ],
+   "cevap": "A"
+  },
+  {
+   "no": 4,
+   "soru": "The Black Rock Rangers ----.",
+   "secenekler": [
+    "A) help Mike to burn the sculpture",
+    "B) try to save people from danger",
+    "C) want to change the festival place",
+    "D) work with the police for safety"
+   ],
+   "cevap": "B"
+  }
+ ],
+ "kelimeler": [
+  {
+   "en": "last (v)",
+   "tr": "sürmek, devam etmek"
+  },
+  {
+   "en": "end (v)",
+   "tr": "sona ermek, bitmek"
+  },
+  {
+   "en": "sculpture (n)",
+   "tr": "heykel"
+  },
+  {
+   "en": "permit (n)",
+   "tr": "izin, ruhsat"
+  },
+  {
+   "en": "desert (n)",
+   "tr": "çöl"
+  },
+  {
+   "en": "attendance (n)",
+   "tr": "katılım"
+  }
+ ],
+ "guven": "goruntuden-birebir"
+}
