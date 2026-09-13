@@ -12,9 +12,9 @@
  */
 
 import React from 'react';
-import { X, Mic, Images, TrendingUp } from 'lucide-react';
+import { X, Mic, Images, TrendingUp, AudioLines } from 'lucide-react';
 
-export type KonusmaSekmesi = 'alistirma' | 'gecmis' | 'ilerleme';
+export type KonusmaSekmesi = 'alistirma' | 'telaffuz' | 'gecmis' | 'ilerleme';
 
 interface NavItem {
   id: KonusmaSekmesi;
@@ -37,6 +37,7 @@ export const KonusmaSidebar: React.FC<Props> = ({
 }) => {
   const ogeler: NavItem[] = [
     { id: 'alistirma', label: 'Betimleme', icon: <Mic className="h-4 w-4" />, hint: 'Görseli anlat, çözümlet' },
+    { id: 'telaffuz', label: 'Telaffuz', icon: <AudioLines className="h-4 w-4" />, hint: 'Metni sesli oku, telaffuzunu ölç' },
     { id: 'gecmis', label: 'Betimlemelerim', icon: <Images className="h-4 w-4" />, hint: 'Geçmiş çözümlemeler' },
     { id: 'ilerleme', label: 'İlerleme', icon: <TrendingUp className="h-4 w-4" />, hint: 'Seviye ve hata eğrisi' },
   ];
@@ -101,15 +102,27 @@ export const KonusmaSidebar: React.FC<Props> = ({
             })}
           </div>
 
-          {/* MAHREMİYET NOTU PANELDE, ekranın içinde değil.
-              Alıştırma ekranında da yazıyor ama orada akışın parçası; burada
-              sürekli görünür olması gerekiyor, çünkü "sesim nereye gidiyor"
-              sorusu kullanıcının aklına mikrofon düğmesine basmadan ÖNCE
-              geliyor. */}
-          <p className="mt-auto border-t border-hairline px-3 pt-4 text-[11px] leading-relaxed text-ink-3">
-            Sesin bu bilgisayardan çıkmıyor: kayıt tarayıcıda metne çevriliyor
-            ve hemen bırakılıyor. Saklanan tek şey metnin kendisi.
-          </p>
+          {/* MAHREMİYET NOTU PANELDE, ekranın içinde değil: "sesim nereye
+              gidiyor" sorusu kullanıcının aklına mikrofon düğmesine basmadan
+              ÖNCE geliyor.
+
+              İKİ ALIŞTIRMANIN CEVABI AYRI, ve bunu tek bir cümleye
+              sıkıştırmak ikisini de yanlış anlatırdı. Önce burada mutlak bir
+              "sesin çıkmıyor" cümlesi vardı; telaffuz değerlendirmesi
+              eklenince o cümle bir özellik için yalan oldu. Ayırmak, kısa
+              tutmak uğruna yanlış söylemekten iyi. */}
+          <div className="mt-auto space-y-2 border-t border-hairline px-3 pt-4">
+            <p className="text-[11px] leading-relaxed text-ink-3">
+              <span className="text-ink-2">Betimlemede</span> sesin bu
+              bilgisayardan çıkmıyor: kayıt tarayıcıda metne çevrilip hemen
+              bırakılıyor.
+            </p>
+            <p className="text-[11px] leading-relaxed text-ink-3">
+              <span className="text-ink-2">Telaffuzda</span> kayıt
+              değerlendirme için gönderiliyor — fonem ölçmenin başka yolu yok.
+              Hiçbirinde ses saklanmıyor.
+            </p>
+          </div>
         </div>
       </aside>
     </>

@@ -22,9 +22,12 @@
 
 import React, { useMemo } from 'react';
 import { CEFR_SIRASI, cefrPuani, type BetimlemeKaydi } from '../types';
+import { parseAssessmentReport } from '../lib/telaffuzRaporu';
+import type { TelaffuzKaydi } from '../lib/telaffuzDeposu';
 
 interface Props {
   kayitlar: BetimlemeKaydi[];
+  telaffuzlar: TelaffuzKaydi[];
 }
 
 const Sayi: React.FC<{ deger: React.ReactNode; etiket: string }> = ({ deger, etiket }) => (
@@ -83,7 +86,52 @@ const SeviyeEgrisi: React.FC<{ noktalar: { x: number; y: number; etiket: string 
   );
 };
 
-export const Ilerleme: React.FC<Props> = ({ kayitlar }) => {
+/** 0-100 eğrisi — telaffuz puanı için. CEFR'den ayrı, çünkü o ölçek
+    ayrık altı basamak, bu sürekli bir yüzde. */
+const PuanEgrisi: React.FC<{ noktalar: { x: number; y: number; etiket: string }[] }> = ({ noktalar }) => {
+  if (noktalar.length < 2) return null;
+
+  const G = 600;
+  const Y = 160;
+  const SOL = 28;
+  const PAY = 12;
+
+  const xler = noktalar.map((p) => p.x);
+  const enKucukX = Math.min(...xler);
+  const araX = (Math.max(...xler) - enKucukX) || 1;
+
+  const xe = (x: number) => SOL + ((x - enKucukX) / araX) * (G - SOL - PAY);
+  const ye = (y: number) => Y - PAY - (y / 100) * (Y - PAY * 2);
+
+  const yol = noktalar
+    .map((p, i) => `${i === 0 ? 'M' : 'L'}${xe(p.x).toFixed(1)},${ye(p.y).toFixed(1)}`)
+    .join(' ');
+
+  return (
+    <svg viewBox={`0 0 ${G} ${Y}`} className="h-40 w-full" role="img"
+      aria-label="Telaffuz puanının zaman içindeki değişimi">
+      {[0, 60, 80, 100].map((tik) => (
+        <g key={tik}>
+          <line x1={SOL} y1={ye(tik)} x2={G - PAY} y2={ye(tik)}
+            style={{ stroke: 'var(--hairline)' }} strokeWidth={1} />
+          <text x={0} y={ye(tik) + 3}
+            style={{ fill: 'var(--ink-3)', fontSize: 10, fontFamily: 'var(--font-mono)' }}>
+            {tik}
+          </text>
+        </g>
+      ))}
+      <path d={yol} fill="none" style={{ stroke: 'var(--accent)' }} strokeWidth={2}
+        vectorEffect="non-scaling-stroke" />
+      {noktalar.map((p, i) => (
+        <circle key={i} cx={xe(p.x)} cy={ye(p.y)} r={3.5} style={{ fill: 'var(--accent)' }}>
+          <title>{p.etiket}</title>
+        </circle>
+      ))}
+    </svg>
+  );
+};
+
+export const Ilerleme: React.FC<Props> = ({ kayitlar, telaffuzlar }) => {
   /* Kayıtlar yeniden eskiye geliyor; grafik ve ortalamalar için eskiden
      yeniye gerekli. */
   const eskidenYeniye = useMemo(
@@ -143,15 +191,71 @@ export const Ilerleme: React.FC<Props> = ({ kayitlar }) => {
       .slice(0, 8);
   }, [kayitlar]);
 
-  if (!ozet) {
+  /* Telaffuz puanlari kayittan degil RAPORDAN turetiliyor; ayristirici
+     duzelirse eski kayitlar da duzelmis gorunur. */
+  const telaffuzNoktalari = useMemo(() => {
+    return [...telaffuzlar]
+      .sort((a, b) => a.olusturuldu - b.olusturuldu)
+      .map((t) => {
+        const puan = parseAssessmentReport(t.rapor, t.hedefMetin).overallScore;
+        return {
+          x: t.olusturuldu,
+          y: puan,
+          etiket: `${new Date(t.olusturuldu).toLocaleDateString('tr-TR')} — ${puan}`,
+        };
+      })
+      /* Puanı okunamayan rapor eğriyi sıfıra çakardı; grafikte yeri yok. */
+      .filter((n) => n.y > 0);
+  }, [telaffuzlar]);
+
+  const telaffuzOzeti = useMemo(() => {
+    if (!telaffuzNoktalari.length) return null;
+    const puanlar = telaffuzNoktalari.map((n) => n.y);
+    const sonUc = puanlar.slice(-3);
+    return {
+      adet: telaffuzNoktalari.length,
+      enIyi: Math.max(...puanlar),
+      sonUcOrt: Math.round(sonUc.reduce((t, p) => t + p, 0) / sonUc.length),
+    };
+  }, [telaffuzNoktalari]);
+
+  const telaffuzBolumu = telaffuzOzeti && (
+    <section className="border-t border-hairline pt-6">
+      <h2 className="eyebrow mb-1">Telaffuz</h2>
+      <p className="mb-4 max-w-[64ch] text-[12px] leading-relaxed text-ink-3">
+        Betimleme ne söylediğini ölçüyor, bu bölüm nasıl söylediğini. İki
+        eğri ayrı duruyor çünkü ayrı şeyler: biri yükselirken diğeri
+        yerinde sayabilir.
+      </p>
+      <div className="mb-6 flex flex-wrap gap-x-12 gap-y-6">
+        <Sayi deger={telaffuzOzeti.adet} etiket="değerlendirme" />
+        <Sayi deger={telaffuzOzeti.sonUcOrt} etiket="son üçün ortalaması" />
+        <Sayi deger={telaffuzOzeti.enIyi} etiket="en yüksek puan" />
+      </div>
+      <PuanEgrisi noktalar={telaffuzNoktalari} />
+    </section>
+  );
+
+  if (!ozet && !telaffuzOzeti) {
     return (
       <div className="max-w-[60ch] space-y-3">
         <h1 className="text-[22px] font-semibold tracking-tight text-ink">İlerleme</h1>
         <p className="text-[14px] leading-relaxed text-ink-2">
-          Burası ilk betimlemeden sonra dolmaya başlar. İki betimlemeden sonra
-          seviye eğrisi, birkaç betimlemeden sonra da tekrarlayan hata konuların
-          görünür olur.
+          Burası ilk alıştırmadan sonra dolmaya başlar. İki betimlemeden sonra
+          seviye eğrisi, birkaç betimlemeden sonra tekrarlayan hata konuların,
+          telaffuz çalıştıkça da puan eğrin görünür olur.
         </p>
+      </div>
+    );
+  }
+
+  /* Yalnızca telaffuz çalışılmışsa betimleme bölümlerini hiç çizme:
+     sıfırlarla dolu bir ekran bilgi değil gürültü. */
+  if (!ozet) {
+    return (
+      <div className="space-y-10">
+        <h1 className="text-[22px] font-semibold tracking-tight text-ink">İlerleme</h1>
+        {telaffuzBolumu}
       </div>
     );
   }
@@ -210,6 +314,8 @@ export const Ilerleme: React.FC<Props> = ({ kayitlar }) => {
           </ul>
         </section>
       )}
+
+      {telaffuzBolumu}
 
       {kelimeSayimi.length > 0 && (
         <section className="border-t border-hairline pt-6">

@@ -3958,6 +3958,218 @@ app.post("/api/betimleme-analizi", async (req, res) => {
   }
 });
 
+/* ============================================================
+   TELAFFUZ DEĞERLENDİRMESİ  (/api/telaffuz-degerlendirme)
+   ------------------------------------------------------------
+   SES BU UCA GELIYOR — ve uygulamada sesin cihazdan ciktigi TEK yer
+   burasi. Betimleme tarafinda ses tarayicida kaliyor (Whisper yerel
+   calisiyor); burada kalamaz, cunku olculecek sey FONEM.
+
+   Neden Whisper yetmiyor: Whisper bir sesletim modeli degil. Hangi
+   kelimeyi soyledigini biliyor ama "th sesini d gibi cikardin"
+   diyemiyor (bkz. shared/ses/konusmaCozumleme.ts, ayni not orada da
+   var). Fonem, vurgu ve tonlama degerlendirmesi icin sesi DUYAN bir
+   model gerekiyor.
+
+   OLCULDU — model gercekten dinliyor mu? Ayirt edici deneme: ayni ses
+   kaydi iki farkli hedef metinle gonderildi.
+     hedef DOGRU  -> 76/100, iki kelime hatali, bir atlama, IPA verdi
+     hedef YANLIS ->  0/100, 12 atlama, 17 fazladan kelime
+   Yanlis hedefte model her soylenen kelimeyi "fazladan" diye
+   isaretledi; yani hedef metni okuyup makul gorunen bir rapor
+   uydurmuyor, sesi cozumluyor. Uydursaydi bu ozellik kullaniciya
+   yalan soyluyor olurdu.
+
+   YALNIZCA GEMINI: Groq'un metin ucu ses almiyor. generateContentWithRetry
+   kullanilmiyor, cunku o Groq dalinda contents'i JSON'a ceviriyor ve
+   base64 ses oradan gecerse modele anlamsiz bir harf yigini giderdi.
+   ============================================================ */
+
+/* AI Studio surumundeki sistem istemi, BIREBIR korundu.
+
+   Sablonun kendisi uzerinde oynamadim: istemcideki ayristirici
+   (lib/telaffuzRaporu.ts) tam olarak bu basliklara ve bu isaretlere
+   gore yaziImis. Istemi "iyilestirmek" ayristiriciyi sessizce
+   bozardi - rapor gelir, ekran bos cikardi. */
+const TELAFFUZ_SISTEM_ISTEMI = `Sen uzman bir İngilizce Telaffuz ve Konuşma Değerlendiricisisin (Pronunciation Assessment AI).
+Görevin, kullanıcının yüklediği ses kaydını (veya söylediği metni) hedef metinle harf, fonem, duraklama ve tonlama düzeyinde karşılaştırmaktır.
+
+Analizini yaptıktan sonra kesinlikle genel sohbet cümleleri (merhaba, işte analizin, umarım beğenirsin vb.) kurma. Doğrudan aşağıdaki şablona birebir uyarak Markdown formatında çıktı üret:
+
+---
+
+### Telaffuz Değerlendirme Raporu
+
+**Genel Telaffuz Puanı:** [0 - 100 arası bir skor] / 100
+
+#### 1. İncelenen Cümle
+[Kullanıcının okuduğu metni buraya yaz.
+- Doğru telaffuz edilen kelimeleri normal bırak.
+- Hatalı veya fonetik bozukluk olan kelimeleri **[kelime]** şeklinde sarı/vurgulu göster.
+- Atlanan veya eksik söylenen kelimeleri ~~kelime~~ (üzeri çizili) yap.
+- Metinde olmayan fazladan eklenen kelimeleri *(kelime)* şeklinde paranteze al.
+- Cümle ortasında yapılan yersiz/uzun duraklamaların arasına [--] işareti koy.]
+
+#### 2. Hata Özeti
+* **Hatalı Telaffuzlar:** [Sayı] adet (Yanlış veya anlaşılmayan sesletimler)
+* **Çıkarmalar (Atlanan):** [Sayı] adet (Metinde olup okunmayan kelimeler)
+* **Eklemeler:** [Sayı] adet (Metinde olmayıp fazladan söylenen kelimeler)
+* **Beklenmeyen Duraklama:** [Sayı] adet (Doğal olmayan, akışı bozan duraklamalar)
+* **Duraklama Eksik:** [Sayı] adet (Noktalama veya nefes payı bırakılmayan yerler)
+* **Monotonluk:** [0 veya 1] (Düz ve vurgusuz konuşma uyarısı)
+
+#### 3. Puan Dökümü
+| Metrik | Puan | Değerlendirme (0-59: Düşük, 60-79: Orta, 80-100: İyi) |
+| :--- | :--- | :--- |
+| **Doğruluk Puanı (Accuracy)** | [0-100] / 100 | [Durum] |
+| **Akıcılık Puanı (Fluency)** | [0-100] / 100 | [Durum] |
+| **Tamamlanma Puanı (Completeness)** | [0-100] / 100 | [Durum] |
+| **Prosodi/Tonlama Puanı (Prosody)** | [0-100] / 100 | [Durum] |
+
+#### 4. Düzeltme Önerileri
+* Hatalı telaffuz edilen kelimeleri şu formatta yaz (ses kaydındaki yaklaşık zaman aralığını saniye cinsinden belirt):
+  * **[Kelime]** (Ses Kaydı: [örn: 01.2s - 02.4s]): [IPA okunuşu örn: /haʊˈevər/] - [Kullanıcının yaptığı hata ve doğru telaffuz için pratik tüyo]
+
+---
+Hedef Metin: [Kullanıcının Okuması Gereken Metin Buraya Gelecek]`;
+
+/* Ses uretebilen Gemini modelleri DEGIL — ses ANLAYABILEN modeller.
+   Sira, metin zincirindekiyle ayni gerekceyle kuruldu (bkz.
+   GEMINI_MODELS): once o an calisan sabit kimlik, arkasinda takma ad.
+
+   gemini-2.5-flash BU ZINCIRDEN CIKARILDI. Olcum: bu anahtarla
+   "no longer available to new users" (404) donuyor, yani zincirin
+   dibinde hicbir zaman calismayan bir basamak duruyordu. Metin
+   zincirinde (GEMINI_MODELS) hala var ve orada kalmali - oradaki
+   gerekce "erisimi olan daha eski anahtarlarda davranis degismesin";
+   burada zincir yeni, o yuzden bastan dogru kuruluyor. */
+const TELAFFUZ_MODELLERI = [
+  "gemini-3.6-flash",
+  "gemini-flash-latest",
+  "gemini-3.8-flash",
+];
+
+/* GOVDE SINIRI.
+
+   Netlify fonksiyonlarinda istek govdesi 6 MB ile sinirli ve sure 26
+   saniye. MediaRecorder webm/opus dakikada ~500 KB uretiyor, base64'e
+   cevrilince ~680 KB; yani 10 dakikalik bir kayit (AI Studio surumunun
+   vaat ettigi sey) ~7 MB eder ve CANLI SITEDE HIC CALISMAZ.
+
+   4 MB, iki dakikalik kayda rahatca yetiyor ve sinirin altinda kaliyor.
+   Istemci de kaydi iki dakikada kesiyor; buradaki denetim onun
+   atlanmasi ihtimaline karsi. */
+const TELAFFUZ_EN_BUYUK_BASE64 = 4 * 1024 * 1024;
+
+app.post("/api/telaffuz-degerlendirme", async (req, res) => {
+  try {
+    const hedefMetin = typeof req.body?.hedefMetin === 'string' ? req.body.hedefMetin.trim() : '';
+    if (!hedefMetin) {
+      return res.status(400).json({ error: "Hedef metin gerekli." });
+    }
+
+    const ham = typeof req.body?.sesVerisi === 'string' ? req.body.sesVerisi : '';
+    /* data: on eki gelirse ayikla; istemci gondermiyor ama elle
+       denenirse sessizce bozulmasin. */
+    const sesVerisi = ham.includes(',') ? ham.split(',')[1] : ham;
+    if (!sesVerisi) {
+      return res.status(400).json({ error: "Ses kaydı gerekli." });
+    }
+    if (sesVerisi.length > TELAFFUZ_EN_BUYUK_BASE64) {
+      return res.status(413).json({
+        error: "Kayıt çok uzun. En fazla iki dakikalık bir bölüm okuyun.",
+      });
+    }
+
+    const sesTuru = typeof req.body?.sesTuru === 'string' ? req.body.sesTuru : 'audio/webm';
+    const aksan = typeof req.body?.aksan === 'string' && req.body.aksan.trim()
+      ? req.body.aksan.trim()
+      : 'İngilizce (Birleşik Devletler en-US)';
+
+    const ai = getAIClient();
+    if (!ai) {
+      return res.status(503).json({
+        error: "Telaffuz değerlendirmesi için Gemini anahtarı gerekiyor. Ayarlardan kendi anahtarını girebilirsin.",
+      });
+    }
+
+    const yonerge = `Hedef Metin: ${hedefMetin}
+Değerlendirme Dili / Aksanı: ${aksan}
+
+Ses kaydını dinle. Hedef metin ile kullanıcı sesini harf, fonem, duraklama, vurgu ve tonlama düzeyinde titizlikle karşılaştır.
+Hiçbir sohbet cümlesi eklemeden doğrudan belirtilen Telaffuz Değerlendirme Raporu şablonu çıktısını Markdown olarak üret. En alttaki 'Hedef Metin: ...' satırını da tam olarak hedef metinle doldur.`;
+
+    const parcalar = [
+      { inlineData: { mimeType: sesTuru, data: sesVerisi } },
+      { text: yonerge },
+    ];
+
+    let rapor = '';
+    let sonHata: any = null;
+    /* ILK HATA DA TUTULUYOR, ve bu tam olarak deponun daha once ogrendigi
+       ders (bkz. generateContentWithRetry'daki firstErrorByProvider notu).
+       Yalnizca son hatayi firlatirsak kullaniciya zincirin EN DIBINDEKI
+       modelin hatasi gider - gercekten yasandi: ilk iki model kotaya
+       takilmisken ekranda "gemini-2.5-flash artik yok" yaziyordu, yani
+       dogru olmayan bir teshis. Sorunu anlatan hata BIRINCISI. */
+    let ilkHata: any = null;
+
+    for (const model of TELAFFUZ_MODELLERI) {
+      /* Iki deneme: 503 ("high demand") gecici, 404 kalici. Ayrimi
+         isTransientError yapiyor; kalici hatada dogrudan sonraki
+         modele geciliyor. */
+      for (let deneme = 0; deneme < 2; deneme++) {
+        try {
+          const yanit = await ai.models.generateContent({
+            model,
+            contents: { parts: parcalar },
+            config: {
+              systemInstruction: TELAFFUZ_SISTEM_ISTEMI,
+              temperature: 0.2,
+            },
+          });
+          if (yanit?.text) {
+            rapor = yanit.text;
+            break;
+          }
+          sonHata = new Error(`${model} bos yanit dondurdu.`);
+          if (!ilkHata) ilkHata = sonHata;
+        } catch (err) {
+          sonHata = err;
+          if (!ilkHata) ilkHata = err;
+          if ((isRateLimitError(err) || isTransientError(err)) && deneme === 0) {
+            await sleep(1500);
+            continue;
+          }
+          break;
+        }
+      }
+      if (rapor) {
+        return res.json({ rapor, model, uretildi: Date.now() });
+      }
+    }
+
+    throw ilkHata || sonHata || new Error("Modelden yanıt alınamadı.");
+  } catch (error: any) {
+    console.error("Error in /api/telaffuz-degerlendirme:", error);
+    const kota = isRateLimitError(error);
+    res.status(kota ? 429 : 500).json({
+      /* KOTA MESAJI BURADA AYRI YAZILIYOR, describeRateLimit KULLANILMIYOR.
+         O ortak mesaj kullaniciya "hikaye ureticide 'Yazan model' olarak
+         acik kaynak bir model sec" diyor; okuma uygulamasinda dogru bir
+         tavsiye ama BURADA YANLIS: bu ekranda oyle bir secici yok ve
+         zaten olamaz - Groq'un metin ucu ses almiyor, yani telaffuz
+         degerlendirmesinin acik kaynak bir yedegi yok. Kullaniciyi var
+         olmayan bir ayara yollamak, hatanin kendisinden kotu. */
+      error: kota
+        ? 'Gemini\'nin günlük ücretsiz kotası doldu (UTC gece yarısı, Türkiye saatiyle 03:00\'te sıfırlanır). ' +
+          'Telaffuz değerlendirmesinin açık kaynak bir yedeği yok: sesi dinleyip fonem ölçebilen tek sağlayıcı bu. ' +
+          'Beklemek istemezsen Ayarlar\'dan kendi Gemini anahtarını girebilirsin. Betimleme alıştırması bundan etkilenmiyor.'
+        : formatErrorMessage(error, "Telaffuz değerlendirilemedi."),
+    });
+  }
+});
+
 // Netlify Functions ortaminda Express uygulamasi disaridan sarmalanir;
 // kendi portunu dinlemez ve statik dosyalari kendisi servis etmez.
 export { app };

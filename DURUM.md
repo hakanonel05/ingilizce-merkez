@@ -252,6 +252,89 @@ düşüyor ve bunu kullanıcıya söylüyor.
 
 ## 5. Son oturumda yapılanlar
 
+### Konuşma'ya ikinci alıştırma: telaffuz değerlendirmesi
+
+AI Studio'da ayrı geliştirilen `pronunciation-assessment-ai` projesinin
+ÇEKİRDEĞİ `/konusma/` altına taşındı. Artık iki alıştırma var ve farklı
+şeyler ölçüyorlar: **Betimleme** ne söylediğini (gramer, kelime, CEFR),
+**Telaffuz** nasıl söylediğini (fonem, vurgu, duraklama).
+
+**SES SORUSUNUN CEVABI ARTIK İKİYE AYRILDI — en önemli değişiklik bu.**
+Betimlemede ses cihazdan çıkmıyor (Whisper tarayıcıda). Telaffuzda
+çıkmak ZORUNDA: Whisper bir sesletim modeli değil, "th sesini d gibi
+çıkardın" diyemiyor. Panelde duran mutlak "sesin çıkmıyor" cümlesi bu
+yüzden bölündü; telaffuz tarafında ayrıca bir **rıza kapısı** var —
+mikrofon ve yükleme kabul edilene kadar kapalı, karar localStorage'da ve
+geri alınabiliyor. İkisinde de ses SAKLANMIYOR.
+
+**Model gerçekten dinliyor mu — ölçüldü.** Ayırt edici deneme: aynı kayıt
+iki farklı hedef metinle gönderildi.
+
+| | hedef doğru | hedef kasten yanlış |
+|---|---|---|
+| puan | 76/100 | 0/100 |
+| atlanan | 1 | 12 |
+| fazladan | 0 | 17 |
+
+Yanlış hedefte her söylenen kelimeyi "fazladan" diye işaretledi; yani
+hedef metni okuyup makul bir rapor uydurmuyor. Uydursaydı bu özellik
+kullanıcıya yalan söylüyor olurdu.
+
+**gemini-2.5-flash telaffuz zincirinden çıkarıldı** — bu anahtarla
+"no longer available to new users" (404) dönüyor, yani zincirin dibinde
+hiç çalışmayan bir basamak duruyordu. Aynı uçta ikinci bir düzeltme:
+hata olarak SON model yerine İLK hata dönüyor. Bu depo bu dersi
+`generateContentWithRetry` içinde zaten almıştı; elle yazılan döngüde
+tekrarlanmıştı ve gerçekten yaşandı — ilk iki model kotaya takılıyken
+ekranda "gemini-2.5-flash artık yok" yazıyordu.
+
+**Rapor ayrıştırıcısında bir hata bulundu ve düzeltildi.** Özgün desen
+satırdaki ilk `/.../` arasını IPA sayıyordu; iki gerçek satırı birden
+bozdu: düz metin bir maddedeki "en-US" tiresi "kelime - açıklama" sanıldı,
+ve bir cümlenin İÇİNDEKİ iki eğik çizgi arası IPA sanıldı (kelime "i",
+IPA "/ - Çok heceli ... ötümlü /"). İki şart bunu kesti: kalın kelime
+işareti zorunlu, ve IPA boşluk içeremez. Tanınmayan maddeler artık düz
+metin olarak gösteriliyor, sessizce kaybolmuyor.
+
+**KOTA DUVARINDA YERELE DÜŞÜYOR.** Telaffuz değerlendirmesinin bulut
+yedeği yok (Groq ses almıyor) ve Gemini'nin günlük ücretsiz kotası
+gerçekten doluyor — bu oturumda yaşandı. Artık bulut düşünce ekran boş
+bir hataya değil, TARAYICIDAKİ çözümlemeye düşüyor: gölgeleme katmanının
+motoru (`kaydiCozumle`, Whisper + Needleman-Wunsch hizalama) hedef
+cümleyle karşılaştırıp kelime doğruluğu, atlananlar, fazladanlar, hız ve
+duraksamaları veriyor. Fonem ve tonlama ölçülemiyor ve ekran bunu açıkça
+yazıyor. Kaydedilmiyor: İlerleme eğrisi tam değerlendirme puanlarından
+oluşuyor, kelime düzeyi ölçümü oraya karışırsa eğri iki farklı şeyi aynı
+çizgide gösterirdi. Uçtan uca sınandı (uç kasten düşürülüp).
+
+**UYDURMA IPA KALDIRILDI.** Taşınan sözlükte 37 kelime vardı ve dışındaki
+her kelime için IPA harf değiştirilerek üretiliyordu; ölçtüm, ürettiği şey
+IPA bile değildi: `island -> /island/`, `business -> /business/`,
+`through -> /θrɔː/` (doğrusu /θruː/). Telaffuz öğreten bir ekranda
+uydurulmuş okunuş yanlış puandan zararlı. Artık bilinmeyen kelimede IPA
+gösterilmiyor, ve sözlük Türkçe konuşanın zorlandığı seslerle 81 kelimeye
+çıkarıldı (/θ/ /ð/, /w/-/v/, /ɜːr/, /æ/-/e/, sessiz harfler, vurgu
+yanlışları). CMUdict gömülmedi: 3,6 MB ve bu yol nadiren işliyor.
+
+**TAŞINMAYANLAR ve sebepleri.** AI Studio sürümünün ~7.900 satırının
+önemli kısmı bu depoda zaten olan şeyleri yeniden yazıyordu: katman
+çalışması, ders listesi, kelime bankası, gramer koçu, metot rehberi,
+kendi kenar çubuğu ve üst çubuğu. Taşımak iki ayrı ilerleme kaydı
+demekti. Ayrıca üç özellik ölçüme dayanarak dışarıda bırakıldı:
+- **Zamana atlama / dalga formu üzerinde kelime konumu:** modelin verdiği
+  zaman damgaları yanlış (cümle sonundaki bir kelime için "00.0s - 00.4s").
+  Kesit çalma yine var ama "yaklaşık" diye işaretli.
+- **Hata türü filtre anahtarları:** beş kelimelik bir cümlede gösterecek
+  bir şey bırakmıyor.
+- **10 dakikalık kayıt:** Netlify gövde sınırı 6 MB; base64'te ~7 MB eder
+  ve canlı sitede hiç çalışmaz. Kayıt iki dakikada kendiliğinden duruyor.
+
+**Eklenenler (AI Studio'da olmayan ya da oradan alınan):** kelimenin doğru
+okunuşunu dinleme ve karşılaştırma, depodaki mevcut `/api/speak` ile —
+telaffuz için ikinci bir seslendirme servisi gerekmedi. Karşılaştırmadaki
+450 ms sessizlik özgün sürümden: iki ses bitişik çalınca kulak farkı
+duymuyor.
+
 ### Üçüncü uygulama: Konuşma (görsel betimleme)
 
 `/konusma/` — görseli gör, sesli anlat, çözümlet. Akış: görsel seç →

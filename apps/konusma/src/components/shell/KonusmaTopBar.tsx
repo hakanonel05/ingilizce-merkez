@@ -60,7 +60,7 @@ export const KonusmaTopBar: React.FC<Props> = ({
           <Mic className="h-4 w-4" />
         </span>
         <span className="wordmark hidden text-[19px] text-ink sm:inline">
-          Görsel <span className="text-brand">Betimleme</span>
+          Konuşma <span className="text-brand">Pratiği</span>
         </span>
       </button>
 

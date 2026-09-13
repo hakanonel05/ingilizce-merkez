@@ -64,3 +64,37 @@ export async function betimlemeCozumle(istek: AnalizIstegi): Promise<BetimlemeAn
   if (!yanit.ok) throw new Error(await hataMetni(yanit, 'Betimleme çözümlenemedi'));
   return yanit.json();
 }
+
+/* ---------------------------------------------------------------------
+   TELAFFUZ DEĞERLENDİRMESİ
+
+   SESİN SUNUCUYA GİTTİĞİ TEK ÇAĞRI BU. Betimleme tarafında ses hiç
+   çıkmıyor (Whisper tarayıcıda); burada çıkmak zorunda, çünkü ölçülen
+   şey fonem ve bunu duyan bir model gerekiyor. Arayüz bunu kullanıcıya
+   göndermeden önce açıkça söylüyor.
+   --------------------------------------------------------------------- */
+
+export interface TelaffuzIstegi {
+  hedefMetin: string;
+  /** base64, ön ek olmadan. */
+  sesVerisi: string;
+  sesTuru: string;
+  aksan: string;
+}
+
+export interface TelaffuzYaniti {
+  /** Ham Markdown rapor; ayrıştırması istemcide (lib/telaffuzRaporu.ts). */
+  rapor: string;
+  model?: string;
+  uretildi: number;
+}
+
+export async function telaffuzDegerlendir(istek: TelaffuzIstegi): Promise<TelaffuzYaniti> {
+  const yanit = await apiFetch('/api/telaffuz-degerlendirme', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(istek),
+  });
+  if (!yanit.ok) throw new Error(await hataMetni(yanit, 'Telaffuz değerlendirilemedi'));
+  return yanit.json();
+}

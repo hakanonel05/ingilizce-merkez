@@ -14,7 +14,7 @@ export default function AppSwitcher({ active }: Props) {
   const tabs = [
     { id: 'reading', label: 'Okuma & Kelime', sub: 'LEXIS TRAINER', href: '/' },
     { id: 'katmanli', label: 'Katmanlı İngilizce', sub: 'VİDEO İLE ÖĞRENME', href: '/katmanli/' },
-    { id: 'konusma', label: 'Konuşma', sub: 'GÖRSEL BETİMLEME', href: '/konusma/' },
+    { id: 'konusma', label: 'Konuşma', sub: 'BETİMLEME & TELAFFUZ', href: '/konusma/' },
   ] as const;
 
   return (
