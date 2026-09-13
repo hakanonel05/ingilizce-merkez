@@ -13,7 +13,7 @@ import { useEffect, useRef } from 'react';
 import { ActivityTimer, Skill } from './activityLog';
 
 export function useActivityTimer(
-  app: 'katmanli' | 'reading',
+  app: 'katmanli' | 'reading' | 'konusma',
   skill: Skill,
   refId?: string,
   refTitle?: string,

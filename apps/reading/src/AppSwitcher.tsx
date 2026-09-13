@@ -1,14 +1,20 @@
 /**
- * İki uygulama arasında geçiş çubuğu.
- * Reading  -> /          Katmanlı -> /katmanli/
+ * Uygulamalar arasında geçiş çubuğu.
+ * Reading -> /        Katmanlı -> /katmanli/        Konuşma -> /konusma/
  * Aynı alan adında oldukları için oturum ve yerel kayıtlar paylaşılır.
+ *
+ * Üç uygulamada da AYNI dosya duruyor (üç kopya). Tek bir ortak bileşene
+ * çıkarılabilirdi ama her uygulamanın Tailwind taraması kendi kökünden
+ * başlıyor ve bu bileşen zaten satır içi stille yazılmış — paylaşmanın
+ * kazancı, üç dosyayı birlikte güncelleme zorunluluğundan az.
  */
-type Props = { active: 'reading' | 'katmanli' };
+type Props = { active: 'reading' | 'katmanli' | 'konusma' };
 
 export default function AppSwitcher({ active }: Props) {
   const tabs = [
     { id: 'reading', label: 'Okuma & Kelime', sub: 'LEXIS TRAINER', href: '/' },
     { id: 'katmanli', label: 'Katmanlı İngilizce', sub: 'VİDEO İLE ÖĞRENME', href: '/katmanli/' },
+    { id: 'konusma', label: 'Konuşma', sub: 'GÖRSEL BETİMLEME', href: '/konusma/' },
   ] as const;
 
   return (

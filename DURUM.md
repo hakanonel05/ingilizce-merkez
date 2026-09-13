@@ -11,12 +11,13 @@ Son güncelleme: 30 Ağustos 2026 · `main` yayında
 
 ## 1. Proje nedir, nerede yayınlanır
 
-Tek sitede iki uygulama:
+Tek sitede üç uygulama:
 
 | Yol | Uygulama | Ne yapar |
 |-----|----------|----------|
 | `/` | **Okuma & Kelime** (Lexis Trainer) | 100 okuma parçası, kelime kartları, sınav, hikaye üreteci |
 | `/katmanli/` | **Katmanlı İngilizce** | Bir videonun transkriptiyle 7 katmanlı çalışma |
+| `/konusma/` | **Konuşma** (Görsel Betimleme) | Görseli sesli anlat, konuşmanın metni CEFR + gramer çözümlemesinden geçsin |
 
 - Depo: `github.com/hakanonel05/ingilizce-merkez`
 - Yayın: `https://ingilizcemerkez.netlify.app` — `main`'e push edilince otomatik
@@ -26,8 +27,9 @@ Tek sitede iki uygulama:
 npm install
 npm run dev:reading     # 5173
 npm run dev:katmanli    # 5174
+npm run dev:konusma     # 5175
 npm run dev:api         # 3000
-npm run build           # ikisini de derler -> dist/
+npm run build           # üçünü de derler -> dist/
 npm run lint            # tsc --noEmit
 ```
 
@@ -35,9 +37,9 @@ npm run lint            # tsc --noEmit
 
 ## 2. Koda bakarak anlaşılmayan yapısal kararlar
 
-**İki uygulama AYNI ORIGIN'de.** Bu yüzden `localStorage` ve `IndexedDB`
-ortak. Kelime kartları, API anahtarları ve çalışma takvimi iki tarafta da
-aynı veriyi görüyor. Bir uygulamada veri bozarsan diğeri de etkilenir.
+**Üç uygulama AYNI ORIGIN'de.** Bu yüzden `localStorage` ve `IndexedDB`
+ortak. Kelime kartları, API anahtarları ve çalışma takvimi üçünde de
+aynı veriyi görüyor. Bir uygulamada veri bozarsan diğerleri de etkilenir.
 
 **Ortak kod `shared/` altında.** Bir modül iki uygulamada da gerekiyorsa
 `shared/`'a taşınır ve eski yoluna **tek satırlık bir re-export bırakılır**
@@ -249,6 +251,52 @@ düşüyor ve bunu kullanıcıya söylüyor.
 ---
 
 ## 5. Son oturumda yapılanlar
+
+### Üçüncü uygulama: Konuşma (görsel betimleme)
+
+`/konusma/` — görseli gör, sesli anlat, çözümlet. Akış: görsel seç →
+anlat → metni gözden geçir → çözümleme → kayıt.
+
+**SES KAYDI SAKLANMIYOR, bu bir tercih değil uygulamanın kuralı.** Kayıt
+tarayıcıdaki Whisper'a veriliyor (`shared/ses/konusmaCozumleme.ts`
+içindeki yeni `kaydiYaziyaCevir`, gölgelemeyle AYNI worker ve model),
+metin alınınca blob bırakılıyor. IndexedDB'de duran tek konuşma izi
+metnin kendisi. Gölgeleme katmanında kayıtlar saklanıyor çünkü orada
+tekrar dinlemek alıştırmanın parçası; burada değil.
+
+**Görsel üretimi ölçüldü ve Gemini ÜCRETSİZ KATMANDA ÇALIŞMIYOR.**
+Dört görsel modelinin dördü de 429 döndü ve gerekçe açık: `limit: 0` —
+yani kota dolmuş değil, özellik ücretsiz katmanda hiç yok. Bu yüzden
+`/api/gorsel-uret` Gemini'yi deniyor, düşünce **Pollinations**'a
+geçiyor: anahtar istemiyor, ölçülen 1024×768 JPEG ~62 KB / ~3,2 sn,
+karşılığında köşede kendi filigranı oluyor. Faturalandırması açık bir
+anahtar girilirse Gemini kolu kendiliğinden devreye giriyor.
+
+**Çözümleme görselli.** `/api/betimleme-analizi` görseli inline
+gönderiyor (yalnızca Gemini — Groq dalı contents'i JSON'a çeviriyor,
+base64 oradan geçemez). Gemini düşerse metin üzerinden devam ediliyor ve
+ekran "görsel modele ulaşmadı" diye açıkça yazıyor. Ölçülen: ~18 sn,
+83 KB istek. Netlify'ın 26 sn sınırına yakın — görselin 1280px'e
+küçültülmesi bu yüzden şart.
+
+**Gramer kural adları KAPALI LİSTEDEN geliyor** (`GRAMER_KURALLARI`).
+Serbest metinken model aynı kurala her seferinde başka ad veriyordu
+("Present Continuous Tense" / "Present Continuous (Şimdiki Zaman)",
+"Irregular Plural Nouns" / "Düzensiz Çoğul İsimler") ve ilerleme
+ekranındaki "hangi hatayı tekrar yapıyorum" sayımı aynı hatayı iki ayrı
+konu gibi gösteriyordu. Liste hem şemaya (enum) hem isteme yazılı; iki
+bağımsız çalıştırmada adlar birebir aynı çıktı.
+
+**Vite önbelleği ayrıldı** (`node_modules/.vite-konusma`). Üç
+yapılandırma aynı `node_modules/.vite`'ı paylaştığı için konuşma
+sunucusu açılınca vite önbelleği baştan kuruyor ve tarayıcı 504
+(Outdated Optimize Dep) alıp BOŞ sayfa açıyordu. reading ile katmanlı
+hâlâ aynı dizini paylaşıyor; aralarında geçiş yapmak aynı 504'ü
+üretebilir.
+
+**Service worker sürümü v4'e çıktı.** Kök kapsamında çalışıyor ve
+`/konusma/` yolunu da kapsam dışına almak gerekti; sürüm artırılmazsa
+kurulu v3 yeni uygulamanın varlıklarını kendi önbelleğine alırdı.
 
 ### Vurgu rengi indigodan mürekkebe
 

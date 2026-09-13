@@ -3429,6 +3429,494 @@ Kullanıcı Sorusu: "${question}"
   }
 });
 
+/* ============================================================
+   KONUSMA — GORSEL BETIMLEME  (/api/gorsel-uret, /api/betimleme-analizi)
+   ------------------------------------------------------------
+   Ucuncu uygulama (/konusma/) ogrenciye bir gorsel verip onu INGILIZCE
+   sozlu betimletiyor, sonra betimlemeyi cozumluyor. Iki uc:
+
+     /api/gorsel-uret        rastgele bir sahne uretir
+     /api/betimleme-analizi  konusmanin yazi halini gorselle birlikte inceler
+
+   SES BU UCLARA HIC GELMIYOR. Kayit tarayicida Whisper ile yaziya
+   ceviriliyor (bkz. shared/ses/konusmaIscisi.ts) ve BURAYA yalnizca metin
+   gonderiliyor. Boylece "ses kaydi hicbir yere gitmiyor, saklanmiyor"
+   sozu sunucu tarafinda da dogru kaliyor.
+   ============================================================ */
+
+
+/* SAHNE HAVUZU
+
+   Betimleme alistirmasinin kalitesi sahnenin kendisine bagli: icinde
+   INSAN, EYLEM, NESNE ve MEKAN olan bir kare betimlenecek sey verir;
+   "gun batimi manzarasi" ise iki cumlede biter.
+
+   Her sahne bir CEFR bandina bagli, cunku A2 ogrencisine on kisilik
+   kalabalik bir tren istasyonu vermek alistirma degil caresizlik olur:
+   kelime yetmedigi icin ogrenci susuyor. Ust seviyelerde ise sahnenin
+   icinde anlatilacak bir DURUM (gerginlik, beklenti, celiski) var -
+   orada artik nesne saymak degil yorum yapmak gerekiyor.
+
+   Her sahne bir de ARAMA TERIMI tasiyor; sahnenin Turkce adi ekranda
+   gorunen ad, arama terimi ise Openverse'e giden sey. */
+interface Sahne {
+  /** Openverse arama terimi. KISA olmak zorunda: servis terimleri
+      AND'liyor, "construction site workers crane" sifir sonuc verirken
+      "construction workers" 240 sonuc veriyor (olculdu). */
+  arama: string;
+  /** Ekranda gosterilen kisa ad. */
+  tr: string;
+  /** Bu sahnenin uygun oldugu en dusuk seviye. */
+  taban: 'A1' | 'A2' | 'B1' | 'B2' | 'C1';
+}
+
+const SAHNE_HAVUZU: Sahne[] = [
+  { taban: 'A1', tr: 'Mutfakta kahvaltı', arama: 'family breakfast' },
+  { taban: 'A1', tr: 'Park', arama: 'children playground' },
+  { taban: 'A1', tr: 'Sınıf', arama: 'classroom students' },
+  { taban: 'A2', tr: 'Pazar yeri', arama: 'farmers market' },
+  { taban: 'A2', tr: 'Otobüs durağı', arama: 'bus stop waiting' },
+  { taban: 'A2', tr: 'Kafe', arama: 'cafe interior people' },
+  { taban: 'A2', tr: 'Sahil', arama: 'crowded beach summer' },
+  { taban: 'B1', tr: 'Tren istasyonu', arama: 'train station platform' },
+  { taban: 'B1', tr: 'Mutfak telaşı', arama: 'restaurant kitchen chefs' },
+  { taban: 'B1', tr: 'Taşınma günü', arama: 'moving boxes house' },
+  { taban: 'B1', tr: 'Şantiye', arama: 'construction workers' },
+  { taban: 'B1', tr: 'Hastane bekleme salonu', arama: 'hospital waiting room' },
+  { taban: 'B2', tr: 'Protesto', arama: 'street protest signs' },
+  { taban: 'B2', tr: 'Açık hava düğünü', arama: 'wedding reception' },
+  { taban: 'B2', tr: 'Havalimanı', arama: 'airport terminal passengers' },
+  { taban: 'B2', tr: 'Balıkçı limanı', arama: 'fishing harbour boats' },
+  { taban: 'C1', tr: 'Terk edilmiş fabrika', arama: 'abandoned factory' },
+  { taban: 'C1', tr: 'Kütüphane', arama: 'library reading room' },
+  { taban: 'C1', tr: 'Sel sonrası', arama: 'flood damage street' },
+  { taban: 'C1', tr: 'Metroda kalabalık', arama: 'subway passengers' },
+];
+
+
+const SEVIYE_SIRASI = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const;
+type Seviye = typeof SEVIYE_SIRASI[number];
+
+function seviyeIndeksi(s: string): number {
+  const i = (SEVIYE_SIRASI as readonly string[]).indexOf(String(s).toUpperCase());
+  return i < 0 ? 2 : i; // taninmayan deger B1 sayilir
+}
+
+/** Bir ust CEFR seviyesi; C2'nin ustu yok, kendisi doner. */
+function birUstSeviye(s: string): Seviye {
+  const i = seviyeIndeksi(s);
+  return SEVIYE_SIRASI[Math.min(i + 1, SEVIYE_SIRASI.length - 1)];
+}
+
+/**
+ * Seviyeye uygun rastgele bir sahne.
+ *
+ * Tam esitlik aranmiyor: ogrencinin seviyesinin BIR ALTINDAN baslayip
+ * seviyesine kadar olan sahneler havuza giriyor. Yalnizca tam esitlik
+ * arasaydik A1'de uc sahne kalirdi ve dorduncu alistirmada bastan
+ * tekrar baslardi.
+ */
+function sahneSec(seviye: string): Sahne {
+  const ust = seviyeIndeksi(seviye);
+  const uygun = SAHNE_HAVUZU.filter((s) => {
+    const t = seviyeIndeksi(s.taban);
+    return t <= ust && t >= ust - 1;
+  });
+  const havuz = uygun.length ? uygun : SAHNE_HAVUZU;
+  return havuz[Math.floor(Math.random() * havuz.length)];
+}
+
+
+/* OPENVERSE — VARSAYILAN GORSEL KAYNAGI (gercek fotograf)
+
+   NEDEN URETIM DEGIL DE FOTOGRAF: olculdu, ayni alti konuda yan yana.
+
+     |                        | Pollinations | Openverse |
+     | hiz                    | 4,4-8,1 sn   | 1,5 sn    |
+     | betimleme uygunlugu    | 68/100       | 78/100    |
+     | betimlenebilir oge     | 7            | 11        |
+     | konuya uygunluk        | 2/3          | 5/6       |
+     | sorunlu kare           | 3/3          | 0/6       |
+
+   Uretilen karelerin hepsinde servisin filigrani vardi ve "kalabalik"
+   uretiyor olsalar da ayri ayri anlatilabilir OLAY uretmiyorlardi.
+   Gercek bir istasyon fotografinda iki tren, on iki insan, cam cati,
+   duvarda grafiti ve bir tabela ayni anda var - ogrenciyi iki dakika
+   konusturan sey bu.
+
+   AYRICA DAYANIKLILIK: Pollinations'a pes pese on istek atildiginda
+   ucu 429, ucu zaman asimi verdi ve basarili olanlar 44 saniye surdu.
+   Tek tek kullanimda sorun cikarmiyor ama "Yeni gorsel"e ust uste
+   basan kullanici duvara tosluyordu.
+
+   HIZ SINIRI (olculdu, yanit basliklarindan): anonim kullanimda
+   20/dakika ve 200/gun. Bu sinir SUNUCUNUN IP'sine bagli, yani
+   Netlify'da site genelinde gecerli - gunde 200 alistirma demek, bu
+   uygulama icin fazlasiyla yeterli. Daralirsa Openverse ucretsiz bir
+   istemci kimligi veriyor (auth_tokens/register) ve sinir yukseliyor.
+
+   LISANS: gelen fotograflar CC lisansli ve cogu ATIF ISTIYOR. Bu yuzden
+   uc, fotografciyi ve lisansi da donduruyor; arayuz karenin altinda
+   kunye gosteriyor. Atifsiz gostermek lisansi ihlal ederdi. */
+
+interface FotografSonucu {
+  veri: Buffer;
+  tur: string;
+  lisans: string;
+  atif: string;
+  kaynakSayfa: string;
+}
+
+async function openverseFotografi(arama: string): Promise<FotografSonucu> {
+  const api = 'https://api.openverse.org/v1/images/?' + new URLSearchParams({
+    q: arama,
+    /* category=photograph: cizim, logo, clipart eleniyor. Bunlarin
+       betimlenecek ayrintisi yok. */
+    category: 'photograph',
+    mature: 'false',
+    page_size: '20',
+  });
+
+  const kontrol = new AbortController();
+  const zamanlayici = setTimeout(() => kontrol.abort(), 12000);
+  let adaylar: any[];
+  try {
+    const yanit = await fetch(api, {
+      signal: kontrol.signal,
+      headers: { 'User-Agent': OPENVERSE_UA },
+    });
+    /* 429 AYRI ELE ALINIYOR. Servis anonim kullanimda 20/dakika ve 200/gun
+       veriyor (olculdu, yanit basliklarindan: x-ratelimit-limit-anon_burst
+       ve anon_sustained) ve sinir SUNUCUNUN IP'sine bagli - yani Netlify'da
+       site geneli. Sinir asilinca JSON degil HTML bir hata sayfasi donuyor;
+       ham hatayi gostermek kullaniciya "Unexpected token <" yazdirirdi. */
+    if (yanit.status === 429) {
+      throw new Error('Fotograf servisinin gunluk sinirina ulasildi.');
+    }
+    if (!yanit.ok) throw new Error(`Fotograf servisi ${yanit.status} dondu.`);
+    /* HTML donerse json() firlatir; null'a dusup "sonuc yok" demek,
+       ayristirma hatasini kullaniciya gostermekten iyi. */
+    const govde: any = await yanit.json().catch(() => null);
+    adaylar = (govde?.results || []).filter((r: any) => r?.url);
+  } finally {
+    clearTimeout(zamanlayici);
+  }
+
+  if (!adaylar.length) throw new Error('Bu konuda fotograf bulunamadi.');
+
+  /* ILK SONUC DEGIL, ILK YIRMIDEN RASTGELE BIRI. Ilk sonuc her zaman
+     ayni kare demek; ikinci alistirmada kullanici ayni fotografi gorurdu.
+     Havuz konu basina ~240 sonuc, yani tekrar pratikte olmuyor. */
+  const secim = adaylar[Math.floor(Math.random() * adaylar.length)];
+
+  const gorselKontrol = new AbortController();
+  const gorselZaman = setTimeout(() => gorselKontrol.abort(), 15000);
+  try {
+    const yanit = await fetch(secim.url, {
+      signal: gorselKontrol.signal,
+      headers: { 'User-Agent': OPENVERSE_UA },
+    });
+    if (!yanit.ok) throw new Error(`Fotograf indirilemedi (${yanit.status}).`);
+    const tur = yanit.headers.get('content-type') || 'image/jpeg';
+    if (!tur.startsWith('image/')) throw new Error('Gorsel disi yanit.');
+    return {
+      veri: Buffer.from(await yanit.arrayBuffer()),
+      tur,
+      lisans: `CC ${String(secim.license || '').toUpperCase()} ${secim.license_version || ''}`.trim(),
+      atif: secim.creator || 'bilinmiyor',
+      kaynakSayfa: secim.foreign_landing_url || '',
+    };
+  } finally {
+    clearTimeout(gorselZaman);
+  }
+}
+
+/* Wikimedia Commons DENENDI VE ELENDI: hizi iyiydi (1,5 sn) ama aramasi
+   dosya ADINA bakiyor, icerige degil. Uc konuluk denemede yalnizca biri
+   konuyla ilgili bir kare dondu; "farmers market" aramasi alakasiz bir
+   goruntu getirdi. Not burada duruyor ki bir daha denenmesin. */
+
+const OPENVERSE_UA =
+  'ingilizce-merkez/1.0 (https://ingilizcemerkez.netlify.app; egitim amacli gorsel arama)';
+
+
+app.post("/api/gorsel-uret", async (req, res) => {
+  try {
+    const seviye = typeof req.body?.seviye === 'string' ? req.body.seviye : 'B1';
+    const sahne = sahneSec(seviye);
+    const f = await openverseFotografi(sahne.arama);
+
+    res.json({
+      veriUrl: `data:${f.tur};base64,${f.veri.toString('base64')}`,
+      baslik: sahne.tr,
+      arama: sahne.arama,
+      lisans: f.lisans,
+      atif: f.atif,
+      kaynakSayfa: f.kaynakSayfa,
+    });
+  } catch (error: any) {
+    console.error("Error in /api/gorsel-uret:", error);
+    /* HIZLI BASARISIZ OL. Eskiden burada bir uretim yedegi vardi ve
+       fotograf bulunamadiginda kullanici 15-40 saniye bekleyip filigranli
+       bir kare aliyordu. Yuklemeyi soylemek bundan hem hizli hem durust. */
+    res.status(502).json({
+      error: /sinir|429/i.test(String(error?.message || ''))
+        ? 'Hazır görsel servisinin sınırına ulaşıldı. Kendi görselini yükleyerek devam edebilirsin — çözümleme aynı şekilde çalışıyor.'
+        : formatErrorMessage(
+            error,
+            "Hazır görsel getirilemedi. Kendi görselini yükleyerek devam edebilirsin."
+          ),
+    });
+  }
+});
+
+/**
+ * BETIMLEME COZUMLEMESI — cikti semasi.
+ *
+ * Gelen metin bir KONUSMANIN otomatik yaziya cevrilmis hali; elle yazilmis
+ * bir metin degil. Bu ayrim cozumlemenin dogrulugu icin belirleyici ve
+ * istemde acikca yaziyor (asagida), yoksa hata listesi asil sorunlar
+ * yerine yaziya dokum tortusuyla doluyor.
+ */
+/* KURAL ADLARI KAPALI BIR LISTEDEN SECILIYOR.
+
+   ILERLEME EKRANI BUNA BAGLI. Orada "hangi hatayi tekrar tekrar yapiyorum"
+   sorusu, butun cozumlemelerdeki kural adlari SAYILARAK cevaplaniyor. Ad
+   serbest metinken model ayni kurala her seferinde baska bir ad veriyordu;
+   olctum: uc betimlemede "Present Continuous (Simdiki Zaman)" ile
+   "Present Continuous Tense", "Duzensiz Cogul Isimler" ile "Irregular
+   Plural Nouns" AYRI satirlar olarak cikti - yani ayni hatayi iki kez
+   yapan kullanici listede iki ayri konu goruyordu, ikisi de birer kez.
+   Boyle bir sayim hicbir sey soylemiyor.
+
+   Liste hem semaya (enum) hem isteme yaziliyor: Gemini semayi uyguluyor,
+   Groq ise sema almiyor ve yalnizca istemdeki listeyi goruyor. */
+const GRAMER_KURALLARI = [
+  'Fiil zamanı',
+  'Present Simple',
+  'Present Continuous',
+  'Past Simple',
+  'Present Perfect',
+  'Özne-yüklem uyumu',
+  'Özne eksikliği',
+  'Artikel (a/an/the)',
+  'Tekil/çoğul isim',
+  'Düzensiz çoğul',
+  'Sayılamayan isim',
+  'Edat (preposition)',
+  'Sözcük türü',
+  'Sıfat kullanımı',
+  'Zamir',
+  'Kelime sırası',
+  'Bağlaç',
+  'Modal fiil',
+  'Edilgen çatı',
+  'Mastar / -ing',
+  'İlgi cümlesi',
+  'Karşılaştırma',
+  'Olumsuzluk ve soru',
+  'There is / There are',
+  'Eşdizim (collocation)',
+  'Diğer',
+];
+
+const BETIMLEME_SEMASI = {
+  type: Type.OBJECT,
+  properties: {
+    cefr: { type: Type.STRING },
+    seviyeGerekcesiTr: { type: Type.STRING },
+    gucluYanlarTr: { type: Type.ARRAY, items: { type: Type.STRING } },
+    gramerHatalari: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          hatali: { type: Type.STRING },
+          dogrusu: { type: Type.STRING },
+          kuralTr: { type: Type.STRING, enum: GRAMER_KURALLARI },
+          aciklamaTr: { type: Type.STRING },
+        },
+        required: ["hatali", "dogrusu", "kuralTr", "aciklamaTr"],
+      },
+    },
+    kelimeSecimi: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          kullanilan: { type: Type.STRING },
+          oneri: { type: Type.STRING },
+          nedenTr: { type: Type.STRING },
+        },
+        required: ["kullanilan", "oneri", "nedenTr"],
+      },
+    },
+    kacirilanlarTr: { type: Type.ARRAY, items: { type: Type.STRING } },
+    ustSeviyeOrnek: { type: Type.STRING },
+    ustSeviyeNotuTr: { type: Type.STRING },
+    iseYararKelimeler: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          ifade: { type: Type.STRING },
+          anlamTr: { type: Type.STRING },
+        },
+        required: ["ifade", "anlamTr"],
+      },
+    },
+  },
+  required: [
+    "cefr", "seviyeGerekcesiTr", "gucluYanlarTr", "gramerHatalari",
+    "kelimeSecimi", "kacirilanlarTr", "ustSeviyeOrnek", "ustSeviyeNotuTr",
+    "iseYararKelimeler",
+  ],
+};
+
+function betimlemeIstemi(
+  metin: string,
+  hedef: string,
+  gorselVarMi: boolean,
+  gorselIstemi: string
+): string {
+  return `GÖREV: Bir İngilizce öğrencisinin SÖZLÜ görsel betimlemesini değerlendir.
+
+${gorselVarMi
+    ? 'Betimlenen görsel bu mesajda ekli. Önce görsele bak, sonra öğrencinin anlattığıyla karşılaştır.'
+    : `Görsel bu isteğe eklenemedi. Görselin içeriği şuydu: "${gorselIstemi || 'bilinmiyor'}". Sadece metin üzerinden değerlendir ve görselde olup söylenmeyen ayrıntılar hakkında İDDİA ETME.`}
+
+ÖĞRENCİNİN BETİMLEMESİ (konuşma, otomatik olarak yazıya çevrildi):
+"""
+${metin}
+"""
+
+YAZIYA DÖKÜM TORTUSUNU HATA SAYMA — bunlar öğrencinin hatası değil:
+- Noktalama ve büyük/küçük harf. Çözümleyici bunları kendisi uyduruyor.
+- "don't / it's" gibi kısaltmalar ve "gonna, kinda" gibi konuşma biçimleri.
+- "um, uh, you know" gibi duraksama sözcükleri.
+- Tek bir sesin yanlış duyulmuş olabileceği kelimeler (ör. "see" / "sea").
+Bunlar yerine GRAMERE ve KELİME SEÇİMİNE bak: zaman uyumu, tekil/çoğul,
+edat, artikel (a/an/the), özne-yüklem uyumu, sözcük türü, eşdizim.
+
+ÇIKTI ALANLARI:
+1. "cefr": Bu betimlemenin CEFR seviyesi — A1, A2, B1, B2, C1 veya C2'den
+   biri, başka hiçbir şey yazma. Betimlemenin KENDİSİNİ değerlendir;
+   öğrencinin genel seviyesini tahmin etme. Cümle yapısı çeşitliliği,
+   kelime zenginliği, bağlaç kullanımı ve hata yoğunluğu belirleyici.
+2. "seviyeGerekcesiTr": Bu seviyeyi neden verdiğin, 2-3 cümle, Türkçe.
+   Metinden somut örnek göster.
+3. "gucluYanlarTr": İyi yapılmış 2-4 şey, Türkçe. Uydurma; gerçekten
+   metinde olan şeyleri yaz.
+4. "gramerHatalari": Her hata için hatalı ifade, doğrusu, kural adı ve
+   Türkçe açıklama. Önemliden önemsize sırala, en fazla 8 tane.
+   "kuralTr" ŞU LİSTEDEN BİRİ OLMAK ZORUNDA — harfi harfine yaz, listede
+   olmayan bir ad uydurma, hiçbiri uymuyorsa "Diğer" yaz:
+   ${GRAMER_KURALLARI.join(' · ')}
+5. "kelimeSecimi": Yanlış ya da zayıf kelime seçimleri. "kullanilan" =
+   öğrencinin dediği, "oneri" = yerine ne denmeliydi, "nedenTr" = neden.
+   Anlamı bozan yanlış kelimeler önce; sonra "good/nice/very" gibi zayıf
+   ama yanlış olmayan seçimler. En fazla 8 tane.
+6. "kacirilanlarTr": ${gorselVarMi
+    ? 'Görselde açıkça görünen ama öğrencinin hiç değinmediği, betimlemeyi zenginleştirecek 2-5 ayrıntı. Türkçe yaz.'
+    : 'Boş dizi döndür — görsel olmadan bu değerlendirilemez.'}
+7. "ustSeviyeOrnek": AYNI görselin ${hedef} seviyesinde örnek betimlemesi,
+   İNGİLİZCE. Öğrencinin anlattığı sahneyi anlatsın, başka bir sahneyi
+   değil. Konuşma diline uygun, 5-8 cümle. Gösterişli değil DOĞAL olsun.
+8. "ustSeviyeNotuTr": Bu örneği ${hedef} yapan şey nedir — hangi yapılar,
+   hangi bağlaçlar, hangi kelimeler? 2-4 cümle, Türkçe.
+9. "iseYararKelimeler": Bu görseli anlatmak için ${hedef} seviyesinde
+   işine yarayacak 5-8 ifade. "ifade" İngilizce (kelime ya da kalıp),
+   "anlamTr" Türkçe karşılığı.
+
+DİL: Açıklamaların tamamı Türkçe; yalnızca İngilizce örnekler ve örnek
+betimleme İngilizce. Ton: doğrudan ve yapıcı, abartılı övgü yok.`;
+}
+
+app.post("/api/betimleme-analizi", async (req, res) => {
+  try {
+    const metin = typeof req.body?.metin === 'string' ? req.body.metin.trim() : '';
+    if (!metin) {
+      return res.status(400).json({ error: "Betimleme metni boş." });
+    }
+    if (metin.split(/\s+/).filter(Boolean).length < 5) {
+      return res.status(400).json({
+        error: "Betimleme çok kısa; en az birkaç cümle konuşman gerekiyor.",
+      });
+    }
+
+    const gorselVeri = typeof req.body?.gorselVeri === 'string' ? req.body.gorselVeri : '';
+    const gorselTuru = typeof req.body?.gorselTuru === 'string' ? req.body.gorselTuru : 'image/jpeg';
+    const gorselIstemi = typeof req.body?.gorselIstemi === 'string' ? req.body.gorselIstemi : '';
+    const hedef = birUstSeviye(
+      typeof req.body?.hedefSeviye === 'string' ? req.body.hedefSeviye : 'B1'
+    );
+
+    const ortakAyar = {
+      systemInstruction: SYSTEM_INSTRUCTION_COACH,
+      responseMimeType: "application/json",
+      responseSchema: BETIMLEME_SEMASI as any,
+    };
+
+    let yanit: { text: string; usedModel: string } | null = null;
+    let gorselGoruldu = false;
+
+    /* 1) GORSELLE. Yalnizca Gemini: Groq'un metin ucu gorsel almiyor ve
+       generateContentWithRetry icindeki Groq dali contents'i JSON'a
+       ceviriyor - base64 oradan gecerse modele anlamsiz bir harf yigini
+       gitmis olurdu. */
+    if (gorselVeri && getAIClient()) {
+      try {
+        yanit = await generateContentWithRetry(null, {
+          contents: [{
+            role: 'user',
+            parts: [
+              { inlineData: { mimeType: gorselTuru, data: gorselVeri } },
+              { text: betimlemeIstemi(metin, hedef, true, gorselIstemi) },
+            ],
+          }],
+          config: ortakAyar,
+          providers: ['gemini'],
+        });
+        gorselGoruldu = true;
+      } catch (err: any) {
+        console.warn('[betimleme] gorselli cozumleme basarisiz, metne dusuluyor:', err?.message);
+      }
+    }
+
+    /* 2) METINLE. Gorsel yoksa ya da gorselli deneme dustuyse. Gramer ve
+       seviye degerlendirmesi gorsel olmadan da gecerli; yalnizca
+       "gorselde olup soylenmeyenler" bolumu bos kaliyor ve arayuz bunu
+       kullaniciya acikca yaziyor. */
+    if (!yanit) {
+      yanit = await generateContentWithRetry(getAIClient(), {
+        contents: betimlemeIstemi(metin, hedef, false, gorselIstemi),
+        jsonHint: '{"cefr":"B1","seviyeGerekcesiTr":"","gucluYanlarTr":[""],"gramerHatalari":[{"hatali":"","dogrusu":"","kuralTr":"Edat (preposition)","aciklamaTr":""}],"kelimeSecimi":[{"kullanilan":"","oneri":"","nedenTr":""}],"kacirilanlarTr":[],"ustSeviyeOrnek":"","ustSeviyeNotuTr":"","iseYararKelimeler":[{"ifade":"","anlamTr":""}]}',
+        config: ortakAyar,
+      });
+    }
+
+    const cozum = JSON.parse(yanit.text || "{}");
+    res.json({
+      ...cozum,
+      /* Seviye modelden serbest metin olarak geliyor; "B1 (orta)" gibi bir
+         sey donerse ilerleme grafigi okuyamaz. Burada tek bicime indiriliyor. */
+      cefr: String(cozum.cefr || '').toUpperCase().match(/[ABC][12]/)?.[0] || 'B1',
+      hedefSeviye: hedef,
+      gorselGorulduMu: gorselGoruldu,
+      model: yanit.usedModel,
+      uretildi: Date.now(),
+    });
+  } catch (error: any) {
+    console.error("Error in /api/betimleme-analizi:", error);
+    const isQuota = isRateLimitError(error);
+    res.status(isQuota ? 429 : 500).json({
+      error: isQuota
+        ? describeRateLimit(error)
+        : formatErrorMessage(error, "Betimleme çözümlenemedi."),
+    });
+  }
+});
+
 // Netlify Functions ortaminda Express uygulamasi disaridan sarmalanir;
 // kendi portunu dinlemez ve statik dosyalari kendisi servis etmez.
 export { app };

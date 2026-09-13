@@ -66,6 +66,7 @@ let sorun = 0;
 for (const [ad, kaynak, cssDizin] of [
   ['KATMANLI', ['apps/katmanli', 'shared'], 'dist/katmanli/assets'],
   ['READING', ['apps/reading', 'shared'], 'dist/assets'],
+  ['KONUSMA', ['apps/konusma', 'shared'], 'dist/konusma/assets'],
 ]) {
   const css = cssOku(cssDizin);
   const siniflar = topla(kaynak);

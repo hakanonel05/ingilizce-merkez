@@ -163,7 +163,10 @@ function emptyRow(day: string, deviceId: string): DayStatRow {
 }
 
 export interface ActivityInput {
-  app: 'katmanli' | 'reading';
+  /* Hangi uygulamadan geldigi. Satira YAZILMIYOR (gunluk toplam yalnizca
+     beceriye gore ayriliyor); ayrimi burada tutmak, ileride uygulama
+     kirilimi istenirse cagri yerlerini degistirmeden eklenebilmesi icin. */
+  app: 'katmanli' | 'reading' | 'konusma';
   skill: Skill;
   kind: ActivityKind;
   /** Süre (saniye) — 'session' için. */
@@ -368,7 +371,7 @@ export class ActivityTimer {
 
   constructor(
     private readonly meta: {
-      app: 'katmanli' | 'reading';
+      app: 'katmanli' | 'reading' | 'konusma';
       skill: Skill;
       refId?: string;
       refTitle?: string;

@@ -3,8 +3,14 @@
 // ============================================================
 
 /* v3: v2'de Kokoro modelinin 88 MB'lik gereksiz kopyasi vardi. Surum
-   artirilinca eski onbellek silinip yerine temizi kuruluyor. */
-const CACHE_NAME = 'lexis-trainer-v3';
+   artirilinca eski onbellek silinip yerine temizi kuruluyor.
+
+   v4: ucuncu uygulama (/konusma/) eklendi ve asagidaki kapsam disi birakma
+   listesine girdi. SURUM ARTIRMAK SART: bu SW kok kapsaminda ('/') calisiyor
+   ve zaten kurulu olan v3, /konusma/ altindaki JS ve CSS'i kendi onbellegine
+   almaya calisirdi - reading'in dosyalarina benzeyen ama ona ait olmayan
+   varliklar. Surum degisince eski onbellek toptan siliniyor. */
+const CACHE_NAME = 'lexis-trainer-v4';
 
 // Başlangıçta önbelleğe alınacak temel statik dosyalar
 const APP_SHELL = [
@@ -49,12 +55,13 @@ self.addEventListener('activate', (event) => {
 
 // ---- FETCH ----
 self.addEventListener('fetch', (event) => {
-  // BIRLESIK SITE: Katmanli uygulamasi ve API istekleri bu SW'nin
+  // BIRLESIK SITE: Katmanli ve Konusma uygulamalari ile API istekleri bu SW'nin
   // kapsami disinda kalmali; aksi halde onbellek yanlis sayfa dondurur.
   {
     const u = new URL(event.request.url);
     if (u.origin === self.location.origin &&
-        (u.pathname.startsWith('/katmanli') || u.pathname.startsWith('/api') ||
+        (u.pathname.startsWith('/katmanli') || u.pathname.startsWith('/konusma') ||
+         u.pathname.startsWith('/api') ||
          u.pathname.startsWith('/.netlify'))) {
       return;
     }

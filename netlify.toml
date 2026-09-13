@@ -28,6 +28,12 @@
   to = "/katmanli/index.html"
   status = 200
 
+# Konuşma (görsel betimleme) tek sayfa uygulaması
+[[redirects]]
+  from = "/konusma/*"
+  to = "/konusma/index.html"
+  status = 200
+
 # Kullanım kılavuzu STATİK bir sayfa (dist/kilavuz/), tek sayfa uygulaması
 # değil. Netlify var olan dosyayı zaten force olmayan bir rewrite'ten önce
 # servis eder, ama sondaki eğik çizgisiz "/kilavuz" isteği dizin çözümüne

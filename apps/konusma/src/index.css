@@ -1,0 +1,471 @@
+@import "tailwindcss";
+
+/* Tailwind v4 sinif taramasini Vite kokunden (apps/<uygulama>) baslatir;
+   shared/ o agacin disinda kaldigi icin YALNIZCA orada gecen siniflar
+   uretilmiyordu. Ortak bilesenler (ornegin analytics/Dashboard.tsx)
+   sessizce yari stilsiz kaliyordu: overflow-x-auto uretilmedigi icin
+   takvim serididen tasip sayfayi yatay kaydirmisti. */
+@source "../../../shared";
+
+/* =====================================================================
+   KONUŞMA — TASARIM SİSTEMİ
+
+   Bu dosya katmanlı uygulamanın index.css dosyasının KOPYASI. Tailwind v4
+   @theme bloğu her Vite kökünde ayrı olmak zorunda; paylaşılan bir CSS
+   dosyasından @import etmek token üretimini kökten kırıyor. Değer
+   değiştirirken üç dosyanın (reading, katmanlı, konuşma) hepsine bakın —
+   amaç ADLARIN ve DEĞERLERİN üçünde de aynı kalması.
+
+   Yon: sakin, yuksek kontrastli bir calisma arayuzu.
+   Referanslar: qurio.academy (kabuk ve palet) + apple.com (tipografi ve
+   bosluk disiplini). Ayrintili kurallar: .claude/skills/frontend-design.
+
+   ÖNEMLİ BİR KARAR: burada ~90 satırlık bir "palet eşleme" katmanı
+   vardı; kaynaktaki slate/indigo sınıflarını kağıt/mürekkep tonlarına
+   çeviriyordu. O katman KALDIRILDI.
+
+   Sebebi şu: bileşenler ZATEN slate/indigo ile, doğru kontrast
+   ilişkileriyle yazılmış. Eşleme katmanı hepsini tek bir kreme ve
+   siyaha indirgeyince görsel hiyerarşi düzleşiyordu — birincil düğme
+   ile ikincil düğme aynı renge düşüyor, tamamlanmış adım ile pasif
+   adım ayırt edilemiyordu. Sınıfları kendi hallerinde bırakmak hem
+   90 satır CSS'ten kurtarıyor hem de hiyerarşiyi geri veriyor.
+
+   Değişkenler (--ink, --paper …) duruyor: kabuk ve ortak bileşenler
+   bunları kullanıyor. Artık slate ölçeğinin birebir karşılığı olacak
+   şekilde tanımlılar, yani iki yazım biçimi de aynı paleti gösteriyor.
+   ===================================================================== */
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* =====================================================================
+     ORTAK RENK SOZLUGU
+
+     Bu token'lar asagidaki :root degiskenleriyle AYNI adi ve AYNI degeri
+     tasiyor, ve reading'in @theme blogunda da birebir ayni tanimlilar.
+     Amac: shared/ altindaki bir bilesenin `bg-accent` yazabilmesi ve bu
+     sinifin IKI uygulamada da uretilmesi.
+
+     Onceden ortak bilesenler vurgu icin `bg-teal-600` gibi sabit bir renk
+     yaziyordu: teal ne bu uygulamanin ne de reading'in paletinde vardi,
+     dolayisiyla kelime kartlari ekrani her iki tarafta da ucuncu bir
+     vurgu rengiyle duruyordu.
+
+     DIKKAT: bu bir "palet esleme katmani" DEGIL. Yukaridaki nottaki gibi
+     slate/indigo siniflarini yeniden tanimlamiyor - yalnizca yeni adlar
+     ekliyor. Bilesenlerdeki slate olcegi oldugu gibi duruyor, gorsel
+     hiyerarsi bozulmuyor.
+     ===================================================================== */
+  --color-paper:        #F5F4F2;
+  --color-paper-2:      #FFFFFF;
+  --color-paper-3:      #EDEBE8;
+  --color-ink:          #1C1917;
+  --color-ink-2:        #57534E;
+  /* Pasif metin. #78716C "beyazda 4.8" diye secilmisti ve o dogruydu,
+     ama sayfanin zemini beyaz DEGIL: govde #F5F4F2, kart ici #EDEBE8.
+     Gercek kullanimda 4.36 ve 4.03'e dusuyordu. Bu deger uc zeminde de
+     gecer: 5.74 / 5.23 / 4.83. */
+  --color-ink-3:        #6B6560;
+  --color-ink-800:      #292524;
+  --color-ink-950:      #0C0A09;
+  --color-hairline:     #E7E5E4;
+  /* hairline-2 @theme'e EKLENMEK ZORUNDA: depoda 48 yerde
+     `border-hairline-2` / `text-hairline-2` yaziliyor ve token burada
+     tanimli degilse Tailwind o siniflari hic uretmez — hata da vermez,
+     sinif sessizce yok sayilir. */
+  --color-hairline-2:   #D6D3D1;
+  /* VURGU — dolu birincil eylem ve aktif menu ogesi.
+     Deger #4F46E5 (Tailwind indigo-600) idi. O renk yapay zekayla
+     uretilmis arayuzlerin fiilen varsayilani; skill'in birinci yasak
+     maddesi de mor/indigo. Referans aldigimiz sitenin aktif menu ogesi
+     oyle oldugu icin korunmustu, ama bu projenin markasi turuncu —
+     indigo disaridan gelmeydi.
+
+     Simdi murekkep: birincil eylem sessiz ve koyu, turuncu ise yalnizca
+     markaya ve satir ici baglantiya kaliyor. Uzerine yazilan beyaz
+     16.9 kontrast veriyor.
+     accent-700 hover icin ACIK taraftadir - koyu bir dugmede
+     koyulasmak gorunmuyor, hafif acilmak goruluyor. */
+  --color-accent:       #1C1917;
+  --color-accent-700:   #3F3A36;
+  --color-accent-soft:  #EDEBE8;
+
+  /* MARKA RENGI (turuncu) — vurgu icin, eylem icin DEGIL.
+     qurio.academy'de iki renk var ve isleri kesin ayrilmis: menekse-mavi
+     yalnizca aktif/tiklanabilir durumu isaretler, turuncu yalnizca markayi
+     ve bir cumledeki tek anahtar kelimeyi ("Social *Space*") isaretler.
+     Turuncu bir dugmenin zemini olursa bu ayrim cokup ekran iki renkli
+     bir SaaS panosuna doner.
+     --brand buyuk metin icin (beyazda 4.0 kontrast, >=18px kalinda AA),
+     --brand-strong 14px ve altindaki metin icin (5.6). */
+  --color-paper-warm:   #F6F3EE;
+
+  /* DEGER OLCULEREK SECILDI. Onceki #E8590C 3.58/3.26/3.01 veriyordu
+     (paper-2/paper/paper-3). "Buyuk metinde AA yeter" varsayimi yanlisti:
+     AA >=24px YA DA >=18.66px VE KALIN ister; bolum basliklari 22px/600.
+     Bu deger kullanildigi her zeminde gecer (5.18 / 4.71 / 4.76) ve
+     uzerine yazilan beyaz rozet metni icin de 5.18. */
+  --color-brand:        #C2410C;
+  --color-brand-strong: #9A3412;
+  --color-brand-soft:   #FFF3EC;
+
+  /* DURUM RENKLERI — dogru / yanlis.
+     Depoda 258 yerde "bg-emerald-50", "text-rose-800" gibi sabit Tailwind
+     siniflari yaziliyordu: emerald'in 16, rose'un 16 ayri tonu kullanilmis,
+     yani "dogru" rengi dosyadan dosyaya degisiyordu.
+
+     Bu renkler paletten atilamaz, cunku dekoratif degil: bir cevabin dogru
+     mu yanlis mi oldugunu soyluyorlar ve bunu renkten baska bir sey
+     soylemiyor. Yapilan sey onlari isimlendirip tek degere indirmek.
+
+     Kirmizi OLCULEREK secildi. Ilk aday #B91C1C idi; marka turuncusuyla
+     arasindaki hue farki yalnizca 17 derece cikti, yani hata rengi markaya
+     benziyordu. #BE123C 32 derece ayriliyor. Ikisi de kullanildiklari her
+     zeminde AA geciyor (en dusuk 5.28 ve 5.99).
+
+     Yumusak zeminler sayfa zemininde ve beyaz kartta ayrisiyor; paper-3
+     uzerinde ayrisma cizgiden gelir, bu yuzden "-soft" her zaman "-line"
+     ile birlikte kullanilir. */
+  --color-ok:          #166534;
+  --color-ok-strong:   #14532D;
+  --color-ok-line:     #B7D6BF;
+  --color-ok-soft:     #E6F1E9;
+  --color-danger:      #BE123C;
+  --color-danger-strong: #9F1239;
+  --color-danger-line: #EFC3CE;
+  --color-danger-soft: #F7E6EB;
+
+  /* ISARET (kehribar). :root'ta zaten vardi ama @theme'de YOKTU, yani
+     "bg-marker" diye bir sinif hic uretilmiyordu ve bilesenler mecburen
+     "bg-amber-500" yaziyordu. hairline-2 ile ayni tuzak. */
+  --color-marker:      #F59E0B;
+  --color-marker-bg:   #FFFBEB;
+  --color-marker-ink:  #92400E;
+}
+
+:root {
+  /* Zeminler — SICAK NOTR. Onceki palet slate idi (mavi-soguk gri);
+     referans aldigimiz qurio.academy notr-sicak bir gri kullaniyor ve
+     ayni beyaz kartin altinda daha az "yazilim panosu" duruyor.
+     Yine de KREM DEGIL: kremde beyaz kart zeminden sarimsi ayrisip
+     kirli duruyor, burada ayrisma yalnizca acikligta. */
+  --paper:      #F5F4F2;   /* sicak notr — sayfa zemini */
+  --paper-2:    #FFFFFF;   /* saf beyaz — çalışma kartları */
+  --paper-3:    #EDEBE8;   /* stone-150 — ikincil yuzey */
+
+  /* Metin — üçü de kendi zemininde net okunur */
+  --ink:        #1C1917;   /* stone-900 — ana metin */
+  --ink-2:      #57534E;   /* stone-600 — ikincil */
+  /* "Pasif" diye en acik ton secilmisti; ama kullanildigi her yer acik
+     zeminde 10-11px ACIKLAMA metni ve olculen kontrast 2.56 idi
+     (gereken 4.5). Okunmasi gereken yazi icin fazla soluk. stone-500
+     ayni sakinlikte duruyor ama 4.83 ile okunuyor. */
+  --ink-3:      #6B6560;   /* pasif — uc zeminde de >=4.8 (olculdu) */
+  --ink-800:    #292524;   /* stone-800 — koyu panel */
+  --ink-950:    #0C0A09;   /* stone-950 — en koyu yuzey */
+
+  /* Çizgiler */
+  --hairline:   #E7E5E4;   /* stone-200 */
+  --hairline-2: #D6D3D1;   /* stone-300 */
+
+  /* Vurgu — aktif adım ve birincil eylem */
+  /* VURGU — dolu birincil eylem ve aktif menu ogesi.
+     Deger #4F46E5 (Tailwind indigo-600) idi. O renk yapay zekayla
+     uretilmis arayuzlerin fiilen varsayilani; skill'in birinci yasak
+     maddesi de mor/indigo. Referans aldigimiz sitenin aktif menu ogesi
+     oyle oldugu icin korunmustu, ama bu projenin markasi turuncu —
+     indigo disaridan gelmeydi.
+
+     Simdi murekkep: birincil eylem sessiz ve koyu, turuncu ise yalnizca
+     markaya ve satir ici baglantiya kaliyor. Uzerine yazilan beyaz
+     16.9 kontrast veriyor.
+     accent-700 hover icin ACIK taraftadir - koyu bir dugmede
+     koyulasmak gorunmuyor, hafif acilmak goruluyor. */
+  --accent:      #1C1917;
+  --accent-700:  #3F3A36;
+  --accent-soft: #EDEBE8;
+  --accent-ring: rgba(28, 25, 23, 0.18);
+
+  /* Marka — yukaridaki @theme notuna bak. */
+  --paper-warm: #F6F3EE;   /* yalnizca hero seridi */
+
+  --brand:        #C2410C;
+  --brand-strong: #9A3412;
+  --brand-soft:   #FFF3EC;
+
+  /* Durumlar */
+  --ok:          #166534;
+  --ok-line:     #B7D6BF;
+  --ok-soft:     #E6F1E9;
+  --danger:      #BE123C;
+  --danger-line: #EFC3CE;
+  --danger-soft: #F7E6EB;
+
+  /* Canlı altyazı işareti — ekrandaki tek "sıcak" renk.
+     Süs değil: şu an konuşulan cümleyi gösteriyor. */
+  --marker:     #F59E0B;   /* amber-500 */
+  --marker-bg:  #FFFBEB;   /* amber-50  */
+  --marker-ink: #92400E;   /* amber-800 */
+
+  --radius:     14px;
+  --radius-lg:  18px;
+  --sidebar-w:  276px;
+}
+
+html { background: var(--paper); }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: #D6D3D1;      /* hairline-2 */
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--hairline-2) transparent;
+}
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--hairline-2);
+  border-radius: 999px;
+}
+
+/* =====================================================================
+   TİPOGRAFİ
+
+   Tek aile: Inter. Önceki sürümde başlıklar Playfair Display ile
+   diziliyordu; ekranda yan yana duran onlarca küçük başlıkta yüksek
+   kontrastlı bir serif dağınık ve eski duruyordu. Ayrım artık yazı
+   tipiyle değil AĞIRLIK ve HARF ARALIĞIYLA yapılıyor.
+
+   JetBrains Mono yalnızca sayılarda: zaman damgası ve sayaç metin
+   değil, veridir.
+   ===================================================================== */
+
+/* @layer base ŞART.
+   Tailwind v4 yardımcı sınıfları `utilities` katmanında yayımlıyor.
+   Katmansız (unlayered) bir kural, ÖZGÜLLÜĞÜNE BAKILMAKSIZIN katmanlı
+   olanı ezer. Bu blok başta katmansızdı ve `color` atıyordu; sonuç:
+   `text-slate-300` yazan bir başlık bile slate-900'e dönüyordu.
+   Koyu panellerdeki başlıklar (ör. transkript başlığı) koyu zemin
+   üstünde koyu kalıp tamamen görünmez oluyordu — ölçülen kontrast
+   oranı 1.0.
+
+   İki düzeltme birden: kural `base` katmanına alındı, ve `color`
+   tamamen çıkarıldı. Başlıklar zaten body'den slate-900 miras alıyor,
+   yani varsayılan aynı; farklı bir renk isteyen başlık artık kendi
+   sınıfıyla söyleyebiliyor. */
+@layer base {
+  .font-display,
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: -0.018em;
+  }
+
+  /* Eski tasarımdan kalan italik başlık süsü: modern bir arayüzde
+     başlık içinde italik serif göz yorduğu için düz ağırlığa iniyor. */
+  .font-display em {
+    font-style: normal;
+    font-weight: 400;
+  }
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  /* Eski deger beyaz üzerinde 2.56 kontrast veriyordu. Bölüm
+     başlıkları okunması GEREKEN metinler, dekoratif değil; stone-500
+     aynı sakinlikte ama 4.7 kontrastla okunuyor. */
+  color: #6B6560;
+}
+
+/* Transkript gövdesi. Uzun İngilizce metin okunuyor: rahat satır
+   aralığı ve 16px taban. ABB Voice kuruluysa devreye girer; lisanslı
+   olduğu için siteye gömülmüyor, yalnızca yığına yazılıyor. */
+.transcript-en {
+  font-family: "ABB Voice", "Inter", "Segoe UI Variable Text", ui-sans-serif,
+    system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  letter-spacing: normal;
+}
+
+@media (min-width: 640px) {
+  .transcript-en { font-size: 1.0625rem; line-height: 1.75; }
+}
+
+.timecode {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+}
+
+/* =====================================================================
+   KABUK YARDIMCILARI
+
+   Kart ve panel yüzeyleri tek yerde tanımlı; onlarca bileşende aynı
+   sınıf dizisini tekrarlamak yerine.
+   ===================================================================== */
+
+.surface {
+  background: var(--paper-2);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+}
+
+.surface-soft {
+  background: var(--paper-3);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+}
+
+/* =====================================================================
+   KATMAN ÇEKMECESİ (dar ekran)
+
+   Açılıp kapanma Tailwind'in translate yardımcıları yerine burada,
+   tek yerde yazılı. Üç ayrı yardımcı sınıfı (kapalı hâl, açık hâl ve
+   `lg:` geçersiz kılması) bir ternary içinde taşımak yerine iki
+   satırlık açık bir kural, davranışı okumayı kolaylaştırıyor.
+   ===================================================================== */
+
+/* Çekmece davranışı YALNIZCA dar ekranda tanımlı.
+
+   Önce kurallar her genişlikte geçerliydi ve `lg:` için ayrı bir
+   `transform: none` ile geri alınıyordu. Bunun iki sakıncası vardı:
+   masaüstünde hiç gerekmeyen bir geçiş (transition) tanımlı kalıyor,
+   ve panel önce -100%'e konumlanıp sonra geri alınıyordu. Kuralları
+   media sorgusunun İÇİNE almak ikisini de ortadan kaldırıyor —
+   masaüstünde `.layer-drawer` hiçbir şey yapmayan bir sınıf. */
+@media (max-width: 1023.98px) {
+  .layer-drawer {
+    transform: translateX(-100%);
+    transition: transform 200ms ease-in-out;
+  }
+
+  .layer-drawer[data-open="true"] {
+    transform: translateX(0);
+  }
+}
+
+/* Yatay kaydırma şeritlerinde çubuğu gizle */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* =====================================================================
+   MOBİL / DOKUNMATİK KULLANIM
+
+   Arayüz dar ekranda zaten taşmıyor; buradaki kurallar telefonda
+   KULLANILABİLİRLİĞİ düzeltiyor. Hepsi yalnızca dokunmatik cihazlarda
+   (pointer: coarse) devreye girer, masaüstü görünümü değişmez.
+
+   1) iOS ZIPLAMASI. Safari, yazı tipi 16px'ten küçük bir form alanına
+      dokunulduğunda sayfayı otomatik yakınlaştırır ve geri
+      uzaklaştırmaz. Arayüzdeki kutular text-xs (12px) olduğu için her
+      dokunuşta ekran kayıyordu.
+   2) DOKUNMA HEDEFİ. 22-28px'lik simge düğmeleri parmakla ıskalanıyor;
+      görsel boyut korunarak tıklama alanı en az 40px'e çıkarılıyor
+      (Apple 44pt, Google 48dp önerir; 40px sıkışık listelerde
+      komşu düğmelerin üst üste binmemesi için seçilen alt sınır).
+   3) touch-action: manipulation — çift dokunuşla yakınlaştırmayı ve
+      onun getirdiği ~300ms tıklama gecikmesini kaldırır.
+   4) Metin içinde tıklanan kelimeler <span> olarak işleniyor; bu
+      kurallar <button> hedeflediği için satır akışı bozulmaz.
+   ===================================================================== */
+
+/* Yatay çevirmede iOS'un yazıyı kendiliğinden büyütmesini engeller */
+html { -webkit-text-size-adjust: 100%; }
+
+@media (pointer: coarse) {
+  input, select, textarea { font-size: 16px !important; }
+
+  button, select, summary, [role="button"], [role="tab"] {
+    touch-action: manipulation;
+  }
+
+  /* Yukseklik VE genislik. Yalnizca min-height varken 40x32 ve 40x38
+     olcusunde iki dugme kaliyordu (marka rozeti ve gramer kocu): parmak
+     hedefi iki boyutlu, tek boyutu tutturmak yetmiyor. */
+  button, select { min-height: 40px; min-width: 40px; }
+
+  /* Yalnızca simge taşıyan düğmeler kare bir hedefe çıkar */
+  button:has(> svg:only-child) { min-width: 40px; }
+
+  /* Simge düğmelerinin dar dolgusunu parmak ölçüsüne açar */
+  button.p-1, button.p-1\.5 { padding: 0.5rem !important; }
+
+  /* Basılı tutunca çıkan gri kutuyu kaldırır */
+  button, a, [role="button"] { -webkit-tap-highlight-color: transparent; }
+
+  /* Hover'a bagli gizlenen satir eylemleri (ornegin ders listesindeki
+     duzenle/sil) dokunmatikte ERISILEMEZ olurdu: parmakla hover yok, yani
+     opacity-0 kalici hale gelirdi. Burada surekli acik tutuluyorlar. */
+  .row-actions { opacity: 1 !important; }
+
+}
+
+/* Telefon tarayıcılarında 100vh adres çubuğunu saymaz: sayfa alta taşar.
+   dvh destekleyen tarayıcılarda gerçek görünür yükseklik kullanılır. */
+@supports (height: 100dvh) {
+  .min-h-screen { min-height: 100dvh; }
+  .max-h-\[90vh\] { max-height: 90dvh; }
+  .max-h-\[75vh\] { max-height: 75dvh; }
+  .max-h-\[70vh\] { max-height: 70dvh; }
+  .max-h-\[65vh\] { max-height: 65dvh; }
+  .max-h-\[55vh\] { max-height: 55dvh; }
+}
+
+/* Çentikli / ev çubuğu olan telefonlarda güvenli alan payı */
+@supports (padding: env(safe-area-inset-bottom)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* =====================================================================
+   KELIME ISARETI (marka)
+
+   Arayuzun tamami sans; serif YALNIZCA marka adinda. Basliklarda serif
+   denenip birakilmisti (yukaridaki tipografi notu) — orada dagitiyordu,
+   burada tam tersine tek bir kelimeyi arayuzun geri kalanindan ayirmaya
+   yariyor.
+
+   WEBFONT INDIRILMIYOR: iki kelimelik bir isaret icin ayri bir yazi tipi
+   dosyasi cekmek, sayfa acilisina o dosyanin maliyetini eklemek demek.
+   Yigin isletim sistemlerinde HAZIR bulunan serifleri sirayla deniyor;
+   uc platformda da makul bir eski-stil serif bulunuyor.
+   ===================================================================== */
+.wordmark {
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
+    "Times New Roman", serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}

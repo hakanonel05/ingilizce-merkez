@@ -535,3 +535,58 @@ export function cozumlemeyiDurdur(): void {
   bekleyen.clear();
   durumBildir('kapali');
 }
+
+/* ===========================================================================
+   6) HEDEF CUMLESIZ COZUMLEME  (serbest konusma)
+   ---------------------------------------------------------------------------
+   Golgelemede bir HEDEF cumle var ve isin yarisi hizalama. Gorsel betimlemede
+   (bkz. apps/konusma) hedef cumle YOK: ogrenci aklina geleni soyluyor, dolayi-
+   siyla olculecek sey "dogru kelimeyi soyledin mi" degil, "ne soyledin".
+
+   Bu yuzden hizalama ve dogruluk puani burada calismiyor; geriye iki sey
+   kaliyor ve ikisi de ayni altyapidan geliyor:
+     · Whisper'in duydugu metin  -> yapay zekaya gonderilecek olan.
+     · Akicilik  -> hiz ve duraksama, yine dogrudan dalga biciminden.
+
+   AYRI BIR ISCI ACILMIYOR: ayni Worker ve ayni model ornegi kullaniliyor.
+   Ikinci bir isci 76 MB'lik modeli ikinci kez indirir ve bellekte iki kopya
+   tutardi.
+   =========================================================================== */
+
+export interface SerbestCozum {
+  metin: string;
+  akicilik: Akicilik;
+  akicilikPuani: number;
+  /** Whisper'in ayirdigi kelime sayisi — betimlemenin uzunlugu. */
+  kelimeSayisi: number;
+}
+
+export async function kaydiYaziyaCevir(anahtar: string, blob: Blob): Promise<SerbestCozum> {
+  const w = isciyiAl();
+  if (!w) throw new Error('Bu tarayıcı arka planda çözümlemeyi desteklemiyor.');
+
+  const pcm = await pcmCikar(blob);
+  /* Golgelemedeki esik yarim saniye; orada tek bir cumle okunuyor. Burada
+     bir betimleme bekleniyor, uc saniyenin altindaki bir kayitta cozumlenecek
+     bir sey yok ve yapay zekaya gonderip "cok kisa" cevabi almak hem zaman
+     hem kota harciyor. */
+  if (pcm.length < 16000 * 3) {
+    throw new Error('Kayıt çok kısa; görseli anlatmak için en az birkaç cümle gerekiyor.');
+  }
+
+  const olcum = sesiOlc(pcm);
+
+  durumBildir('cozuluyor');
+  const cozum = await new Promise<{ metin: string; kelimeler: CozumKelimesi[] }>((coz, hata) => {
+    bekleyen.set(anahtar, { coz, hata });
+    w.postMessage({ tip: 'coz', anahtar, pcm }, [pcm.buffer]);
+  });
+
+  const akicilik = akicilikOlc(cozum.kelimeler.length, olcum);
+  return {
+    metin: cozum.metin,
+    akicilik,
+    akicilikPuani: akicilikPuanla(akicilik, olcum),
+    kelimeSayisi: cozum.kelimeler.length,
+  };
+}
