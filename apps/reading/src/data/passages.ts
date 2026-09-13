@@ -10680,11 +10680,7 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Reading Comprehension (YDS)",
     paragraphs: [
-      "Machines are getting matter thanks to artificial intelligence and if you think this is fresh news, think again. Though the term Al sounds like a recent attribution, research into artificial intelligence is actually as old as computers themselves. The intelligence that machines have is called Artificial intelligence or Al, without which a machine will be just an ordinary tool. Machines with artificial intelligence are everywhere today; from your smartphone, car, computer to even your refrigerator, The industry, government and the banking system have become so reliant on artificial intelligence that it is almost impossible to imagine a single day without it. The world is today no more run by humans but computers. We may still be the masters of the machines we have created but how long this will persist is a matter of question. Thanks to the rise in processing power and the growing abundance of digitally available data, Al is enjoying a boom in its capabilities. Moreover, machines with artificial intelligence can now produce other machines with Al, though they still need humans to do that, but in the long run they may not do so. Then the question is: will they need humans anymore? Probably not.",
-      "It is mentioned in the paragraph that artificial intelligence ----.--. needs to be enhanced to meet the needs of our modern life dates back to the emergence of computers has made our life much more complicated than it should have the spread of computers should not be regarded as that to humanity",
-      "We can understand from the passage that for a machine -----. performing intricate thanks is still challenging humans have become a nuisance and obstacle there is no need for a human to create other machines anymore to be considered as intelligent, it has to be used in the industry artificial intelligence is of crucial importance so that it can perform smart applications",
-      "As we learn from the passage one of the concerns stated by the writer is that ------, one day the industry and the banking system may fail most smart devices may become redundant in the near future machines could create other machines without the help of humans humans will become the masters of the planet thanks to Al technology machines equipped with Al may take over the jobs run by humans",
-      "The best title for the passage could be ----- The rising power of artificial intelligence Humans versus machines What is artificial intelligence? How to get along with Al Steps to be taken against Al"
+      "Machines are getting smarter thanks to artificial intelligence and if you think this is fresh news, think again. Though the term AI sounds like a recent attribution, research into artificial intelligence is actually as old as computers themselves. The intelligence that machines have is called Artificial intelligence or AI, without which a machine will be just an ordinary tool. Machines with artificial intelligence are everywhere today; from your smartphone, car, computer to even your refrigerator. The industry, government and the banking system have become so reliant on artificial intelligence that it is almost impossible to imagine a single day without it. The world is today no more run by humans but computers. We may still be the masters of the machines we have created but how long this will persist is a matter of question. Thanks to the rise in processing power and the growing abundance of digitally available data, AI is enjoying a boom in its capabilities. Moreover, machines with artificial intelligence can now produce other machines with AI, though they still need humans to do that, but in the long run they may not do so. Then the question is: will they need humans anymore? Probably not."
     ],
     vocabulary: [
       { term: "artificial intelligence", meaning: "yapay zeka", partOfSpeech: "n", definition: "The ability of a machine to act intelligently.", exampleSentence: "Machines are getting smarter thanks to AI." },
@@ -10704,51 +10700,49 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "It is mentioned in the paragraph that artificial intelligence",
+        question: "It is mentioned in the paragraph that artificial intelligence -------.",
         options: [
-          "A) needs to be enhanced to meet the needs of our modem life",
+          "A) needs to be enhanced to meet the needs of our modern life",
           "B) dates back to the emergence of computers",
           "C) has made our life much more complicated than it should have",
           "D) will become mainstream in the short run thanks to the spread of computers",
-          "E) should not be regarded as threat to humanity NIAID"
+          "E) should not be regarded as threat to humanity"
         ],
         answer: "C"
       },
       {
         id: 2,
-        question: "We can understand from the passage that for a machine-",
+        question: "We can understand from the passage that for a machine -----.",
         options: [
           "A) performing intricate tasks is still challenging",
           "B) humans have become a nuisance and obstacle",
           "C) there is no need for a human to create other machines anymore",
           "D) to be considered as intelligent, it has to be used in the industry",
-          "E) artificial, intelligence is of crucial importance so that it can perform smart applications"
+          "E) artificial intelligence is of crucial importance so that it can perform smart applications"
         ],
         answer: "A"
       },
       {
         id: 3,
-        question: "As we learn from the passage one of the concerns stated by the writer is that",
+        question: "As we learn from the passage one of the concerns stated by the writer is that ------.",
         options: [
           "A) one day the industry and the banking system may fail",
           "B) most smart devices may become redundant in the near future",
           "C) machines could create other machines without the help of humans",
-          "D) humans will become the masters of the planet thanks to",
-          "E) technology",
-          "F) machines equipped with",
-          "G) may take over the jobs run by humans"
+          "D) humans will become the masters of the planet thanks to AI technology",
+          "E) machines equipped with AI may take over the jobs run by humans"
         ],
         answer: "C"
       },
       {
         id: 4,
-        question: "The best title for the passage could be",
+        question: "The best title for the passage could be -----",
         options: [
           "A) The rising power of artificial intelligence",
           "B) Humans versus machines",
           "C) What is artificial intelligence?",
-          "D) How to get along with Al",
-          "E) Steps to be taken against Al"
+          "D) How to get along with AI",
+          "E) Steps to be taken against AI"
         ],
         answer: "A"
       }
@@ -10779,7 +10773,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "A"
       },
     ],
-    sourceFidelity: "ocr-uzlastirma"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 92,
@@ -10787,11 +10781,7 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Reading Comprehension (YDS)",
     paragraphs: [
-      "Of all the existing cryptocurrencies, Bitcoin has become the frenzy in international markets. But what it is and how it works have yet to be thoroughly recognized by the public. Bitcoin is a new currency that was created in 2009 by an unknown person using the alias Satoshi Nakamoto. Unlike traditional money we use, Bitcoin is not backed by any physical asset, nor is it regulated by any government. Apart from supply and demand, in trade there is another main issue: trust. That is what Bitcoin lacks at the moment. Names of buyers and sellers are never revealed — only their wallet IDs. While that keeps bitcoin users’ transactions private, it also lets them buy or sell anything without being trade easily. That's why it has become the currency of choice for people buying drugs online or those engaged in other illicit activities. Transactions are made with no intermediaries, which lets buyers and sellers trade directly. Bitcoin can be used to book hotels, shop for furniture and buy Xbox games. As of 2017, the price of Bitcoin skyrocketed into the thousands. No one knows what will become of Bitcoin. It is mostly unregulated, but some countries like Japan, China and Australia have begun weighing regulations as they are concerned about taxation and their lack of control over the currency. In the meantime, they are not the only ones apprehensive of the Bitcoin.",
-      "The writers asserts that Bitcoin ------. has not become a medium of exchange in trade vit yet has not become a complete trustworthy asset so far alone is mainly used by illicit third-parties such as drug is mainly used by illicit third-parties such as drug sellers has already replaced conventional money as we know",
-      "As we learn from the passage, one of the things that remains unknown is -------. what Bitcoin current market value is how exchangeable Bitcoin is whether Bitcoin will hit another record this year what cryptocurrencies actually are by whom Bitcoin was developed",
-      "Which one of the following statements is not true about the Bitcoin ? Though there is a huge interest in the Bitcoin, many people still find the Bitcoin hard to comprehend. Satoshi Nakamoto is a cover name that is used to conceal the true identity of its created Ina Bitcoin transaction, the buyers and sellers are in favour of names rather than wallet IDs. The private of Bitcoin makes it appealing for illegal sales and purchases. When using Bitcoin in trade, there is only the buyers and sellers and nobody else in between.",
-      "According to the passage,, ——-. Bitcoin has been a challenge to government the value of Bitcoin is volatile due to its speculative nature the more intricate Bitcoin is, the more appealing it the more becomes for investors the range of products that Bitcoin can buy is still limited to few items Bitcoin still lacks credibility as it reached it limits in 2017"
+      "Of all the existing cryptocurrencies, Bitcoin has become the frenzy in international markets. But what it is and how it works have yet to be thoroughly recognized by the public. Bitcoin is a new currency that was created in 2009 by an unknown person using the alias Satoshi Nakamoto. Unlike traditional money we use, Bitcoin is not backed by any physical asset, nor is it regulated by any government. Apart from supply and demand, in trade there is another main issue: trust. That is what Bitcoin lacks at the moment. Names of buyers and sellers are never revealed – only their wallet IDs. While that keeps bitcoin users' transactions private, it also lets them buy or sell anything without being traced easily. That's why it has become the currency of choice for people buying drugs online or those engaged in other illicit activities. Transactions are made with no intermediaries, which lets buyers and sellers trade directly. Bitcoin can be used to book hotels, shop for furniture and buy Xbox games. As of 2017, the price of Bitcoin skyrocketed into the thousands. No one knows what will become of Bitcoin. It is mostly unregulated, but some countries like Japan, China and Australia have begun weighing regulations as they are concerned about taxation and their lack of control over the currency. In the meantime, they are not the only ones apprehensive of the Bitcoin."
     ],
     vocabulary: [
       { term: "cryptocurrency", meaning: "kripto para", partOfSpeech: "n", definition: "A digital currency that uses encryption.", exampleSentence: "Bitcoin is the most famous cryptocurrency." },
@@ -10813,13 +10803,13 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "EsiTIM 2. From the passage, we can infer that —.",
+        question: "The writers asserts that Bitcoin ------.",
         options: [
           "A) has not become a medium of exchange in trade yet",
           "B) has not become a complete trustworthy asset so far",
           "C) is being used in banking transaction in markets alone",
-          "D) is mainly used by licit third-parties such as drug dealers",
-          "E) has already replaced conventional money as we know IN BIL RAITEM"
+          "D) is mainly used by illicit third-parties such as drug dealers",
+          "E) has already replaced conventional money as we know"
         ],
         answer: "B"
       },
@@ -10837,26 +10827,25 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 3,
-        question: "historical data relating to the region ecitim",
+        question: "Which one of the following statements is not true about the Bitcoin ?",
         options: [
-          "E) the geometric shapes should not be taken too seriously 3. It can be inferred from the passage that the ancient Amazon people ----.",
-          "A) killed large numbers of would-be colonists",
-          "B) had no resistance to new diseases",
-          "C) hid themselves in the Amazon rain forest",
-          "D) led a led a plain life and lived as separate tribes",
-          "E) are the ancestors of the present-day inhabitants of"
+          "A) Though there is a huge interest in the Bitcoin, many people still find the Bitcoin hard to comprehend.",
+          "B) Satoshi Nakamoto is a cover name that is used to conceal the true identity of its creator.",
+          "C) In a Bitcoin transaction, the buyers and sellers are in favour of names rather than wallet IDs.",
+          "D) The privacy of Bitcoin makes it appealing for illegal sales and purchases.",
+          "E) When using Bitcoin in trade, there is only the buyer and seller and nobody else in between."
         ],
         answer: "C"
       },
       {
         id: 4,
-        question: "the region 4. As can be understood from the passage, the researchers now tend to think that -—-. ecitim e6trim",
+        question: "According to the passage,, -------.",
         options: [
           "A) Bitcoin has been a challenge to governments",
           "B) the value of Bitcoin is volatile due to its speculative nature",
           "C) the more intricate Bitcoin is, the more appealing it becomes for investors",
-          "D) the range of products that Blicoins can buy is still limted to few items",
-          "E) Bitcoin still lacks credibility as it reached it limits in 2017 www.stmal.com"
+          "D) the range of products that Bitcoins can buy is still limited to few items",
+          "E) Bitcoin still lacks credibility as it reached it limits in 2017"
         ],
         answer: "A"
       }
@@ -10887,7 +10876,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "A"
       },
     ],
-    sourceFidelity: "ocr-uzlastirma"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 93,
@@ -10895,7 +10884,7 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Reading Comprehension (YDS)",
     paragraphs: [
-      "Once deemed too sluggish for passenger cars, today diesel power high-speed vehicles with efficiency. At the time when Rudolph Diesel, the inventor of the diesel engine, introduced the first diesel engine, it was merely used in the industry. While Diesel appreciated the significance of his achievement, his hopes for the new diesel engine were actually modest. He thought it may be of use to small businesses and craftsmen alone to compete with larger manufacturers. He could never have imagined how significant the diesel engine would soon become to the automotive world. But even in its early days, diesel became a mainstay of the industrial revolution as it was used in trains, power stations, factories and ships. As the post World War II austerity required more fuel efficient engines in Europe, diesel became preferable for car manufacturers in the 1950s and 1960s, as they woke up to the greater efficiency and longevity of the diesel engine. Unfortunately, Rudolf Diesel was not able to see what his invention caused as he disappeared mysteriously on a ship voyage in September 29, 1913. There are some theories as to the death of Diesel, one of which is Suicide most likely one. Some conspiracy theories, on the other hand, suggest homicide based on military interest in his works."
+      "Once deemed too sluggish for passenger cars, today diesel powers high-speed vehicles with efficiency. At the time when Rudolph Diesel, the inventor of the diesel engine, introduced the first diesel engine, it was merely used in the industry. While Diesel appreciated the significance of his achievement, his hopes for the new diesel engine were actually modest. He thought it may be of use to small businesses and craftsmen alone to compete with larger manufacturers. He could never have imagined how significant the diesel engine would soon become to the automotive world. But even in its early days, diesel became a mainstay of the industrial revolution as it was used in trains, power stations, factories and ships. As the post World War II austerity required more fuel efficient engines in Europe, diesel became preferable for car manufacturers in the 1950s and 1960s, as they woke up to the greater efficiency and longevity of the diesel engine. Unfortunately, Rudolf Diesel was not able to see what his invention caused as he disappeared mysteriously on a ship voyage in September 29, 1913. There are some theories as to the death of Diesel, one of which is suicide - most likely one. Some conspiracy theories, on the other hand, suggest homicide based on military interest in his works."
     ],
     vocabulary: [
       { term: "deem", meaning: "saymak, kabul etmek", partOfSpeech: "v", definition: "To consider or judge something in a certain way.", exampleSentence: "It was once deemed too slow for cars." },
@@ -10917,31 +10906,31 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "According to the passage, apart from being a way of showing off, -------.",
+        question: "It has been suggested in the passage that in the early days of the diesel engine, the new invention ------.",
         options: [
           "A) was used widely in a great variety of fields",
           "B) was nothing more than a frustration",
           "C) was realized by small manufactures but not by large ones",
-          "D) led to corispiracies and technological espionage",
-          "E) was thought to be inefficient enough for passenger cars BIL EĞITIM ASIX DIL ECITIN"
+          "D) led to conspiracies and technological espionage",
+          "E) was thought to be inefficient enough for passenger cars"
         ],
         answer: "C"
       },
       {
         id: 2,
-        question: "around castles in the past",
+        question: "According to the passage, diesel engines were preferable in Europe partly because -------.",
         options: [
           "A) these engines proved to be far efficient than others only in trains and factories",
           "B) they were much easier to install on passenger cars",
           "C) war conditions required far faster vehicles on the battle field",
           "D) they consumed almost the same amount of fuel than those running on gasoline",
-          "E) car manufacturers realized its efficiency and durabilty"
+          "E) car manufacturers realized its efficiency and durability"
         ],
         answer: "E"
       },
       {
         id: 3,
-        question: "leading \"plant\" by far",
+        question: "We learn from the passage that Rudolf Diesel ----",
         options: [
           "A) transformed the passenger car industry with his contributions to gasoline engines",
           "B) did not expect his invention to make such an impact",
@@ -10953,11 +10942,11 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 4,
-        question: "synthetic ones to save water",
+        question: "We can learn from the passage that -------.",
         options: [
           "A) the death of Rudolf Diesel is mainly related with his military deals",
           "B) car manufacturers in the 1950s and 1960s were unable to foresee the fruits of the diesel engines",
-          "C) Rudolf Diesel had the chance to witness what his Invention brought about",
+          "C) Rudolf Diesel had the chance to witness what his invention brought about",
           "D) there is still uncertainty as to whom actually embraced diesel engines for passenger cars",
           "E) how Rudolf Diesel actually died is nothing but a mystery"
         ],
@@ -10965,13 +10954,13 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 5,
-        question: "grassy fields to keep the lawns growing 4. The village farmers’ attitude towards growing lawns sounds ——. hesitant B) satirical",
+        question: "The passage is mainly about -----.",
         options: [
           "A) The life and death of Rudolph Diesel",
           "B) What is a diesel engine?",
-          "C) A concise history of the diesel engine and Its inventor",
+          "C) A concise history of the diesel engine and Its Inventor",
           "D) How Rudolph Diesel developed his invention",
-          "E) The conspiracy behind the death of Rudolph Diesel www.ahinde.com"
+          "E) The conspiracy behind the death of Rudolph Diesel"
         ],
         answer: "C"
       }
@@ -11002,7 +10991,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "A"
       },
     ],
-    sourceFidelity: "ocr-uzlastirma"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 94,
@@ -11010,12 +10999,7 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Reading Comprehension (YDS)",
     paragraphs: [
-      "“Keep off the grass\": a Warning you would see all around the globe. Growing grass requires a lot of Water, fertilisers and manpower. For instance, approximately 80% of all homes in the United States have grass where lawns use more water than is used to grow all crops in the United States. But if you cannot graze animals on it and gives us no grass why are lawns are so important? Because they simply indicate wealth. The larger your Eğirim lawn field is, the wealthier you are it means, The very first lawns were grassy fields that surrounded English and French castles. Castle grounds had to be kept clear of trees so that the soldiers protecting them had a clear view of their surroundings. By the late 17 century, grass lawns, with the grass cut close to the ground, started popping up on the grounds of the wealthy, such as at the famed Versailles gardens in France. This practice quickly spread among the elite and turns out, the lawn as a status symbol has its origins in European aristocracy. Without trees, grass sprouted naturally just like they do in fields and clearings today. Unlike modern days, ina village farmers were able to graze their livestock on lawns in the past. As the sheep and cows more the lawn, they also left behind fertiliser, ensuring the grass would keep growing.",
-      "We learn from the paragraph that lawns are plants that ------. shaped the design of ancient castles in Europe require extreme effort to plant as they need much available land weren't seen around until the ones in Versailles caught on could make one wealthier than he is still have no value in any field",
-      "According to the passage, apart from being a way of showing off, -------. lawns still provide Growing and for village in France lawns are vital for trees to flourish in an open field grass makes the soil more resilient against floods around castles in the past grass make soil become more fertile and wet",
-      "Which one of the following can be inferred from the passage? By water consumption, grass is the United States’ leading \"plant\" by far Lawn fields were already common among the royalty before they appeared around the Versailles gardens Rather than organic lawns, we have to turn to synthetic ones to save water France is second to the US in terms of planting lawns in households _ grassy fields to keep the lawns growing",
-      "The village farmers’ attitude towards growing lawns sounds ——. hesitant B) satirical indifferent D) negligent pragmatic",
-      "247 wwakindil.com wwnakirdil, com"
+      "\"Keep off the grass\": a warning you would see all around the globe. Growing grass requires a lot of water, fertilisers and manpower. For instance, approximately 80% of all homes in the United States have grass where lawns use more water than is used to grow all crops in the United States. But if you cannot graze animals on it and gives us no grain, why are lawns are so important? Because they simply indicate wealth. The larger your lawn field is, the wealthier you are it means. The very first lawns were grassy fields that surrounded English and French castles. Castle grounds had to be kept clear of trees so that the soldiers protecting them had a clear view of their surroundings. By the late 17th century, grass lawns, with the grass cut close to the ground, started popping up on the grounds of the wealthy, such as at the famed Versailles gardens in France. This practice quickly spread among the elite and turns out, the lawn as a status symbol has its origins in European aristocracy. Without trees, grasses sprouted naturally just like they do in fields and clearings today. Unlike modern days, in a village farmers were able to graze their livestock on lawns in the past. As the sheep and cows \"mowed\" the lawn, they also left behind fertiliser, ensuring the grass would keep growing."
     ],
     vocabulary: [
       { term: "lawn", meaning: "çim, çimenlik", partOfSpeech: "n", definition: "An area of short grass in a garden or park.", exampleSentence: "American homes often have a lawn." },
@@ -11037,50 +11021,49 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "EsiTIM 2. From the passage, we can infer that —.",
+        question: "We learn from the paragraph that lawns are plants that ------.",
         options: [
           "A) shaped the design of ancient castles in Europe",
           "B) require extreme effort to plant as they need much available land",
           "C) weren't seen around until the ones in Versailles caught on",
-          "D) could make one wealthier than he s",
-          "E) still have no value in any field ANIN BIL EGITEN"
+          "D) could make one wealthier than he is",
+          "E) still have no value in any field"
         ],
         answer: "A"
       },
       {
         id: 2,
-        question: "the upper Amazon Basin",
+        question: "According to the passage, apart from being a way of showing off, -------.",
         options: [
           "A) lawns still provide grazing lands for villagers in France",
           "B) lawns are vital for trees to flourish in an open field",
           "C) grass makes the soil more resilient against floods",
           "D) grassy fields were used for better surveillance around castles in the past",
-          "E) grass make soil become more fertile and wel"
+          "E) grass make soil become more fertile and wet"
         ],
         answer: "D"
       },
       {
         id: 3,
-        question: "historical data relating to the region ecitim",
+        question: "Which one of the following can be inferred from the passage?",
         options: [
-          "E) the geometric shapes should not be taken too seriously 3. It can be inferred from the passage that the ancient Amazon people ----.",
-          "A) killed large numbers of would-be colonists",
-          "B) had no resistance to new diseases",
-          "C) hid themselves in the Amazon rain forest",
-          "D) led a led a plain life and lived as separate tribes",
-          "E) are the ancestors of the present-day inhabitants of"
+          "A) By water consumption, grass is the United States' leading \"plant\" by far",
+          "B) Lawn fields were already common among the royalty before they appeared around the Versailles gardens",
+          "C) Rather than organic lawns, we have to turn to synthetic ones to save water",
+          "D) France is second to the US in terms of planting lawns in households",
+          "E) The sheep and cows had to be kept away from grassy fields to keep the lawns growing"
         ],
         answer: "A"
       },
       {
         id: 4,
-        question: "the region 4. As can be understood from the passage, the researchers now tend to think that -—-. ecitim e6trim",
+        question: "The village farmers' attitude towards growing lawns sounds -----.",
         options: [
           "A) hesitant",
           "B) satirical",
           "C) indifferent",
           "D) negligent",
-          "E) pragmatic AKİN DİLEĞİTİM www.ckmil.com ORSO 420 AKIN (2546)"
+          "E) pragmatic"
         ],
         answer: "E"
       }
@@ -11111,7 +11094,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "A"
       },
     ],
-    sourceFidelity: "ocr-uzlastirma"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 95,
@@ -11119,12 +11102,7 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Reading Comprehension (YDS)",
     paragraphs: [
-      "Satellite images of the upper Amazon Basin in Brazil taken since 1999 have revealed hundreds of circles, squares, and other geometric shapes once hidden by the Amazon rain forests. They in at a previously unknown ancient society that flourished in the Amazon, Now researchers estimate that nearly ten times as many such structures, of unknown purpose, may exist undetected under the Amazon forest cover. The discovery adds to evidence that the hinterlands of the Amazon once teemed with complex societies, which were largely wiped out by diseases brought to South America by European colonists in the 15 and with centuries. Since these vanished societies had gone unrecorded, earlier research had suggested that soils in the upper Amazon were too poor to support the extensive agriculture needed for such large, permanent settlements. The researchers say “We found that this view is wrong, and there is a lot more to discover in these places”.",
-      "According to the passage, the new discovery",
-      "has strengthened the already known facts about the upper Amazon Basin is too poor to become an evidence for the ancient Amazon society has proved that the satellite pictures were misleading has falsified the previous assumptions about the land indicates the fact that the upper Amazon Basin was made of geometric shapes",
-      "From the passage, we can infer that —. pictures taken by satellites can provide scientists with valuable new data the upper Amazon Basin the ancient Amazon people were in close contact with the other world researchers can leam a lot from the written historical data relating to the region ecitim the geometric shapes should not be taken too seriously",
-      "It can be inferred from the passage that the It can be inferred from the passage that the ancient Amazon people ----. killed large numbers of would-be colonists had no resistance to new diseases hid themselves in the Amazon rain forest led a led a plain life and lived as separate times are the ancestors of the present-day inhabitants of the region",
-      "As can be understood from the passage, the researchers now tend to think that -—-. ecitim e6trim Taken D) the geometric shapes revealed something about the new industrial areas"
+      "Satellite images of the upper Amazon Basin in Brazil taken since 1999 have revealed hundreds of circles, squares, and other geometric shapes once hidden by the Amazon rain forests. They hint at a previously unknown ancient society that flourished in the Amazon. Now researchers estimate that nearly ten times as many such structures, of unknown purpose, may exist undetected under the Amazon forest cover. The discovery adds to evidence that the hinterlands of the Amazon once teemed with complex societies, which were largely wiped out by diseases brought to South America by European colonists in the 15 and 16th centuries. Since these vanished societies had gone unrecorded, earlier research had suggested that soils in the upper Amazon were too poor to support the extensive agriculture needed for such large, permanent settlements. The researchers say \"We found that this view is wrong, and there is a lot more to discover in these places\"."
     ],
     vocabulary: [
       { term: "satellite image", meaning: "uydu görüntüsü", partOfSpeech: "n", definition: "A picture of the Earth taken from a satellite.", exampleSentence: "Satellite images revealed hidden shapes." },
@@ -11146,50 +11124,49 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "EsiTIM 2. From the passage, we can infer that —.",
+        question: "According to the passage, the new discovery -----.",
         options: [
-          "A) has strengthened the already known facts about the upper Amazon Basın",
+          "A) has strengthened the already known facts about the upper Amazon Basin",
           "B) is too poor to become an evidence for the ancient Amazon society",
           "C) has proved that the satellite pictures were misleading",
           "D) has falsified the previous assumptions about the land",
-          "E) indicates the fact that the upper Amazon Basin was made of geometric shapes ANIN DİL EGITIN"
+          "E) indicates the fact that the upper Amazon Basin was made of geometric shapes"
         ],
         answer: "C"
       },
       {
         id: 2,
-        question: "the upper Amazon Basin",
+        question: "From the passage, we can infer that ----.",
         options: [
           "A) pictures taken by satellites can provide scientists with valuable new data",
           "B) there is no longer any reason to further investigate the upper Amazon Basin",
           "C) the ancient Amazon people were in close contact with the outer world",
-          "D) researchers can leam a lot from the written historical data relating to the regon",
-          "E) the geometric shapes should not be taken too seriously vanished societies had gone unrecorded, earlier research had suggested that soils in the upper Amazon were too poor to support the extensive agriculture needed for such large, permanent settlements. The researchers say \"We found that this view is wrong, and there is a lot more to discover in these places\""
+          "D) researchers can learn a lot from the written historical data relating to the region",
+          "E) the geometric shapes should not be taken too seriously"
         ],
         answer: "A"
       },
       {
         id: 3,
-        question: "historical data relating to the region ecitim",
+        question: "It can be inferred from the passage that the ancient Amazon people ----.",
         options: [
-          "E) the geometric shapes should not be taken too seriously 3. It can be inferred from the passage that the ancient Amazon people ----.",
           "A) killed large numbers of would-be colonists",
           "B) had no resistance to new diseases",
           "C) hid themselves in the Amazon rain forest",
-          "D) led a led a plain life and lived as separate tribes",
-          "E) are the ancestors of the present-day inhabitants of"
+          "D) led a plain life and lived as separate tribes",
+          "E) are the ancestors of the present-day inhabitants of the region"
         ],
         answer: "B"
       },
       {
         id: 4,
-        question: "the region 4. As can be understood from the passage, the researchers now tend to think that -—-. ecitim e6trim",
+        question: "As can be understood from the passage, the researchers now tend to think that ----.",
         options: [
           "A) they have revealed almost everything about the region",
           "B) the natives had no idea about agriculture",
           "C) the colonists helped the natives become civilized",
           "D) the geometric shapes reveal something about the new industrial areas",
-          "E) the sand might have once been inhabited densely www.aknd.com"
+          "E) the land might have once been inhabited densely"
         ],
         answer: "E"
       }
@@ -11220,7 +11197,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "A"
       },
     ],
-    sourceFidelity: "ocr-uzlastirma"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 96,
@@ -11228,12 +11205,7 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Reading Comprehension (YDS)",
     paragraphs: [
-      "The omnipresent “Barcode\" is everywhere, but it seems that its reign is coming to an end. As retailers and manufacturers need more information than basic storage and logistics information, the new QR code is gradually replacing the barcode. The first use of the barcode was to label railroad cars, but they were not commercially successful until they were used to automate supermarket checkout systems, by which they have become almost universal. The very first scanning of the now ubiquitous barcode was on a pack of Wrigley Company chewing gum in June 1974. On the other hand, while the concept of OR code is not very old compared to the barcode, it has gained considerable steam in the past few years in the mobile and print world. When the QR Code was established, it presented a greater potential to carry information in a smaller space. Compared to a barcode, it's no competition at all. People are just now waking up to the possibilities of the QR Code, and are aware of how awesome it is. The QR code, similar to a barcode, is an example of an information matrix. However, a significant difference in the two is that while a barcode only old information nicely in the horizontal direction, a QR can do so vertically as well.",
-      "itis mentioned in the paragraph that one reason why the QR code is preferable is that -----. it can store information in a minute space compared to the barcode you don't necessarily have to use them in supermarket chains it can merely provide information horizontally it has become universal, while the barcode has not it lowers production costs for any item, good or service",
-      "(YAKIN 10850 420 (2546)",
-      "According to the writer, —-----, manufacturers should cease to print Barcode on their products there are more similarities than differences between the QR and the barcode the barcode is no match to the QR code and they are incomparable there are limits to the use of the QR code in some products it may take some time until the QR code completely replaces the barcode",
-      "Itis stated in the passage that the barcode ------. can be provided with more flexibility if it is designed as the QR code need its success to its use in supermarket checkout systems met its own demise when it was printed on a pack of chewing gum in June 1974 resilience and dependability is far easier for retailers and buyers to code than the OR code",
-      "The writer emphasizes that ——. a barcode should be designed to hold information both horizontally and vertically the concept of QR code will hardly catch on due to its rigidity axin two coding systems bear identical features rather than differences it would be is te rely on the ubiquitous barcode people have been late to realize the potential in the QR code"
+      "The omnipresent \"Barcode\" is everywhere, but it seems that its reign is coming to an end. As retailers and manufacturers need more information than basic storage and logistics information, the new QR code is gradually replacing the barcode. The first use of the barcode was to label railroad cars, but they were not commercially successful until they were used to automate supermarket checkout systems, by which they have become almost universal. The very first scanning of the now ubiquitous barcode was on a pack of Wrigley Company chewing gum in June 1974. On the other hand, while the concept of QR codes is not very old compared to the barcode, it has gained considerable steam in the past few years in the mobile and print world. When the QR Code was established, it presented a greater potential to carry information in a smaller space. Compared to a barcode, it's no competition at all. People are just now waking up to the possibilities of the QR Code, and are aware of how awesome it is. The QR code, similar to a barcode, is an example of an information matrix. However, a significant difference in the two is that while a barcode only holds information nicely in the horizontal direction, a QR can do so vertically as well."
     ],
     vocabulary: [
       { term: "omnipresent", meaning: "her yerde bulunan", partOfSpeech: "adj", definition: "Present everywhere.", exampleSentence: "The omnipresent barcode is everywhere." },
@@ -11255,33 +11227,33 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "It is mentioned in the paragraph that one reason why the QR code is preferable is that.",
+        question: "It is mentioned in the paragraph that one reason why the QR code is preferable is that -----.",
         options: [
           "A) it can store information in a minute space compared to the barcode",
           "B) you don't necessarily have to use them in supermarket chains",
-          "C) It can merely provide information horizontally",
+          "C) it can merely provide information horizontally",
           "D) it has become universal, while the barcode has not",
-          "E) it lowers production costs for any ilem, good or service ✔ NI"
+          "E) it lowers production costs for any item, good or service"
         ],
         answer: "A"
       },
       {
         id: 2,
-        question: "According to the writer,",
+        question: "According to the writer, ---------.",
         options: [
           "A) manufacturers should cease to print barcodes on their products",
-          "B) there are more similarities than differences between the OR and the barcode",
-          "C) the barcode is no match to the QR code and they ara incomparable",
-          "D) there are limits to the use of the OR code in some products",
+          "B) there are more similarities than differences between the QR and the barcode",
+          "C) the barcode is no match to the QR code and they are incomparable",
+          "D) there are limits to the use of the QR code in some products",
           "E) it may take some time until the QR code completely replaces the barcode"
         ],
         answer: "E"
       },
       {
         id: 3,
-        question: "It is stated in the passage that the barcode",
+        question: "It is stated in the passage that the barcode ------.",
         options: [
-          "A) can be provided with more flexibility if it is designed as the OR code",
+          "A) can be provided with more flexibility if it is designed as the QR code",
           "B) owed its success to its use in supermarket checkout systems",
           "C) met its own demise when it was printed on a pack of chewing gum in June 1974",
           "D) overshadows the QR code in terms of both resilience and dependability",
@@ -11291,13 +11263,13 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 4,
-        question: "The writer emphasizes that",
+        question: "The writer emphasizes that ------.",
         options: [
           "A) a barcode should be designed to hold information both horizontally and vertically",
-          "B) the concept of OR code will hardly catch on due to its rigidity",
+          "B) the concept of QR code will hardly catch on due to its rigidity",
           "C) two coding systems bear identical features rather than differences",
           "D) it would be wise to rely on the ubiquitous barcode",
-          "E) people have been late to realize the potential in the QR code AKİN DİL EĞİTİM www.akmdc.com"
+          "E) people have been late to realize the potential in the QR code"
         ],
         answer: "E"
       }
@@ -11328,7 +11300,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "A"
       },
     ],
-    sourceFidelity: "ocr-uzlastirma"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 97,
@@ -11336,13 +11308,7 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Reading Comprehension (YDS)",
     paragraphs: [
-      "The tires seen on millions of cars across the world are the result of multiple inventors working across several decades. And those inventors have names that should be recognizable to anyone who ever bought tires for their car: Michelin, Goodyear, and Dunlop. Of these, however, none had greater impact on the invention of the rubber pneumatic tires than Charles Goodyear, who discovered the process of strengthening rubber, known as vulcanization or curing, in 1839, nearly more than 50 years before the first rubber tires would appear on cars and so patented a process known as vulcanization. He had actually been experimenting with rubber since 1830 but had been unable to develop a suitable curing process, yet during an experiment with a mixture of rubber and sulfur, Goodyear dropped the mixture on a hot stove accidentally. Then, a chemical reaction took place and, instead of melting, the rubber-sulfur mixture formed a hard lump, which is called vulcanization. He continued his experiments until he could treat continuous sheets of rubber. This process involved heating and removing the sulfur from rubber, thus making the rubber waterproof and winter-proof and allowing it to retain its elasticity. While Goodyear's claim to have invented vulcanization was challenged, he is considered as the father of vulcanized rubber tires. And that became largely important once people realized it would be perfect for making tires.",
-      "We learn from the passage that Goodyear -----. developed his method of developing tires with several inventors is widely regarded as the none greater of tires collaborated with Michelin and Dunlop to develop rubber tires is accepted as the first one to come up with the idea of vuleanized rubber tires was inspired by several other inventors such as Michelin and Dunlop",
-      "(MD AKINDIL 250 İğ 0850 420 (2546) so 420 (2546)",
-      "Merkezi ve Yayıncılık Hizmetleri",
-      "What does the passage mainly focus on? How rubber pneumatic tires and the process of vulcanization came into being contributions on the tires The challenge among inventors over the patent of rettin@® the vulcanization vin What makes Goodyear's invention distinct from other tires inventors? it could prevent tires from blowing out in case of an accident winter-proof when put on a hot stove, the rubber-sulfur mixture melts continuous sheets of rubber it had a convenient curing process called vulcanization, making the rubber more elastic",
-      "We can understand from the passage that -----. before Charles Goodyear, the pioneers of the tires technology were seen as Michelin and Dunlap when a mixture of rubber and sulfur is dropped on a stove, it never melts Charles Goodyear was not intentionally working vit on the vulcanization process when he discovered",
-      "the rubber tires Goodyear appeared on cars nearly 50 years before those of other tires Goodyear got the patent of the vulcanization though it was also carried out by Michelin"
+      "The tires seen on millions of cars across the world are the result of multiple inventors working across several decades. And those inventors have names that should be recognizable to anyone who's ever bought tires for their car: Michelin, Goodyear, and Dunlop. Of these, however, none had greater impact on the invention of the rubber pneumatic tires than Charles Goodyear, who discovered the process of strengthening rubber, known as vulcanization or curing, in 1839, nearly more than 50 years before the first rubber tires would appear on cars and so patented a process known as vulcanization. He had actually been experimenting with rubber since 1830 but had been unable to develop a suitable curing process, yet during an experiment with a mixture of rubber and sulfur, Goodyear dropped the mixture on a hot stove accidentally. Then, a chemical reaction took place and, instead of melting, the rubber-sulfur mixture formed a hard lump, which is called vulcanization. He continued his experiments until he could treat continuous sheets of rubber. This process involved heating and removing the sulfur from rubber, thus making the rubber waterproof and winter-proof and allowing it to retain its elasticity. While Goodyear's claim to have invented vulcanization was challenged, he is considered as the father of vulcanized rubber tires. And that became largely important once people realized it would be perfect for making tires."
     ],
     vocabulary: [
       { term: "tire", meaning: "lastik", partOfSpeech: "n", definition: "A rubber ring that fits around a wheel.", exampleSentence: "The tires on cars result from many inventors." },
@@ -11365,13 +11331,13 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "We learn from the passage that Goodyear",
+        question: "We learn from the passage that Goodyear -----.",
         options: [
           "A) developed his method of developing tires with several inventors",
           "B) is widely regarded as the sole creator of tires",
-          "C) colaborated with Micheln and Dunlop to develop rubber tires",
+          "C) collaborated with Michelin and Dunlop to develop rubber tires",
           "D) is accepted as the first one to come up with the idea of vulcanized rubber tires",
-          "E) was inspired by several other inventors such as Michelin and Dunlop AKER BEL ITIM EGIT"
+          "E) was inspired by several other inventors such as Michelin and Dunlop"
         ],
         answer: "D"
       },
@@ -11392,8 +11358,8 @@ export const PASSAGES_DATA: Passage[] = [
         question: "What makes Goodyear's invention distinct from other tire inventors?",
         options: [
           "A) it could prevent tires from blowing out in case of an accident",
-          "B) It enables the rubber to be waterproof rather than winter-proof",
-          "C) when put on a hot stove, the rubber-sulfur mixture meits",
+          "B) it enables the rubber to be waterproof rather than winter-proof",
+          "C) when put on a hot stove, the rubber-sulfur mixture melts",
           "D) it was the first one allowing the treatment of continuous sheets of rubber",
           "E) it had a convenient curing process called vulcanization, making the rubber more elastic"
         ],
@@ -11401,11 +11367,11 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 4,
-        question: "We can understand from the passage that",
+        question: "We can understand from the passage that -----.",
         options: [
-          "A) before Charles Goodyear, the pioneers of the tire hechnology were seen as Michelin and Dunlop",
+          "A) before Charles Goodyear, the pioneers of the tire technology were seen as Michelin and Dunlop",
           "B) when a mixture of rubber and sulfur is dropped on a stove, it never melts",
-          "C) Chartes Goodyear was not intentionally working on the vulcanization process when he discovered",
+          "C) Charles Goodyear was not intentionally working on the vulcanization process when he discovered it",
           "D) the rubber tires Goodyear appeared on cars nearly 50 years before those of other firms",
           "E) Goodyear got the patent of the vulcanization though it was also carried out by Michelin"
         ],
@@ -11438,7 +11404,7 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "A"
       },
     ],
-    sourceFidelity: "ocr-uzlastirma"
+    sourceFidelity: "goruntuden-birebir"
   },
   {
     id: 98,
@@ -11678,11 +11644,7 @@ export const PASSAGES_DATA: Passage[] = [
     cefr: "C1",
     theme: "Reading Comprehension (YDS)",
     paragraphs: [
-      "Drinking tea is actually drinking a lot of history. Tea has been one of the most wide-spread beverages around the globe with a very distant past. The British, for example, had a good appetite for tea. Although the earliest custom of drinking tea dates back to the third millennium BC in China, it was not until the mid 17\" century that the beverage first appeared in England. Once tea caught on, Britain had to import as much as tea as they could from the world. And this meant they had to pour a fortune into buying tea, which would soon cause various conflicts. For example, in an incident known as the \"Boston Tea party\", the tea growing Americans protested both the tax on tea and the perceived monopoly of Britain over tea and other commodities. This would soon lead to the liberation and foundation of the United States. China was another main source of tea, but China would only accept silver as payment for its tea, due to which the British had to pour an immense amount of silver into China. This would place would place a toll on the British economy, so they then began to remedy the financial debt by trading opium to China, instead of silver. This opium trade paid for the tea exported from China and soon money was growing out of China to Britain, which would cause the wars known as “The Opium Wars” and the defeat of China. So when you have a cup of tea, remember that you are actually consuming history.",
-      "We learn from the passage that tea was heavily taxed by the Americans against the British known has until people and nation in a peaceful manner has been a source of remedy and meditation has been both at the centre of pleasure and conflict throughout history was the only conflict between the Americans and the British",
-      "It is stated in the passage that due to the immense demand for tea, ------. the British had a hard time meeting the demand and funding it people in Britain had turned to opium that was imported from China of the globe the silver in became the main currency in eGtrimn@ EĞitiN Britain the Chinese were incapable of supply the vit vin demand",
-      "Which of the following is not true according to the passage? the appearance of tea in Britain took hundreds of years conflicts for the British, opium made up for the silver sent to China Britain and China The Boston Tea party was a reaction to the taxation of the British",
-      "The overall aim of the writer is to —----, give us a glimpse of the history of tea Dir."
+      "Drinking tea is actually drinking a lot of history. Tea has been one of the most wide-spread beverages around the globe with a very distant past. The British, for example, had a good appetite for tea. Although the earliest custom of drinking tea dates back to the third millennium BC in China, it was not until the mid 17th century that the beverage first appeared in England. Once tea caught on, Britain had to import as much as tea as they could from the world. And this meant they had to pour a fortune into buying tea, which would soon cause various conflicts. For example, in an incident known as the \"Boston Tea party\", the tea growing Americans protested both the tax on tea and the perceived monopoly of Britain over tea and other commodities. This would soon lead to the liberation and foundation of the United States. China was another main source of tea, but China would only accept silver as payment for its tea, due to which the British had to pour an immense amount of silver into China. This would place a toll on the British economy, so they then began to remedy the financial debt by trading opium to China, instead of silver. This opium trade paid for the tea exported from China and soon money was flowing out of China to Britain, which would cause the wars known as \"The Opium Wars\" and the defeat of China. So when you have a cup of tea, remember that you are actually consuming history."
     ],
     vocabulary: [
       { term: "widespread", meaning: "yaygın", partOfSpeech: "adj", definition: "Existing or happening in many places.", exampleSentence: "Tea is one of the most widespread beverages." },
@@ -11706,10 +11668,10 @@ export const PASSAGES_DATA: Passage[] = [
     questions: [
       {
         id: 1,
-        question: "We learn from the passage that tea",
+        question: "We learn from the passage that tea ------.",
         options: [
           "A) was heavily taxed by the Americans against the British crown",
-          "B) has untied people and nation in a peacefus manner",
+          "B) has untied people and nation in a peaceful manner",
           "C) has been a source of remedy and meditation",
           "D) has been both at the centre of pleasure and conflict throughout history",
           "E) was the only conflict between the Americans and the British"
@@ -11718,7 +11680,7 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 2,
-        question: "It is stated in the passage that due to the Immense demand for tea,",
+        question: "It is stated in the passage that due to the immense demand for tea, ------.",
         options: [
           "A) the British had a hard time meeting the demand and funding it",
           "B) people in Britain had turned to opium that was imported from China",
@@ -11742,13 +11704,13 @@ export const PASSAGES_DATA: Passage[] = [
       },
       {
         id: 4,
-        question: "The overall aim of the writer is to",
+        question: "The overall aim of the writer is to -------.",
         options: [
           "A) give us a glimpse of the history of tea",
           "B) tell about the causes behind both the opium wars and liberation of the American continent",
           "C) seduce us to appreciate tea as a global beverage",
           "D) present the delicate balance between the supply and demand of a commodity",
-          "E) indicate the relation between silver and tea throughout history 0850-420 AKIN (2546) www.zknAlam Mirica TEMEL SEVİYE OKUMA PARÇALARI AAKIS DIL EGITIMA AXIN DIL EGITIN www.small.com AM-IS-ARE Reading 1 050420 AKIN (2546) BIL EĞİTİM EXERCISE 1"
+          "E) indicate the relation between silver and tea throughout history"
         ],
         answer: "A"
       }
@@ -11779,6 +11741,6 @@ export const PASSAGES_DATA: Passage[] = [
         answer: "A"
       },
     ],
-    sourceFidelity: "ocr-uzlastirma"
+    sourceFidelity: "goruntuden-birebir"
   }
 ];

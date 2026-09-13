@@ -1,24 +1,21 @@
 {
  "no": 97,
+ "sayfalar": [
+  260
+ ],
  "paragraflar": [
-  "The tires seen on millions of cars across the world are the result of multiple inventors working across several decades. And those inventors have names that should be recognizable to anyone who ever bought tires for their car: Michelin, Goodyear, and Dunlop. Of these, however, none had greater impact on the invention of the rubber pneumatic tires than Charles Goodyear, who discovered the process of strengthening rubber, known as vulcanization or curing, in 1839, nearly more than 50 years before the first rubber tires would appear on cars and so patented a process known as vulcanization. He had actually been experimenting with rubber since 1830 but had been unable to develop a suitable curing process, yet during an experiment with a mixture of rubber and sulfur, Goodyear dropped the mixture on a hot stove accidentally. Then, a chemical reaction took place and, instead of melting, the rubber-sulfur mixture formed a hard lump, which is called vulcanization. He continued his experiments until he could treat continuous sheets of rubber. This process involved heating and removing the sulfur from rubber, thus making the rubber waterproof and winter-proof and allowing it to retain its elasticity. While Goodyear's claim to have invented vulcanization was challenged, he is considered as the father of vulcanized rubber tires. And that became largely important once people realized it would be perfect for making tires.",
-  "We learn from the passage that Goodyear -----. developed his method of developing tires with several inventors is widely regarded as the none greater of tires collaborated with Michelin and Dunlop to develop rubber tires is accepted as the first one to come up with the idea of vuleanized rubber tires was inspired by several other inventors such as Michelin and Dunlop",
-  "(MD AKINDIL 250 İğ 0850 420 (2546) so 420 (2546)",
-  "Merkezi ve Yayıncılık Hizmetleri",
-  "What does the passage mainly focus on? How rubber pneumatic tires and the process of vulcanization came into being contributions on the tires The challenge among inventors over the patent of rettin@® the vulcanization vin What makes Goodyear's invention distinct from other tires inventors? it could prevent tires from blowing out in case of an accident winter-proof when put on a hot stove, the rubber-sulfur mixture melts continuous sheets of rubber it had a convenient curing process called vulcanization, making the rubber more elastic",
-  "We can understand from the passage that -----. before Charles Goodyear, the pioneers of the tires technology were seen as Michelin and Dunlap when a mixture of rubber and sulfur is dropped on a stove, it never melts Charles Goodyear was not intentionally working vit on the vulcanization process when he discovered",
-  "the rubber tires Goodyear appeared on cars nearly 50 years before those of other tires Goodyear got the patent of the vulcanization though it was also carried out by Michelin"
+  "The tires seen on millions of cars across the world are the result of multiple inventors working across several decades. And those inventors have names that should be recognizable to anyone who's ever bought tires for their car: Michelin, Goodyear, and Dunlop. Of these, however, none had greater impact on the invention of the rubber pneumatic tires than Charles Goodyear, who discovered the process of strengthening rubber, known as vulcanization or curing, in 1839, nearly more than 50 years before the first rubber tires would appear on cars and so patented a process known as vulcanization. He had actually been experimenting with rubber since 1830 but had been unable to develop a suitable curing process, yet during an experiment with a mixture of rubber and sulfur, Goodyear dropped the mixture on a hot stove accidentally. Then, a chemical reaction took place and, instead of melting, the rubber-sulfur mixture formed a hard lump, which is called vulcanization. He continued his experiments until he could treat continuous sheets of rubber. This process involved heating and removing the sulfur from rubber, thus making the rubber waterproof and winter-proof and allowing it to retain its elasticity. While Goodyear's claim to have invented vulcanization was challenged, he is considered as the father of vulcanized rubber tires. And that became largely important once people realized it would be perfect for making tires."
  ],
  "sorular": [
   {
    "no": 1,
-   "soru": "We learn from the passage that Goodyear",
+   "soru": "We learn from the passage that Goodyear -----.",
    "secenekler": [
     "A) developed his method of developing tires with several inventors",
     "B) is widely regarded as the sole creator of tires",
-    "C) colaborated with Micheln and Dunlop to develop rubber tires",
+    "C) collaborated with Michelin and Dunlop to develop rubber tires",
     "D) is accepted as the first one to come up with the idea of vulcanized rubber tires",
-    "E) was inspired by several other inventors such as Michelin and Dunlop AKER BEL ITIM EGIT"
+    "E) was inspired by several other inventors such as Michelin and Dunlop"
    ],
    "cevap": "D"
   },
@@ -39,8 +36,8 @@
    "soru": "What makes Goodyear's invention distinct from other tire inventors?",
    "secenekler": [
     "A) it could prevent tires from blowing out in case of an accident",
-    "B) It enables the rubber to be waterproof rather than winter-proof",
-    "C) when put on a hot stove, the rubber-sulfur mixture meits",
+    "B) it enables the rubber to be waterproof rather than winter-proof",
+    "C) when put on a hot stove, the rubber-sulfur mixture melts",
     "D) it was the first one allowing the treatment of continuous sheets of rubber",
     "E) it had a convenient curing process called vulcanization, making the rubber more elastic"
    ],
@@ -48,11 +45,11 @@
   },
   {
    "no": 4,
-   "soru": "We can understand from the passage that",
+   "soru": "We can understand from the passage that -----.",
    "secenekler": [
-    "A) before Charles Goodyear, the pioneers of the tire hechnology were seen as Michelin and Dunlop",
+    "A) before Charles Goodyear, the pioneers of the tire technology were seen as Michelin and Dunlop",
     "B) when a mixture of rubber and sulfur is dropped on a stove, it never melts",
-    "C) Chartes Goodyear was not intentionally working on the vulcanization process when he discovered",
+    "C) Charles Goodyear was not intentionally working on the vulcanization process when he discovered it",
     "D) the rubber tires Goodyear appeared on cars nearly 50 years before those of other firms",
     "E) Goodyear got the patent of the vulcanization though it was also carried out by Michelin"
    ],
@@ -60,12 +57,6 @@
   }
  ],
  "kelimeler": [],
- "_kaynak": {
-  "taban": "pdf",
-  "soru": "word",
-  "yazimDuzeltme": 7,
-  "doldurulanBosluk": 0
- },
- "_not": "Metin PDF metin katmanı ve Word dökümünden, daha eksiksiz olanı taban alınarak üretildi; yalnızca apaçık OCR yazım hataları öteki kaynakla düzeltildi. Cevaplar kitabın cevap anahtarından. GÖZLE DOĞRULANMADI.",
- "guven": "ocr-uzlastirma"
+ "_not": "Tamamı 250. sayfada (g260). 59-100 arasında kitapta Türkçe sözlük bölümü yok.",
+ "guven": "goruntuden-birebir"
 }
