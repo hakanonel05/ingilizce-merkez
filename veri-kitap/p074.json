@@ -2,8 +2,7 @@
  "no": 74,
  "baslik": "Civilization and History",
  "paragraflar": [
-  "An overwhelming majority of the people who appear most often and most gloriously in the history books are great conquerors and soldiers, whereas really helped civilization develop are almost never mentioned at all at too. For instance, we do not know who first treated a broken leg, or calculated the length of a year, or grew crops: however addition, we do know all about the killers and destroyers. They could, but we must note that they are definitely not the most civilized ones. It is true that fighting is a part of the nature of all living things, but can we say the same for war-fighting? Animals fight, so such do savages, hence, to be good at good in the way in which an animal or a savage is good, but it is not to be civilized. People fight to settle quarrels. Fighting means killing, and civilized people ought to be able to find some way of settling their disputes other than seeing which side can kill off the greater number of the other side, and then saying that the side which has killed most has won.",
-  "On, that is what the story of mankind has been ike. But we must not expect loo much. After all, the race of men has only just started. From the point of view of evolution, human beings are just babies of a ferw months old. Suppose that whole past of living creatures on hundred years; then the whole past of man works out to about one month, and during have been civilizations for between seven and eight hours. Taking mari's civilized past at about seven or eight hours, we may his future, that is to say, the whole period between now and when the sun grows too life any longer on the earth, at about one hundred thousand years Thus at the outset of its civilized life..."
+  "An overwhelming majority of the people who appear most often and most gloriously in the history books are great conquerors and soldiers, whereas the people who really helped civilization develop are almost never mentioned at all instance, we do not know who first treated a broken leg, or calculated the length of a year, or grew crops; however addition, we do know all about the killers and destroyers. They could be great indeed, but we must note that they are definitely not the most civilized ones. It is true that fighting is a part of the nature of all living things, but can we say the same for war-fighting? Animals fight; so do savages; hence, to be good at fighting is to be good in the way in which an animal or a savage is good, but it is not to be civilized. People fight to settle quarrels. Fighting means killing, and civilized people ought to be able to find some way of settling their disputes other than of by seeing which side can kill off the greater number of the other side, and then saying that the side which has killed most has won. 2 On the whole, that is what the story of mankind has been like. But we must not expect too much. After all, the race of men has only just started. From the point of view of evolution, human beings are just babies of a few months old. Suppose that we calculate the whole past of living creatures on Earth as one hundred years; then the whole past of man works out to about one month, and during that month there have been civilizations for between about seven or eight hours, we may able to estimate his future, that is to say, the whole period between now and when the sun grows too cold to maintain life any longer on the earth, at about one hundred thousand years. Thus mankind is only at the outset of its civilized life"
  ],
  "sorular": [
   {
@@ -49,11 +48,11 @@
   "oyDegisen": 12,
   "supheli": 17
  },
- "_not": "Metin üç bağımsız OCR çıkarımının (yerel tesseract, PDF metin katmanı, Word dökümü) kelime kelime hizalanıp OY ÇOKLUĞUYLA uzlaştırılmasıyla üretildi: iki kaynağın birleştiği yazım kazandı. Sütunlar tesseract için ayrı ayrı kırpıldı, böylece sütun karışması olmadı. Boşluk doldurma alıştırmasındaki seçenekler kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Sorular ve cevaplar kitabın anahtarından. GÖZLE DOĞRULANMADI.",
+ "_not": "Gövde sayfa görüntülerinden yerel OCR ile okundu ve sayfanın YAPISINA göre ayıklandı: EXERCISE 2 yönergesinden sonra başlar, EXERCISE 3 başlığında biter; paragraf sınırları kitabın kendi paragraf numaralarından. Boşluk doldurma seçenekleri kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Sorular ve cevaplar kitabın anahtarından. GÖZLE DOĞRULANMADI.",
  "_uyari": [
   "kalan-numara:4",
   "eksik-doldurma:13/17"
  ],
- "guvenNot": "uc-kaynak-oylama",
- "guven": "ocr-uzlastirma"
+ "guvenNot": "yapisal-ocr",
+ "guven": "ocr-yapisal"
 }

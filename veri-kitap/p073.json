@@ -2,7 +2,8 @@
  "no": 73,
  "baslik": "The Father of All Languages: African",
  "paragraflar": [
-  "~~ A) resembling B) different lerkezi ve Yayincilik Hizmetleri 1 Recent research has revealed that all common ancestor. Some scientists studied 504 modern languages, from Chinese, and discovered that every has stemmed from a dialect people spoke in Africa in prehistoric times. According to, they began to speak for the first time approximately 100,000 years ago and this was the first language in the world. However, it is not spoken any more. Early humans then left Africa, moving across Europe, Asia, them which then altered along. 2 Most the first humans came from Africa, but developed at different times in different parts of the world and there is no connection between them. Thus, this research is important as it suggests this is not the case. It suggests that all languages must originate from place — somewhere in Africa. The scientists made this discovery by looking at how many there were in various languages across. They discovered that the number of sounds that languages had was different in different continents. Then, they compared them with the ones in Africa, and found out a spoken language was a long way from Africa, it didn't have many sounds. However, if a language was close to Africa, it had a lot of sounds. For example, Hadza, which is spoken in Tanzania, has 69 sounds, English has about 45 sounds, and Mandarin Chinese has 32 sounds. 3 So it seems that thousands of years ago, as moving further away from, they used fewer sounds in their languages. So it seems the first language was African! Interestingly, some African languages have instance, Xu, a South African language, has 141 G different sounds. While - that are far away from Africa have many sounds, Bandjalang, an Australian language, has merely sixteen sounds. 2 world to spread their language. information |"
+  "Recent research has revealed that all languages have a common ancestor. Some scientists studied 504 modern languages, from English to Mandarin Chinese, and discovered that every language on Earth has stemmed from a dialect people spoke in Africa in prehistoric times. According to the researchers, they began to speak for the first time approximately 100,000 years ago and this was the first language in the world. However, it is not spoken any more. Early humans then left Africa, moving across Europe, Asia, them which then altered along the way. 2 Most scientists agree that the first humans came from Africa, but some believe languages developed at different times in different parts of the world and there is no connection between them. Thus, this research is important as it suggests this is not the case. It suggests that all languages must originate from the same place — somewhere in Africa. The scientists made this discovery by looking at how many different sounds there were in various languages across the world. They discovered that the number of sounds that languages had was different in different continents. Then, they compared them with the ones in Africa, and found out that if a spoken language was a long way from Africa, it didn’t have many sounds. However other hand, if a language was close to Africa, it had a lot of sounds. For example As a result For example, Hadza, which is spoken in Tanzania, has 69 sounds, English has about 45 sounds, and Mandarin Chinese has 32 sounds",
+  "So it seems that thousands of years ago, as human beings were moving further away from Africa, they used fewer sounds in their languages. So it seems the first language was African! Interestingly, some African languages have a large number of sounds. For instance, Xu, a South African language, has 141 G different sounds. While some languages - that are far away from Africa have many sounds, Bandjalang, an Australian language, has merely sixteen sounds. 2"
  ],
  "sorular": [
   {
@@ -48,11 +49,11 @@
   "oyDegisen": 1,
   "supheli": 3
  },
- "_not": "Metin üç bağımsız OCR çıkarımının (yerel tesseract, PDF metin katmanı, Word dökümü) kelime kelime hizalanıp OY ÇOKLUĞUYLA uzlaştırılmasıyla üretildi: iki kaynağın birleştiği yazım kazandı. Sütunlar tesseract için ayrı ayrı kırpıldı, böylece sütun karışması olmadı. Boşluk doldurma alıştırmasındaki seçenekler kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Sorular ve cevaplar kitabın anahtarından. GÖZLE DOĞRULANMADI.",
+ "_not": "Gövde sayfa görüntülerinden yerel OCR ile okundu ve sayfanın YAPISINA göre ayıklandı: EXERCISE 2 yönergesinden sonra başlar, EXERCISE 3 başlığında biter; paragraf sınırları kitabın kendi paragraf numaralarından. Boşluk doldurma seçenekleri kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Sorular ve cevaplar kitabın anahtarından. GÖZLE DOĞRULANMADI.",
  "_uyari": [
   "kalan-numara:3",
   "eksik-doldurma:17/20"
  ],
- "guvenNot": "uc-kaynak-oylama",
- "guven": "ocr-uzlastirma"
+ "guvenNot": "yapisal-ocr",
+ "guven": "ocr-yapisal"
 }

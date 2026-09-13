@@ -1,13 +1,20 @@
 {
  "no": 64,
  "baslik": "Koko",
+ "sayfalar": [
+  190,
+  191
+ ],
  "paragraflar": [
-  "Merkezi ve Yayincilik Hizmetleri 1 Did you know that animals are also each other? Bees communicate by dancing. Whales talk to each other by singing. And some apes talk to humans by using American Sign 2 Meet Koko: a female gorilla born at the San Francisco Zoo on July 4th, 1971. Koko learned sign language from, Dr. Penny Patterson. Patterson began teaching sign language to Koko in 1972, when Koko was one year old. Koko was a good student for sure, so she moved onto the Stanford University campus with Dr. Patterson. Koko continued to learn on the campus until 1976. That's when full-time with Patterson's group, the Gorilla Foundation. The relationship between Patterson and Koko has blossomed ever since. 3 Dr. Patterson says that Koko has mastered sign language. She says that Koko knows over 1,000 words, and that Koko makes up new words. For example, Koko didn't know the sign for ring, so she signed the words finger and bracelet. Dr. Patterson thinks that this shows meaningful and constructive use of language. 4 Not everyone agrees with. Patterson. Some argue that apes like Koko do not understand the meaning of what they are doing. Skeptics say that these apes are just performing complex tricks. For example, if an apple and signs red or apple, Dr. Patterson will give her an apple. They argue that Koko does not really know what means. She only knows that if she makes the right motion, then apple. The debate is unsolved, but for certain: Koko is an extraordinary ape. drainer Adtesadi? Soa @ossoszoacn sss):XERCISE 4.. ---- a language / the results. ---- a plan / relationship"
+  "Did you know that animals are also in contact with each other? Bees communicate by dancing. Whales talk to each other by singing. And some apes talk to humans by using American Sign Language.",
+  "Meet Koko: a female gorilla born at the San Francisco Zoo on July 4th, 1971. Koko learned sign language from her trainer, Dr. Penny Patterson. Patterson began teaching sign language to Koko in 1972, when Koko was one year old. Koko was a good student for sure, so two years later she moved onto the Stanford University campus with Dr. Patterson. Koko continued to learn on the campus until 1976. That's when she began living full-time with Patterson's group, the Gorilla Foundation. The relationship between Patterson and Koko has blossomed ever since.",
+  "Dr. Patterson says that Koko has mastered sign language. She says that Koko knows over 1,000 words, and that Koko makes up new words. For example, Koko didn't know the sign for ring, so she signed the words finger and bracelet. Dr. Patterson thinks that this shows meaningful and constructive use of language.",
+  "Not everyone agrees with Dr. Patterson. Some argue that apes like Koko do not understand the meaning of what they are doing. Skeptics say that these apes are just performing complex tricks. For example, if Koko points to an apple and signs red or apple, Dr. Patterson will give her an apple. They argue that Koko does not really know what the sign apple means. She only knows that if she makes the right motion, then she gets an apple. The debate is unsolved, but one thing is for certain: Koko is an extraordinary ape."
  ],
  "sorular": [
   {
    "no": 1,
-   "soru": "the text. 1. In paragraph 1, the author mentions different animals to show that ----.",
+   "soru": "In paragraph 1, the author mentions different animals to show that ----.",
    "secenekler": [
     "A) communication is easy and even animals can talk",
     "B) animals are as intelligent as human beings",
@@ -18,18 +25,12 @@
   },
   {
    "no": 2,
-   "soru": "The word “blossom” in paragraph 2 means —.",
+   "soru": "The word \"blossom\" in paragraph 2 means ----.",
    "secenekler": [
     "A) end",
     "B) start",
     "C) break",
-    "D) develop 2.-job/employees",
-    "E) full-time",
-    "F) contagious 3. aplan/relationship",
-    "G) appear",
-    "H) show 4. species apes/birds",
-    "I) like",
-    "J) through"
+    "D) develop"
    ],
    "cevap": "D"
   },
@@ -46,29 +47,17 @@
   },
   {
    "no": 4,
-   "soru": "One can infer from paragraph 4 that —.",
+   "soru": "One can infer from paragraph 4 that ----.",
    "secenekler": [
-    "A) Kokos the last gonila that can use sign language",
+    "A) Koko is the last gorilla that can use sign language",
     "B) other apes are not as clever as Koko",
     "C) Koko isn't the only gorilla who can use sign language",
-    "D) red apples are favourite food of apes AKİN DİL EĞİTİM www.tinht.com 010 420 AKIN SAG"
+    "D) red apples are favourite food of apes"
    ],
    "cevap": "C"
   }
  ],
  "kelimeler": [],
- "_kaynak": {
-  "taban": "tesseract",
-  "soru": "pdf",
-  "yazimDuzeltme": 4,
-  "doldurulanBosluk": 10,
-  "oyDegisen": 0,
-  "supheli": 2
- },
- "_not": "Metin üç bağımsız OCR çıkarımının (yerel tesseract, PDF metin katmanı, Word dökümü) kelime kelime hizalanıp OY ÇOKLUĞUYLA uzlaştırılmasıyla üretildi: iki kaynağın birleştiği yazım kazandı. Sütunlar tesseract için ayrı ayrı kırpıldı, böylece sütun karışması olmadı. Boşluk doldurma alıştırmasındaki seçenekler kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Sorular ve cevaplar kitabın anahtarından. GÖZLE DOĞRULANMADI.",
- "_uyari": [
-  "kalan-numara:1"
- ],
- "guvenNot": "uc-kaynak-oylama",
- "guven": "ocr-uzlastirma"
+ "_not": "Sayfa goruntusunden birebir okundu. Bosluklar kitabin kendi ALISTIRMA 2 anahtariyla dolduruldu.",
+ "guven": "goruntuden-birebir"
 }

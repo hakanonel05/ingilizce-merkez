@@ -42,9 +42,11 @@ export interface Passage {
    * Parça metninin kitaptan hangi yolla alındığı. Veri kalitesi her parçada
    * aynı değil; hangisinin gözle doğrulandığı görünür kalsın diye duruyor.
    *   "goruntuden-birebir" — sayfa görüntüsü okunup birebir yazıldı
-   *   "ocr-uzlastirma"     — iki OCR çıkarımı uzlaştırıldı, gözle görülmedi
+   *   "ocr-yapisal"        — sayfa görüntüsü yerel OCR ile okundu, metin
+   *                          sayfanın yapısına göre ayıklandı; gözle görülmedi
+   *   "ocr-uzlastirma"     — iki OCR çıkarımı uzlaştırıldı (artık kullanılmıyor)
    */
-  sourceFidelity?: 'goruntuden-birebir' | 'ocr-uzlastirma';
+  sourceFidelity?: 'goruntuden-birebir' | 'ocr-yapisal' | 'ocr-uzlastirma';
   /** Sözlük kitabın kendi Türkçe listesinden mi, uygulamanın eski verisinden mi. */
   vocabularySource?: 'kitap' | 'uygulama';
   isGenerated?: boolean;

@@ -1,76 +1,63 @@
 {
  "no": 67,
  "baslik": "Trans-fats",
+ "sayfalar": [
+  196,
+  197
+ ],
  "paragraflar": [
-  "196 ____®axi Merkezi ve Yayinciltk Hizmetleri ) 1 Many people prefer \"junk food\" to healthy food because taste for it. However, trans fat raises the bad cholesterol in your body and lowers the good body needs. Fatty foods do more than cause obesity. Trans fats build up in the body and block blood flow to the heart. People whose high percentage of trans fats are at risk ] for heart diseases. 2 Trans-fat is made by adding hydrogen to liquid oil. Food companies and restaurants use trans-fat oil as it is inexpensive and makes food last longer. It also improves the taste and texture of. They became very popular in the second half of the 20th century. This is when butter got a bad name. By health care professionals, people were told margarine instead which was made from fats. Today doctors know how dangerous these processed foods are. In countries such as the US and Canada there are new government restrictions on food production. Food and beverage makers have to labels to their products. These have a list of daily recommendations and give details about all ingredients including the amount of trans-fats in a product. New York City banned trans fats from all. Even fast food chains such as McDonalds are being forced to change their. In Europe, food manufacturers have started using a voluntary labelling system at the consumers’ request. 4 We all need some fat in our diet. There are three different types of fats: saturated fats, trans fats, and unsaturated fats. Doctors recommend that of our fatty calories from unsaturated fats. Neither butter nor margarine fit in this category, though there are some spreads that contain zero trans fats. Labels are a good way to foods, but a better way is to avoid eating out. eating food with high amount of trans fats in Ereiren-S SRRRA 197"
+  "Many people prefer \"junk food\" to healthy food because they develop a taste for it. However, trans fat raises the bad cholesterol in your body and lowers the good cholesterol that the body needs. Fatty foods do more than cause obesity. Trans fats build up in the body and block blood flow to the heart. People whose diet contains a high percentage of trans fats are at risk for heart diseases.",
+  "Trans-fat is made by adding hydrogen to liquid oil. Food companies and restaurants use trans-fat oil as it is inexpensive and makes food last longer. It also improves the taste and texture of food. They became very popular in the second half of the 20th century. This is when butter got a bad name. By health care professionals, people were told to use margarine instead which was made from trans fats.",
+  "Today doctors know how dangerous these processed foods are. In countries such as the US and Canada there are new government restrictions on food production. Food and beverage makers have to attach Nutrition Fact labels to their products. These have a list of daily recommendations and give details about all ingredients including the amount of trans-fats in a product. New York City banned trans fats from all restaurants. Even fast food chains such as McDonalds are being forced to change their recipes. In Europe, food manufacturers have started using a voluntary labelling system at the consumers' request.",
+  "We all need some fat in our diet. There are three different types of fats: saturated fats, trans fats, and unsaturated fats. Doctors recommend that we get most of our fatty calories from unsaturated fats. Neither butter nor margarine fit in this category, though there are some spreads that contain zero trans fats. Labels are a good way to avoid eating fatty foods, but a better way is to avoid eating out."
  ],
  "sorular": [
   {
    "no": 1,
-   "soru": "synonyms. 1. raise (v)",
+   "soru": "Which of the following is NOT given as a result of eating food with high amount of trans fats in paragraph 1?",
    "secenekler": [
     "A) getting overweight",
     "B) problems with heart",
     "C) high blood pressure",
-    "D) increase in bed cholesterol"
+    "D) increase in bad cholesterol"
    ],
    "cevap": "C"
   },
   {
    "no": 2,
-   "soru": "inexpensive (adj)",
+   "soru": "The word \"restrictions\" in paragraph 3 closest in meaning to ----.",
    "secenekler": [
     "A) permissions",
-    "B) aims",
-    "C) régulations",
-    "D) plana"
+    "B) regulations",
+    "C) aims",
+    "D) plans"
    ],
    "cevap": "B"
   },
   {
    "no": 3,
-   "soru": "dangerous (adj)",
+   "soru": "What does \"these\" in paragraph 3 refer to?",
    "secenekler": [
-    "A) Nutrition Fact labels B food and beverage makers",
-    "B) processed foods",
-    "C) products ANT BIL EGITEN 1. tax the amount of/heat",
-    "D) became",
-    "E) lower 2. two hours/long",
-    "F) last",
-    "G) attach 3. smoking/the use of trans-fats",
-    "H) manufacture",
-    "I) ban 4. a method a medication/a tool",
-    "J) force",
-    "K) use"
+    "A) Nutrition Fact labels",
+    "B) food and beverage makers",
+    "C) processed foods",
+    "D) products"
    ],
    "cevap": "A"
   },
   {
    "no": 4,
-   "soru": "recommendation (n)",
+   "soru": "One can infer from the text that ----.",
    "secenekler": [
     "A) in Europe, foods that have trans fats in them have to indicate it on their labels",
     "B) small amounts of trans fats occur naturally in some meat and dairy products",
     "C) in 1990, scientists began to find the bad effects of trans fats",
-    "D) nutrition Fact laters help consumers make healthier choices EXERCISE 4. Choose the correct option EXERCISE 3. Choose the correct option according to the text."
+    "D) nutrition Fact labels help consumers make healthier choices"
    ],
    "cevap": "D"
   }
  ],
  "kelimeler": [],
- "_kaynak": {
-  "taban": "tesseract",
-  "soru": "pdf",
-  "yazimDuzeltme": 5,
-  "doldurulanBosluk": 8,
-  "oyDegisen": 1,
-  "supheli": 0
- },
- "_not": "Metin üç bağımsız OCR çıkarımının (yerel tesseract, PDF metin katmanı, Word dökümü) kelime kelime hizalanıp OY ÇOKLUĞUYLA uzlaştırılmasıyla üretildi: iki kaynağın birleştiği yazım kazandı. Sütunlar tesseract için ayrı ayrı kırpıldı, böylece sütun karışması olmadı. Boşluk doldurma alıştırmasındaki seçenekler kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Sorular ve cevaplar kitabın anahtarından. GÖZLE DOĞRULANMADI.",
- "_uyari": [
-  "kalan-numara:2",
-  "eksik-doldurma:8/10"
- ],
- "guvenNot": "uc-kaynak-oylama",
- "guven": "ocr-uzlastirma"
+ "_not": "Sayfa goruntusunden birebir okundu. Bosluklar kitabin kendi ALISTIRMA 2 anahtariyla dolduruldu.",
+ "guven": "goruntuden-birebir"
 }

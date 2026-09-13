@@ -1,13 +1,20 @@
 {
  "no": 68,
  "baslik": "Fitness Pill",
+ "sayfalar": [
+  198,
+  199
+ ],
  "paragraflar": [
-  "MIXED READING PASSAGES LEVEL 2 198 ____®Axn Aerkezi ve Yayincihk Hizmetleri Fitness Pill 1 These days there are pills for just about everything. If you can't sleep, take a pill. If you're unhappy, take a pill. What about if you're overweight and you don't have time to exercise? A new fitness pill may soon. Scientists are developing a pill that provides the same benefits as exercise. According to a BBC report, the fitness pill will \"build muscle, increase stamina, and even.\" Would you take a pill if it meant you no longer needed the treadmill? Researchers found that mice who took these pills could run long-distances without. The test mice also ran almost twice as far. There is evidence that humans on these pills will also be able to build muscles without exercising. Furthermore, the research suggests that those who exercise and take the fitness pill will be even stronger. 3 Some researchers think the fitness pill will be useful in certain situations. People who cannot get out of bed due to ill health may benefit from the drug. There are also patients whose diseases cause their muscles waste away. Those with as well. Other researchers feel that the average adult might benefit from such a drug. Most adults do not get the 40 minutes of daily exercise that. The fitness pill requires no time. 4 The greatest concern about the fitness pill is in the sports world. Some will be tempted to use this drug to enhance performance. The pill has not been approved for human use yet, however, some athletes may already be drug testing before events. The renowned gold medalist swimmer, Michael Phelps, voluntarily went through extra drug testing before the 2008 Olympics. He wanted to prove to the public that his strength comes from hard work and training before the world became XERCISE 3. according to. What does “stamina” in paragraph 1 is closest in meaning to ----.?. According to the passage Michael Phelps ----. ERCISE 4. concerned / worried ---- health / your future ---- artist / region / explorer"
+  "These days there are pills for just about everything. If you can't sleep, take a pill. If you're unhappy, take a pill. What about if you're overweight and you don't have time to exercise? A new fitness pill may soon be available. Scientists are developing a pill that provides the same benefits as exercise. According to a BBC report, the fitness pill will \"build muscle, increase stamina, and even burn fat.\"",
+  "Would you take a pill if it meant you no longer needed the treadmill? Researchers found that mice who took these pills could run long-distances without previous training. The test mice also ran almost twice as far. There is evidence that humans on these pills will also be able to build muscles without exercising. Furthermore, the research suggests that those who exercise and take the fitness pill will be even stronger.",
+  "Some researchers think the fitness pill will be useful in certain situations. People who cannot get out of bed due to ill health may benefit from the drug. There are also patients whose diseases cause their muscles waste away. Those with diabetes may benefit as well. Other researchers feel that the average adult might benefit from such a drug. Most adults do not get the 40 minutes of daily exercise that doctors recommend. The fitness pill requires no need for spare time.",
+  "The greatest concern about the fitness pill is in the sports world. Some fear that athletes will be tempted to use this drug to enhance performance. The pill has not been approved for human use yet, however, some athletes may already be taking it. Top athletes already go through extensive drug testing before national and international events. The renowned gold medalist swimmer, Michael Phelps, voluntarily went through extra drug testing before the 2008 Olympics. He wanted to prove to the public that his strength comes from hard work and training before the world became skeptical."
  ],
  "sorular": [
   {
    "no": 1,
-   "soru": "the text. 4. 1. What does “stamina” in paragraph 1 is closest in meaning to ----.?",
+   "soru": "What does \"stamina\" in paragraph 1 is closest in meaning to ----.?",
    "secenekler": [
     "A) assistance",
     "B) profit",
@@ -18,10 +25,10 @@
   },
   {
    "no": 2,
-   "soru": "The author starts paragraph 2 with a question to",
+   "soru": "The author starts paragraph 2 with a question to ----.",
    "secenekler": [
     "A) have the reader question the concepts in the text",
-    "B) encourage the reader think more deeply about what he presenta",
+    "B) encourage the reader think more deeply about what he presents",
     "C) learn about the readers' ideas about his subject",
     "D) to make his writing more interesting, memorable and persuasive"
    ],
@@ -29,55 +36,39 @@
   },
   {
    "no": 3,
-   "soru": "what he presents",
+   "soru": "What is the main idea of paragraph 2?",
    "secenekler": [
-    "A) Evidence suggests that fitness pills have several advantages",
+    "A) Evidence suggests that fitness pills have several advantages.",
     "B) Mice benefit from fitness pills more than humans.",
-    "C) When you are on fitness pilis, you can run faster and further.",
-    "D) The best way to build muscles is taking fitness pills"
+    "C) When you are on fitness pills, you can run faster and further.",
+    "D) The best way to build muscles is taking fitness pills."
    ],
    "cevap": "A"
   },
   {
    "no": 4,
-   "soru": "and persuasive What is the main idea of paragraph 2?",
+   "soru": "According to the passage Michael Phelps ----.",
    "secenekler": [
     "A) gets his strength and energy from fitness pills",
     "B) refused to go through extra drug testing",
-    "C) owes his gold medals to herd work and training",
+    "C) owes his gold medals to hard work and training",
     "D) failed the drug test before the 2008 Olympics"
    ],
    "cevap": "C"
   },
   {
    "no": 5,
-   "soru": "What is the author's attitude towards fitness vin pills?",
+   "soru": "What is the author's attitude towards fitness pills?",
    "secenekler": [
     "A) humorous",
-    "B) pessimistic",
-    "C) objective",
-    "D) indifferent WILD 110 κι AKST A AKIN BEL EGITIN EXERCISE 4. Choose the correct option. muscle/trust 1.",
-    "E) build",
-    "F) repeat people/result/species 2.",
-    "G) certain"
+    "B) objective",
+    "C) pessimistic",
+    "D) indifferent"
    ],
    "cevap": "B"
   }
  ],
  "kelimeler": [],
- "_kaynak": {
-  "taban": "tesseract",
-  "soru": "pdf",
-  "yazimDuzeltme": 3,
-  "doldurulanBosluk": 9,
-  "oyDegisen": 1,
-  "supheli": 2
- },
- "_not": "Metin üç bağımsız OCR çıkarımının (yerel tesseract, PDF metin katmanı, Word dökümü) kelime kelime hizalanıp OY ÇOKLUĞUYLA uzlaştırılmasıyla üretildi: iki kaynağın birleştiği yazım kazandı. Sütunlar tesseract için ayrı ayrı kırpıldı, böylece sütun karışması olmadı. Boşluk doldurma alıştırmasındaki seçenekler kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Sorular ve cevaplar kitabın anahtarından. GÖZLE DOĞRULANMADI.",
- "_uyari": [
-  "kalan-numara:2",
-  "eksik-doldurma:9/10"
- ],
- "guvenNot": "uc-kaynak-oylama",
- "guven": "ocr-uzlastirma"
+ "_not": "Sayfa goruntusunden birebir okundu. Bosluklar kitabin kendi ALISTIRMA 2 anahtariyla dolduruldu.",
+ "guven": "goruntuden-birebir"
 }

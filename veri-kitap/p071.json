@@ -2,8 +2,7 @@
  "no": 71,
  "baslik": "Bollywood and Hollywood",
  "paragraflar": [
-  "Bollywood and Hollywood are two internationally moognized film industries. Hollywood is basically the entire American film industry distributing. It's named after a district in California which of movie studios in the early 1900s. It was established established before WWI and is considered to be the world's leading and influential film industry. Both stars are recognized by many people around the world. Hollywood movies are made on. They usually involve elements of blood, violence, and other. In terms of. Hollywood dominates the sales. The industry earns more money by systent apart from the actual film. The movie is often ted with various other media such as and magazines. In terms of worldwide cinema, Hollywood gets around 75 per cent of all.",
-  "On the other hand, Bollywood is one part of the Hindi cinema industry. The term “Bollywood” was coined and popularized during the 1970s, when Hindi cinema surpassed Hollywood. The name is a combination of. Movies created often family-oriented and appeal to. The dominant themes in these movies are musicals with large casts and several song and dance sequences. A major criticism of Bollywood movies is that they have a predictable and consistent plot. In addition, plots lack creativity and a form of escapist entertainment. Another criticism is that Bollywood replicates plots from Hollywood movies. Just as, Bollywood also produces and distributes its films internationally but does not get the same attention as. The Bollywood industry produces more films than Hollywood but spends less on production. A movie's success or earnings is reliant on and music videos that the movie produces."
+  "Bollywood and Hollywood are two internationally recognized film industries. Hollywood is basically the entire American film industry distributing movies worldwide. It's named after a district in California which became the centre of movie studios in the early 1900s. It was established WWI and is considered to be the world’s leading and influential film industry. Both Hollywood movies and stars are recognized by many people around the world. Hollywood movies are made on a large scale. They usually involve elements of blood, violence, and other controversial themes. In terms of revenue, Hollywood dominates the sales. The industry earns more money by utilising a franchise system apart from revenue from the actual film. The movie is often tied with various other media such as TV networks and magazines. In terms of worldwide cinema, Hollywood gets around 75 per cent of all movie revenues. 2 On the other hand part of the Hindi cinema industry. The term “Bollywood” was coined and popularized during the 1970s, when Hindi cinema surpassed Hollywood. The name is a combination of Bombay and Hollywood. Movies created by Bollywood are often family-oriented and appeal to human sensitivity. The dominant themes in these movies are musicals with large casts and several song and dance sequences. A major criticism of Bollywood movies is that they have a predictable and consistent plot. In addition, plots lack creativity and a form of escapist entertainment. Another criticism is that Bollywood replicates plots from Hollywood movies. Just as Tv pre Hollywood, Bollywood also produces and distributes its films internationally but does not get the same attention as Hollywood. The Bollywood industry produces more films than Hollywood but spends less on production. A movie's success or earnings is reliant on the theater revenues and music videos that the movie produces"
  ],
  "sorular": [
   {
@@ -47,11 +46,11 @@
   "oyDegisen": 7,
   "supheli": 17
  },
- "_not": "Metin üç bağımsız OCR çıkarımının (yerel tesseract, PDF metin katmanı, Word dökümü) kelime kelime hizalanıp OY ÇOKLUĞUYLA uzlaştırılmasıyla üretildi: iki kaynağın birleştiği yazım kazandı. Sütunlar tesseract için ayrı ayrı kırpıldı, böylece sütun karışması olmadı. Boşluk doldurma alıştırmasındaki seçenekler kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Sorular ve cevaplar kitabın anahtarından. GÖZLE DOĞRULANMADI.",
+ "_not": "Gövde sayfa görüntülerinden yerel OCR ile okundu ve sayfanın YAPISINA göre ayıklandı: EXERCISE 2 yönergesinden sonra başlar, EXERCISE 3 başlığında biter; paragraf sınırları kitabın kendi paragraf numaralarından. Boşluk doldurma seçenekleri kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Sorular ve cevaplar kitabın anahtarından. GÖZLE DOĞRULANMADI.",
  "_uyari": [
   "kalan-numara:6",
   "eksik-doldurma:14/20"
  ],
- "guvenNot": "uc-kaynak-oylama",
- "guven": "ocr-uzlastirma"
+ "guvenNot": "yapisal-ocr",
+ "guven": "ocr-yapisal"
 }

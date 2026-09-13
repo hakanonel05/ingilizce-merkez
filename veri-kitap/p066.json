@@ -1,8 +1,18 @@
 {
  "no": 66,
  "baslik": "Life on Mars?",
+ "sayfalar": [
+  194,
+  195
+ ],
  "paragraflar": [
-  "~ A)decrease B) threaten BE snr Em Airihe 8 80 Merkezi ve Yayincilik Hizmetleri Life on Mars? 1 If we tried to, could we really transform the frozen surface of Mars into something more friendly — a place where? And equally importantly, should we? 2 The first question has a clear answer: Yes, we probably could. NASA planetary scientist Chris ) McKay says, “Most of the work in ‘terraforming’ by life itself. We wouldn't have to build Mars, just modify its atmosphere”, “If we warmed it up and threw in some seeds, plants would\". Robert Zubrin, an engineer and president of the Mars Society, dreams of Martian cities. He thinks one day, we will in Mars! Zubrin believes civilisation cannot succeed if it doesn't expand limitlessly. He also thinks that if we transformed Mars, we might learn to manage our limited Earth better. He also says, if he was an astronaut, he wouldn't volunteer for journey! 4 YEAR ZERO: The thousand-year project might begin with a series of eighteen-month survey missions. Each make the six-month journey from Earth to Mars would add a small habitation module to the base. 5 100 YEARS: We could make an Earth-like atmosphere. First, we would release the carbon dioxide which is now ice. Maybe mirrors could focus sunlight on the ice to do www.okindil. com this. 200 YEARS: With, the temperature would go up and rain would fall. Algae and microbes could survive and transform the rocky surface. 7 600 YEARS: Flowering plants could be introduced would add oxygen to. Forests might even grow. on Mars, we will have ----. start to live after some climate changes? |. ---- answer / sky / sound"
+  "If we tried to, could we really transform the frozen surface of Mars into something more friendly – a place where humans could live? And equally importantly, should we?",
+  "The first question has a clear answer: Yes, we probably could. NASA planetary scientist Chris McKay says, \"Most of the work in 'terraforming' (making it similar to Earth) would be done by life itself. We wouldn't have to build Mars, just modify its atmosphere\", \"If we warmed it up and threw in some seeds, plants would grow there\".",
+  "Robert Zubrin, an engineer and president of the Mars Society, dreams of Martian cities. He thinks one day, we will have urban areas in Mars! Zubrin believes civilisation cannot succeed if it doesn't expand limitlessly. He also thinks that if we transformed Mars, we might learn to manage our limited Earth better. He also says, if he was an astronaut, he wouldn't volunteer for that six-month journey!",
+  "YEAR ZERO: The thousand-year project might begin with a series of eighteen-month survey missions. Each crew member who make the six-month journey from Earth to Mars would add a small habitation module to the base.",
+  "100 YEARS: We could make an Earth-like atmosphere. First, we would release the carbon dioxide which is now frozen in the ice. Maybe mirrors could focus sunlight on the ice to do this.",
+  "200 YEARS: With enough carbon dioxide, the temperature would go up and rain would fall. Algae and microbes could survive and transform the rocky surface.",
+  "600 YEARS: Flowering plants could be introduced when the microbes had created soil. This would add oxygen to the atmosphere. Forests might even grow."
  ],
  "sorular": [
   {
@@ -40,21 +50,7 @@
   }
  ],
  "kelimeler": [],
- "_kaynak": {
-  "taban": "tesseract",
-  "soru": "pdf",
-  "yazimDuzeltme": 2,
-  "doldurulanBosluk": 9,
-  "oyDegisen": 4,
-  "supheli": 1
- },
- "_not": "Metin üç bağımsız OCR çıkarımının (yerel tesseract, PDF metin katmanı, Word dökümü) kelime kelime hizalanıp OY ÇOKLUĞUYLA uzlaştırılmasıyla üretildi: iki kaynağın birleştiği yazım kazandı. Sütunlar tesseract için ayrı ayrı kırpıldı, böylece sütun karışması olmadı. Boşluk doldurma alıştırmasındaki seçenekler kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Sorular ve cevaplar kitabın anahtarından. GÖZLE DOĞRULANMADI.",
- "_uyari": [
-  "eksik-doldurma:9/10",
-  "sik-eksik:2"
- ],
- "kitapKusuru": "Sayfada (s195) UC soru basili ama kitabin cevap anahtari DORT cevap veriyor (1.B 2.C 3.A 4.A). Dorduncu sorunun metni kitapta yok; kayitli soru sayisi uce dusuruldu.",
- "_sorularDogrulandi": "Soru metinleri ve şıkları sayfa görüntüsünden okundu. kitap kusuru kaydedildi",
- "guvenNot": "uc-kaynak-oylama",
- "guven": "ocr-uzlastirma"
+ "_not": "Sayfa goruntusunden birebir okundu. Bosluklar kitabin kendi ALISTIRMA 2 anahtariyla dolduruldu.",
+ "_uyari": "Sayfada 3 soru basili ama cevap anahtari 4 cevap veriyor (1.B 2.C 3.A 4.A). Sayfada basili olan 3 soru yazildi, dorduncu soru uydurulmadi.",
+ "guven": "goruntuden-birebir"
 }
