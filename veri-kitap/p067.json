@@ -2,10 +2,7 @@
  "no": 67,
  "baslik": "Trans-fats",
  "paragraflar": [
-  "Many people prefer \"junk food\" to healthy food because taste for it. However, trans fat raises the bad cholesterol in your body and lowers the good body needs. Fatty foods do more than cause obesity. Trans fats build up in the body and blood blood Food to the heart, People whose high percentage of trans fats are at risk for heart diseases.",
-  "Trans-fatis made by adding hydrogen te liquid oil. Food companies and restaurants use trans-fat oil as itis inexpensive and makes food last longer. It also improves the taste and texture of, They became very popular in the second half of the 20th century. This is when butter got a bad name. a bad name. By health care professionals, people were told margarine instead which was made from trans fats.",
-  "Today doctors know how dangerous these processed foods are. In countries such as the US and Canada there are new government restrictions on food production. Food and beverage makes have to labels to their EĞirim products. These have products. These have a list of dally list of daily recommendations and give details about all otc ingredients including the amount of trans-fats in a product. New York City banned trans fats from all. Even fast food chains such @axin (Marin as McDonalds are being forced to change their theirs recipes. In Europe, food manufacturers have theirs recipes. In Europe, food manufacturers have started using a voluntary labelling system at the consumers’ request.",
-  "We all need some fat in our diet. There are three We all need some fat in our diet. There are three different types of fats: saturated fats, trans fats, and unsaturated fats. Doctors recommend that when we get most of our fatty calories from unsaturated fats. Neither butter nor margarine fit in this category, though there are some spreads that contains zero trans fats. Labels are a good way to foods, but a better way is to avoid eating out."
+  "196 ____®axi Merkezi ve Yayinciltk Hizmetleri ) 1 Many people prefer \"junk food\" to healthy food because taste for it. However, trans fat raises the bad cholesterol in your body and lowers the good body needs. Fatty foods do more than cause obesity. Trans fats build up in the body and block blood flow to the heart. People whose high percentage of trans fats are at risk ] for heart diseases. 2 Trans-fat is made by adding hydrogen to liquid oil. Food companies and restaurants use trans-fat oil as it is inexpensive and makes food last longer. It also improves the taste and texture of. They became very popular in the second half of the 20th century. This is when butter got a bad name. By health care professionals, people were told margarine instead which was made from fats. Today doctors know how dangerous these processed foods are. In countries such as the US and Canada there are new government restrictions on food production. Food and beverage makers have to labels to their products. These have a list of daily recommendations and give details about all ingredients including the amount of trans-fats in a product. New York City banned trans fats from all. Even fast food chains such as McDonalds are being forced to change their. In Europe, food manufacturers have started using a voluntary labelling system at the consumers’ request. 4 We all need some fat in our diet. There are three different types of fats: saturated fats, trans fats, and unsaturated fats. Doctors recommend that of our fatty calories from unsaturated fats. Neither butter nor margarine fit in this category, though there are some spreads that contain zero trans fats. Labels are a good way to foods, but a better way is to avoid eating out. eating food with high amount of trans fats in Ereiren-S SRRRA 197"
  ],
  "sorular": [
   {
@@ -62,15 +59,18 @@
  ],
  "kelimeler": [],
  "_kaynak": {
-  "taban": "pdf",
+  "taban": "tesseract",
   "soru": "pdf",
   "yazimDuzeltme": 5,
-  "doldurulanBosluk": 8
+  "doldurulanBosluk": 8,
+  "oyDegisen": 1,
+  "supheli": 0
  },
- "_not": "Metin PDF metin katmanı ve Word dökümünden, daha eksiksiz olanı taban alınarak üretildi; yalnızca apaçık OCR yazım hataları öteki kaynakla düzeltildi. Boşluklar kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Cevaplar kitabın cevap anahtarından. GÖZLE DOĞRULANMADI.",
+ "_not": "Metin üç bağımsız OCR çıkarımının (yerel tesseract, PDF metin katmanı, Word dökümü) kelime kelime hizalanıp OY ÇOKLUĞUYLA uzlaştırılmasıyla üretildi: iki kaynağın birleştiği yazım kazandı. Sütunlar tesseract için ayrı ayrı kırpıldı, böylece sütun karışması olmadı. Boşluk doldurma alıştırmasındaki seçenekler kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Sorular ve cevaplar kitabın anahtarından. GÖZLE DOĞRULANMADI.",
  "_uyari": [
   "kalan-numara:2",
   "eksik-doldurma:8/10"
  ],
+ "guvenNot": "uc-kaynak-oylama",
  "guven": "ocr-uzlastirma"
 }

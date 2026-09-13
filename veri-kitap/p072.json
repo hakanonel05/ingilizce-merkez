@@ -2,9 +2,7 @@
  "no": 72,
  "baslik": "Scuba Diving",
  "paragraflar": [
-  "Scuba diving is a type of underwater diving. Divers use a self-contained underwater breathing apparatus called scutie Since designed to see and breathe underwater, scuba diving requines some vital equipment. Scuba divers breathe with the help of a regulator. There is another an octopus. It is used in case of in case in terms of emergency situations. Divers also ear a pressure cause showing how much air is left in the air and Becoming requires taking a series of lessons. New divers need to could learn about the safety of diving. Moreover, they must practise diving skills first in a closed water area.",
-  "Scuba diving first became the development of the Aqualung by Jacques Cousteau in the early 1940s. Articles in popular magazines about Cousteau and his underwater exploration methods brought attention to with scuba diving. Owing to Owing Since the high cost of the equipment, diving couldn't can't) couldn't become a widely available sport until years later.",
-  "There are many safety issues to consider when diving For example, when down deeper in the water, a diver must be careful to equalize the pressure in his years This is done by For holding the cost and blowing very gently. Otherwise, the extreme pressure can cause damage to the middle ear and sinuses. Decompression sickness is a major concem for divers. The deeper a diver goes, the more pressure the water puts on the air inside his lungs. And, the deeper a dive, the more nitrogen gas goes into the diver's blood. For safety reasons, a diver must measure the length of his dive based on its depth so as not to exceed of nitrogen absorption When divers rise to the surface, they must carry on breathing and rise no air bubbles around them. For very deep diver they must stop and decompress at from certain levels. Therefore, the high pressurized air in the diver's lungs has time to leave the body before expands information on some precautions to be taken when diving deep"
+  "Merkezi ve Yayincilik Hizmetleri Scuba Diving ) 1 Scuba diving is a type of underwater diving. Divers use a self-contained underwater breathing apparatus called scuba. Since designed to see and breathe underwater, scuba diving requires some vital equipment. Scuba divers breathe with the help of a regulator. There is another other regulator called an octopus. It is used in case of / in terms of emergency situations. Divers ) also wear a pressure gauge showing how much air is left in the air tank. Becoming / Yet, they must practise diving skills first in a closed water area. 2 Scuba diving first became the development of the Aqualung by Jacques Cousteau in the early 1940s. Articles in popular magazines about Cousteau and his underwater exploration methods brought attention to. Owing to of the equipment, diving couldn't ) widely available sport until years later. 3 There are many safety issues to consider when diving. For example, when down deeper in the water, a diver must be careful to equalize the pressure in his ears. This is done by and blowing very gently. Otherwise, the extreme pressure can cause damage ) to the middle ear and sinuses. Decompression sickness is a major concern for divers. The deeper a diver goes, the more pressure the water puts on the air inside his lungs. And, the deeper a dive, the more nitrogen gas goes into the diver's blood. For, a diver must measure the length of his dive based on its depth so as not to exceed of nitrogen absorption. When divers rise to the surface, they must carry on breathing and rise no air bubbles around them. For very deep dives, they must stop and decompress at. Therefore / Therefore, the highly pressurized air in the diver's lungs has time to leave the body before it expands -~ will expand / expands. to be taken when diving deep"
  ],
  "sorular": [
   {
@@ -43,18 +41,20 @@
  ],
  "kelimeler": [],
  "_kaynak": {
-  "taban": "word",
+  "taban": "tesseract",
   "soru": "word",
   "yazimDuzeltme": 13,
-  "doldurulanBosluk": 12
+  "doldurulanBosluk": 12,
+  "oyDegisen": 1,
+  "supheli": 5
  },
- "_not": "Metin PDF metin katmanı ve Word dökümünden, daha eksiksiz olanı taban alınarak üretildi; yalnızca apaçık OCR yazım hataları öteki kaynakla düzeltildi. Boşluklar kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Cevaplar kitabın cevap anahtarından. GÖZLE DOĞRULANMADI.",
+ "_not": "Metin üç bağımsız OCR çıkarımının (yerel tesseract, PDF metin katmanı, Word dökümü) kelime kelime hizalanıp OY ÇOKLUĞUYLA uzlaştırılmasıyla üretildi: iki kaynağın birleştiği yazım kazandı. Sütunlar tesseract için ayrı ayrı kırpıldı, böylece sütun karışması olmadı. Boşluk doldurma alıştırmasındaki seçenekler kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Sorular ve cevaplar kitabın anahtarından. GÖZLE DOĞRULANMADI.",
  "_uyari": [
   "kalan-numara:8",
   "eksik-doldurma:12/20",
   "sik-eksik:1"
  ],
- "_incele": "OCR bu parçada 6 boşluğun seçeneklerini tamamen düşürmüş; o noktalara kitabın kendi ALIŞTIRMA 2 anahtarındaki karşılık yazıldı. Gözle doğrulanmalı.",
  "_sorularDogrulandi": "Soru metinleri ve şıkları sayfa görüntüsünden okundu.",
+ "guvenNot": "uc-kaynak-oylama",
  "guven": "ocr-uzlastirma"
 }

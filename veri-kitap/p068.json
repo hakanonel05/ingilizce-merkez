@@ -2,10 +2,7 @@
  "no": 68,
  "baslik": "Fitness Pill",
  "paragraflar": [
-  "These days there are pills for just about everything. If you can't sleep, take a pill. If you're unhappy, take a pill. What about if you're overweight and you don't have time to exercise? A new fitness pill may soon until rGitim { soon be available. Scientists are developing a pill that provides the same benefits as exercise, According to a BBC report, the fitness pill will \"build muscles increase stamina, and even.\"",
-  "Would you take a pill if it meant you no longer needed the treadmill? Researchers found that mice who took these pills could run long-distances without under without previous training. The test mice also ran almost twice as far. There is evidence that humans on these pills will also be able to build muscles without exercising. Furthermore, the research suggests that those who exercise and take the fitness pill will be even stronger.",
-  "Some researchers think the fitness pill will be useful in certain situations. People who cannot get out of bed due to ill health may benefit from the drug. There are also patients whose diseases cause their muscles waste away. Those with as well. Other researchers feel that the average adult might benefit from such a drug. Most adults do not get the 40 minutes of daily exercise that. The fitness pill requires no time.",
-  "The greatest concern about the fitness pill is in the sports world. Some will be tempted to use this drug to enhance performance. The pill has not been approved for human use yet, however, some athletes may already be taking it. Top athletes already go through extensive drug testing before testing before events. The renowned gold medalist swimmer, Michael Phelps, voluntarily went through extra drug testing before the 2008 Olympics. He wanted to prove to the public that his strength comes from hard work and training before the world became skeptical, the text. What does “stamina” in paragraph 1 is closest in meaning to ----.?"
+  "MIXED READING PASSAGES LEVEL 2 198 ____®Axn Aerkezi ve Yayincihk Hizmetleri Fitness Pill 1 These days there are pills for just about everything. If you can't sleep, take a pill. If you're unhappy, take a pill. What about if you're overweight and you don't have time to exercise? A new fitness pill may soon. Scientists are developing a pill that provides the same benefits as exercise. According to a BBC report, the fitness pill will \"build muscle, increase stamina, and even.\" Would you take a pill if it meant you no longer needed the treadmill? Researchers found that mice who took these pills could run long-distances without. The test mice also ran almost twice as far. There is evidence that humans on these pills will also be able to build muscles without exercising. Furthermore, the research suggests that those who exercise and take the fitness pill will be even stronger. 3 Some researchers think the fitness pill will be useful in certain situations. People who cannot get out of bed due to ill health may benefit from the drug. There are also patients whose diseases cause their muscles waste away. Those with as well. Other researchers feel that the average adult might benefit from such a drug. Most adults do not get the 40 minutes of daily exercise that. The fitness pill requires no time. 4 The greatest concern about the fitness pill is in the sports world. Some will be tempted to use this drug to enhance performance. The pill has not been approved for human use yet, however, some athletes may already be drug testing before events. The renowned gold medalist swimmer, Michael Phelps, voluntarily went through extra drug testing before the 2008 Olympics. He wanted to prove to the public that his strength comes from hard work and training before the world became XERCISE 3. according to. What does “stamina” in paragraph 1 is closest in meaning to ----.?. According to the passage Michael Phelps ----. ERCISE 4. concerned / worried ---- health / your future ---- artist / region / explorer"
  ],
  "sorular": [
   {
@@ -69,16 +66,18 @@
  ],
  "kelimeler": [],
  "_kaynak": {
-  "taban": "pdf",
+  "taban": "tesseract",
   "soru": "pdf",
   "yazimDuzeltme": 3,
-  "doldurulanBosluk": 9
+  "doldurulanBosluk": 9,
+  "oyDegisen": 1,
+  "supheli": 2
  },
- "_not": "Metin PDF metin katmanı ve Word dökümünden, daha eksiksiz olanı taban alınarak üretildi; yalnızca apaçık OCR yazım hataları öteki kaynakla düzeltildi. Boşluklar kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Cevaplar kitabın cevap anahtarından. GÖZLE DOĞRULANMADI.",
+ "_not": "Metin üç bağımsız OCR çıkarımının (yerel tesseract, PDF metin katmanı, Word dökümü) kelime kelime hizalanıp OY ÇOKLUĞUYLA uzlaştırılmasıyla üretildi: iki kaynağın birleştiği yazım kazandı. Sütunlar tesseract için ayrı ayrı kırpıldı, böylece sütun karışması olmadı. Boşluk doldurma alıştırmasındaki seçenekler kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Sorular ve cevaplar kitabın anahtarından. GÖZLE DOĞRULANMADI.",
  "_uyari": [
   "kalan-numara:2",
   "eksik-doldurma:9/10"
  ],
- "_incele": "OCR bu parçada 2 boşluğun seçeneklerini tamamen düşürmüş; o noktalara kitabın kendi ALIŞTIRMA 2 anahtarındaki karşılık yazıldı. Gözle doğrulanmalı.",
+ "guvenNot": "uc-kaynak-oylama",
  "guven": "ocr-uzlastirma"
 }

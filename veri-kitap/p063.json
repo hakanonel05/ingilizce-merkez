@@ -2,13 +2,7 @@
  "no": 63,
  "baslik": "A Boat Made of Bottles",
  "paragraflar": [
-  "A Boat Made of Bottles",
-  "‘ail The Plastiki looks like other boats or yachts in Sydney harbour. It's 18 m long, 6 m wide and it weighs about 12000 kg. It carries a crew of 6 people EGItiIM® and has an average speed of 5 knots, However, when to the Plastiki, you DEL realise there's a difference. It's made of 12500 recycled plastic bottles.",
-  "One day, the environmentalist David De Rothschild was reading some information about in the seas and Ocean He couldn't believe what he was reading. For example, humans throw away four out of every five plastic bottles that they use and plastic rubbish causes about fight per cent of the pollution in the sea. Soon afterwards, Rothschild decided that he wanted to help the fight against pollution in the sea. To create publicity for the problem, he started building a boat made of plastic bottles so that everyone would / will learn and care about it.",
-  "As well as building the boat with recycled plastic, it was important for the boat environmentally-friendly. It uses wind power and solar energy. The crew make meals with garden at the back of the boat. Eğirim e6trim They can do exercise by using the special exercise bicycle. The energy For the bike provides power for the computers. And if take a shower, the boat's shower uses saltwater from the sea.",
-  "De Rothschild sailed the Plastiki across the Pacific Ocean from San Francisco to Sydney. That's 15372 nautical kilometres. On the way, De Rothschild took the special boat through the Great Garbage Patch’, lt is a huge area in the Pacific with 3.5 billion",
-  "kilogrammes of rubbish. You can see every rubbish here: shoes, toys, bags, toothbrushes, but the worst problem is the plastic. It kills birds and sea life.",
-  "The journey wasn't always easy and De Rothschild and his crew had to during storms. There were giant ocean waves and winds of took 129 days. Originally, De Rothschild thought the boat could only travel once but well that he is planning to sail it again one day."
+  "————————————————————————— Merkezi ve Yayincilik Hizmetleri A Boat Made of Bottles 3 1 The Plastiki looks like other boats or yachts in Sydney harbour. It's 18 m long, 6 m wide and it - weighs about 12000 kg. It carries a crew of 6 people - and has an average speed of 5 knots. However, when to the Plastiki, you realise there's a difference. It's made of 12500 z recycled plastic bottles. ) 2 One day, the environmentalist David De Rothschild was reading some information about in the seas and oceans. He couldn't believe what he was reading. For example, humans throw away four out of every five plastic bottles that they use and plastic rubbish causes about eighty per cent of the pollution in the sea. Soon afterwards, Rothschild decided that he wanted to help the fight against pollution in the sea. To create publicity for the problem, he started building a boat made of plastic bottles so that everyone would about it. 3 As well as building the boat with recycled plastic, it ) was important for the boat environmentally-friendly. It uses wind power and solar energy. The crew make meals with garden at the back of the boat. They can do exercise by using the special exercise bicycle. The energy from the bike provides power for the computers. And if take a shower, the boat's shower uses saltwater ) from the sea. 4 De Rothschild sailed the Plastiki across the Pacific Ocean from San Francisco to Sydney. That's 15372 nautical kilometres. On the way, De Rothschild took the special boat through the ‘Great Garbage Patch’. It is a huge area in the Pacific with 3.5 billion wane ak indi! foe kilogrammes of rubbish. You can see every rubbish here: shoes, toys, bags, toothbrushes, but the worst problem is the plastic. It kills birds and sea life. 5 The journey wasn't always easy and De Rothschild and his crew had to during © storms. There were giant ocean waves and winds of took 129 days. Originally, De Rothschild thought the boat could only travel once but 5 survived so well that he is planning to sail it again a rubbish in the Pacific Francisco and Sydney"
  ],
  "sorular": [
   {
@@ -83,14 +77,17 @@
  ],
  "kelimeler": [],
  "_kaynak": {
-  "taban": "pdf",
+  "taban": "tesseract",
   "soru": "pdf",
   "yazimDuzeltme": 8,
-  "doldurulanBosluk": 9
+  "doldurulanBosluk": 9,
+  "oyDegisen": 0,
+  "supheli": 3
  },
- "_not": "Metin PDF metin katmanı ve Word dökümünden, daha eksiksiz olanı taban alınarak üretildi; yalnızca apaçık OCR yazım hataları öteki kaynakla düzeltildi. Boşluklar kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Cevaplar kitabın cevap anahtarından. GÖZLE DOĞRULANMADI.",
+ "_not": "Metin üç bağımsız OCR çıkarımının (yerel tesseract, PDF metin katmanı, Word dökümü) kelime kelime hizalanıp OY ÇOKLUĞUYLA uzlaştırılmasıyla üretildi: iki kaynağın birleştiği yazım kazandı. Sütunlar tesseract için ayrı ayrı kırpıldı, böylece sütun karışması olmadı. Boşluk doldurma alıştırmasındaki seçenekler kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Sorular ve cevaplar kitabın anahtarından. GÖZLE DOĞRULANMADI.",
  "_uyari": [
   "eksik-doldurma:9/10"
  ],
+ "guvenNot": "uc-kaynak-oylama",
  "guven": "ocr-uzlastirma"
 }

@@ -2,9 +2,7 @@
  "no": 75,
  "baslik": "Happiness",
  "paragraflar": [
-  "current day writers and professors, the debate about happiness continues. What makes someone feel to feel | feel happy? The Greek philasapher Aristotle once said that a person's happiness stems from the use of intelligence. Such religious books as the Bible discuss with as a form of happiness, The British scientist Charles Darwin believed that all species were formed Way so as to enjoy happiness. People throughout history may have had ideas about happiness. Today, however, many people are still searching for its meaning.",
-  "But how do you study something like happiness? You could start with the World Database of Happiness. This set of information includes how measure happiness. Some surprising. For example surprising. For example, the database suggests that married people are happier than single ones, People who like to be with other than unsocial people. Yet less expected: people with children are equally as happy as. And wealthier people are only a little poorer people. Moreover, people living and affluent countries are happier than those who do not. This database also shows that studying happiness no theories and ideas. Economists, psychiatrists, and doctors are finding ways of understanding happiness by of information.",
-  "There is also an increasing amount of medical research on of happiness. Doctors can now look at happiness in a person's brain utilizing MRI. For example, an MRI can area of a person's brain is stimulated when he or she is shown. A different different area of the brain becomes active when the person sees subjects. This research may lead to better insight into mental problems."
+  "Merkezi ve Yayincilik Hizmetleri 1 From and Romans to current day writers and professors, the debate about - happiness continues. What makes someone feel? The Greek philosopher Aristotle - once said that a person's happiness stems from the » use of intelligence. Such \" religious books as the Bible - discuss faith as a form of happiness. The British <) scientist Charles Darwin believed that all species were formed way so as to enjoy happiness. People throughout history may have had ideas about happiness. Today, however/however, many people are still searching for its meaning. 2 But how do you study something like happiness? You could start with the World Database of Happiness. This set of information includes how measure happiness. Some surprising. For example, the database suggests that married people are happier than single ones. People who like to be S) with other than unsocial people. Yet - are less expected: people with children are equally as ’ happy as. And i wealthier people are only a little than poorer people. Moreover, people living / 2 lived in strongly democratic and affluent countries are happier than those who do not. This database also shows that studying happiness no theories and ideas. Economists, psychiatrists, and doctors are finding ways of understanding happiness by of information. 3 There is also an increasing amount of medical research on of happiness. Doctors can now look at happiness in a person's brain utilizing MRI. For example, an MRI can area of a person's brain is stimulated when he or she is shown. A different area of the brain becomes active when the person sees ® is seen / sees pictures of terrible subjects. This p> research may lead to better insight into depression and other mental problems. makes you happier. i. heated / fierce / intense / ongoing ----"
  ],
  "sorular": [
   {
@@ -45,16 +43,18 @@
  ],
  "kelimeler": [],
  "_kaynak": {
-  "taban": "pdf",
+  "taban": "tesseract",
   "soru": "pdf",
   "yazimDuzeltme": 3,
-  "doldurulanBosluk": 22
+  "doldurulanBosluk": 22,
+  "oyDegisen": 2,
+  "supheli": 5
  },
- "_not": "Metin PDF metin katmanı ve Word dökümünden, daha eksiksiz olanı taban alınarak üretildi; yalnızca apaçık OCR yazım hataları öteki kaynakla düzeltildi. Boşluklar kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Cevaplar kitabın cevap anahtarından. GÖZLE DOĞRULANMADI.",
+ "_not": "Metin üç bağımsız OCR çıkarımının (yerel tesseract, PDF metin katmanı, Word dökümü) kelime kelime hizalanıp OY ÇOKLUĞUYLA uzlaştırılmasıyla üretildi: iki kaynağın birleştiği yazım kazandı. Sütunlar tesseract için ayrı ayrı kırpıldı, böylece sütun karışması olmadı. Boşluk doldurma alıştırmasındaki seçenekler kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Sorular ve cevaplar kitabın anahtarından. GÖZLE DOĞRULANMADI.",
  "_uyari": [
   "kalan-numara:1",
   "eksik-doldurma:22/23"
  ],
- "_incele": "OCR bu parçada 1 boşluğun seçeneklerini tamamen düşürmüş; o noktalara kitabın kendi ALIŞTIRMA 2 anahtarındaki karşılık yazıldı. Gözle doğrulanmalı.",
+ "guvenNot": "uc-kaynak-oylama",
  "guven": "ocr-uzlastirma"
 }

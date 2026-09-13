@@ -2,9 +2,7 @@
  "no": 70,
  "baslik": "King Arthur and His Knights of the Round Table",
  "paragraflar": [
-  "Many places in England claim connections with King Arthur and his Knights of the Round Table and none this honour. Yet, with all high tech tools of modern archaeology, It is still impossible to know if really existed, or whather the fabulous story of men is just made-up. Similarly, many people wonder if the Round Table, around which Knights gathered, was a real round table.",
-  "In fact, Arthur Round Table exists near Winchester. It was first described 1155 by the French poet Are who relied on by the guards of the mighty king. Its symbolism developed, by the 12th century it had represented the chivalric order associated with Arthur court. Today it is preserved Great Hal, which is the only part of the order Winchester Castle that.",
-  "Certainly there are plenty of plenty much historical references to King Arthur. He is known to be the British leader in the early 6th century, who of Britain against Saxon invaders. Arthur had already become a folk hero by the 9 century as a warrior king. But none is very reliable. What that the idea of honor associated with him was not so popular in that period of British history, known as for the Dark Ages The significance of was that no one person, not even the mighty King Arthur, would be able to sit at the head of such a table. As Since its name suggests, it has no head, implying that everyone who sit there has equal status. A round table symbolized the concept of equality. The legend states that King Arthur order it to be built so that would resolve a conflict among his knights with regard to excess of superiority. The Round Table was therefore built to ensure that of the Round Table were equal. natural beauty/the peace/local traditions A) preserve B) exist"
+  "202 @®axi Merkezi ve Yayincilik Hizmetleri EE ETT—mm——————————SSS King Arthur and His Knights of the Round 1 Many places in England claim connections with King: Arthur and his Knights of the Round Table and none / neither wants to share this honour. Yet, with all high tech tools of modern archaeology, it is still impossible to know if really existed, or whether the fabulous story of men is just ) made-up. Similarly, many people wonder if the Round Table, around which Knights gathered, was a real round table. 2 In fact, Arthur's Round Table exists near Winchester. It was first described 1155 by the French poet Wace, who relied on by the guards of the mighty king. Its symbolism developed; by the 12\" century it had represented the chivalric order associated with Arthur's court. Today it which is the only part of the former Winchester Castle 3 Certainly there are plenty of King Arthur. He is known to be the British leader in the early 6\" century, who of Britain against Saxon invaders. Arthur had already become a folk hero by the 9\" century as a warrior king. But none is very reliable. What that the idea of honor associated with him was not so popular in that period of British history, known as. 4 The significance of was that no one person, not even the mighty King Arthur, would be able to sit at the head of such a table. As, it has no head, implying that everyone who sits there has equal status. A round table symbolized the concept of equality. The legend states that King Arthur ordered it to be built so that would resolve a conflict among his knights with regard to ® excess of superiority. The Round Table was therefore - built to ensure that of the Round Table were equal. - are still carrying out excavations of King Arthur and his Knights of the Round Table Arthur and the Round Table references about King Arthur exist, ----. \"XERCISE 4.. ---- natural beauty / the peace / local traditions. ---- undamaged / silent / calm. ---- information / data / person }. ----king/ universe warrior"
  ],
  "sorular": [
   {
@@ -49,16 +47,18 @@
  ],
  "kelimeler": [],
  "_kaynak": {
-  "taban": "word",
+  "taban": "tesseract",
   "soru": "pdf",
   "yazimDuzeltme": 10,
-  "doldurulanBosluk": 16
+  "doldurulanBosluk": 16,
+  "oyDegisen": 1,
+  "supheli": 0
  },
- "_not": "Metin PDF metin katmanı ve Word dökümünden, daha eksiksiz olanı taban alınarak üretildi; yalnızca apaçık OCR yazım hataları öteki kaynakla düzeltildi. Boşluklar kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Cevaplar kitabın cevap anahtarından. GÖZLE DOĞRULANMADI.",
+ "_not": "Metin üç bağımsız OCR çıkarımının (yerel tesseract, PDF metin katmanı, Word dökümü) kelime kelime hizalanıp OY ÇOKLUĞUYLA uzlaştırılmasıyla üretildi: iki kaynağın birleştiği yazım kazandı. Sütunlar tesseract için ayrı ayrı kırpıldı, böylece sütun karışması olmadı. Boşluk doldurma alıştırmasındaki seçenekler kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Sorular ve cevaplar kitabın anahtarından. GÖZLE DOĞRULANMADI.",
  "_uyari": [
   "kalan-numara:4",
   "eksik-doldurma:16/20"
  ],
- "_incele": "OCR bu parçada 3 boşluğun seçeneklerini tamamen düşürmüş; o noktalara kitabın kendi ALIŞTIRMA 2 anahtarındaki karşılık yazıldı. Gözle doğrulanmalı.",
+ "guvenNot": "uc-kaynak-oylama",
  "guven": "ocr-uzlastirma"
 }

@@ -2,9 +2,9 @@
  "no": 77,
  "baslik": "A New Hope for Paper Production",
  "paragraflar": [
-  "Every second, about 1 hectare of the world'u rainforest is destroyed. In a year, that adds up to 31 million hectares. This farming rate of destruction has serious consequences for. Scientists estimate that 137 species of plant and animal become extinct every day due to. Logging, however, provides jobs, profits, times for the government and affordable products of all, so the Canada government is reluctant to restrict or control",
-  "Much production goes lowards making pup and paper It supplies much of the world's wood pulp and newsprint paper. If could be produced in some other. Canada forests could be preserved. Recently, a possible alternative way of producing paper has been environmentalists. a plant called hemp. Hemp has been cultivated for thousands of years. For many centuries, it was essential to the economies of many countries as make the ropes and cables used. Colonial expansion and the establishment of a world-wide trading network wouldn’t without hemp. Nowadays, scientists suggest that its cultivation should be brought back for the production of paper and pulp. According to its proponents, four times as much paper can be produced from land using hemp rather than terms of trees, and also the cultivation of hemp on in a large scale could reduce the pressure on Canada's forests.",
-  "However, hemp is illegal in many countries since it is related to the plant from which marijuana is produced. In the late 1930s, a movement to ban the drug marijuana resulted in from the eventual banning of the cultivation not only of the plant used to produce the drug, but also of the commercial fiber-producing hemp plant. Nowadays, some people believe that it should. They argue that marijuana is not dangerous or addictive. They also point out that marijuana is less or tobacco. As a result of, in 1997, Canada legalized the farming of hemp"
+  "Every second, about 1 hectare of the world'u rainforest is destroyed. In a year, that adds up to 31 million hectares. This alarming rate of destruction has serious consequences for. Scientists estimate that 137 species of plant and animal become extinct every day due to. Logging, however, provides jobs, profits, taxes for the government and affordable products of all, so the Canadian government is reluctant to restrict or control",
+  "Much production goes lowards making pup and paper It supplies much of the world's wood pulp and newsprint paper. If could be produced in some other. Canadian forests could be preserved. Recently, a possible alternative way of producing paper has been environmentalists. a plant called hemp. Hemp has been cultivated for thousands of years. For many centuries, it was essential to the economies of many countries as make the ropes and cables used. Colonial expansion and the establishment of a world-wide trading network wouldn’t without hemp. Nowadays, scientists suggest that its cultivation should be brought back for the production of paper and pulp. According to its proponents, four times as much paper can be produced from land using hemp rather than terms of trees, and also the cultivation of hemp on could reduce the pressure on Canada's forests.",
+  "However, hemp is illegal in many countries since it is related to the plant from which marijuana is produced. In the late 1930s, a movement to ban the drug marijuana resulted in not only of the plant used to produce the drug, but also of the commercial fiber-producing hemp plant. Nowadays, some people believe that it should. They argue that marijuana is not dangerous or addictive. They also point out that marijuana is less or tobacco. As a result of, in 1997, Canada legalized the farming of hemp"
  ],
  "sorular": [
   {
@@ -46,13 +46,15 @@
   "taban": "word",
   "soru": "pdf",
   "yazimDuzeltme": 9,
-  "doldurulanBosluk": 15
+  "doldurulanBosluk": 15,
+  "oyDegisen": 6,
+  "supheli": 14
  },
- "_not": "Metin PDF metin katmanı ve Word dökümünden, daha eksiksiz olanı taban alınarak üretildi; yalnızca apaçık OCR yazım hataları öteki kaynakla düzeltildi. Boşluklar kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Cevaplar kitabın cevap anahtarından. GÖZLE DOĞRULANMADI.",
+ "_not": "Metin üç bağımsız OCR çıkarımının (yerel tesseract, PDF metin katmanı, Word dökümü) kelime kelime hizalanıp OY ÇOKLUĞUYLA uzlaştırılmasıyla üretildi: iki kaynağın birleştiği yazım kazandı. Sütunlar tesseract için ayrı ayrı kırpıldı, böylece sütun karışması olmadı. Boşluk doldurma alıştırmasındaki seçenekler kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Sorular ve cevaplar kitabın anahtarından. GÖZLE DOĞRULANMADI.",
  "_uyari": [
   "kalan-numara:3",
   "eksik-doldurma:15/18"
  ],
- "_incele": "OCR bu parçada 2 boşluğun seçeneklerini tamamen düşürmüş; o noktalara kitabın kendi ALIŞTIRMA 2 anahtarındaki karşılık yazıldı. Gözle doğrulanmalı.",
+ "guvenNot": "uc-kaynak-oylama",
  "guven": "ocr-uzlastirma"
 }

@@ -2,8 +2,7 @@
  "no": 60,
  "baslik": "Homeschooling",
  "paragraflar": [
-  "Homeschooling appeared in the 1960s in the U.S. A philosopher called John Rushdoony was the first person who had this idea in. He thought that children needed to leam about religion at school, But schools did not teach them anything regarding religion, so devise his own education system and teach his kids at home. The idea suddenly became so and more parents stopped sending their children to school and taught their children at home. Today, home schooling is most popular in Canada, France and the US. Many families in these countries don't to schools and they play an active role in their children's education. Currently, there are over one million families that school their children at home. Homeschooling is popular and there are three reasons for it. The first reason is about. People homeschool because they are not happy with the education in schools. They think teachers are not good enough. There are also economic reasona: Some don't have enough money for private or even public schools. And the last reason is about safety. Some think schools are not safe places for their children. They think school environment and friends may be dangerous for them. How can perents teach their children when teacher or a standard program? Home school families use technology to find teaching materials. Many parents use the internet or computer programs to teach standard subjects like math, reading, history, science and grammar. Most of them create their own lesson plans. They regularly meet with other home schooling parents and share their ideas. They help each other lessons-to make their lesson plans better.",
-  "There are negative opinions about homeschooling. For some people, it is a terrible idea. They don't like It because they think homeschooled children can't socialize, interact with other people easily, and they become unsociable. They also think that parents are not professional teachers. They can't teach their children math, science and literature well. We have to had to say this is not true. Exam scores show that homeschool children are more successful they perform better than public school children in standard exams."
+  "ED dea dh Ad AREER E dma eed Merkezi ve Yayincilik Hizmetleri Homeschooling y 1 Homeschooling is education at home where parents are teachers. In homeschooling, children don't go to school but study at home with ad Homeschooling appeared in the 1960s in the U.S.; A philosopher called John Rushdoony was the first person who had this idea in. He ) thought that children needed to learn about religion at school. But schools did not teach them anything regarding religion, so devise his own education system and teach his kids at home. The idea suddenly became so and more parents stopped sending their children to school and taught their children at home. Today, home schooling is most popular in Canada, France and the US. Many families in these countries don't to schools and they play an active role in their children’s education. Currently, there are over one million families that school their children at 3 Homeschooling is popular and there are three reasons for it. The first reason is about ’ teachers at schools. People homeschool because they are not happy with the education in schools. y They think teachers are not good enough. There are also economic reasons: Some don’t have enough money for private or even public schools. And the last reason is about safety. Some think schools are not safe places for their children. They think school environment and friends may be dangerous for www.okindil. com 4 How can parents teach their children when teacher or a standard program? Home school families use technology to find teaching materials. Many parents use the internet or computer programs to teach standard subjects like math, reading, history, science and grammar. Most of them create their own lesson plans. They regularly meet with other home schooling parents © and share their ideas. They help each other good lessons-to make their lesson plans better. 3 o> There are negative opinions about homeschooling. z For some people, it is a terrible idea. They don't like - it because they think homeschooled children can’t GS) socialize, interact with other people easily, and they become unsociable. They also think that parents are not professional teachers. They can't teach their children math, science and literature well. We have to is not true. Exam scores show that homeschool children are more successful-they perform better than public school children in standard exams. religion at home ® children ----, ). economic / educational / environmental ---- ). =-== place / neighbourhood / distance"
  ],
  "sorular": [
   {
@@ -44,15 +43,18 @@
  ],
  "kelimeler": [],
  "_kaynak": {
-  "taban": "word",
+  "taban": "tesseract",
   "soru": "word",
   "yazimDuzeltme": 0,
-  "doldurulanBosluk": 7
+  "doldurulanBosluk": 7,
+  "oyDegisen": 0,
+  "supheli": 0
  },
- "_not": "Metin PDF metin katmanı ve Word dökümünden, daha eksiksiz olanı taban alınarak üretildi; yalnızca apaçık OCR yazım hataları öteki kaynakla düzeltildi. Boşluklar kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Cevaplar kitabın cevap anahtarından. GÖZLE DOĞRULANMADI.",
+ "_not": "Metin üç bağımsız OCR çıkarımının (yerel tesseract, PDF metin katmanı, Word dökümü) kelime kelime hizalanıp OY ÇOKLUĞUYLA uzlaştırılmasıyla üretildi: iki kaynağın birleştiği yazım kazandı. Sütunlar tesseract için ayrı ayrı kırpıldı, böylece sütun karışması olmadı. Boşluk doldurma alıştırmasındaki seçenekler kitabın kendi ALIŞTIRMA 2 anahtarıyla dolduruldu. Sorular ve cevaplar kitabın anahtarından. GÖZLE DOĞRULANMADI.",
  "_uyari": [
   "kalan-numara:1",
   "eksik-doldurma:7/9"
  ],
+ "guvenNot": "uc-kaynak-oylama",
  "guven": "ocr-uzlastirma"
 }
