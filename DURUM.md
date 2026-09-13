@@ -264,13 +264,39 @@ metin alınınca blob bırakılıyor. IndexedDB'de duran tek konuşma izi
 metnin kendisi. Gölgeleme katmanında kayıtlar saklanıyor çünkü orada
 tekrar dinlemek alıştırmanın parçası; burada değil.
 
-**Görsel üretimi ölçüldü ve Gemini ÜCRETSİZ KATMANDA ÇALIŞMIYOR.**
-Dört görsel modelinin dördü de 429 döndü ve gerekçe açık: `limit: 0` —
-yani kota dolmuş değil, özellik ücretsiz katmanda hiç yok. Bu yüzden
-`/api/gorsel-uret` Gemini'yi deniyor, düşünce **Pollinations**'a
-geçiyor: anahtar istemiyor, ölçülen 1024×768 JPEG ~62 KB / ~3,2 sn,
-karşılığında köşede kendi filigranı oluyor. Faturalandırması açık bir
-anahtar girilirse Gemini kolu kendiliğinden devreye giriyor.
+**GÖRSEL ÜRETİMİ YOK — ölçülüp ÇIKARILDI.** Üç yol yan yana denendi
+(aynı altı konu, aynı rubrikle puanlandı):
+
+| | Pollinations (üretim) | Openverse (fotoğraf) | Wikimedia |
+|---|---|---|---|
+| hız | 4,4–8,1 sn | **1,5 sn** | 1,5 sn |
+| betimleme uygunluğu | 68/100 | **78/100** | 40/100 |
+| betimlenebilir öge | 7 | **11** | 11 |
+| konuya uygunluk | 2/3 | **5/6** | 1/3 |
+| sorunlu kare | **3/3** (filigran) | **0/6** | 1/3 |
+
+Üretim üç yönden birden kaybetti. Gemini'nin görsel üretimi ücretsiz
+katmanda zaten hiç yok (dört modelin dördü de 429 + `limit: 0` —
+kota dolması değil, özellik kapalı). Anahtarsız yedek olan Pollinations
+tek tek isteklerde çalışıyor ama peş peşe on istekte üçü 429, üçü zaman
+aşımı verdi ve başarılı olanlar 44 saniye sürdü. Ürettiği karelerin
+hepsinde servisin filigranı vardı.
+
+**Wikimedia de elendi:** araması dosya ADINA bakıyor, içeriğe değil;
+"farmers market" araması alakasız bir kare döndürdü (puan 0).
+
+Kalan iki yol: **yükleme (birincil)** ve **Openverse'ten hazır fotoğraf
+(ikincil)**. İkisi de jeton harcamıyor.
+
+**Openverse sınırı ÖLÇÜLDÜ:** anonim kullanımda 20/dakika ve 200/gün,
+ve sınır SUNUCUNUN IP'sine bağlı — yani Netlify'da site geneli. Aşılınca
+JSON değil HTML dönüyor, o yüzden uçta 429 ayrıca ele alınıyor ve
+kullanıcıya "kendi görselini yükle" deniyor. Daralırsa Openverse
+ücretsiz bir istemci kimliği veriyor.
+
+**LİSANS ATLANAMAZ:** gelen fotoğraflar CC lisanslı ve çoğu atıf
+istiyor. Fotoğrafın göründüğü her yerde künye çiziliyor
+(`GorselKunyesiSatiri`) ve künye kayda da yazılıyor.
 
 **Çözümleme görselli.** `/api/betimleme-analizi` görseli inline
 gönderiyor (yalnızca Gemini — Groq dalı contents'i JSON'a çeviriyor,

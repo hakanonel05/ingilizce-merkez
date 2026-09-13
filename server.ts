@@ -3567,7 +3567,8 @@ interface FotografSonucu {
   kaynakSayfa: string;
 }
 
-async function openverseFotografi(arama: string): Promise<FotografSonucu> {
+/** Tek bir arama; sonuc yoksa bos dizi doner (hata DEGIL). */
+async function openverseAra(arama: string): Promise<any[]> {
   const api = 'https://api.openverse.org/v1/images/?' + new URLSearchParams({
     q: arama,
     /* category=photograph: cizim, logo, clipart eleniyor. Bunlarin
@@ -3579,7 +3580,6 @@ async function openverseFotografi(arama: string): Promise<FotografSonucu> {
 
   const kontrol = new AbortController();
   const zamanlayici = setTimeout(() => kontrol.abort(), 12000);
-  let adaylar: any[];
   try {
     const yanit = await fetch(api, {
       signal: kontrol.signal,
@@ -3594,12 +3594,51 @@ async function openverseFotografi(arama: string): Promise<FotografSonucu> {
       throw new Error('Fotograf servisinin gunluk sinirina ulasildi.');
     }
     if (!yanit.ok) throw new Error(`Fotograf servisi ${yanit.status} dondu.`);
-    /* HTML donerse json() firlatir; null'a dusup "sonuc yok" demek,
-       ayristirma hatasini kullaniciya gostermekten iyi. */
-    const govde: any = await yanit.json().catch(() => null);
-    adaylar = (govde?.results || []).filter((r: any) => r?.url);
+
+    /* ARIZA ILE "SONUC YOK" AYRI SEYLER, ve ayirmak zorundayiz.
+       Once ikisi de bos diziye dusuyordu; sonucu suydu: servis 502
+       verdiginde ya da govde JSON yerine HTML geldiginde kullanici
+       "Bu konuda fotograf bulunamadi" okuyordu. Yanlis teshis - arama
+       teriminde bir sorun yokken varmis gibi gosteriyor, ve cagiran
+       taraf terimi kisaltarak bosuna yeniden deniyordu.
+       Olcumde gercekten yasandi: servis arka arkaya 502 dondu. */
+    const ham = await yanit.text();
+    let govde: any;
+    try {
+      govde = JSON.parse(ham);
+    } catch {
+      throw new Error('Fotograf servisi su an yanit vermiyor.');
+    }
+    return (govde?.results || []).filter((r: any) => r?.url);
   } finally {
     clearTimeout(zamanlayici);
+  }
+}
+
+/**
+ * ARAMA TERIMI GEREKIRSE KISALTILIYOR.
+ *
+ * Openverse terimleri AND'liyor: "construction site workers crane" sifir
+ * sonuc verirken "construction workers" 240 sonuc veriyor. Havuzdaki
+ * terimler bunu bilerek kisa yazildi, ama yirmi terimin yalnizca altisini
+ * dogrulayabildim - kalan on dorde bakarken servisin gunluk siniri doldu.
+ *
+ * Dogrulanmamis bir terimin sifir sonuc vermesi, kullaniciya sebepsiz bir
+ * hata gostermek demek. Kisaltarak yeniden denemek bu ihtimali kokten
+ * kaldiriyor ve sinirli: en fazla uc istek, ve yalnizca bos sonuc
+ * geldiginde - calisan terimlerde fazladan tek bir istek bile atilmiyor.
+ */
+async function openverseFotografi(arama: string): Promise<FotografSonucu> {
+  const kelimeler = arama.split(/\s+/).filter(Boolean);
+  const denemeler = [arama];
+  if (kelimeler.length > 2) denemeler.push(kelimeler.slice(0, 2).join(' '));
+  if (kelimeler.length > 1) denemeler.push(kelimeler[0]);
+
+  let adaylar: any[] = [];
+  for (const terim of denemeler) {
+    adaylar = await openverseAra(terim);
+    if (adaylar.length) break;
+    console.warn(`[gorsel] "${terim}" sonuc vermedi, terim kisaltiliyor.`);
   }
 
   if (!adaylar.length) throw new Error('Bu konuda fotograf bulunamadi.');
@@ -3662,6 +3701,8 @@ app.post("/api/gorsel-uret", async (req, res) => {
     res.status(502).json({
       error: /sinir|429/i.test(String(error?.message || ''))
         ? 'Hazır görsel servisinin sınırına ulaşıldı. Kendi görselini yükleyerek devam edebilirsin — çözümleme aynı şekilde çalışıyor.'
+        : /yanit vermiyor|502|503/i.test(String(error?.message || ''))
+        ? 'Hazır görsel servisi şu an yanıt vermiyor. Kendi görselini yükleyerek devam edebilirsin — çözümleme aynı şekilde çalışıyor.'
         : formatErrorMessage(
             error,
             "Hazır görsel getirilemedi. Kendi görselini yükleyerek devam edebilirsin."
