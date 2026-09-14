@@ -79,12 +79,25 @@ export default function App() {
   };
   const [isSyncing, setIsSyncing] = useState(false);
 
+  /**
+   * Oturum ilk kez okunana kadar karşılama ekranı gösterilmemeli.
+   *
+   * getSession() asenkron; ilk karede session daima null oluyordu. Zaten
+   * giriş yapmış biri uygulamayı her açtığında karşılama ekranı bir an
+   * yanıp sönüyordu. Google ile girişte bu daha kötü: kullanıcı Google'dan
+   * dönüyor, supabase-js oturumu URL'den çözerken ekranda yine "giriş yap"
+   * yazıyor — giriş başarısız olmuş gibi görünüyor.
+   */
+  const [oturumOkundu, setOturumOkundu] = useState(false);
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      setOturumOkundu(true);
     });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      setOturumOkundu(true);
     });
     return () => subscription.unsubscribe();
   }, []);
@@ -697,6 +710,17 @@ export default function App() {
       }
     }));
   }, []);
+
+  /* Çevrimdışı seçimi yapılmışsa beklemeye gerek yok; uygulama zaten
+     hesapsız açılıyor. Bekleme yalnızca karşılama ekranını göstermeden
+     önce gerekli. */
+  if (!session && !isOfflineMode && !oturumOkundu) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-paper">
+        <p className="text-[13px] text-ink-3">Oturum denetleniyor...</p>
+      </div>
+    );
+  }
 
   if (!session && !isOfflineMode) {
     return <AuthScreen onContinueOffline={() => setOfflineMode(true)} />;
