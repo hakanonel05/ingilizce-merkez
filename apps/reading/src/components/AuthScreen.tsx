@@ -48,6 +48,35 @@ function GoogleIsareti() {
   );
 }
 
+/**
+ * Supabase'in OAuth hatalarını, ne yapılacağını söyleyen Türkçeye çevirir.
+ *
+ * Ham metinler kullanıcıya hiçbir şey anlatmıyor ("Unable to exchange
+ * external code: 4/0A"). Üstelik bu hataların çoğu kullanıcının değil
+ * kurulumun sorunu; mesaj nerede bakılacağını söylemezse kimse çözemiyor.
+ * Tanınmayan hata olduğu gibi gösteriliyor — uydurma bir açıklama, yanlış
+ * yere bakmaya yol açar.
+ */
+function oauthHatasiniCevir(ham: string): string | null {
+  if (/provider is not enabled|Unsupported provider/i.test(ham)) {
+    return 'Google girişi Supabase panelinde henüz açılmamış. Authentication → Providers → Google bölümünden açılması gerekiyor.';
+  }
+  /* Google, yetkilendirme kodunu jetona çevirmeyi reddetti. Kod ve
+     yönlendirme adresi doğruysa geriye tek değişken kalıyor: istemci sırrı.
+     Kurulum sırasında bu alana yanlışlıkla başka bir şey yazılması —
+     tarayıcının kayıtlı şifresini otomatik doldurması dahil — sık görülüyor. */
+  if (/Unable to exchange external code|invalid_client|unauthorized_client/i.test(ham)) {
+    return 'Google ile bağlantı kurulamadı: Supabase\'deki Client Secret, Google Cloud\'daki istemcinin sırrıyla eşleşmiyor. Google Cloud → Clients → ilgili istemci → Add secret ile yeni bir sır üretip Supabase → Authentication → Providers → Google alanına yapıştırmak gerekiyor.';
+  }
+  if (/redirect_uri_mismatch/i.test(ham)) {
+    return 'Yönlendirme adresi Google\'da tanımlı değil. Google Cloud\'daki istemcinin Authorized redirect URIs listesinde Supabase callback adresi birebir yazmalı.';
+  }
+  if (/access_denied/i.test(ham)) {
+    return 'Google ile giriş yarıda kaldı. İstersen tekrar deneyebilirsin.';
+  }
+  return null;
+}
+
 export default function AuthScreen({ onContinueOffline }: { onContinueOffline: () => void }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -74,13 +103,7 @@ export default function AuthScreen({ onContinueOffline }: { onContinueOffline: (
     if (!kod) return;
 
     const aciklama = ara.get('error_description') || kesme.get('error_description') || '';
-    setError(
-      /provider is not enabled|Unsupported provider/i.test(aciklama + kod)
-        ? 'Google girişi Supabase panelinde henüz açılmamış. Authentication → Providers → Google bölümünden açılması gerekiyor.'
-        : /access_denied/i.test(kod)
-          ? 'Google ile giriş yarıda kaldı. İstersen tekrar deneyebilirsin.'
-          : aciklama || 'Google ile giriş tamamlanamadı.'
-    );
+    setError(oauthHatasiniCevir(kod + ' ' + aciklama) || aciklama || 'Google ile giriş tamamlanamadı.');
 
     /* Adresi temizle ki sayfa yenilenince hata geri gelmesin. */
     window.history.replaceState({}, '', window.location.pathname);
@@ -102,11 +125,7 @@ export default function AuthScreen({ onContinueOffline }: { onContinueOffline: (
          "Yönlendiriliyor..." halinde kalsın, sayfa zaten değişecek. */
     } catch (err: any) {
       const ham = err?.message || '';
-      setError(
-        /provider is not enabled|Unsupported provider/i.test(ham)
-          ? 'Google girişi Supabase panelinde henüz açılmamış. Authentication → Providers → Google bölümünden açılması gerekiyor.'
-          : ham || 'Google ile giriş yapılamadı.'
-      );
+      setError(oauthHatasiniCevir(ham) || ham || 'Google ile giriş yapılamadı.');
       setGoogleLoading(false);
     }
   };
