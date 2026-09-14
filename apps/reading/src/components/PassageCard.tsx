@@ -6,6 +6,7 @@ import { addWordToVocabBank, getAllCards, VOCAB_CHANGED_EVENT, readingPassageLes
 import { SelectionToCard } from '../../../../shared/vocab/SelectionToCard';
 import { useNarration } from '../lib/narration';
 import { acikUcluDogruMu } from '../lib/acikUcluCevap';
+import { kelimeKimligi } from '../lib/kelimeKimligi';
 import NarrationBar from './NarrationBar';
 
 interface PassageCardProps {
@@ -398,7 +399,7 @@ export default function PassageCard({
                     {passage.vocabulary.map(word => {
                       const status = progress.wordStatus[word.term] || 'unstudied';
                       return (
-                        <div key={word.term} className="group flex flex-col justify-between gap-3 py-3.5 sm:flex-row sm:items-center">
+                        <div key={kelimeKimligi(word)} className="group flex flex-col justify-between gap-3 py-3.5 sm:flex-row sm:items-center">
                           <div className="min-w-0">
                             <div className="flex items-baseline gap-2">
                               <span className="text-[14px] font-medium text-ink">{word.term}</span>

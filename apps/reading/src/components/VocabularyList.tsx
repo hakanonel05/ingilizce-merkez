@@ -9,6 +9,7 @@ import {
   READING_CORE_LESSON_TITLE,
   readingPassageLessonId,
 } from '../lib/vocabBank';
+import { kelimeKimligi } from '../lib/kelimeKimligi';
 import { Search, Volume2, Eye, BrainCircuit, Check } from 'lucide-react';
 
 interface VocabularyListProps {
@@ -59,10 +60,17 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
   const flatVocabulary = useMemo(() => {
     if (sourceType === 'passages') {
       const list: (VocabularyWord & { passageId?: number; passageTitle?: string; isCore: boolean; category?: string })[] = [];
+      // Kimlik terim+tür+anlam; yalnız terime bakmak "fat (adj)" ile
+      // "fat (n)" gibi ayrı kayıtların ikincisini siliyordu. Set kullanılıyor
+      // çünkü her eklemede listeyi baştan taramak 2000 kayıtta dört milyon
+      // karşılaştırma demekti.
+      const gorulen = new Set<string>();
       passages.forEach(p => {
         if (!p) return;
         (p.vocabulary ?? []).forEach(v => {
-          if (!list.some(item => item.term === v.term)) {
+          const k = kelimeKimligi(v);
+          if (!gorulen.has(k)) {
+            gorulen.add(k);
             list.push({
               ...v,
               passageId: p.id,
@@ -252,7 +260,7 @@ export default function VocabularyList({ passages, progress, onWordStatusChange,
             const inBank = bankedTerms.has(item.term.toLowerCase());
 
             return (
-              <li key={item.term} className="group px-3 py-3.5">
+              <li key={kelimeKimligi(item)} className="group px-3 py-3.5">
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-baseline gap-2">

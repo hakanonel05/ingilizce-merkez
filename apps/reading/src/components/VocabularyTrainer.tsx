@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Passage, VocabularyWord, UserProgress } from '../types';
 import { CORE_VOCABULARY_DATA, CORE_VOCABULARY_CATEGORIES } from '../data/coreVocabulary';
+import { kelimeKimligi } from '../lib/kelimeKimligi';
 import { CheckCircle2, ChevronLeft, ChevronRight, Volume2 } from 'lucide-react';
 
 interface VocabularyTrainerProps {
@@ -16,12 +17,17 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
   // Flatten words across all passages and/or core vocabulary
   const allWords = useMemo(() => {
     const list: (VocabularyWord & { passageTitle?: string; isCore?: boolean })[] = [];
-    
+    // Kimlik terim+tür+anlam: yalnız terime bakınca "run (n) koşu" varken
+    // "run (v) koşmak" karta hiç girmiyordu.
+    const gorulen = new Set<string>();
+
     if (trainerSource === 'all' || trainerSource === 'passages') {
       passages.forEach(p => {
         if (!p) return;
         (p.vocabulary ?? []).forEach(v => {
-          if (!list.some(item => item.term === v.term)) {
+          const k = kelimeKimligi(v);
+          if (!gorulen.has(k)) {
+            gorulen.add(k);
             list.push({ ...v, passageTitle: p.title, isCore: false });
           }
         });
@@ -30,7 +36,9 @@ export default function VocabularyTrainer({ passages, progress, onWordStatusChan
 
     if (trainerSource === 'all' || trainerSource === 'core') {
       CORE_VOCABULARY_DATA.forEach(v => {
-        if (!list.some(item => item.term === v.term)) {
+        const k = kelimeKimligi(v);
+        if (!gorulen.has(k)) {
+          gorulen.add(k);
           list.push({
             term: v.term,
             meaning: v.meaning,

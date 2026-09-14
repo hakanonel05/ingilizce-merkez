@@ -25,6 +25,7 @@ import { useState, useMemo, type ReactNode } from "react";
 import { UserProgress, Passage, CEFRLevel } from '../types';
 import { Clock, Star } from 'lucide-react';
 import { PASSAGE_CATALOG } from '../data/passageCatalog';
+import { kelimeKimligi } from '../lib/kelimeKimligi';
 
 interface DashboardProps {
   progress: UserProgress;
@@ -44,11 +45,16 @@ export default function Dashboard({ progress, passages, onSelectPassage, onReset
   // Words metrics
   const allWords = useMemo(() => {
     const list: { term: string; meaning: string; partOfSpeech: string; passageTitle: string; passageId: number }[] = [];
+    // Kimlik terim+tür+anlam. Yalnız terime bakmak kitabın ayrı verdiği
+    // kayıtları ("fat (adj) şişman" / "fat (n) yağ") teke indiriyor ve
+    // kelime sayısını olduğundan düşük gösteriyordu.
+    const gorulen = new Set<string>();
     passages.forEach(p => {
       if (!p) return;
       (p.vocabulary ?? []).forEach(w => {
-        // Prevent duplicate terms if any, but associate with passage
-        if (!list.some(item => item.term === w.term)) {
+        const k = kelimeKimligi(w);
+        if (!gorulen.has(k)) {
+          gorulen.add(k);
           list.push({
             term: w.term,
             meaning: w.meaning,
@@ -289,7 +295,7 @@ export default function Dashboard({ progress, passages, onSelectPassage, onReset
         {wordsToReview.length > 0 ? (
           <ul className="mt-4 divide-y divide-hairline border-t border-hairline">
             {wordsToReview.map(w => (
-              <li key={w.term}>
+              <li key={kelimeKimligi(w)}>
                 <button
                   type="button"
                   onClick={() => onSelectPassage(w.passageId)}
