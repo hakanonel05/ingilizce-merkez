@@ -3,14 +3,25 @@
  *
  * Akış: metni seç -> sesli oku -> değerlendirme.
  *
+ * EKRANLAR AI STUDIO SÜRÜMÜNDEN OLDUĞU GİBİ TAŞINDI (components/telaffuz/).
+ * Önce bu deponun görsel diline çevrilmişti; sonuç istenen tasarım
+ * olmadığı için özgün bileşenler taşındı. Taşımak yeniden çizmekten hem
+ * hızlı hem birebir: o proje özel bir tema kullanmıyor, hepsi standart
+ * Tailwind sınıfı, yani bu depoda da aynı görünüyorlar.
+ *
+ * BU DOSYA KABUK: taşınan ekranları bu uygulamanın gerçekleriyle
+ * birleştiriyor — rıza kapısı, sunucu ucu, kayıt deposu ve bulut
+ * düştüğünde devreye giren yerel çözümleme. Taşınan bileşenlerin
+ * içine dokunulmadı.
+ *
  * BU SAYFANIN BETİMLEMEDEN AYRILDIĞI YER: ses sunucuya gidiyor. Betimleme
  * tarafında kayıt tarayıcıda Whisper'a veriliyor ve cihazdan hiç çıkmıyor;
  * burada çıkmak zorunda, çünkü ölçülen şey FONEM ve Whisper bir sesletim
  * modeli değil (bkz. shared/ses/konusmaCozumleme.ts'teki "ölçülemez" notu).
  *
  * BU YÜZDEN RIZA KAPISI VAR ve kapı bir kez açılıyor:
- *   · İlk kullanımda mikrofon ve yükleme KAPALI; ne olduğu yazıyor ve
- *     kullanıcı açıkça kabul ediyor.
+ *   · İlk kullanımda kayıt ekranı KAPALI; ne olduğu yazıyor ve kullanıcı
+ *     açıkça kabul ediyor.
  *   · Kabul edildikten sonra her seferinde tekrar sorulmuyor — aynı şeyi
  *     her gün onaylatmak rızayı bilgi olmaktan çıkarıp tıklanacak bir
  *     engele çevirir. Yerine kalıcı ve görünür tek satır duruyor, ve
@@ -19,24 +30,17 @@
  */
 
 import React, { useState } from 'react';
-import { Loader2, AlertTriangle, RotateCcw, ShieldAlert, Check, Volume2 } from 'lucide-react';
-import { apiFetch } from '../../../../shared/vocab/userKeys';
-import { TelaffuzKayitPaneli } from './TelaffuzKayitPaneli';
-import { TelaffuzSonucu } from './TelaffuzSonucu';
+import { Loader2, AlertTriangle, RotateCcw, ShieldAlert, Check } from 'lucide-react';
+import { ReadingTab } from './telaffuz/ReadingTab';
+import { VisualAssessmentResult } from './telaffuz/VisualAssessmentResult';
 import { YerelTelaffuzSonucu } from './YerelTelaffuzSonucu';
 import { telaffuzDegerlendir } from '../lib/api';
 import { telaffuzYaz } from '../lib/telaffuzDeposu';
 import { yeniKimlik } from '../lib/betimlemeDeposu';
-import { TELAFFUZ_METINLERI, type TelaffuzMetni } from '../data/telaffuzMetinleri';
 import { logActivity } from '../../../../shared/analytics/activityLog';
 import { kaydiCozumle, type KayitAnalizi } from '../../../../shared/ses/konusmaCozumleme';
 
 const IZIN_ANAHTARI = 'konusma_telaffuz_ses_izni_v1';
-
-const AKSANLAR = [
-  'İngilizce (Birleşik Devletler en-US)',
-  'İngilizce (Birleşik Krallık en-GB)',
-];
 
 function izinOku(): boolean {
   try {
@@ -65,24 +69,22 @@ interface Props {
 
 export const TelaffuzAkisi: React.FC<Props> = ({ onKaydedildi }) => {
   const [izin, setIzin] = useState(izinOku);
-  const [secili, setSecili] = useState<TelaffuzMetni | null>(TELAFFUZ_METINLERI[0] ?? null);
-  const [kendiMetni, setKendiMetni] = useState('');
-  const [kendiModu, setKendiModu] = useState(false);
-  const [aksan, setAksan] = useState(AKSANLAR[0]);
+
+  const [hedefMetin, setHedefMetin] = useState(
+    'We had a great time taking a long walk outside in the morning.'
+  );
+  const [dil, setDil] = useState('İngilizce (Birleşik Devletler - US)');
+
+  /* Kayıt oturum boyunca bellekte: raporu okurken tekrar dinlemek ve
+     kelime kesitlerini çalmak için gerekiyor. Hiçbir yere yazılmıyor. */
+  const [sesBlob, setSesBlob] = useState<Blob | null>(null);
+  const [sesUrl, setSesUrl] = useState<string | null>(null);
 
   const [mesgul, setMesgul] = useState(false);
+  const [yerelMesgul, setYerelMesgul] = useState(false);
   const [hata, setHata] = useState<string | null>(null);
   const [rapor, setRapor] = useState<string | null>(null);
-  const [sesUrl, setSesUrl] = useState<string | null>(null);
-  /* Buluta ulaşılamadığında tarayıcıda üretilen kelime düzeyi çözümleme. */
   const [yerel, setYerel] = useState<{ analiz: KayitAnalizi; sebep: string } | null>(null);
-  /* Hedef metni ÖNCE dinlemek alıştırmanın parçası: doğru ritmi duymadan
-     okumak, hatayı tekrar etmekten başka bir şey vermiyor. */
-  const [ornekCaliyor, setOrnekCaliyor] = useState(false);
-  const [yerelMesgul, setYerelMesgul] = useState(false);
-
-  const hedefMetin = (kendiModu ? kendiMetni : secili?.text || '').trim();
-  const kelimeSayisi = hedefMetin ? hedefMetin.split(/\s+/).filter(Boolean).length : 0;
 
   const izniAyarla = (deger: boolean) => {
     setIzin(deger);
@@ -94,37 +96,42 @@ export const TelaffuzAkisi: React.FC<Props> = ({ onKaydedildi }) => {
     }
   };
 
-  const degerlendir = async (blob: Blob) => {
-    if (!hedefMetin) {
-      setHata('Önce okunacak bir metin seç.');
+  const sesiAl = (blob: Blob, url: string) => {
+    setHata(null);
+    setSesBlob(blob);
+    setSesUrl((onceki) => {
+      if (onceki && onceki !== url) URL.revokeObjectURL(onceki);
+      return url;
+    });
+  };
+
+  const degerlendir = async () => {
+    if (!sesBlob) {
+      setHata('Önce kayıt al ya da bir ses dosyası yükle.');
       return;
     }
+    if (!hedefMetin.trim()) {
+      setHata('Önce okunacak bir metin gir.');
+      return;
+    }
+
     setHata(null);
     setMesgul(true);
     try {
-      const sesVerisi = await base64Yap(blob);
+      const sesVerisi = await base64Yap(sesBlob);
       const yanit = await telaffuzDegerlendir({
-        hedefMetin,
+        hedefMetin: hedefMetin.trim(),
         sesVerisi,
-        sesTuru: blob.type || 'audio/webm',
-        aksan,
+        sesTuru: sesBlob.type || 'audio/webm',
+        aksan: dil,
       });
 
-      /* Kaydı oturum boyunca dinlenebilir tutuyoruz — raporu okurken
-         "ben bunu nasıl söylemiştim" sorusunun cevabı lazım. Sayfadan
-         çıkınca URL serbest bırakılıyor, hiçbir yere yazılmıyor. */
-      setSesUrl((onceki) => {
-        if (onceki) URL.revokeObjectURL(onceki);
-        return URL.createObjectURL(blob);
-      });
       setRapor(yanit.rapor);
-
       await telaffuzYaz({
         id: yeniKimlik(),
         olusturuldu: Date.now(),
-        hedefMetin,
-        baslik: kendiModu ? undefined : secili?.title,
-        aksan,
+        hedefMetin: hedefMetin.trim(),
+        aksan: dil,
         rapor: yanit.rapor,
         model: yanit.model,
       });
@@ -132,19 +139,15 @@ export const TelaffuzAkisi: React.FC<Props> = ({ onKaydedildi }) => {
       onKaydedildi();
     } catch (err: any) {
       /* BULUT DÜŞTÜ — HİÇBİR ŞEY GÖSTERMEMEK YERİNE YEREL ÇÖZÜMLEME.
-         Kullanıcı okudu, kaydı gitti; karşılığında boş bir hata mesajı
-         almak en kötüsü. Whisper tarayıcıda zaten var ve hedef cümleyle
-         hizalama yapabiliyor (gölgeleme katmanının motoru). Fonem ve
-         tonlama ölçülemiyor, ekran bunu açıkça söylüyor. */
+         Kullanıcı okudu; karşılığında boş bir hata mesajı almak en
+         kötüsü. Whisper tarayıcıda zaten var ve hedef cümleyle hizalama
+         yapabiliyor (gölgeleme katmanının motoru). Fonem ve tonlama
+         ölçülemiyor, ekran bunu açıkça söylüyor. */
       const sebep = err?.message || 'Telaffuz değerlendirilemedi.';
       setMesgul(false);
       setYerelMesgul(true);
       try {
-        const analiz = await kaydiCozumle(yeniKimlik(), blob, hedefMetin);
-        setSesUrl((onceki) => {
-          if (onceki) URL.revokeObjectURL(onceki);
-          return URL.createObjectURL(blob);
-        });
+        const analiz = await kaydiCozumle(yeniKimlik(), sesBlob, hedefMetin.trim());
         setYerel({ analiz, sebep });
         void logActivity({ app: 'konusma', skill: 'speaking', kind: 'recording' });
       } catch (yerelHata: any) {
@@ -164,263 +167,155 @@ export const TelaffuzAkisi: React.FC<Props> = ({ onKaydedildi }) => {
     }
   };
 
-  const ornegiCal = async () => {
-    if (!hedefMetin || ornekCaliyor) return;
-    setOrnekCaliyor(true);
-    try {
-      const yanit = await apiFetch('/api/speak', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        /* "cumle" profili: tek kelimeden uzun ama hikaye temposundan
-           yavaş — okunacak metni model gibi duymak için doğru olan bu. */
-        body: JSON.stringify({ text: hedefMetin, profil: 'cumle' }),
-      });
-      const govde = await yanit.json();
-      if (!yanit.ok || !govde?.audio) throw new Error(govde?.error || 'Seslendirilemedi.');
-      const ikili = atob(govde.audio);
-      const bayt = new Uint8Array(ikili.length);
-      for (let i = 0; i < ikili.length; i++) bayt[i] = ikili.charCodeAt(i);
-      const url = URL.createObjectURL(new Blob([bayt], { type: govde.mimeType || 'audio/mpeg' }));
-      const ses = new Audio(url);
-      await new Promise<void>((coz) => {
-        ses.onended = () => coz();
-        ses.onerror = () => coz();
-        void ses.play().catch(() => coz());
-      });
-      URL.revokeObjectURL(url);
-    } catch (err: any) {
-      setHata(err?.message || 'Örnek okunuş çalınamadı.');
-    } finally {
-      setOrnekCaliyor(false);
-    }
-  };
-
   const yenidenOku = () => {
     setRapor(null);
     setYerel(null);
+    setHata(null);
+    setSesBlob(null);
     setSesUrl((onceki) => {
       if (onceki) URL.revokeObjectURL(onceki);
       return null;
     });
-    setHata(null);
   };
 
   /* ---------------- SONUÇ ---------------- */
   if (rapor || yerel) {
     return (
-      <div className="space-y-8">
+      <div className="space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h1 className="text-[22px] font-semibold tracking-tight text-ink">
+          <h1 className="font-serif text-2xl font-bold tracking-tight text-stone-900">
             Telaffuz değerlendirmesi
           </h1>
           <button
             type="button"
             onClick={yenidenOku}
-            className="flex items-center gap-2 rounded-xl bg-accent px-4 py-2
-              text-[13px] font-medium text-white transition-colors
-              hover:bg-accent-700 cursor-pointer"
+            className="flex cursor-pointer items-center gap-2 rounded-xl bg-stone-900 px-4
+              py-2 text-sm font-medium text-white transition-colors hover:bg-stone-800"
           >
             <RotateCcw className="h-4 w-4" />
             Tekrar oku
           </button>
         </div>
-        {rapor
-          ? <TelaffuzSonucu rapor={rapor} hedefMetin={hedefMetin} sesUrl={sesUrl} />
-          : yerel && <YerelTelaffuzSonucu analiz={yerel.analiz} sebep={yerel.sebep} />}
+
+        {rapor ? (
+          <VisualAssessmentResult
+            markdown={rapor}
+            targetText={hedefMetin}
+            audioUrl={sesUrl}
+            audioBlob={sesBlob}
+          />
+        ) : (
+          yerel && <YerelTelaffuzSonucu analiz={yerel.analiz} sebep={yerel.sebep} />
+        )}
       </div>
     );
   }
 
   /* ---------------- ALIŞTIRMA ---------------- */
   return (
-    <div className="max-w-[1100px] space-y-8">
+    <div className="space-y-6">
 
-      <div className="space-y-2">
-        <h1 className="text-[26px] font-semibold tracking-tight text-ink">
-          Bir metni sesli oku, telaffuzunu ölç
+      {/* HERO — AI Studio sürümündeki manifesto kartı, olduğu gibi. */}
+      <section className="rounded-2xl border border-stone-200/90 bg-[#fbfbf9] p-6 shadow-xs sm:p-8">
+        <h1 className="font-serif text-2xl font-bold leading-snug tracking-tight text-stone-900 sm:text-3xl">
+          Sesinizi kaydedin,{' '}
+          <span className="italic text-[#c2410c] sm:not-italic">
+            fonetik doğrulukla akıcı konuşun.
+          </span>
         </h1>
-        <p className="max-w-[62ch] text-[14px] leading-relaxed text-ink-2">
-          Betimleme ne <em>söylediğine</em> bakıyor; burası nasıl
-          söylediğine. Hangi kelimede ses kaydı, nerede gereksiz duraklama,
-          hangi hecede vurgu düştü — kelime kelime, IPA okunuşuyla.
-        </p>
-      </div>
 
-      {/* RIZA KAPISI */}
+        <p className="mt-2 max-w-2xl text-xs font-normal leading-relaxed text-stone-600 sm:text-sm">
+          Hedef metin ile konuşmanızı fonem, kelime, duraklama ve tonlama düzeyinde
+          karşılaştırın. İki dakikaya kadar kesintisiz ses kaydı ve fonetik
+          telaffuz değerlendirmesi.
+        </p>
+
+        <div className="my-5 border-t border-stone-200/80" />
+
+        <div className="grid grid-cols-1 gap-4 text-xs sm:grid-cols-3 sm:gap-6">
+          <div>
+            <h4 className="text-sm font-bold text-stone-900">Dinle &amp; Oku</h4>
+            <p className="mt-1 leading-relaxed text-stone-500">
+              Doğal konuşma ritmini ve ses birleşmelerini (connected speech) dinleyin.
+            </p>
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-stone-900">Kaydet</h4>
+            <p className="mt-1 leading-relaxed text-stone-500">
+              Mikrofonunuzla sesinizi kaydedin veya ses dosyası (WAV/MP3) yükleyin.
+            </p>
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-stone-900">Geliş</h4>
+            <p className="mt-1 leading-relaxed text-stone-500">
+              Hatalı fonemleri, IPA sembollerini ve{' '}
+              <span className="font-semibold text-[#c2410c]">akıcılık</span> puanınızı inceleyin.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* RIZA KAPISI — taşınan tasarımda yok, bu uygulamaya ait.
+          Ses buradan sunucuya gidiyor ve kullanıcının bunu bilmeden
+          mikrofona basmaması gerekiyor. */}
       {!izin ? (
-        <div className="max-w-[62ch] rounded-xl border border-marker bg-marker-bg p-4">
-          <p className="flex items-start gap-2 text-[13px] font-medium text-marker-ink">
+        <div className="max-w-[70ch] rounded-2xl border border-amber-300 bg-amber-50 p-5">
+          <p className="flex items-start gap-2 text-sm font-semibold text-amber-900">
             <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0" />
             Bu alıştırmada ses kaydın cihazından çıkıyor.
           </p>
-          <p className="mt-2 text-[13px] leading-relaxed text-marker-ink">
+          <p className="mt-2 text-sm leading-relaxed text-amber-900">
             Telaffuzu fonem düzeyinde değerlendirebilmek için kaydın Google
             Gemini'ye gönderilmesi gerekiyor — tarayıcıdaki model bunu
-            yapamıyor, yalnızca hangi kelimeyi söylediğini duyabiliyor.
-            Kayıt değerlendirme için gönderiliyor; ne bu bilgisayarda ne de
-            bizim tarafımızda saklanıyor. Saklanan tek şey raporun kendisi.
+            yapamıyor, yalnızca hangi kelimeyi söylediğini duyabiliyor. Kayıt
+            değerlendirme için gönderiliyor; ne bu bilgisayarda ne de bizim
+            tarafımızda saklanıyor. Saklanan tek şey raporun kendisi.
           </p>
-          <p className="mt-2 text-[13px] leading-relaxed text-marker-ink">
+          <p className="mt-2 text-sm leading-relaxed text-amber-900">
             <strong>Betimleme bölümü bundan etkilenmiyor</strong>; orada ses
             hâlâ cihazdan hiç çıkmıyor.
           </p>
           <button
             type="button"
             onClick={() => izniAyarla(true)}
-            className="mt-4 flex items-center gap-2 rounded-xl bg-accent px-4 py-2.5
-              text-[13px] font-medium text-white transition-colors
-              hover:bg-accent-700 cursor-pointer"
+            className="mt-4 flex cursor-pointer items-center gap-2 rounded-xl bg-stone-900
+              px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-stone-800"
           >
             <Check className="h-4 w-4" />
             Anladım, göndermeyi kabul ediyorum
           </button>
         </div>
       ) : (
-        <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-ink-3">
-          <ShieldAlert className="h-3.5 w-3.5 text-marker" />
-          Kaydın değerlendirme için Gemini'ye gönderilir, hiçbir yerde saklanmaz.
-          <button
-            type="button"
-            onClick={() => izniAyarla(false)}
-            className="text-brand-strong underline underline-offset-2 cursor-pointer"
-          >
-            İzni geri al
-          </button>
-        </p>
+        <>
+          <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-stone-500">
+            <ShieldAlert className="h-3.5 w-3.5 text-amber-600" />
+            Kaydın değerlendirme için Gemini'ye gönderilir, hiçbir yerde saklanmaz.
+            <button
+              type="button"
+              onClick={() => izniAyarla(false)}
+              className="cursor-pointer text-[#c2410c] underline underline-offset-2"
+            >
+              İzni geri al
+            </button>
+          </p>
+
+          <ReadingTab
+            targetText={hedefMetin}
+            onTargetTextChange={setHedefMetin}
+            onAudioReady={sesiAl}
+            onFileSelected={(dosya, url) => sesiAl(dosya, url)}
+            onAnalyze={degerlendir}
+            isLoading={mesgul || yerelMesgul}
+            hasAudio={!!sesBlob}
+            audioUrl={sesUrl}
+            selectedLanguage={dil}
+            onLanguageChange={setDil}
+          />
+        </>
       )}
 
-      {/* METİN SEÇİMİ — sekmeler tam genişlikte, çünkü seçim iki sütunun
-          İKİSİNİ birden değiştiriyor; bir sütunun içine sıkıştırmak onu
-          yalnızca o sütuna aitmiş gibi gösterirdi. */}
-      <div className="flex flex-wrap items-center gap-2">
-        {TELAFFUZ_METINLERI.map((m) => {
-          const on = !kendiModu && secili?.id === m.id;
-          return (
-            <button
-              key={m.id}
-              type="button"
-              onClick={() => { setKendiModu(false); setSecili(m); }}
-              className={`rounded-lg px-3 py-1.5 text-[12px] transition-colors cursor-pointer
-                ${on ? 'bg-accent font-medium text-white' : 'border border-hairline text-ink-2 hover:bg-paper-3'}`}
-            >
-              {m.title}
-            </button>
-          );
-        })}
-        <button
-          type="button"
-          onClick={() => setKendiModu(true)}
-          className={`rounded-lg px-3 py-1.5 text-[12px] transition-colors cursor-pointer
-            ${kendiModu ? 'bg-accent font-medium text-white' : 'border border-hairline text-ink-2 hover:bg-paper-3'}`}
-        >
-          Kendi metnim
-        </button>
-      </div>
-
-      {/* İKİ SÜTUN: solda okunacak şey, sağda okuma aracı.
-          Tek sütunda metin ile mikrofon düğmesi arasına aksan seçici ve
-          açıklamalar giriyordu; okurken göz metne dönmek için aşağı
-          kaydırmak zorunda kalıyordu. Okunan metin, okurken GÖRÜNÜR
-          kalmalı. Dar ekranda alt alta diziliyorlar. */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-
-        {/* SOL: HEDEF METİN */}
-        <div className="lg:col-span-7">
-          <div className="flex h-full flex-col rounded-xl border border-hairline bg-paper-2 p-5">
-            <div className="mb-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
-              <span className="eyebrow">
-                {kendiModu ? 'Kendi metnin' : secili?.category}
-              </span>
-              <span className="flex items-center gap-2">
-                {!kendiModu && secili && (
-                  <span className="timecode rounded bg-paper-3 px-1.5 py-0.5 text-ink-2">
-                    {secili.difficulty}
-                  </span>
-                )}
-                {/* Kelime sayısı: iki dakikalık sınırla birlikte okunduğunda
-                    "bu metne yetişir miyim" sorusunun cevabı. */}
-                {kelimeSayisi > 0 && (
-                  <span className="text-[11px] text-ink-3">{kelimeSayisi} kelime</span>
-                )}
-              </span>
-            </div>
-
-            {kendiModu ? (
-              <>
-                <textarea
-                  value={kendiMetni}
-                  onChange={(e) => setKendiMetni(e.target.value)}
-                  rows={5}
-                  placeholder="Okumak istediğin İngilizce metni buraya yaz."
-                  className="transcript-en w-full flex-1 rounded-lg border border-hairline
-                    bg-paper p-3 text-ink placeholder:text-ink-3"
-                />
-                <p className="mt-2 text-[11px] leading-relaxed text-ink-3">
-                  Kısa tut: iki dakikada rahat okunacak kadar. Uzun metinde hata
-                  listesi okunamaz hâle geliyor.
-                </p>
-              </>
-            ) : secili && (
-              <>
-                <p className="transcript-en flex-1 text-[17px] leading-relaxed text-ink">
-                  {secili.text}
-                </p>
-                <p className="mt-4 text-[12px] leading-relaxed text-ink-3">
-                  Çalıştırdığı: {secili.focus}
-                </p>
-              </>
-            )}
-
-            {/* ÖRNEK OKUNUŞ METNİN ALTINDA, ayrı bir bölümde değil:
-                yapılacak iş "şu metni dinle", yani metne ait bir eylem. */}
-            {hedefMetin && (
-              <button
-                type="button"
-                onClick={ornegiCal}
-                disabled={ornekCaliyor}
-                className="mt-4 flex items-center gap-2 self-start border-t border-hairline
-                  pt-4 text-[13px] font-medium text-brand-strong transition-colors
-                  hover:text-brand disabled:opacity-50 cursor-pointer"
-              >
-                {ornekCaliyor
-                  ? <Loader2 className="h-4 w-4 animate-spin" />
-                  : <Volume2 className="h-4 w-4" />}
-                Orijinal telaffuzu dinle
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* SAĞ: KAYIT */}
-        <div className="lg:col-span-5">
-          <div className="flex h-full flex-col gap-5 rounded-xl border border-hairline
-            bg-paper-2 p-5">
-            <span className="eyebrow">Ses kaydı</span>
-
-            <div className="flex flex-wrap items-center gap-2">
-              <label htmlFor="aksan" className="text-[12px] text-ink-2">Aksan</label>
-              <select
-                id="aksan"
-                value={aksan}
-                onChange={(e) => setAksan(e.target.value)}
-                className="min-w-0 flex-1 rounded-lg border border-hairline bg-paper px-2 py-1.5
-                  text-[12px] text-ink cursor-pointer"
-              >
-                {AKSANLAR.map((a) => <option key={a} value={a}>{a}</option>)}
-              </select>
-            </div>
-
-            <TelaffuzKayitPaneli
-              onKayitBitti={degerlendir}
-              kilitli={mesgul || yerelMesgul}
-              izinVerildi={izin}
-            />
-          </div>
-        </div>
-      </div>
-
       {(mesgul || yerelMesgul) && (
-        <p className="flex items-center gap-2 text-[13px] text-ink-2">
+        <p className="flex items-center gap-2 text-sm text-stone-600">
           <Loader2 className="h-4 w-4 animate-spin" />
           {yerelMesgul
             ? 'Buluta ulaşılamadı; kaydın tarayıcında çözümleniyor…'
@@ -429,8 +324,8 @@ export const TelaffuzAkisi: React.FC<Props> = ({ onKaydedildi }) => {
       )}
 
       {hata && (
-        <p className="flex items-start gap-2 rounded-xl border border-danger-line
-          bg-danger-soft p-3 text-[13px] leading-relaxed text-danger">
+        <p className="flex max-w-[70ch] items-start gap-2 rounded-xl border border-rose-200
+          bg-rose-50 p-3 text-sm leading-relaxed text-rose-700">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
           {hata}
         </p>

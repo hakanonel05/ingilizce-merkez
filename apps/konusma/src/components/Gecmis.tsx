@@ -12,7 +12,7 @@
 
 import React, { useState } from 'react';
 import { ArrowLeft, Trash2, Images } from 'lucide-react';
-import { TelaffuzSonucu } from './TelaffuzSonucu';
+import { VisualAssessmentResult } from './telaffuz/VisualAssessmentResult';
 import { parseAssessmentReport } from '../lib/telaffuzRaporu';
 import type { TelaffuzKaydi } from '../lib/telaffuzDeposu';
 import { AnalizSonucu } from './AnalizSonucu';
@@ -73,11 +73,15 @@ export const Gecmis: React.FC<Props> = ({
           </button>
           <span className="timecode text-ink-3">{tarihBicimle(seciliTelaffuz.olusturuldu)}</span>
         </div>
-        {/* Ses yok: kayıt saklanmıyor, yalnızca rapor. */}
-        <TelaffuzSonucu
-          rapor={seciliTelaffuz.rapor}
-          hedefMetin={seciliTelaffuz.hedefMetin}
-          sesUrl={null}
+        {/* SES YOK — kayıt saklanmıyor, yalnızca rapor. Bileşen bu
+            durumu zaten biliyor: audioUrl boşken oynatıcı ve
+            "Kaydımdan Dinle" düğmeleri çıkmıyor, "Doğru Okunuş"
+            çalışmaya devam ediyor. */}
+        <VisualAssessmentResult
+          markdown={seciliTelaffuz.rapor}
+          targetText={seciliTelaffuz.hedefMetin}
+          audioUrl={null}
+          audioBlob={null}
         />
       </div>
     );
