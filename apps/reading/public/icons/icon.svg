@@ -1,7 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
-  <rect width="512" height="512" fill="#1a1a2e"/>
-  <rect x="10" y="10" width="492" height="492" fill="none" stroke="#f59e0b" stroke-width="14"/>
-  <text x="256" y="360" font-family="Georgia, serif" font-size="320" font-weight="bold" fill="#ffffff" text-anchor="middle">L</text>
-  <text x="256" y="460" font-family="Arial, sans-serif" font-size="48" fill="#f59e0b" text-anchor="middle" letter-spacing="10">LEXIS</text>
+  <!-- Giris ekranindaki isaretin ayni si: ink zemin (#1C1917) uzerinde acik
+       kitap, tek vurgu marka rengi (#C2410C) ayracta.
+
+       KOSELER YUVARLATILMIYOR ve zemin tam kare. Bu simge manifest'te
+       "maskable" olarak veriliyor; isletim sistemi onu kendi siklinde
+       (daire, squircle, kare) kirpiyor. Yuvarlatilmis kose birakmak
+       kirpma sirasinda saydam ucgenler gosteriyordu.
+
+       Kitap merkezdeki %80'lik guvenli alanin icinde duruyor, boylece
+       daire kirpmada da kesilmiyor. -->
+  <rect width="512" height="512" fill="#1C1917"/>
+
+  <path d="M120 200 C120 192 127 186 135 188 L239 206 C247 207 252 214 252 221
+           L252 353 C252 361 245 367 237 365 L133 347 C125 346 120 339 120 331 Z"
+        fill="#FFFFFF"/>
+  <path d="M392 200 C392 192 385 186 377 188 L273 206 C265 207 260 214 260 221
+           L260 353 C260 361 267 367 275 365 L379 347 C387 346 392 339 392 331 Z"
+        fill="#FFFFFF"/>
+
+  <path d="M340 184 L340 282 L322 261 L304 282 L304 190 Z" fill="#C2410C"/>
 </svg>

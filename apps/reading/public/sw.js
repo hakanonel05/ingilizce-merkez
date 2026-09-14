@@ -9,8 +9,13 @@
    listesine girdi. SURUM ARTIRMAK SART: bu SW kok kapsaminda ('/') calisiyor
    ve zaten kurulu olan v3, /konusma/ altindaki JS ve CSS'i kendi onbellegine
    almaya calisirdi - reading'in dosyalarina benzeyen ama ona ait olmayan
-   varliklar. Surum degisince eski onbellek toptan siliniyor. */
-const CACHE_NAME = 'lexis-trainer-v4';
+   varliklar. Surum degisince eski onbellek toptan siliniyor.
+
+   v5: uygulama simgesi degisti (eski simge artik kullanilmayan bir palete
+   aitti) ve yaninda PNG surumleri uretildi. Simge dosyalari onbellekte
+   duruyor; surum artmazsa kurulu cihazlar eski simgeyi gostermeye devam
+   ederdi. */
+const CACHE_NAME = 'lexis-trainer-v5';
 
 // Başlangıçta önbelleğe alınacak temel statik dosyalar
 const APP_SHELL = [
@@ -18,6 +23,9 @@ const APP_SHELL = [
   '/index.html',
   '/manifest.json',
   '/icons/icon.svg',
+  '/icons/icon-192.png',
+  '/icons/icon-512.png',
+  '/icons/apple-touch-icon.png',
 ];
 
 // ---- INSTALL ----

@@ -11,7 +11,7 @@
 
     <!-- PWA Temel -->
     <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#1a1a2e" />
+    <meta name="theme-color" content="#1C1917" />
     <meta name="mobile-web-app-capable" content="yes" />
 
     <!-- Apple (iOS / iPadOS) PWA Desteği -->
@@ -20,7 +20,10 @@
     <meta name="apple-mobile-web-app-title" content="Lexis Trainer" />
     <!-- Favicon & PWA Icons -->
     <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
-    <link rel="apple-touch-icon" href="/icons/icon.svg" />
+    <!-- iOS, apple-touch-icon olarak SVG kabul etmiyor: burada icon.svg
+         duruyordu ve "Ana Ekrana Ekle" dendiginde simge bos cikiyordu.
+         PNG surumu bunun icin uretildi. -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
 
     <!-- Open Graph (paylaşım önizleme) -->
     <meta property="og:title" content="Lexis Trainer — YDS YÖKDİL İngilizce Okuma" />
