@@ -138,6 +138,8 @@ const LOCAL_KEYS = [
   // Yapay zekaya sorulmus CEFR seviyeleri. Senkronlanmasi kota tasarrufu:
   // bir cihazda sorulan kelime digerlerinde bedava gelir.
   { storageKey: 'layered_learning_cefr_cache_v1', syncKey: 'cefrCache' },
+  // "Biliyorum" diye isaretlenen kelimeler (katmanli, zorlanabilecegin kelimeler).
+  { storageKey: 'layered_learning_known_words_v1', syncKey: 'knownWords' },
 ];
 
 /**

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { CefrLevel } from '../../../../shared/vocab/cefr';
 import { getAllCards, VocabCard, VOCAB_CHANGED_EVENT } from '../../../../shared/vocab/vocabStore';
 import { buildLessonInsight, LessonInsight, DEFAULT_USER_LEVEL } from './lessonInsight';
+import { getKnownWords, KNOWN_WORDS_CHANGED_EVENT } from './knownWords';
 
 /**
  * Ders zorluk cozumlemesini tek yerden saglar.
@@ -19,6 +20,14 @@ export function useLessonInsight(
   refreshToken = 0
 ): { insight: LessonInsight; unknownSet: Set<string>; phraseSet: Set<string> } {
   const [cards, setCards] = useState<VocabCard[]>([]);
+  const [knownWords, setKnownWords] = useState<Set<string>>(() => getKnownWords());
+
+  // "Biliyorum" denince kelime listeden ve alti cizililerden aninda duser
+  useEffect(() => {
+    const reload = () => setKnownWords(getKnownWords());
+    window.addEventListener(KNOWN_WORDS_CHANGED_EVENT, reload);
+    return () => window.removeEventListener(KNOWN_WORDS_CHANGED_EVENT, reload);
+  }, []);
 
   useEffect(() => {
     let alive = true;
@@ -36,8 +45,8 @@ export function useLessonInsight(
   }, []);
 
   const insight = useMemo(
-    () => buildLessonInsight(text, userLevel, cards),
-    [text, userLevel, cards, refreshToken]
+    () => buildLessonInsight(text, userLevel, cards, knownWords),
+    [text, userLevel, cards, knownWords, refreshToken]
   );
 
   // Alti cizilecek kelimeler; metinde gectigi haliyle (kucuk harf)

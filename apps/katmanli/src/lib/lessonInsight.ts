@@ -12,6 +12,8 @@
  *   - FSRS destesi: seviyesi ne olursa olsun, olgunlasmis (Review) bir
  *     karti olan kelime bilinir sayilir. Ogrenilmekte olanlar ayri
  *     gosterilir, cunku henuz guvenilir degiller.
+ *   - "Biliyorum" listesi (lib/knownWords): kullanicinin karti olmadan
+ *     bilinir diye isaretledigi kelimeler. Seviyeden bagimsiz bilinir.
  */
 
 import { CefrLevel, CEFR_ORDER, analyzeCefr, CefrAnalysis, TokenizedWord } from '../../../../shared/vocab/cefr';
@@ -82,13 +84,16 @@ function buildDeckIndex(cards: VocabCard[]): Map<string, WordStatus> {
 function scoreWord(
   token: TokenizedWord,
   userLevelIndex: number,
-  deck: Map<string, WordStatus>
+  deck: Map<string, WordStatus>,
+  knownWords: Set<string>
 ): ScoredWord {
   const level = levelOfCached(token.word);
   const deckStatus = deck.get(token.word);
 
-  // Deste her seyin ustunde: kullanici bu kelimeyi bilerek calismis
-  if (deckStatus === 'known') return { ...token, level, status: 'known' };
+  // Deste ve "biliyorum" listesi her seyin ustunde: kullanici bunu kendisi soyledi
+  if (deckStatus === 'known' || knownWords.has(token.word)) {
+    return { ...token, level, status: 'known' };
+  }
 
   // Seviyesi kullanicinin seviyesinde veya altindaysa bilinir kabul et
   if (level && CEFR_ORDER.indexOf(level) <= userLevelIndex) {
@@ -108,7 +113,9 @@ function scoreWord(
 export function buildLessonInsight(
   text: string,
   userLevel: CefrLevel,
-  cards: VocabCard[]
+  cards: VocabCard[],
+  /** "Biliyorum" diye isaretlenmis kelimeler ve kaliplar (kucuk harf). */
+  knownWords: Set<string> = new Set()
 ): LessonInsight {
   const cefr = analyzeCefr(text);
   const deck = buildDeckIndex(cards);
@@ -140,7 +147,7 @@ export function buildLessonInsight(
     const level = phraseLevelOf(hit.phrase) ?? levelOfCached(hit.phrase);
     const deckStatus = deck.get(hit.phrase);
     let status: WordStatus;
-    if (deckStatus === 'known') status = 'known';
+    if (deckStatus === 'known' || knownWords.has(hit.phrase)) status = 'known';
     else if (level && CEFR_ORDER.indexOf(level) <= userLevelIndex) status = 'known';
     else if (deckStatus === 'learning') status = 'learning';
     else status = 'unknown';
@@ -170,7 +177,7 @@ export function buildLessonInsight(
     const count = Math.max(0, token.count - usedByPhrase);
     if (count === 0) continue;
 
-    const scored = scoreWord({ ...token, count }, userLevelIndex, deck);
+    const scored = scoreWord({ ...token, count }, userLevelIndex, deck, knownWords);
     if (deck.has(token.word)) deckHits++;
 
     if (scored.status === 'known') {

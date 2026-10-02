@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { Gauge, Sparkles, Loader2, BookOpen, Layers } from 'lucide-react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Gauge, Sparkles, Loader2, BookOpen, Layers, Check, Plus } from 'lucide-react';
 import { CefrLevel, CEFR_ORDER } from '../../../../shared/vocab/cefr';
 import { comprehensionVerdict, DEFAULT_USER_LEVEL, LessonInsight } from '../lib/lessonInsight';
 import { classifyMissingWords } from '../lib/cefrCache';
@@ -14,6 +14,10 @@ interface Props {
   onChangeUserLevel?: (level: CefrLevel) => void;
   /** Yapay zeka siniflandirmasi bitince cozumlemeyi tazelemek icin. */
   onClassified?: () => void;
+  /** Kelime listesinde "Biliyorum": kart acmadan bilinir say. */
+  onKnowWord?: (word: string) => void;
+  /** Kelime listesinde "Bilmiyorum": kart taslagini ac. */
+  onDontKnowWord?: (word: string) => void;
 }
 
 const TONE_CLASS: Record<'good' | 'ok' | 'hard', string> = {
@@ -32,8 +36,50 @@ export const LessonInsightPanel: React.FC<Props> = ({
   userLevel,
   onChangeUserLevel,
   onClassified,
+  onKnowWord,
+  onDontKnowWord,
 }) => {
   const level = userLevel || DEFAULT_USER_LEVEL;
+
+  /* Kelime etiketindeki "Biliyorum / Bilmiyorum" menusu.
+     Farede uzerine gelince, dokunmatikte dokununca acilir. Hover icin
+     pointer olaylari ve yalnizca `mouse`: dokunmada tarayici mouseenter
+     da uretiyor, ardindan gelen tiklama menuyu acar acmaz kapatiyordu. Kapanma
+     kisa bir gecikmeyle: fare etiketten menuye inerken aradaki bir iki
+     piksellik bosluktan gecerken menu kaybolmasin. */
+  const [openWord, setOpenWord] = useState<string | null>(null);
+  /** Sag kenara yakin etiketlerde menu saga yaslanir, ekrandan tasmasin. */
+  const [alignRight, setAlignRight] = useState(false);
+  const openFor = (word: string, el: HTMLElement) => {
+    cancelClose();
+    setAlignRight(el.getBoundingClientRect().left + 230 > window.innerWidth);
+    setOpenWord(word);
+  };
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cancelClose = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = null;
+  };
+  const scheduleClose = () => {
+    cancelClose();
+    closeTimer.current = setTimeout(() => setOpenWord(null), 150);
+  };
+  useEffect(() => cancelClose, []);
+  useEffect(() => {
+    if (!openWord) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpenWord(null); };
+    // Dokunmatikte disari dokununca kapanir
+    const onDown = (e: PointerEvent) => {
+      if (!(e.target as Element)?.closest?.('[data-word-chip]')) setOpenWord(null);
+    };
+    window.addEventListener('keydown', onKey);
+    window.addEventListener('pointerdown', onDown);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('pointerdown', onDown);
+    };
+  }, [openWord]);
+  const canRate = !!(onKnowWord || onDontKnowWord);
   const [classifying, setClassifying] = useState(false);
   const [aiProgress, setAiProgress] = useState('');
 
@@ -181,19 +227,72 @@ export const LessonInsightPanel: React.FC<Props> = ({
             </span>
           </div>
           <div className="flex flex-wrap gap-1">
-            {insight.unknownWords.slice(0, 24).map((w) => (
-              <span
-                key={w.word}
-                title={w.level ? `${w.level} · metinde ${w.count} kez` : `seviyesi bilinmiyor · metinde ${w.count} kez`}
-                className="text-[11px] px-1.5 py-0.5 rounded border border-[var(--marker)] bg-[var(--marker-bg)] text-[var(--marker-ink)]"
-              >
-                {w.word}
-                {w.level && <span className="ml-1 opacity-60">{w.level}</span>}
-              </span>
-            ))}
+            {insight.unknownWords.slice(0, 24).map((w) => {
+              const info = w.level ? `${w.level} · metinde ${w.count} kez` : `seviyesi bilinmiyor · metinde ${w.count} kez`;
+              const chip = (
+                <>
+                  {w.word}
+                  {w.level && <span className="ml-1 opacity-60">{w.level}</span>}
+                </>
+              );
+              const chipClass = 'text-[11px] px-1.5 py-0.5 rounded border border-[var(--marker)] bg-[var(--marker-bg)] text-[var(--marker-ink)]';
+
+              if (!canRate) {
+                return <span key={w.word} title={info} className={chipClass}>{chip}</span>;
+              }
+
+              const isOpen = openWord === w.word;
+              return (
+                <span
+                  key={w.word}
+                  data-word-chip
+                  className="relative inline-flex"
+                  onPointerEnter={(e) => { if (e.pointerType === 'mouse') openFor(w.word, e.currentTarget); }}
+                  onPointerLeave={(e) => { if (e.pointerType === 'mouse') scheduleClose(); }}
+                >
+                  <button
+                    type="button"
+                    aria-expanded={isOpen}
+                    onClick={(e) => (isOpen ? setOpenWord(null) : openFor(w.word, e.currentTarget))}
+                    className={`${chipClass} cursor-pointer`}
+                  >
+                    {chip}
+                  </button>
+
+                  {isOpen && (
+                    /* pt-1: etiketle menu arasinda farenin gectigi kopru */
+                    <span className={`absolute top-full z-30 pt-1 ${alignRight ? 'right-0' : 'left-0'}`}>
+                      <span className="flex w-max flex-col gap-1 rounded-lg border border-[var(--hairline-2)] bg-[var(--paper-2)] p-1.5">
+                        <span className="px-1 pb-0.5 text-[10px] text-[var(--ink-3)]">{info}</span>
+                        <span className="flex gap-1">
+                          <button
+                            type="button"
+                            onClick={() => { setOpenWord(null); onKnowWord?.(w.word); }}
+                            className="inline-flex items-center gap-1 h-7 px-2.5 rounded-md border border-[var(--hairline)] text-[11px] font-medium text-[var(--ink-2)] hover:border-[var(--hairline-2)] hover:text-[var(--ink)] transition-colors cursor-pointer"
+                          >
+                            <Check className="w-3 h-3 shrink-0" />
+                            Biliyorum
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => { setOpenWord(null); onDontKnowWord?.(w.word); }}
+                            className="inline-flex items-center gap-1 h-7 px-2.5 rounded-md bg-accent text-[11px] font-medium text-white hover:bg-accent-700 transition-colors cursor-pointer"
+                          >
+                            <Plus className="w-3 h-3 shrink-0" />
+                            Bilmiyorum
+                          </button>
+                        </span>
+                      </span>
+                    </span>
+                  )}
+                </span>
+              );
+            })}
           </div>
           <p className="text-[10px] text-[var(--ink-3)]">
-            Metinde bu kelimelerin altı çizili. Üzerine gelip seçerek kelime kartına ekleyebilirsin.
+            {canRate
+              ? 'Bir kelimenin üzerine gel: biliyorsan listeden çıkar, bilmiyorsan kelime kartına ekle. Metinde de altları çizili.'
+              : 'Metinde bu kelimelerin altı çizili. Üzerine gelip seçerek kelime kartına ekleyebilirsin.'}
           </p>
         </div>
       )}
