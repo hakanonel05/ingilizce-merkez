@@ -192,6 +192,7 @@
 
   --radius:     14px;
   --radius-lg:  18px;
+  --sidebar-w:  276px;
 }
 
 html { background: var(--paper); }
@@ -213,6 +214,25 @@ body {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
   border-radius: 6px;
+}
+
+/* BOLUM CEKMECESI (dar ekran)
+
+   ReadingSidebar `layer-drawer` sinifini ve `data-open` niteligini
+   kullaniyor, ama bu kurallar yalnizca katmanli/konusma CSS'inde
+   tanimliydi. Okuma tarafinda karsiligi olmadigi icin telefonda panel
+   hic kapanmiyordu: X'e ya da bir bolume basinca durum degisiyor, ama
+   panel ekranda kaliyor ve icerigin ustunu kapatiyordu. --sidebar-w de
+   eksikti. Kurallar katmanliyla birebir ayni; masaustunde etkisiz. */
+@media (max-width: 1023.98px) {
+  .layer-drawer {
+    transform: translateX(-100%);
+    transition: transform 200ms ease-in-out;
+  }
+
+  .layer-drawer[data-open="true"] {
+    transform: translateX(0);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
