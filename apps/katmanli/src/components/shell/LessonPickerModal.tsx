@@ -63,7 +63,7 @@ export const LessonPickerModal: React.FC<Props> = ({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="my-8 w-full max-w-4xl overflow-hidden rounded-2xl border border-hairline
+        className="my-8 w-full max-w-5xl overflow-hidden rounded-2xl border border-hairline
           bg-paper-2 shadow-ink/10"
       >
         <div className="flex items-center justify-between gap-4 border-b border-hairline px-5 py-4">
@@ -86,7 +86,7 @@ export const LessonPickerModal: React.FC<Props> = ({
           </button>
         </div>
 
-        <div className="max-h-[70vh] overflow-y-auto p-5">
+        <div className="max-h-[75vh] overflow-y-auto p-5">
           <LessonSelector
             lessons={lessons}
             activeLesson={activeLesson}
