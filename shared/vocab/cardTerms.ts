@@ -10,6 +10,11 @@
  * okumasın diye. Kart eklenince/silinince VOCAB_CHANGED_EVENT ile
  * arka planda yeniden kuruluyor.
  *
+ * "BİLİYORUM" DENEN KELİME MOR DEĞİL: kelime listesinde Biliyorum dersen
+ * (katmanlı, lib/knownWords) kart silinmiyor ama işaret anında kalkıyor —
+ * mor "henüz öğreniyorsun" demek. Kartın herhangi bir çekimi bilinen
+ * listesindeyse ("engages") kartın tamamı ("engage") işaretten çıkar.
+ *
  * ÇEKİMLER: kart "cultivate" ise metindeki "cultivated", "cultivating",
  * "cultivates" de onun. Kural tabanlı ve kasıtlı olarak kaba — düzensiz
  * fiiller (went, bought) eşleşmiyor. Yanlış pozitif ("bus" kartı "bused"i
@@ -26,7 +31,7 @@ export interface CardMatcher {
    *  kelimenin çekimli biçimleri de ayrı anahtar olarak var
    *  ("lays off", "laid off" hariç). */
   phrases: Map<string, string>;
-  /** Dizindeki toplam kart sayısı. */
+  /** Dizindeki kart sayısı ("Biliyorum" denenler hariç). */
   size: number;
 }
 
@@ -74,36 +79,62 @@ export function inflections(word: string): string[] {
   return [...out];
 }
 
-function buildMatcher(fronts: string[]): CardMatcher {
+/* "Biliyorum" listesi. Anahtar ve olay katmanlı'nın lib/knownWords'ünde
+ * tanımlı; aynı origin'de olduğumuz için reading de aynı listeyi görüyor.
+ * Burada yalnızca okunuyor. */
+const KNOWN_WORDS_KEY = 'layered_learning_known_words_v1';
+const KNOWN_WORDS_CHANGED_EVENT = 'known-words-changed';
+
+function readKnownWords(): Set<string> {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(KNOWN_WORDS_KEY) || '[]');
+    return new Set(Array.isArray(parsed) ? parsed.map((w) => String(w).trim().toLowerCase()) : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function buildMatcher(fronts: string[], known: Set<string>): CardMatcher {
   const words = new Map<string, string>();
   const phrases = new Map<string, string>();
+  let size = 0;
   for (const front of fronts) {
     const parts = (String(front || '').match(WORD_RE) || []).map((p) => p.toLowerCase());
     if (parts.length === 0) continue;
+    const firstForms = inflections(parts[0]);
     if (parts.length === 1) {
-      for (const form of inflections(parts[0])) if (!words.has(form)) words.set(form, front);
+      if (firstForms.some((f) => known.has(f))) continue;
+      for (const form of firstForms) if (!words.has(form)) words.set(form, front);
+      size++;
     } else if (parts.length <= MAX_PHRASE_WORDS) {
       const rest = parts.slice(1).join(' ');
-      for (const form of inflections(parts[0])) {
-        const key = `${form} ${rest}`;
-        if (!phrases.has(key)) phrases.set(key, front);
-      }
+      const keys = firstForms.map((form) => `${form} ${rest}`);
+      if (keys.some((k) => known.has(k))) continue;
+      for (const key of keys) if (!phrases.has(key)) phrases.set(key, front);
+      size++;
     }
   }
-  return { words, phrases, size: fronts.length };
+  return { words, phrases, size };
 }
 
 /* ---- Paylaşılan depo (useSyncExternalStore) ---- */
 
 let current: CardMatcher = EMPTY;
+let fronts: string[] = [];
 let started = false;
 const listeners = new Set<() => void>();
+
+/** Dizini eldeki kartlardan ve güncel "Biliyorum" listesinden yeniden kurar. */
+function rebuild() {
+  current = buildMatcher(fronts, readKnownWords());
+  listeners.forEach((l) => l());
+}
 
 function reload() {
   getAllCards()
     .then((cards) => {
-      current = buildMatcher(cards.map((c) => c.front));
-      listeners.forEach((l) => l());
+      fronts = cards.map((c) => c.front);
+      rebuild();
     })
     .catch(() => { /* IndexedDB yoksa işaret de yok; ekran çalışmaya devam eder */ });
 }
@@ -114,6 +145,10 @@ function subscribe(listener: () => void) {
     started = true;
     reload();
     window.addEventListener(VOCAB_CHANGED_EVENT, reload);
+    // Biliyorum: kartları yeniden okumaya gerek yok, yalnız süzgeç değişti.
+    window.addEventListener(KNOWN_WORDS_CHANGED_EVENT, rebuild);
+    // Başka sekmede (ör. reading açıkken katmanlı'da) Biliyorum denirse.
+    window.addEventListener('storage', (e) => { if (e.key === KNOWN_WORDS_KEY) rebuild(); });
   }
   return () => { listeners.delete(listener); };
 }
