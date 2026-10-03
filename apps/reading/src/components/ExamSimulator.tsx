@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Passage, CEFRLevel, ExamAttempt, GradedQuestionResult } from '../types';
 import { Timer, Play, Flag, CheckCircle2, XCircle, RotateCcw, ExternalLink } from 'lucide-react';
+import { CardMarkedText } from '../../../../shared/vocab/CardMarkedText';
 
 /**
  * Sınav çoktan seçmeli: şık düğmelerine basılarak cevaplanıyor.
@@ -276,7 +277,7 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
 
               <div className="passage-body space-y-4 border-b border-hairline px-6 py-5">
                 {p.paragraphs.map((para, i) => (
-                  <p key={i}>{para}</p>
+                  <p key={i}><CardMarkedText text={para} /></p>
                 ))}
               </div>
 
@@ -287,7 +288,7 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
                     <div key={q.id} className="space-y-3">
                       <div className="flex gap-2.5 items-start">
                         <span className="timecode shrink-0 text-ink-3">{qIndex + 1}</span>
-                        <h3 className="text-[15px] font-medium leading-relaxed text-ink">{q.question}</h3>
+                        <h3 className="text-[15px] font-medium leading-relaxed text-ink"><CardMarkedText text={q.question} /></h3>
                       </div>
                       <div className="grid grid-cols-1 gap-2 pl-6 sm:grid-cols-2">
                         {q.options.map(option => {
@@ -304,7 +305,7 @@ export default function ExamSimulator({ passages, onFinishExam, onSelectPassage 
                                   : 'border-hairline text-ink hover:bg-paper-3'
                               }`}
                             >
-                              {option}
+                              <CardMarkedText text={option} />
                             </button>
                           );
                         })}

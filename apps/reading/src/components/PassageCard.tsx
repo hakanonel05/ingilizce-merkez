@@ -3,6 +3,8 @@ import { Passage, UserProgress, GradedQuestionResult, VocabularyWord } from '../
 import { ChevronLeft, Star, Volume2, AlertCircle, Check, X, BrainCircuit } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { addWordToVocabBank, getAllCards, VOCAB_CHANGED_EVENT, readingPassageLessonId } from '../lib/vocabBank';
+import { cardRanges, useCardMatcher, CardRange } from '../../../../shared/vocab/cardTerms';
+import { CardMarkedText, CARD_MARK_STYLE, cardMarkTitle } from '../../../../shared/vocab/CardMarkedText';
 import { SelectionToCard } from '../../../../shared/vocab/SelectionToCard';
 import { useNarration } from '../lib/narration';
 import { acikUcluDogruMu } from '../lib/acikUcluCevap';
@@ -123,11 +125,40 @@ export default function PassageCard({
     }
   };
 
+  // Kelime bankasında kartı olan kelimeler (mor) — katmanlı ile aynı dizin.
+  const cardMatcher = useCardMatcher();
+
+  /**
+   * Parçanın kart aralıklarıyla kesişen kısmını mor işaretler. Parça
+   * "method," gibi noktalama taşıyabilir; yalnız kelimenin kendisi
+   * boyanıyor. Çok kelimeli kartta aradaki boşluk da boyanıyor ki kalıp
+   * tek parça görünsün.
+   */
+  const renderCardChunk = (chunk: string, offset: number, ranges: CardRange[], key: number) => {
+    const end = offset + chunk.length;
+    const r = ranges.find(x => x.start < end && x.end > offset);
+    if (!r) return <span key={key}>{chunk}</span>;
+    const a = Math.max(r.start, offset) - offset;
+    const b = Math.min(r.end, end) - offset;
+    return (
+      <span key={key}>
+        {chunk.slice(0, a)}
+        <span style={CARD_MARK_STYLE} title={cardMarkTitle(r.front)}>{chunk.slice(a, b)}</span>
+        {chunk.slice(b)}
+      </span>
+    );
+  };
+
   // Helper to highlight key words in paragraphs
   const renderParagraphWithHighlights = (paragraph: string) => {
+    const ranges = cardRanges(paragraph, cardMatcher);
+    let offset = 0;
     // Splitting by spaces but keeping track of punctuation
     const words = paragraph.split(/(\s+)/);
     return words.map((chunk, index) => {
+      const chunkStart = offset;
+      offset += chunk.length;
+      const cardHit = ranges.find(x => x.start < offset && x.end > chunkStart);
       // Find clean alphanumeric word for matching
       const cleanWord = chunk.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"']/g, "").trim().toLowerCase();
       const isVocabulary = (passage.vocabulary ?? []).some(v => v.term.toLowerCase() === cleanWord);
@@ -142,10 +173,13 @@ export default function PassageCard({
         if (status === 'studied') underlineStyle = 'border-b-2 border-marker';
         if (status === 'learned') underlineStyle = 'border-b-2 border-ok';
 
+        // Sözlük kelimesi karttaysa da mor; seçiliyken seçim rengi kazanır.
         return (
           <span
             key={index}
             onClick={() => handleWordClick(chunk)}
+            title={cardHit && !isSelected ? cardMarkTitle(cardHit.front) : undefined}
+            style={cardHit && !isSelected ? { color: CARD_MARK_STYLE.color, backgroundColor: CARD_MARK_STYLE.backgroundColor } : undefined}
             className={`passage-word cursor-pointer px-1 transition-all duration-150 ${underlineStyle} ${
               isSelected
                 ? 'bg-accent text-white border-none'
@@ -156,7 +190,7 @@ export default function PassageCard({
           </span>
         );
       }
-      return <span key={index}>{chunk}</span>;
+      return renderCardChunk(chunk, chunkStart, ranges, index);
     });
   };
 
@@ -479,7 +513,7 @@ export default function PassageCard({
                       <div key={q.id} className="space-y-3">
                         <div className="flex items-baseline gap-2.5">
                           <span className="timecode shrink-0 text-ink-3">{qIndex + 1}</span>
-                          <h3 className="text-[15px] font-medium leading-relaxed text-ink">{q.question}</h3>
+                          <h3 className="text-[15px] font-medium leading-relaxed text-ink"><CardMarkedText text={q.question} /></h3>
                         </div>
 
                         {/* Kitapta şıksız basılmış sorular: cevap yazılıyor. */}
@@ -537,7 +571,7 @@ export default function PassageCard({
                                   px-4 py-3 text-left text-[13px] transition-colors duration-150
                                   disabled:cursor-default cursor-pointer ${buttonStyle}`}
                               >
-                                <span>{option}</span>
+                                <span><CardMarkedText text={option} /></span>
                                 {comprehensionSubmitted && isOptionCorrect && (
                                   <Check className="h-4 w-4 text-ok shrink-0 ml-2" />
                                 )}
@@ -632,7 +666,7 @@ export default function PassageCard({
                       <div key={ex.id} className="space-y-3">
                         <div className="flex items-baseline gap-2.5">
                           <span className="timecode shrink-0 text-ink-3">{exIndex + 1}</span>
-                          <h3 className="text-[15px] font-medium leading-relaxed text-ink">{ex.question}</h3>
+                          <h3 className="text-[15px] font-medium leading-relaxed text-ink"><CardMarkedText text={ex.question} /></h3>
                         </div>
 
                         <div className="space-y-2 pl-6">
@@ -666,7 +700,7 @@ export default function PassageCard({
                                   px-4 py-3 text-left text-[13px] transition-colors duration-150
                                   disabled:cursor-default cursor-pointer ${buttonStyle}`}
                               >
-                                <span>{option}</span>
+                                <span><CardMarkedText text={option} /></span>
                                 {exercisesSubmitted && isOptionCorrect && (
                                   <Check className="h-4 w-4 text-ok shrink-0 ml-2" />
                                 )}

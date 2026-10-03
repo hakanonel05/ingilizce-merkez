@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { useCardMatcher, findCardHits, WORD_RE, MAX_PHRASE_WORDS } from '../lib/cardTerms';
+import { CARD_MARK_STYLE, cardMarkTitle } from '../../../../shared/vocab/CardMarkedText';
 
 const NO_WORDS = new Set<string>();
 
@@ -28,17 +29,6 @@ const PHRASE_MARK: React.CSSProperties = {
   textDecorationColor: 'var(--marker-ink, #6B5312)',
   textDecorationThickness: '1.5px',
   textUnderlineOffset: '3px',
-};
-
-// Kelime bankasinda karti olan kelime: mor zemin + mor yazi. Alti
-// cizgili isaretlerden (zorluk) ayri bir dil, cunku anlami da ayri:
-// "zor olabilir" degil "bunu zaten karta ekledin".
-const CARD_MARK: React.CSSProperties = {
-  color: 'var(--cardword)',
-  backgroundColor: 'var(--cardword-bg)',
-  borderRadius: '3px',
-  padding: '0 2px',
-  margin: '0 -2px',
 };
 
 interface Segment {
@@ -136,7 +126,9 @@ export const MarkedText: React.FC<Props> = ({ text, unknown = NO_WORDS, phrases 
         seg.mark === 'none' ? (
           seg.text
         ) : seg.mark === 'card' ? (
-          <span key={i} style={CARD_MARK} title={`Kelime kartında var: ${seg.front}`}>
+          // Mor zemin, alti cizgili zorluk isaretlerinden ayri bir dil:
+          // "zor olabilir" degil "bunu zaten karta ekledin".
+          <span key={i} style={CARD_MARK_STYLE} title={cardMarkTitle(seg.front!)}>
             {seg.text}
           </span>
         ) : (
