@@ -577,11 +577,11 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
       </div>
 
       {/* Main Layout */}
-      {/* Menü daraltılınca sütunlar 4/12 + 8/12 yerine 4.5/12 + 7.5/12:
-          kazanılan yer ikisine bölünüyor, video daha çok payı alıyor
-          çünkü dar sütunda en çok o sıkışıyordu. */}
+      {/* Menü daraltılınca sütunlar 4/12 + 8/12 yerine 5/17 + 12/17:
+          kazanılan yerin çoğu transkripte gidiyor — geniş alan okumak
+          için isteniyor; video yine de açık menüdekinden büyük kalıyor. */}
       <div className={viewMode === 'split'
-        ? `grid grid-cols-1 gap-6 items-start ${wide ? 'lg:grid-cols-[9fr_15fr]' : 'lg:grid-cols-12'}`
+        ? `grid grid-cols-1 gap-6 items-start ${wide ? 'lg:grid-cols-[5fr_12fr]' : 'lg:grid-cols-12'}`
         : 'space-y-6'}>
 
         {/* Video Player Column */}
@@ -626,7 +626,7 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                       <button
                         type="button"
                         onClick={() => { setShowVideoUrlInput(true); setNewVideoUrl(lesson.youtubeUrl || ''); }}
-                        className="text-[11px] font-semibold text-brand hover:text-brand flex items-center space-x-1 transition cursor-pointer"
+                        className="text-[11px] font-semibold text-brand hover:text-brand flex shrink-0 items-center space-x-1 whitespace-nowrap transition cursor-pointer"
                       >
                         <Edit2 className="w-3 h-3" />
                         <span>URL Değiştir</span>
