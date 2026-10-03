@@ -4,7 +4,7 @@ import { ChevronLeft, Star, Volume2, AlertCircle, Check, X, BrainCircuit } from 
 import { motion, AnimatePresence } from 'motion/react';
 import { addWordToVocabBank, getAllCards, VOCAB_CHANGED_EVENT, readingPassageLessonId } from '../lib/vocabBank';
 import { cardRanges, useCardMatcher, CardRange } from '../../../../shared/vocab/cardTerms';
-import { CardMarkedText, CARD_MARK_STYLE, cardMarkTitle } from '../../../../shared/vocab/CardMarkedText';
+import { CardMarkedText, CARD_MARK_STYLE, cardMarkProps } from '../../../../shared/vocab/CardMarkedText';
 import { SelectionToCard } from '../../../../shared/vocab/SelectionToCard';
 import { useNarration } from '../lib/narration';
 import { acikUcluDogruMu } from '../lib/acikUcluCevap';
@@ -143,7 +143,7 @@ export default function PassageCard({
     return (
       <span key={key}>
         {chunk.slice(0, a)}
-        <span style={CARD_MARK_STYLE} title={cardMarkTitle(r.front)}>{chunk.slice(a, b)}</span>
+        <span {...cardMarkProps(r.front)}>{chunk.slice(a, b)}</span>
         {chunk.slice(b)}
       </span>
     );
@@ -178,7 +178,7 @@ export default function PassageCard({
           <span
             key={index}
             onClick={() => handleWordClick(chunk)}
-            title={cardHit && !isSelected ? cardMarkTitle(cardHit.front) : undefined}
+            data-card-front={cardHit && !isSelected ? cardHit.front : undefined}
             style={cardHit && !isSelected ? { color: CARD_MARK_STYLE.color, backgroundColor: CARD_MARK_STYLE.backgroundColor } : undefined}
             className={`passage-word cursor-pointer px-1 transition-all duration-150 ${underlineStyle} ${
               isSelected

@@ -121,6 +121,19 @@ function buildMatcher(fronts: string[], known: Set<string>): CardMatcher {
 
 let current: CardMatcher = EMPTY;
 let fronts: string[] = [];
+
+/** Mor kelimenin üzerine gelince açılan pencere için kartın yüzleri. */
+export interface CardInfo {
+  front: string;
+  back: string;
+  ipa?: string;
+}
+let infoByFront = new Map<string, CardInfo>();
+
+/** Kartın ön yüzünden (MarkedText'in data-card-front'u) kart bilgisi. */
+export function cardInfo(front: string): CardInfo | undefined {
+  return infoByFront.get(front.trim().toLowerCase());
+}
 let started = false;
 const listeners = new Set<() => void>();
 
@@ -134,6 +147,9 @@ function reload() {
   getAllCards()
     .then((cards) => {
       fronts = cards.map((c) => c.front);
+      infoByFront = new Map(
+        cards.map((c) => [c.front.trim().toLowerCase(), { front: c.front, back: c.back, ipa: c.ipa }])
+      );
       rebuild();
     })
     .catch(() => { /* IndexedDB yoksa işaret de yok; ekran çalışmaya devam eder */ });

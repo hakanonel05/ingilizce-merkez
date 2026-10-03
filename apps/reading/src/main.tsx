@@ -2,10 +2,13 @@ import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
+import { CardWordHover } from '../../../shared/vocab/CardWordHover';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
+    {/* Mor (kart) kelimelerin üzerine gelince açılan pencere — bkz. CardWordHover */}
+    <CardWordHover />
   </StrictMode>,
 );
 

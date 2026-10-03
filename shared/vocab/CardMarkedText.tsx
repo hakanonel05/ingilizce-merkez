@@ -14,7 +14,16 @@ export const CARD_MARK_STYLE: React.CSSProperties = {
   margin: '0 -2px',
 };
 
-export const cardMarkTitle = (front: string) => `Kelime kartında var: ${front}`;
+/**
+ * Mor işaretli span'in nitelikleri. data-card-front'u CardWordHover okuyor:
+ * fare üstüne gelince kartın Türkçe karşılığını ve hoparlörü gösteren
+ * pencere tek bir yerde, olay devretmeyle açılıyor — yüzlerce kelimenin her
+ * biri kendi dinleyicisini taşımıyor.
+ */
+export const cardMarkProps = (front: string) => ({
+  style: CARD_MARK_STYLE,
+  'data-card-front': front,
+});
 
 /**
  * Metni olduğu gibi yazar, yalnızca kart kelimelerini mor işaretler.
@@ -32,7 +41,7 @@ export const CardMarkedText: React.FC<{ text: string }> = ({ text }) => {
   ranges.forEach((r, i) => {
     if (r.start > cursor) out.push(text.slice(cursor, r.start));
     out.push(
-      <span key={i} style={CARD_MARK_STYLE} title={cardMarkTitle(r.front)}>
+      <span key={i} {...cardMarkProps(r.front)}>
         {text.slice(r.start, r.end)}
       </span>
     );

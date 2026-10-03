@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useCardMatcher, findCardHits, WORD_RE, MAX_PHRASE_WORDS } from '../lib/cardTerms';
-import { CARD_MARK_STYLE, cardMarkTitle } from '../../../../shared/vocab/CardMarkedText';
+import { cardMarkProps } from '../../../../shared/vocab/CardMarkedText';
 
 const NO_WORDS = new Set<string>();
 
@@ -128,7 +128,7 @@ export const MarkedText: React.FC<Props> = ({ text, unknown = NO_WORDS, phrases 
         ) : seg.mark === 'card' ? (
           // Mor zemin, alti cizgili zorluk isaretlerinden ayri bir dil:
           // "zor olabilir" degil "bunu zaten karta ekledin".
-          <span key={i} style={CARD_MARK_STYLE} title={cardMarkTitle(seg.front!)}>
+          <span key={i} {...cardMarkProps(seg.front!)}>
             {seg.text}
           </span>
         ) : (
