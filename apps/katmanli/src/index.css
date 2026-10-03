@@ -137,6 +137,10 @@
   --color-marker:      #F59E0B;
   --color-marker-bg:   #FFFBEB;
   --color-marker-ink:  #92400E;
+
+  /* KART KELİMESİ (mor) — bkz. :root'taki not. */
+  --color-cardword:     #6D28D9;
+  --color-cardword-bg:  #F1EAFE;
 }
 
 :root {
@@ -202,6 +206,15 @@
   --marker:     #F59E0B;   /* amber-500 */
   --marker-bg:  #FFFBEB;   /* amber-50  */
   --marker-ink: #92400E;   /* amber-800 */
+
+  /* Kart kelimesi işareti — kelime bankasında kartı olan kelime.
+     Mor/indigo bu depoda arayüz rengi olarak yasak (frontend-design);
+     buradaki istisna kullanıcının açık isteği ve bir ANLAM taşıyor:
+     "bunu zaten karta ekledim". Yalnızca metin içindeki kelimede
+     kullanılıyor, hiçbir düğme ya da yüzey mor değil. Kehribar
+     (şu an konuşulan) ve turuncu (marka) ile karışmıyor. */
+  --cardword:    #6D28D9;   /* violet-700 */
+  --cardword-bg: #F1EAFE;
 
   --radius:     14px;
   --radius-lg:  18px;

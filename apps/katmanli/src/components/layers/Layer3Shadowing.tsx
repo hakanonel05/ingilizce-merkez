@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { oku } from '../../lib/seslendirme';
 import { VideoLesson } from '../../types';
+import { MarkedText } from '../MarkedText';
 import { extractYouTubeId } from '../../lib/youtube';
 import { useYouTubePlayer, getSentenceStart } from '../../lib/useYouTubePlayer';
 import { Mic, Square, Play, RotateCcw, ChevronLeft, ChevronRight, Volume2, Trash2, Save, ListMusic } from 'lucide-react';
@@ -285,7 +286,7 @@ export const Layer3Shadowing: React.FC<Props> = ({ lesson, onCompleteLayer }) =>
               </div>
 
               <p className="transcript-en text-xl sm:text-2xl text-ink">
-                {current?.en}
+                {current && <MarkedText text={current.en} />}
               </p>
 
               <div className="flex flex-wrap items-center gap-2">

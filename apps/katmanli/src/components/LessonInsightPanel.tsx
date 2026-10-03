@@ -3,6 +3,7 @@ import { Gauge, Sparkles, Loader2, BookOpen, Layers, Check, Plus } from 'lucide-
 import { CefrLevel, CEFR_ORDER } from '../../../../shared/vocab/cefr';
 import { comprehensionVerdict, DEFAULT_USER_LEVEL, LessonInsight } from '../lib/lessonInsight';
 import { classifyMissingWords } from '../lib/cefrCache';
+import { useCardMatcher } from '../lib/cardTerms';
 
 interface Props {
   /**
@@ -39,6 +40,8 @@ export const LessonInsightPanel: React.FC<Props> = ({
   onKnowWord,
   onDontKnowWord,
 }) => {
+  // Karta eklenmiş kelime bu listede de mor: metindeki işaretle aynı dil.
+  const cards = useCardMatcher();
   const level = userLevel || DEFAULT_USER_LEVEL;
 
   /* Kelime etiketindeki "Biliyorum / Bilmiyorum" menusu.
@@ -228,14 +231,18 @@ export const LessonInsightPanel: React.FC<Props> = ({
           </div>
           <div className="flex flex-wrap gap-1">
             {insight.unknownWords.slice(0, 24).map((w) => {
-              const info = w.level ? `${w.level} · metinde ${w.count} kez` : `seviyesi bilinmiyor · metinde ${w.count} kez`;
+              const cardFront = cards.words.get(w.word.toLowerCase());
+              const info = (w.level ? `${w.level} · metinde ${w.count} kez` : `seviyesi bilinmiyor · metinde ${w.count} kez`)
+                + (cardFront ? ` · kelime kartında var: ${cardFront}` : '');
               const chip = (
                 <>
                   {w.word}
                   {w.level && <span className="ml-1 opacity-60">{w.level}</span>}
                 </>
               );
-              const chipClass = 'text-[11px] px-1.5 py-0.5 rounded border border-[var(--marker)] bg-[var(--marker-bg)] text-[var(--marker-ink)]';
+              const chipClass = cardFront
+                ? 'text-[11px] px-1.5 py-0.5 rounded border border-cardword/40 bg-cardword-bg text-cardword'
+                : 'text-[11px] px-1.5 py-0.5 rounded border border-[var(--marker)] bg-[var(--marker-bg)] text-[var(--marker-ink)]';
 
               if (!canRate) {
                 return <span key={w.word} title={info} className={chipClass}>{chip}</span>;

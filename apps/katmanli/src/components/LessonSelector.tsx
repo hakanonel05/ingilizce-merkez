@@ -22,6 +22,7 @@
 import React, { useMemo, useState } from 'react';
 import { VideoLesson } from '../types';
 import { lessonComputedLevel } from '../lib/lessonInsight';
+import { useCardMatcher, lessonCardTerms } from '../lib/cardTerms';
 import { extractYouTubeId } from '../lib/youtube';
 import { CORE_LAYERS, CORE_LAYER_COUNT } from './shell/LayerSidebar';
 import {
@@ -88,6 +89,15 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
   onRestorePresetLessons,
 }) => {
   const [inputMode, setInputMode] = useState<'youtube' | 'text'>('youtube');
+
+  // Her dersin transkripti ve test soruları kart kelimeleri için taranıyor;
+  // kartlar değişince (useCardMatcher) liste kendiliğinden tazeleniyor.
+  const cardMatcher = useCardMatcher();
+  const cardTermsByLesson = useMemo(() => {
+    const out = new Map<string, string[]>();
+    for (const l of lessons) out.set(l.id, lessonCardTerms(l, cardMatcher));
+    return out;
+  }, [lessons, cardMatcher]);
   const [youtubeInput, setYoutubeInput] = useState('');
   const [manualYoutubeUrl, setManualYoutubeUrl] = useState('');
   const [textInput, setTextInput] = useState('');
@@ -441,6 +451,14 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
                           {shownLevel}
                         </span>
                         <span className="timecode">{lesson.sentences.length} cümle</span>
+                        {(cardTermsByLesson.get(lesson.id)?.length ?? 0) > 0 && (
+                          <span
+                            className="font-medium text-cardword"
+                            title={`Bu derste geçen kart kelimelerin: ${cardTermsByLesson.get(lesson.id)!.join(', ')}`}
+                          >
+                            {cardTermsByLesson.get(lesson.id)!.length} kart kelimesi
+                          </span>
+                        )}
                       </p>
                     </div>
 

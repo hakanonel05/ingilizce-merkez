@@ -1,17 +1,16 @@
 import React, { useMemo } from 'react';
+import { useCardMatcher, findCardHits, WORD_RE, MAX_PHRASE_WORDS } from '../lib/cardTerms';
+
+const NO_WORDS = new Set<string>();
 
 interface Props {
   text: string;
   /** Alti cizilecek tekil kelimeler, kucuk harfle. */
-  unknown: Set<string>;
+  unknown?: Set<string>;
   /** Alti cizilecek kalip bicimleri, kucuk harfle ("carried out"). */
   phrases?: Set<string>;
 }
 
-const WORD_RE = /[A-Za-z][A-Za-z'-]*/g;
-
-/** Kalibin en fazla kac kelimeden olustugu; oradan geriye dogru aranir. */
-const MAX_PHRASE_WORDS = 4;
 
 const WORD_MARK: React.CSSProperties = {
   textDecoration: 'underline',
@@ -31,9 +30,22 @@ const PHRASE_MARK: React.CSSProperties = {
   textUnderlineOffset: '3px',
 };
 
+// Kelime bankasinda karti olan kelime: mor zemin + mor yazi. Alti
+// cizgili isaretlerden (zorluk) ayri bir dil, cunku anlami da ayri:
+// "zor olabilir" degil "bunu zaten karta ekledin".
+const CARD_MARK: React.CSSProperties = {
+  color: 'var(--cardword)',
+  backgroundColor: 'var(--cardword-bg)',
+  borderRadius: '3px',
+  padding: '0 2px',
+  margin: '0 -2px',
+};
+
 interface Segment {
   text: string;
-  mark: 'none' | 'word' | 'phrase';
+  mark: 'none' | 'word' | 'phrase' | 'card';
+  /** mark === 'card' iken kartin on yuzu (ipucu icin). */
+  front?: string;
 }
 
 /**
@@ -45,13 +57,19 @@ interface Segment {
  * geliyor. Kalip eslesmesi tekil kelimeden ONCE denenir ve eslesen
  * kelimeler tuketilir, boylece ayni yer iki kez isaretlenmez.
  *
+ * KART KELIMELERI (mor): kelime bankasinda karti olan kelime ya da kalip,
+ * cekimli bicimleriyle (bkz. lib/cardTerms). Kart isareti her zaman
+ * kazanir — karta ekledigin bir kelime "zor" olarak da cizilmez; ayni
+ * yerin iki anlami olmasin.
+ *
  * Bosluk ve noktalama aynen korunur, dolayisiyla fareyle secim
  * (SelectionToCard) ve kopyalama bozulmaz.
  */
-export const MarkedText: React.FC<Props> = ({ text, unknown, phrases }) => {
+export const MarkedText: React.FC<Props> = ({ text, unknown = NO_WORDS, phrases }) => {
+  const cards = useCardMatcher();
   const segments = useMemo<Segment[] | null>(() => {
     const hasPhrases = !!phrases && phrases.size > 0;
-    if (unknown.size === 0 && !hasPhrases) return null;
+    if (unknown.size === 0 && !hasPhrases && cards.size === 0) return null;
 
     const matches = [...text.matchAll(WORD_RE)];
     if (matches.length === 0) return null;
@@ -63,6 +81,18 @@ export const MarkedText: React.FC<Props> = ({ text, unknown, phrases }) => {
     while (i < matches.length) {
       const m = matches[i];
       const start = m.index!;
+
+      // 0) Kart kelimesi / kart kalibi
+      const card = cards.size > 0 ? findCardHits(matches, i, cards) : null;
+      if (card) {
+        const last = matches[i + card.len - 1];
+        const end = last.index! + last[0].length;
+        if (start > cursor) out.push({ text: text.slice(cursor, start), mark: 'none' });
+        out.push({ text: text.slice(start, end), mark: 'card', front: card.front });
+        cursor = end;
+        i += card.len;
+        continue;
+      }
 
       // 1) Bu konumdan baslayan en uzun kalip
       let phraseLen = 0;
@@ -96,7 +126,7 @@ export const MarkedText: React.FC<Props> = ({ text, unknown, phrases }) => {
 
     if (cursor < text.length) out.push({ text: text.slice(cursor), mark: 'none' });
     return out;
-  }, [text, unknown, phrases]);
+  }, [text, unknown, phrases, cards]);
 
   if (!segments) return <>{text}</>;
 
@@ -105,6 +135,10 @@ export const MarkedText: React.FC<Props> = ({ text, unknown, phrases }) => {
       {segments.map((seg, i) =>
         seg.mark === 'none' ? (
           seg.text
+        ) : seg.mark === 'card' ? (
+          <span key={i} style={CARD_MARK} title={`Kelime kartında var: ${seg.front}`}>
+            {seg.text}
+          </span>
         ) : (
           <span key={i} style={seg.mark === 'phrase' ? PHRASE_MARK : WORD_MARK}>
             {seg.text}

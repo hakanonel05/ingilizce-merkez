@@ -4,6 +4,7 @@ import { extractYouTubeId } from '../../lib/youtube';
 import { useYouTubePlayer, formatSeconds, getSentenceStart } from '../../lib/useYouTubePlayer';
 import { Ear, AlertTriangle } from 'lucide-react';
 import { SelectionToCard } from '../vocab/SelectionToCard';
+import { MarkedText } from '../MarkedText';
 
 interface Props {
   lesson: VideoLesson;
@@ -131,7 +132,7 @@ export const Layer2ActiveListening: React.FC<Props> = ({ lesson, onCompleteLayer
                           isActive ? 'text-[var(--marker-ink)] font-medium' : 'text-ink-2'
                         }`}
                       >
-                        {pair.en}
+                        <MarkedText text={pair.en} />
                       </p>
                     </div>
                   );

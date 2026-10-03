@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { VideoLesson, QuizQuestion, MistakeEntry } from '../../types';
 import { apiFetch } from '../../lib/userKeys';
+import { MarkedText } from '../MarkedText';
 import { HelpCircle, CheckCircle2, XCircle, Sparkles, CheckCircle, Loader2, Award, AlertCircle } from 'lucide-react';
 
 interface Layer3ComprehensionQuizProps {
@@ -213,7 +214,7 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
                     Soru {qIdx + 1}
                   </span>
                   <h3 className="text-xs sm:text-sm font-semibold text-ink leading-relaxed">
-                    {q.question}
+                    <MarkedText text={q.question} />
                   </h3>
                 </div>
 
@@ -241,7 +242,7 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
                           onClick={() => handleSelectOption(q.id, optIdx)}
                           className={`w-full text-left p-3 rounded-lg border text-xs transition flex items-center justify-between cursor-pointer ${btnStyle}`}
                         >
-                          <span>{opt}</span>
+                          <span><MarkedText text={opt} /></span>
                           {isSubmitted && isRightOption && <CheckCircle2 className="w-4 h-4 text-ok shrink-0" />}
                           {isSubmitted && isSelected && !isRightOption && <XCircle className="w-4 h-4 text-danger shrink-0" />}
                         </button>
