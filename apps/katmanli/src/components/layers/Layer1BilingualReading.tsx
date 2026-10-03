@@ -6,6 +6,7 @@ import { SelectionToCard } from '../vocab/SelectionToCard';
 import { LessonInsightPanel } from '../LessonInsightPanel';
 import { MarkedText } from '../MarkedText';
 import { useLessonInsight } from '../../lib/useLessonInsight';
+import { markWordKnown } from '../../lib/knownWords';
 import { CefrLevel } from '../../../../../shared/vocab/cefr';
 import { Volume2, Bookmark, Search, Eye, EyeOff, Youtube, Edit2, Check, X, LayoutGrid, List, Play, Sliders, AlertTriangle, RefreshCw, Pause } from 'lucide-react';
 
@@ -80,6 +81,15 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
     [lesson.sentences]
   );
   const { insight, unknownSet, phraseSet } = useLessonInsight(lessonText, userLevel, insightRefresh);
+
+  // Kelime listesinde "Bilmiyorum" denince kart taslagi; baglam, kelimenin gectigi ilk cumle
+  const [cardRequest, setCardRequest] = useState<{ term: string; context: string; id: number } | null>(null);
+  const requestCard = (word: string) => {
+    const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp(`\\b${escaped}\\b`, 'i');
+    const sentence = (lesson.sentences || []).find((s) => re.test(s.en));
+    setCardRequest({ term: word, context: sentence?.en || '', id: Date.now() });
+  };
   const [playingSentenceId, setPlayingSentenceId] = useState<number | null>(null);
   const [viewMode, setViewMode] = useState<'split' | 'stacked'>('split');
 
@@ -370,6 +380,7 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
         lessonId={lesson.id}
         lessonTitle={lesson.title}
         onAdded={() => { /* VocabHub depo olayıyla kendini tazeliyor */ }}
+        lookupRequest={cardRequest}
       />
 
       {/* Control Header */}
@@ -543,6 +554,8 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
           userLevel={userLevel}
           onChangeUserLevel={onChangeUserLevel}
           onClassified={() => setInsightRefresh((n) => n + 1)}
+          onKnowWord={markWordKnown}
+          onDontKnowWord={requestCard}
         />
 
         {/* Search Bar */}

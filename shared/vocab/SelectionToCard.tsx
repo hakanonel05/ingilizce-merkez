@@ -13,6 +13,12 @@ interface Props {
   lessonTitle: string;
   /** Kart eklendikten sonra üst bileşeni bilgilendirmek için. */
   onAdded?: () => void;
+  /**
+   * Seçim olmadan kart taslağı açtırmak için: örneğin katmanlıda
+   * "zorlanabileceğin kelimeler" listesinde "Bilmiyorum" denince.
+   * `id` her istekte değişmeli; aynı kelime iki kez istenebilir.
+   */
+  lookupRequest?: { term: string; context: string; id: number } | null;
 }
 
 interface Draft {
@@ -44,6 +50,7 @@ export const SelectionToCard: React.FC<Props> = ({
   lessonId,
   lessonTitle,
   onAdded,
+  lookupRequest,
 }) => {
   /**
    * Seçim balonu. Bağlam cümlesi BURADA saklanıyor, tıklama anında değil:
@@ -57,6 +64,8 @@ export const SelectionToCard: React.FC<Props> = ({
   const [draft, setDraft] = useState<Draft | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [savedMsg, setSavedMsg] = useState<string | null>(null);
+  /** Taslağı hazırlanan ifade; seçim balonu yokken de bekleme göstermek için. */
+  const [lookingUp, setLookingUp] = useState<string | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const bubbleRef = useRef<HTMLButtonElement | null>(null);
 
@@ -120,11 +129,21 @@ export const SelectionToCard: React.FC<Props> = ({
     return (el?.textContent || '').slice(0, 400);
   };
 
-  const handleLookup = async () => {
+  const handleLookup = () => {
     if (!selection) return;
-    const term = selection.text;
-    const context = selection.context;
+    lookup(selection.text, selection.context);
+  };
 
+  // Dışarıdan istenen kelime: seçim balonunu atlayıp doğrudan taslağa git
+  useEffect(() => {
+    if (!lookupRequest || draft || isLoading) return;
+    lookup(lookupRequest.term, lookupRequest.context);
+    // Yalnızca yeni bir istek geldiğinde çalışmalı
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lookupRequest?.id]);
+
+  const lookup = async (term: string, context: string) => {
+    setLookingUp(term);
     setIsLoading(true);
     setError(null);
 
@@ -172,6 +191,7 @@ export const SelectionToCard: React.FC<Props> = ({
       setError(err?.message || 'Kelime bilgisi alınamadı.');
     } finally {
       setIsLoading(false);
+      setLookingUp(null);
     }
   };
 
@@ -387,6 +407,14 @@ export const SelectionToCard: React.FC<Props> = ({
           >
             <X className="w-3.5 h-3.5" />
           </button>
+        </div>
+      )}
+
+      {/* Seçim balonu olmadan başlatılan aramada bekleme göstergesi */}
+      {isLoading && !selection && lookingUp && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[80] flex items-center gap-2 px-4 py-2.5 bg-ink text-white text-xs font-semibold rounded-xl">
+          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+          <span>"{lookingUp}" için kart hazırlanıyor...</span>
         </div>
       )}
 
