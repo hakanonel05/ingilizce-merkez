@@ -28,6 +28,8 @@ interface Layer1BilingualReadingProps {
   /** Anlama oranı bu seviyeye göre hesaplanır. */
   userLevel?: CefrLevel;
   onChangeUserLevel?: (level: CefrLevel) => void;
+  /** Sol menü daraltıldı: kazanılan yer videoya ve transkripte veriliyor. */
+  wide?: boolean;
 }
 
 /**
@@ -70,6 +72,7 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
   onResyncFromCaptions,
   userLevel,
   onChangeUserLevel,
+  wide = false,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [hideTurkish, setHideTurkish] = useState(false);
@@ -574,10 +577,17 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
       </div>
 
       {/* Main Layout */}
-      <div className={viewMode === 'split' ? 'grid grid-cols-1 lg:grid-cols-12 gap-6 items-start' : 'space-y-6'}>
+      {/* Menü daraltılınca sütunlar 4/12 + 8/12 yerine 4.5/12 + 7.5/12:
+          kazanılan yer ikisine bölünüyor, video daha çok payı alıyor
+          çünkü dar sütunda en çok o sıkışıyordu. */}
+      <div className={viewMode === 'split'
+        ? `grid grid-cols-1 gap-6 items-start ${wide ? 'lg:grid-cols-[9fr_15fr]' : 'lg:grid-cols-12'}`
+        : 'space-y-6'}>
 
         {/* Video Player Column */}
-        <div className={viewMode === 'split' ? 'lg:col-span-4 lg:sticky lg:top-4 space-y-3' : 'space-y-3'}>
+        <div className={viewMode === 'split'
+          ? `${wide ? '' : 'lg:col-span-4'} lg:sticky lg:top-4 space-y-3`
+          : 'space-y-3'}>
           {ytId ? (
             <div className="rounded-2xl border border-hairline bg-paper-2 p-3 space-y-2">
               <div className="aspect-video w-full rounded-lg overflow-hidden bg-ink-950 border border-hairline shadow-inner relative">
@@ -678,7 +688,7 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
         </div>
 
         {/* Transcript Column */}
-        <div ref={transcriptAreaRef} className={viewMode === 'split' ? 'lg:col-span-8' : 'w-full'}>
+        <div ref={transcriptAreaRef} className={viewMode === 'split' ? (wide ? '' : 'lg:col-span-8') : 'w-full'}>
           <div className="overflow-hidden rounded-2xl border border-hairline bg-paper-2">
 
             <div className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-hairline bg-paper-3 px-4 py-2.5">
@@ -706,7 +716,8 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
               </span>
             </div>
 
-            <div className={`divide-y divide-hairline ${viewMode === 'split' ? 'max-h-[75vh] overflow-y-auto' : ''}`}>
+            <div className={`divide-y divide-hairline ${viewMode === 'split'
+              ? `${wide ? 'max-h-[85vh]' : 'max-h-[75vh]'} overflow-y-auto` : ''}`}>
               {filteredSentences.map(({ pair }) => {
                 const isActive = activeSentenceId === pair.id;
                 const start = getStartSeconds(pair);

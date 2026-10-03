@@ -43,6 +43,7 @@ import AppSwitcher from './AppSwitcher';
 const LESSONS_STORAGE_KEY = 'layered_learning_lessons_v2';
 const PROGRESS_STORAGE_KEY = 'layered_learning_progress_v1';
 const MISTAKES_STORAGE_KEY = 'layered_learning_mistakes_v1';
+const SIDEBAR_COLLAPSED_KEY = 'katmanli_sidebar_collapsed';
 
 /**
  * Bir degeri localStorage'a yazar, gercekten degistiyse senkron damgasi
@@ -150,6 +151,18 @@ export default function App() {
   const [editingLesson, setEditingLesson] = useState<VideoLesson | null>(null);
   /** Dar ekranda katman cekmecesi; genis ekranda sidebar zaten acik. */
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+  // Masaüstünde menünün yalnız ikonlara daraltılması. Görünüm tercihi,
+  // ilerleme değil: senkronlanan anahtarların dışında, bu cihazda kalıyor.
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(() => {
+    try { return localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === '1'; } catch { return false; }
+  });
+  const toggleSidebarCollapsed = () => {
+    setIsSidebarCollapsed((prev) => {
+      const next = !prev;
+      try { localStorage.setItem(SIDEBAR_COLLAPSED_KEY, next ? '1' : '0'); } catch { /* özel pencere */ }
+      return next;
+    });
+  };
   /** Ders listesi artik sayfada degil, bu pencerede. */
   const [isLessonPickerOpen, setIsLessonPickerOpen] = useState<boolean>(false);
   /** Hedef ve seri duzenleyicisi ust cubuktan aciliyor. */
@@ -798,6 +811,8 @@ async function buildLessonData(
           onOpenGuide={() => setIsGuideOpen(true)}
           onOpenGrammarCoach={() => setIsGrammarCoachOpen(true)}
           onOpenSettings={() => setIsSettingsOpen(true)}
+          collapsed={isSidebarCollapsed}
+          onToggleCollapsed={toggleSidebarCollapsed}
         />
 
         <main className="min-w-0 flex-1">
@@ -814,7 +829,9 @@ async function buildLessonData(
               onOpenGuide={() => setIsGuideOpen(true)}
             />
           ) : (
-          <div className="min-h-[500px] w-full max-w-[1180px] xl:max-w-[1440px] 2xl:max-w-[1760px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <div className={`min-h-[500px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 ${isSidebarCollapsed
+            ? 'lg:max-w-[1440px] xl:max-w-[1760px] 2xl:max-w-[2200px]'
+            : 'max-w-[1180px] xl:max-w-[1440px] 2xl:max-w-[1760px]'}`}>
           {!activeLesson &&
           activeLayer !== 9 &&
           activeLayer !== 10 &&
@@ -902,6 +919,7 @@ async function buildLessonData(
                   onResyncFromCaptions={(onProgress) => handleResyncLessonFromCaptions(activeLesson.id, onProgress)}
                   userLevel={progress.cefrLevel}
                   onChangeUserLevel={(level) => handleUpdateProgress({ cefrLevel: level })}
+                  wide={isSidebarCollapsed}
                 />
               )}
 
