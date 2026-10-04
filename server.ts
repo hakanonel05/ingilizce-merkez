@@ -1726,6 +1726,31 @@ function normalizePartOfSpeech(raw: any): string | undefined {
   return PARTS_OF_SPEECH.includes(value) ? value : undefined;
 }
 
+/* Kartin "diger anlamlari": soz turune gore gruplanmis sozluk anlamlari.
+ * Modelin yanitindan yalnizca gecerli soz turleri ve bos olmayan, tekrarsiz
+ * karsiliklar alinir; sinirlar istemdekilerle ayni (3 grup x 4 anlam). */
+function normalizeSenses(raw: any): { pos: string; meanings: string[] }[] | undefined {
+  if (!Array.isArray(raw)) return undefined;
+  const out: { pos: string; meanings: string[] }[] = [];
+  for (const group of raw) {
+    const pos = normalizePartOfSpeech(group?.pos);
+    if (!pos || out.some((g) => g.pos === pos)) continue;
+    const seen = new Set<string>();
+    const meanings: string[] = [];
+    for (const m of Array.isArray(group?.meanings) ? group.meanings : []) {
+      const t = String(m || '').trim();
+      if (t && t.length <= 80 && !seen.has(t.toLocaleLowerCase('tr'))) {
+        seen.add(t.toLocaleLowerCase('tr'));
+        meanings.push(t);
+      }
+      if (meanings.length >= 4) break;
+    }
+    if (meanings.length) out.push({ pos, meanings });
+    if (out.length >= 3) break;
+  }
+  return out.length ? out : undefined;
+}
+
 /* ============================================================
    HIKAYE URETECI
 
@@ -2865,13 +2890,19 @@ Bu ifade icin kart bilgisi uret:
     C2 = nadir, edebi veya uzmanlik kelimeleri (ubiquitous, quintessential)
   Temel bir kelimeye B2 demek de nadir bir kelimeye B2 demek de hatadir.
 - "exampleEn": ifadeyi kullanan YENI ve basit bir ornek cumle
-- "exampleTr": ornek cumlenin Turkcesi`;
+- "exampleTr": ornek cumlenin Turkcesi
+- "senses": ifadenin SOZLUKTEKI yaygin anlamlari, soz turune gore gruplanmis.
+  Her grup { "pos": <yukaridaki soz turu degerlerinden biri>, "meanings":
+  [kisa Turkce karsiliklar] }. Bir sozluk maddesi gibi dusun: en sik
+  kullanilan anlamlar once, grup basina en fazla 4 karsilik, en fazla 3 grup.
+  "back"teki baglam anlami da uygun grupta yer alsin. Tek anlamli bir
+  ifadede tek grup yeterli; anlam uydurma.`;
 
     const response = await generateContentWithRetry(ai, {
       contents: prompt,
       // NOT: sema orneginde seviye BOS birakiliyor. Burada "B2" yazdigi
       // surece model cogu kelimeye bakmadan B2 diyordu.
-      jsonHint: '{"front":"","back":"","ipa":"","kind":"word","pos":"","level":"","exampleEn":"","exampleTr":""}',
+      jsonHint: '{"front":"","back":"","ipa":"","kind":"word","pos":"","level":"","exampleEn":"","exampleTr":"","senses":[{"pos":"","meanings":[""]}]}',
       config: {
         systemInstruction: SYSTEM_INSTRUCTION_COACH,
         responseMimeType: "application/json",
@@ -2886,6 +2917,17 @@ Bu ifade icin kart bilgisi uret:
             level: { type: Type.STRING },
             exampleEn: { type: Type.STRING },
             exampleTr: { type: Type.STRING },
+            senses: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  pos: { type: Type.STRING },
+                  meanings: { type: Type.ARRAY, items: { type: Type.STRING } },
+                },
+                required: ["pos", "meanings"],
+              },
+            },
           },
           required: ["front", "back", "kind", "pos", "level"],
         },
@@ -2917,6 +2959,7 @@ Bu ifade icin kart bilgisi uret:
       level,
       exampleEn: item.exampleEn ? String(item.exampleEn).trim() : undefined,
       exampleTr: item.exampleTr ? String(item.exampleTr).trim() : undefined,
+      senses: normalizeSenses(item.senses),
     });
   } catch (error: any) {
     console.error("Error in /api/define-word:", error);

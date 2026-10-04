@@ -41,6 +41,16 @@ export interface CardSource {
   addedAt: number;
 }
 
+/**
+ * Kelimenin sözlükteki anlamlarından bir grup: söz türü ve Türkçe
+ * karşılıklar. `back` kelimenin GÖRÜLDÜĞÜ cümledeki anlamı; `senses`
+ * öteki yaygın anlamlarını da gösteriyor (bkz. /api/define-word).
+ */
+export interface CardSense {
+  pos: PartOfSpeech | string;
+  meanings: string[];
+}
+
 export interface VocabCard extends FsrsCardFields {
   id: string;
   /** İlk eklendiği yer. sources[0] ile aynıdır; eski kayıtlarla uyum için duruyor. */
@@ -65,6 +75,8 @@ export interface VocabCard extends FsrsCardFields {
   exampleTr?: string;
   /** Transkriptte geçtiği asıl cümle. */
   contextEn?: string;
+  /** Sözlükteki yaygın anlamlar, söz türüne göre. Eski kartlarda yok. */
+  senses?: CardSense[];
   note?: string;
   suspended?: boolean;
   createdAt: number;
@@ -172,6 +184,7 @@ export function buildCard(input: {
   exampleEn?: string;
   exampleTr?: string;
   contextEn?: string;
+  senses?: CardSense[];
 }): VocabCard {
   const front = input.front.trim();
   const meta = resolveCardMeta(front, {
@@ -204,6 +217,7 @@ export function buildCard(input: {
     exampleEn: input.exampleEn,
     exampleTr: input.exampleTr,
     contextEn: input.contextEn,
+    senses: input.senses?.length ? input.senses : undefined,
     createdAt: Date.now(),
     ...createNewCard(Date.now()),
   };
@@ -518,6 +532,7 @@ function withSource(existing: VocabCard, incoming: VocabCard): VocabCard | null 
   if (!existing.exampleEn && incoming.exampleEn) filled.exampleEn = incoming.exampleEn;
   if (!existing.exampleTr && incoming.exampleTr) filled.exampleTr = incoming.exampleTr;
   if (!existing.pos && incoming.pos) filled.pos = incoming.pos;
+  if (!existing.senses?.length && incoming.senses?.length) filled.senses = incoming.senses;
   if (Object.keys(filled).length > 0) changed = true;
 
   if (!changed) return null;

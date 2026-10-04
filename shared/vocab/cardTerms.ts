@@ -22,7 +22,7 @@
  */
 
 import { useSyncExternalStore } from 'react';
-import { getAllCards, VOCAB_CHANGED_EVENT } from './vocabStore';
+import { getAllCards, VOCAB_CHANGED_EVENT, VocabCard, CardSense } from './vocabStore';
 
 export interface CardMatcher {
   /** Metindeki tek kelime biçimi (küçük harf) → kartın ön yüzü. */
@@ -127,6 +127,9 @@ export interface CardInfo {
   front: string;
   back: string;
   ipa?: string;
+  senses?: CardSense[];
+  /** Kartın kendisi — pencereden eski karta anlam eklemek için. */
+  card: VocabCard;
 }
 let infoByFront = new Map<string, CardInfo>();
 
@@ -148,7 +151,10 @@ function reload() {
     .then((cards) => {
       fronts = cards.map((c) => c.front);
       infoByFront = new Map(
-        cards.map((c) => [c.front.trim().toLowerCase(), { front: c.front, back: c.back, ipa: c.ipa }])
+        cards.map((c) => [
+          c.front.trim().toLowerCase(),
+          { front: c.front, back: c.back, ipa: c.ipa, senses: c.senses, card: c },
+        ])
       );
       rebuild();
     })

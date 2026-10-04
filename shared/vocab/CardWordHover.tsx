@@ -18,8 +18,9 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Volume2 } from 'lucide-react';
+import { Volume2, Loader2 } from 'lucide-react';
 import { cardInfo, CardInfo } from './cardTerms';
+import { CardSenses, fillCardSenses } from './CardSenses';
 
 type Speaker = (text: string) => void;
 
@@ -48,10 +49,13 @@ interface Open {
 
 const OPEN_DELAY = 120;
 const CLOSE_DELAY = 220;
-const WIDTH = 240;
+const WIDTH = 264;
 
 export const CardWordHover: React.FC = () => {
   const [open, setOpen] = useState<Open | null>(null);
+  // Eski kartın anlamları çekiliyor mu / çekilemediyse neden.
+  const [fetching, setFetching] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const openTimer = useRef<number | undefined>(undefined);
   const closeTimer = useRef<number | undefined>(undefined);
   const anchorRef = useRef<Element | null>(null);
@@ -66,6 +70,7 @@ export const CardWordHover: React.FC = () => {
     const info = front ? cardInfo(front) : undefined;
     if (!info) return;
     anchorRef.current = el;
+    setFetchError(null);
     setOpen({ info, surface: el.textContent?.trim() || info.front, rect: el.getBoundingClientRect() });
   }, []);
 
@@ -145,6 +150,19 @@ export const CardWordHover: React.FC = () => {
 
   if (!open) return null;
 
+  const loadSenses = async () => {
+    setFetching(true);
+    setFetchError(null);
+    try {
+      const senses = await fillCardSenses(open.info.card);
+      setOpen((o) => (o ? { ...o, info: { ...o.info, senses } } : o));
+    } catch (err: any) {
+      setFetchError(err?.message || 'Anlamlar alınamadı.');
+    } finally {
+      setFetching(false);
+    }
+  };
+
   // Kelimenin altında; altta yer yoksa üstünde. Yatayda ekrandan taşmaz.
   const { rect, info, surface } = open;
   const left = Math.max(8, Math.min(rect.left + rect.width / 2 - WIDTH / 2, window.innerWidth - WIDTH - 8));
@@ -187,6 +205,28 @@ export const CardWordHover: React.FC = () => {
       <p className="mt-2 text-[14px] leading-snug text-ink">
         {info.back || <span className="text-ink-3">Türkçe karşılığı yok</span>}
       </p>
+      {/* Üstteki karşılık kelimenin karta eklendiği cümledeki anlamı;
+          altta sözlükteki öteki anlamları. Eski kartlarda bu bilgi yok,
+          bir dokunuşla çekiliyor ve karta kaydediliyor. */}
+      {info.senses?.length ? (
+        <div className="mt-2.5 border-t border-hairline pt-2">
+          <CardSenses senses={info.senses} back={info.back} compact />
+        </div>
+      ) : (
+        <div className="mt-2 flex items-center gap-2">
+          <button
+            type="button"
+            onClick={loadSenses}
+            disabled={fetching}
+            className="inline-flex items-center gap-1 text-[11px] font-medium text-cardword
+              hover:underline disabled:cursor-wait disabled:opacity-60 cursor-pointer"
+          >
+            {fetching && <Loader2 className="h-3 w-3 animate-spin" />}
+            {fetching ? 'Anlamlar getiriliyor…' : 'Diğer anlamları getir'}
+          </button>
+          {fetchError && <span className="truncate text-[11px] text-danger">{fetchError}</span>}
+        </div>
+      )}
       <p className="mt-2 text-[11px] text-ink-3">Kelime kartında var</p>
     </div>,
     document.body

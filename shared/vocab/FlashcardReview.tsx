@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { VocabCard, putCard, isNewCard, cardSources } from './vocabStore';
 import { POS_LABELS_TR } from './pos';
+import { CardSenses } from './CardSenses';
 import { logActivity } from '../analytics/activityLog';
 import { bumpDailyCounter } from './vocabSettings';
 import { FsrsScheduler, Rating, CardState, formatInterval } from './fsrs';
@@ -302,6 +303,15 @@ export const FlashcardReview: React.FC<Props> = ({
           {showAnswer && (
             <div className="space-y-3 pt-3 border-t border-hairline">
               <p className="text-lg sm:text-xl font-medium text-ink">{current.back}</p>
+
+              {/* Üstteki karşılık kelimenin görüldüğü cümledeki anlamı;
+                  burada sözlükteki öteki anlamları. */}
+              {current.senses?.length ? (
+                <div className="mx-auto max-w-sm space-y-1 text-left">
+                  <p className="text-[11px] font-semibold uppercase tracking-wide text-ink-3">Diğer anlamlar</p>
+                  <CardSenses senses={current.senses} back={current.back} />
+                </div>
+              ) : null}
 
               {current.exampleEn && (
                 <div className="border-l-2 border-hairline-2 pl-3 text-left">

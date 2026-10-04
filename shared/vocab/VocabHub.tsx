@@ -21,6 +21,7 @@ import {
   LevelSource,
 } from './autoClassify';
 import { PartOfSpeech, POS_ORDER, POS_LABELS_TR } from './pos';
+import { CardSenses } from './CardSenses';
 import { CEFR_ORDER } from './cefr';
 import { CardState } from './fsrs';
 import { apiFetch } from './userKeys';
@@ -1157,6 +1158,9 @@ const CardTable: React.FC<{
                 </div>
 
                 <p className="text-[13px] text-ink-2">{c.back}</p>
+                {c.senses?.length ? (
+                  <CardSenses senses={c.senses} back={c.back} compact />
+                ) : null}
 
                 {c.exampleEn && (
                   <p className="text-[11px] text-ink-3 italic truncate">{c.exampleEn}</p>

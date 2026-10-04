@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { buildCard, addCardsIfMissing, CardKind, CardLevel } from './vocabStore';
+import { buildCard, addCardsIfMissing, CardKind, CardLevel, CardSense } from './vocabStore';
+import { CardSenses, toggleMeaning } from './CardSenses';
 import { resolveCardMeta, LEVEL_SOURCE_LABELS, LevelSource } from './autoClassify';
 import { PartOfSpeech, POS_ORDER, POS_LABELS_TR } from './pos';
 import { CEFR_ORDER } from './cefr';
@@ -34,6 +35,8 @@ interface Draft {
   exampleEn?: string;
   exampleTr?: string;
   contextEn?: string;
+  /** Sözlükteki öteki anlamlar; karta da kaydediliyor. */
+  senses?: CardSense[];
 }
 
 /**
@@ -185,6 +188,7 @@ export const SelectionToCard: React.FC<Props> = ({
         exampleEn: data.exampleEn,
         exampleTr: data.exampleTr,
         contextEn: context,
+        senses: Array.isArray(data.senses) ? data.senses : undefined,
       });
       setSelection(null);
     } catch (err: any) {
@@ -210,6 +214,7 @@ export const SelectionToCard: React.FC<Props> = ({
         exampleEn: draft.exampleEn,
         exampleTr: draft.exampleTr,
         contextEn: draft.contextEn,
+        senses: draft.senses,
       });
       const added = await addCardsIfMissing([card]);
       setDraft(null);
@@ -293,6 +298,21 @@ export const SelectionToCard: React.FC<Props> = ({
                 placeholder="Anlamı"
                 className="w-full px-3 py-2 bg-paper border border-hairline-2 rounded-lg text-sm text-ink focus:outline-none focus:border-accent"
               />
+              {/* Kutudaki karşılık cümledeki anlam. Sözlükteki öteki
+                  anlamlar altta; dokununca karşılığa eklenir/çıkar.
+                  Hangisi seçilirse seçilsin hepsi karta kaydediliyor. */}
+              {draft.senses?.length ? (
+                <div className="space-y-1.5 pt-1.5">
+                  <p className="text-[11px] text-ink-3">
+                    Kutudaki anlam bu cümledeki. Sözlükteki diğer anlamlar — dokununca karşılığa eklenir:
+                  </p>
+                  <CardSenses
+                    senses={draft.senses}
+                    back={draft.back}
+                    onToggle={(m) => setDraft({ ...draft, back: toggleMeaning(draft.back, m) })}
+                  />
+                </div>
+              ) : null}
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
