@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { oku, sesiDurdur } from '../../lib/seslendirme';
 import { VideoLesson } from '../../types';
 import { apiFetch } from '../../lib/userKeys';
-import { Mic, MicOff, Volume2, Send, Sparkles, CheckCircle, Loader2, Award, RefreshCw, AlertCircle, Repeat, Plus, Minus } from 'lucide-react';
+import { Mic, MicOff, Volume2, Square, Send, Sparkles, CheckCircle, Loader2, Award, RefreshCw, AlertCircle, Repeat, Plus, Minus } from 'lucide-react';
 
 /** Tekrar sayaçları ders bazında saklanır. */
 const REPS_STORAGE_KEY = 'layered_learning_speaking_reps_v1';
@@ -72,6 +72,16 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
     startSimulation();
   }, []);
 
+  /**
+   * Soruyu seslendir / durdur.
+   *
+   * SORULAR ARTIK KENDILIGINDEN OKUNMUYOR. Once her yeni soru geldiginde
+   * otomatik calisiyordu; kullanicinin istemedigi bir anda konusmaya
+   * basliyor, ustelik kullanici cevabini hazirlarken ya da kendi kaydini
+   * alirken araya giriyordu. Dinlemek bir SECIM oldu: asagidaki dugme.
+   *
+   * Ayni metne ikinci kez basmak durduruyor - dugme hem oynat hem dur.
+   */
   const speakText = (text: string) => {
     if (speakingText === text) {
       sesiDurdur();
@@ -105,7 +115,8 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
             coachQuestionTr: data.nextQuestionTr,
           },
         ]);
-        speakText(data.nextQuestion);
+        /* SORU KENDILIGINDEN OKUNMUYOR — bkz. asagidaki dinleme dugmesi.
+           Burada speakText(data.nextQuestion) vardi. */
       } else {
         setErrorMsg(data.error || 'Konuşma simülasyonu başlatılamadı.');
       }
@@ -193,7 +204,7 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
           coachQuestion: data.nextQuestion,
           coachQuestionTr: data.nextQuestionTr,
         });
-        speakText(data.nextQuestion);
+        /* Burada da otomatik okuma vardi; kaldirildi. */
       } else if (data.isCompleted || data.step === 'completed') {
         setIsCompleted(true);
       }
@@ -341,12 +352,31 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
                   <Sparkles className="w-3.5 h-3.5 text-brand" />
                   <span>Gemini Dil Koçu (Soru {turn.step}):</span>
                 </span>
+                {/* OYNAT / DUR. Ikon durumu gosteriyor: hoparlor =
+                    calmiyor, kare = caliyor ve basinca duruyor. Once hep
+                    hoparlor duruyordu, yani basan kisi durduracagini
+                    bilmiyordu. */}
                 <button
                   onClick={() => speakText(turn.coachQuestion)}
-                  className="p-1.5 text-ink-3 hover:text-brand transition cursor-pointer"
-                  title="Soruyu Sesli Dinle"
+                  className={`flex items-center gap-1.5 rounded-lg px-2 py-1 text-[11px]
+                    font-medium transition cursor-pointer ${
+                      speakingText === turn.coachQuestion
+                        ? 'bg-brand-soft text-brand-strong'
+                        : 'text-ink-3 hover:bg-paper-3 hover:text-brand'
+                    }`}
+                  title={speakingText === turn.coachQuestion ? 'Durdur' : 'Soruyu dinle'}
                 >
-                  <Volume2 className="w-4 h-4" />
+                  {speakingText === turn.coachQuestion ? (
+                    <>
+                      <Square className="w-3.5 h-3.5 fill-current" />
+                      Durdur
+                    </>
+                  ) : (
+                    <>
+                      <Volume2 className="w-3.5 h-3.5" />
+                      Dinle
+                    </>
+                  )}
                 </button>
               </div>
 
