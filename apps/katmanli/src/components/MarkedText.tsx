@@ -43,8 +43,8 @@ const PHRASE_MARK: React.CSSProperties = {
    altindaki zorluk/kalip cizgileri ve mor kart isaretleri gorunur
    kalmali, vurgu onlarin yerine gecmemeli. */
 const VURGU_MARK: React.CSSProperties = {
-  backgroundColor: 'var(--marker-bg, #FFFBEB)',
-  boxShadow: '0 0 0 2px var(--marker-bg, #FFFBEB)',
+  backgroundColor: 'var(--marker-highlight, #FDE68A)',
+  boxShadow: '0 0 0 2px var(--marker-highlight, #FDE68A)',
   borderRadius: '2px',
 };
 

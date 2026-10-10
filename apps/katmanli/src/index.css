@@ -205,6 +205,17 @@
      Süs değil: şu an konuşulan cümleyi gösteriyor. */
   --marker:     #F59E0B;   /* amber-500 */
   --marker-bg:  #FFFBEB;   /* amber-50  */
+
+  /* SATIR ICI VURGU — transkriptte su an konusulan bolum.
+
+     --marker-bg BURADA YETMIYOR ve sebebi alan buyuklugu: ayni ton genis
+     bir panelde rahat okunuyor ama birkac kelimenin arkasinda kayboluyor.
+     Olculdu: #FFFBEB beyazdan yalnizca mavi kanalda 20 birim ayriliyor
+     (~%2 parlaklik farki), kullanici "vurgu belli olmuyor" dedi.
+     amber-100 (#FEF3C7) de beyaz zeminde ancak %5 ayriliyordu; aktif
+     satirin yazisi siyaha dondukten sonra fosforlu kalem tonu
+     (amber-200) hem kontrasti bozmuyor hem uzaktan secilir duruyor. */
+  --marker-highlight: #FDE68A;   /* amber-200 */
   --marker-ink: #92400E;   /* amber-800 */
 
   /* Kart kelimesi işareti — kelime bankasında kartı olan kelime.

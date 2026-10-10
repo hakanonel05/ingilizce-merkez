@@ -733,12 +733,15 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                     ref={isActive ? activeSentenceRef : null}
                     className={`select-text border-l-4 p-4 transition-colors duration-200 sm:p-5 ${
                       isActive
-                        /* Zemin BEYAZ DEGIL hafif gri: panelin kendisi beyaz
-                           (bg-paper-2), beyaz bir satir orada gorunmez olur.
-                           Kehribar da degil - konusulan bolum zaten kehribar
-                           ve iki sari ust uste binerse kelime vurgusu
-                           kayboluyor. */
-                        ? 'border-[var(--marker)] bg-paper'
+                        /* AKTIF SATIRIN ZEMINI YOK, panelle ayni beyaz.
+                           Once kehribardi: satirin tamami sariyken konusulan
+                           bolumun vurgusu uzerinde kayboluyordu. Sonra hafif
+                           griye cevrildi ve o da yetmedi - gri ile kehribar
+                           cok yakin tonlar, vurgu yine secilmiyordu (olculdu,
+                           ekran goruntusuyle dogrulandi).
+                           Satiri SOL KENARLIK isaretliyor; zemin bos kalinca
+                           kehribar vurgu beyazin uzerinde net duruyor. */
+                        ? 'border-[var(--marker)]'
                         : 'border-transparent'
                     }`}
                   >
@@ -771,9 +774,16 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                               iç kutu, kalın yazı, kehribar zaman etiketi,
                               kalın Türkçe ve "CANLI KONUŞULUYOR" hapı
                               vardı. Yedi sinyal tek bir durum için. Geriye
-                              satır zemini + sol kenarlık + küçük bir
-                              "konuşuluyor" işareti kaldı. */}
-                          <p className={`transcript-en ${isActive ? 'text-[var(--marker-ink)]' : 'text-ink'}`}>
+                              sol kenarlık + kehribar zaman etiketi + küçük
+                              bir "konuşuluyor" işareti kaldı. */}
+                          {/* AKTIF SATIRIN INGILIZCESI DE SIYAH KALIYOR.
+                              Once tum cumle kehribara donuyordu; konusulan
+                              bolumun kehribar zemini o yazinin uzerinde
+                              kayboluyordu - iki kehribar ust uste. Satirin
+                              hangisi oldugunu sol kenarlik, kehribar zaman
+                              etiketi ve Turkce sutunu zaten soyluyor; bu
+                              sutun vurguya birakildi. */}
+                          <p className="transcript-en text-ink">
                             <MarkedText
                               text={pair.en}
                               unknown={unknownSet}
