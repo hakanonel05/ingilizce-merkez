@@ -8,6 +8,19 @@ export interface SentencePair {
   startSec?: number;
   /** Cümlenin bittiği saniye. */
   endSec?: number;
+  /**
+   * Cümleyi oluşturan ALTYAZI PARÇALARI, kendi gerçek zamanlarıyla.
+   *
+   * TED'in transkriptindeki gibi "şu an konuşulan bölümü" sarıyla
+   * vurgulayabilmek için gerekiyor: cümlenin tamamını boyamak, nerede
+   * olunduğunu söylemiyor. YouTube altyazısı zaten bu parçalar halinde
+   * geliyor; buildSentencesFromCues onları cümleye birleştirirken
+   * sınırları da saklıyor.
+   *
+   * Elle yapıştırılmış transkriptlerde ve eski derslerde YOK; o durumda
+   * arayüz kelime sayısına göre tahmin ediyor (bkz. aktifVurguAraligi).
+   */
+  parcalar?: { bas: number; son: number; basHarf: number; sonHarf: number }[];
   notes?: string;
 }
 

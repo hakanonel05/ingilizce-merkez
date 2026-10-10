@@ -123,6 +123,12 @@ interface BuiltSentence {
   startSec?: number;
   endSec?: number;
   timestamp?: string;
+  /* Cumleyi olusturan altyazi parcalari, kendi zamanlariyla ve cumle
+     icindeki karakter araliklariyla. Arayuz "su an konusulan bolumu"
+     bunlarla vurguluyor (TED transkriptindeki gibi); cumlenin tamamini
+     boyamak nerede olundugunu soylemiyor. Elle yapistirilan transkriptte
+     cue yok, bu alan da olmuyor. */
+  parcalar?: { bas: number; son: number; basHarf: number; sonHarf: number }[];
 }
 
 function decodeEntities(text: string): string {
@@ -429,19 +435,27 @@ function buildSentencesFromCues(cues: Cue[]): BuiltSentence[] {
   let startSec: number | null = null;
   let endSec = 0;
   let previousCueEnd = 0;
+  /* Biriken parcalar. Karakter araliklari BUFFER uzerinden tutuluyor ve
+     buffer'a eklenen metin zaten sadelestirilmis oluyor; flush artik
+     yeniden sadelestirmiyor, yoksa araliklar kayardi. */
+  let parcalar: { bas: number; son: number; basHarf: number; sonHarf: number }[] = [];
 
   const flush = () => {
-    const text = buffer.replace(/\s+/g, ' ').trim();
+    const text = buffer.trim();
     if (text && startSec !== null) {
       sentences.push({
         id: sentences.length + 1,
         en: text,
         startSec: Number(startSec.toFixed(2)),
         endSec: Number(Math.max(endSec, startSec + 0.5).toFixed(2)),
+        /* Tek parcali cumlede vurgulanacak bir BOLUM yok; alan
+           yazilmiyor ki ders verisi gereksiz sismesin. */
+        parcalar: parcalar.length > 1 ? parcalar : undefined,
       });
     }
     buffer = '';
     startSec = null;
+    parcalar = [];
   };
 
   for (const cue of cues) {
@@ -460,7 +474,14 @@ function buildSentencesFromCues(cues: Cue[]): BuiltSentence[] {
     if (buffer.length > 60 && gap > 1.2) flush();
 
     if (startSec === null) startSec = cue.startSec;
+    const basHarf = buffer ? buffer.length + 1 : 0;
     buffer += (buffer ? ' ' : '') + text;
+    parcalar.push({
+      bas: Number(cue.startSec.toFixed(2)),
+      son: Number(cue.endSec.toFixed(2)),
+      basHarf,
+      sonHarf: buffer.length,
+    });
     endSec = cue.endSec;
     previousCueEnd = cue.endSec;
 

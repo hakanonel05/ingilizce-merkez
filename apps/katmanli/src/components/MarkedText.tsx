@@ -10,6 +10,14 @@ interface Props {
   unknown?: Set<string>;
   /** Alti cizilecek kalip bicimleri, kucuk harfle ("carried out"). */
   phrases?: Set<string>;
+  /**
+   * Su an KONUSULAN bolumun karakter araligi [bas, son).
+   *
+   * Cumlenin tamami degil yalnizca bu araligin zemini sariya donuyor —
+   * TED'in transkriptindeki gibi. Hangi araligin verilecegini
+   * lib/konusulanBolum.ts hesapliyor.
+   */
+  vurgu?: [number, number];
 }
 
 
@@ -31,11 +39,22 @@ const PHRASE_MARK: React.CSSProperties = {
   textUnderlineOffset: '3px',
 };
 
+/* KONUSULAN BOLUM. Kehribar zemin, metnin kendisine dokunulmadan:
+   altindaki zorluk/kalip cizgileri ve mor kart isaretleri gorunur
+   kalmali, vurgu onlarin yerine gecmemeli. */
+const VURGU_MARK: React.CSSProperties = {
+  backgroundColor: 'var(--marker-bg, #FFFBEB)',
+  boxShadow: '0 0 0 2px var(--marker-bg, #FFFBEB)',
+  borderRadius: '2px',
+};
+
 interface Segment {
   text: string;
   mark: 'none' | 'word' | 'phrase' | 'card';
   /** mark === 'card' iken kartin on yuzu (ipucu icin). */
   front?: string;
+  /** Su an konusulan bolumun icinde mi. */
+  vurgulu?: boolean;
 }
 
 /**
@@ -55,7 +74,7 @@ interface Segment {
  * Bosluk ve noktalama aynen korunur, dolayisiyla fareyle secim
  * (SelectionToCard) ve kopyalama bozulmaz.
  */
-export const MarkedText: React.FC<Props> = ({ text, unknown = NO_WORDS, phrases }) => {
+export const MarkedText: React.FC<Props> = ({ text, unknown = NO_WORDS, phrases, vurgu }) => {
   const cards = useCardMatcher();
   const segments = useMemo<Segment[] | null>(() => {
     const hasPhrases = !!phrases && phrases.size > 0;
@@ -118,21 +137,72 @@ export const MarkedText: React.FC<Props> = ({ text, unknown = NO_WORDS, phrases 
     return out;
   }, [text, unknown, phrases, cards]);
 
-  if (!segments) return <>{text}</>;
+  /* VURGU AYRI BIR GECIS.
+     Isaretleme (kart/kalip/kelime) ile vurgu farkli eksenler: ayni
+     kelime hem mor kart hem su an konusuluyor olabilir. Bu yuzden
+     segmentler once olagan haliyle uretiliyor, sonra vurgu araliginda
+     ikiye/uce boluniyor ve yalnizca vurgulu bayragi ekleniyor. */
+  const parcali = useMemo<Segment[] | null>(() => {
+    const taban: Segment[] = segments ?? [{ text, mark: 'none' }];
+    if (!vurgu) return segments;
+
+    const [a, b] = vurgu;
+    if (!(b > a)) return segments;
+
+    const out: Segment[] = [];
+    let ofset = 0;
+
+    for (const seg of taban) {
+      const bas = ofset;
+      const son = ofset + seg.text.length;
+      ofset = son;
+
+      const kesisimBas = Math.max(bas, a);
+      const kesisimSon = Math.min(son, b);
+
+      if (kesisimSon <= kesisimBas) {
+        out.push(seg);
+        continue;
+      }
+
+      const dilim = (d1: number, d2: number, vurgulu: boolean) => {
+        if (d2 <= d1) return;
+        out.push({ ...seg, text: seg.text.slice(d1 - bas, d2 - bas), vurgulu });
+      };
+
+      dilim(bas, kesisimBas, false);
+      dilim(kesisimBas, kesisimSon, true);
+      dilim(kesisimSon, son, false);
+    }
+
+    return out;
+  }, [segments, text, vurgu]);
+
+  if (!parcali) return <>{text}</>;
 
   return (
     <>
-      {segments.map((seg, i) =>
+      {parcali.map((seg, i) =>
         seg.mark === 'none' ? (
-          seg.text
+          seg.vurgulu ? (
+            <span key={i} style={VURGU_MARK}>{seg.text}</span>
+          ) : (
+            seg.text
+          )
         ) : seg.mark === 'card' ? (
           // Mor zemin, alti cizgili zorluk isaretlerinden ayri bir dil:
           // "zor olabilir" degil "bunu zaten karta ekledin".
           <span key={i} {...cardMarkProps(seg.front!)}>
-            {seg.text}
+            {seg.vurgulu ? <span style={VURGU_MARK}>{seg.text}</span> : seg.text}
           </span>
         ) : (
-          <span key={i} style={seg.mark === 'phrase' ? PHRASE_MARK : WORD_MARK}>
+          <span
+            key={i}
+            style={{
+              ...(seg.mark === 'phrase' ? PHRASE_MARK : WORD_MARK),
+              ...(seg.vurgulu ? VURGU_MARK : null),
+            }}
+          >
             {seg.text}
           </span>
         )

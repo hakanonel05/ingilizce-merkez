@@ -5,6 +5,7 @@ import { extractYouTubeId } from '../../lib/youtube';
 import { SelectionToCard } from '../vocab/SelectionToCard';
 import { LessonInsightPanel } from '../LessonInsightPanel';
 import { MarkedText } from '../MarkedText';
+import { aktifVurguAraligi } from '../../lib/konusulanBolum';
 import { useLessonInsight } from '../../lib/useLessonInsight';
 import { markWordKnown } from '../../lib/knownWords';
 import { CefrLevel } from '../../../../../shared/vocab/cefr';
@@ -720,6 +721,9 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
               ? `${wide ? 'max-h-[85vh]' : 'max-h-[75vh]'} overflow-y-auto` : ''}`}>
               {filteredSentences.map(({ pair }) => {
                 const isActive = activeSentenceId === pair.id;
+                /* Vurgu YALNIZCA aktif cumlede hesaplaniyor: digerleri icin
+                   bos is olurdu ve her karede her satiri yeniden bolerdi. */
+                const vurgu = isActive ? aktifVurguAraligi(pair, speechTime) : null;
                 const start = getStartSeconds(pair);
                 const timeTag = start !== null ? (pair.timestamp || formatSeconds(start)) : null;
 
@@ -729,7 +733,12 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                     ref={isActive ? activeSentenceRef : null}
                     className={`select-text border-l-4 p-4 transition-colors duration-200 sm:p-5 ${
                       isActive
-                        ? 'border-[var(--marker)] bg-[var(--marker-bg)]'
+                        /* Zemin BEYAZ DEGIL hafif gri: panelin kendisi beyaz
+                           (bg-paper-2), beyaz bir satir orada gorunmez olur.
+                           Kehribar da degil - konusulan bolum zaten kehribar
+                           ve iki sari ust uste binerse kelime vurgusu
+                           kayboluyor. */
+                        ? 'border-[var(--marker)] bg-paper'
                         : 'border-transparent'
                     }`}
                   >
@@ -765,7 +774,12 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                               satır zemini + sol kenarlık + küçük bir
                               "konuşuluyor" işareti kaldı. */}
                           <p className={`transcript-en ${isActive ? 'text-[var(--marker-ink)]' : 'text-ink'}`}>
-                            <MarkedText text={pair.en} unknown={unknownSet} phrases={phraseSet} />
+                            <MarkedText
+                              text={pair.en}
+                              unknown={unknownSet}
+                              phrases={phraseSet}
+                              vurgu={vurgu ?? undefined}
+                            />
                           </p>
                           {isActive && (
                             <span className="mt-1.5 inline-flex items-center gap-1.5 text-[11px] text-[var(--marker-ink)]">
