@@ -75,6 +75,15 @@ export interface VideoLesson {
   userSummary?: string;
   userComment?: string;
   completedLayers: number[]; // e.g. [1, 2, 3]
+  /**
+   * Bu dersin son degisme zamani. SENKRON ICIN SART: dersler artik tek
+   * bir blok olarak degil DERS DERS esitleniyor ve iki cihazdaki ayni
+   * dersten hangisinin yeni oldugunu bu alan soyluyor.
+   *
+   * Eski kayitlarda yok; yoksa 0 sayiliyor, yani damgasi olan her surum
+   * ondan yeni kabul ediliyor.
+   */
+  updatedAt?: number;
   /** true ise cümlelerde YouTube'dan gelen gerçek zaman bilgisi var. */
   hasRealTimings?: boolean;
 }

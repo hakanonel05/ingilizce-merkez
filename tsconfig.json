@@ -1,4 +1,12 @@
 {
+  /* DERLEME CIKTISI TARANMIYOR.
+
+     Burada exclude yoktu ve tsc varsayilan olarak proje kokundeki HER
+     seyi tariyordu - dist/ dahil. dist 123 MB'a cikinca "npm run lint"
+     JavaScript heap out of memory ile oluyor. Zaten anlamsiz bir is:
+     derleme ciktisi kaynak degil, bir daha tip denetiminden gecmesi
+     gerekmiyor. */
+  "exclude": ["dist", "node_modules"],
   "compilerOptions": {
     "target": "ES2022",
     "experimentalDecorators": true,

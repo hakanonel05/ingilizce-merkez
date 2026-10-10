@@ -1,4 +1,11 @@
 import { VocabCard, getAllCards, mergeRemoteCard, VOCAB_CHANGED_EVENT } from './vocabStore';
+import {
+  dersiKat,
+  dersiCikar,
+  eskiBloguKat,
+  type DersMezarlari,
+  type SenkronDersi,
+} from './dersBirlestirme';
 import { listAllRecordings, saveRecordingSilently, StoredRecording } from './recordingStore';
 import {
   ACTIVITY_CHANGED_EVENT,
@@ -127,8 +134,59 @@ async function api(path: string, body: any, timeoutMs = API_TIMEOUT_MS): Promise
 
 /* ---------------- Yerel veri toplama ---------------- */
 
+/* DERSLER BU LISTEDE DEGIL — bilerek cikarildi.
+
+   Buradaki her anahtar TEK BIR BLOK olarak esitleniyor ve catismada "son
+   yazan kazanir": uzaktaki deger yereldekinin TAMAMININ yerine geciyor.
+   Ayarlar ya da ilerleme icin bu dogru; DERS LISTESI icin yikici.
+
+   Gercekten yasandi: bir bilgisayarda eklenen ders, digerinde eklenen
+   dersle birlesmek yerine onu tamamen sildi. Iki cihazda calisan biri
+   icin bu veri kaybi demek ve kullanicinin calismasi gitti.
+
+   Dersler artik kartlar gibi TEK TEK esitleniyor (asagidaki
+   'lesson:<id>' dali): ayni dersin iki surumunden yeni olani kazaniyor,
+   FARKLI dersler birlesiyor. Silme ise ayri bir mezar tasi listesiyle
+   tasiniyor, yoksa bir cihazda silinen ders digerinden geri gelirdi. */
+const DERSLER_ANAHTARI = 'layered_learning_lessons_v2';
+/** Silinen ders kimlikleri: { id: silinmeZamani }. */
+const DERS_MEZARLARI_ANAHTARI = 'layered_learning_lessons_deleted_v1';
+
+function dersleriOku(): SenkronDersi[] {
+  const ham = readLocalJson(DERSLER_ANAHTARI);
+  return Array.isArray(ham) ? ham : [];
+}
+
+function mezarlariOku(): DersMezarlari {
+  const ham = readLocalJson(DERS_MEZARLARI_ANAHTARI);
+  return ham && typeof ham === 'object' ? ham : {};
+}
+
+/* Asagidaki ucu de KURALI DEGIL, DEPOYU biliyor: birlestirme mantigi
+   dersBirlestirme.ts'te ve orada sinaniyor. Buradaki is yalnizca
+   localStorage'dan okuyup sonucu geri yazmak. */
+
+function uzakDersiKat(uzak: SenkronDersi): boolean {
+  const sonuc = dersiKat(dersleriOku(), uzak, mezarlariOku());
+  if (sonuc.degisti) writeLocalJson(DERSLER_ANAHTARI, sonuc.dersler);
+  return sonuc.degisti;
+}
+
+function uzakDersiSil(id: string): boolean {
+  const sonuc = dersiCikar(dersleriOku(), id);
+  if (sonuc.degisti) writeLocalJson(DERSLER_ANAHTARI, sonuc.dersler);
+  return sonuc.degisti;
+}
+
+function eskiBlogaBak(blok: unknown, damga: number): number {
+  const once = dersleriOku();
+  const sonuc = eskiBloguKat(once, blok, damga, mezarlariOku());
+  if (!sonuc.degisti) return 0;
+  writeLocalJson(DERSLER_ANAHTARI, sonuc.dersler);
+  return sonuc.dersler.length - once.length || 1;
+}
+
 const LOCAL_KEYS = [
-  { storageKey: 'layered_learning_lessons_v2', syncKey: 'lessons' },
   { storageKey: 'layered_learning_progress_v1', syncKey: 'progress' },
   { storageKey: 'layered_learning_vocab_settings_v1', syncKey: 'vocabSettings' },
   { storageKey: 'layered_learning_speaking_reps_v1', syncKey: 'speakingReps' },
@@ -223,6 +281,30 @@ export async function runSync(
       continue;
     }
 
+    if (key.startsWith('lesson:')) {
+      const id = key.slice('lesson:'.length);
+      if (deleted) {
+        if (uzakDersiSil(id)) pulled++;
+      } else if (uzakDersiKat(value as SenkronDersi)) {
+        pulled++;
+      }
+      continue;
+    }
+
+    /* ESKI BLOK KAYDI — gecis donemi.
+
+       Bu surumden once dersler 'lessons' anahtari altinda tek blok
+       gonderiliyordu ve bulutta oyle duran kayitlar var. Blogu OKUMAYA
+       devam ediyoruz ki o dersler kaybolmasin, ama artik yerelin uzerine
+       YAZMIYORUZ: iceriginden her ders tek tek katiliyor. Yani eski
+       surumu calistiran bir cihaz hala blok gonderse bile buradaki
+       dersler silemiyor, yalnizca ekleyebiliyor. */
+    if (key === 'lessons') {
+      if (deleted) continue;
+      pulled += eskiBlogaBak((value as any)?.data ?? value, (value as any)?.updatedAt || 0);
+      continue;
+    }
+
     if (key.startsWith('recmeta:')) {
       // Ses kaydının kendisi ayrı indirilecek; burada sadece varlığı biliniyor
       continue;
@@ -286,6 +368,19 @@ export async function runSync(
   // (yilda ~365). Kartlarla ayni yoldan gider, ayri bir uc gerekmez.
   for (const row of await getAllDayStats()) {
     items.push({ key: `stat:${row.id}`, value: row });
+  }
+
+  /* DERSLER TEK TEK GIDIYOR. Her birinin kendi damgasi var, yani uzakta
+     yalnizca o ders guncelleniyor; listenin tamami degil. */
+  for (const ders of dersleriOku()) {
+    if (!ders?.id) continue;
+    items.push({ key: `lesson:${ders.id}`, value: ders });
+  }
+
+  /* MEZAR TASLARI. Silinen ders icin 'deleted' kaydi gonderilmezse, ders
+     diger cihazdan geri gelir - silme islemi hicbir zaman yayilmaz. */
+  for (const [id, zaman] of Object.entries(mezarlariOku())) {
+    items.push({ key: `lesson:${id}`, value: { id, updatedAt: zaman }, deleted: true });
   }
 
   for (const { storageKey, syncKey } of LOCAL_KEYS) {

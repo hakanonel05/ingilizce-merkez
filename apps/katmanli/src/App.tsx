@@ -89,6 +89,88 @@ function usePersistedSync<T>(storageKey: string, value: T): void {
   }, [storageKey, value]);
 }
 
+/** Silinen ders kimlikleri: { id: silinmeZamani }. Senkron bunu okuyor. */
+const LESSONS_DELETED_KEY = 'layered_learning_lessons_deleted_v1';
+
+/**
+ * DERSLERI KAYDET — ders basina zaman damgasiyla.
+ *
+ * NEDEN usePersistedSync DEGIL: o, listenin TAMAMINA tek bir damga
+ * vuruyor ve senkron da listeyi tek blok olarak tasiyordu. Sonucu su
+ * oldu: bir bilgisayarda eklenen ders, digerinde eklenen dersle
+ * birlesmek yerine onu tamamen sildi. Gercekten yasandi ve calisma
+ * kaybedildi.
+ *
+ * Artik her ders KENDI damgasini tasiyor (VideoLesson.updatedAt) ve
+ * senkron dersleri tek tek tasiyor; farkli dersler birlesiyor, ayni
+ * dersin iki surumunden yeni olani kazaniyor.
+ *
+ * DAMGA REACT DURUMUNA YAZILMIYOR, yalnizca localStorage kopyasina.
+ * Duruma yazmak her kaydetmede yeni bir nesne uretip effect'i yeniden
+ * tetikler ve sonsuz donguye girerdi. Arayuz updatedAt'i kullanmiyor,
+ * yani ayrisma zararsiz.
+ */
+function useDersleriKaydet(lessons: VideoLesson[]): void {
+  const isFirstRun = useRef(true);
+
+  useEffect(() => {
+    let onceki: VideoLesson[] = [];
+    try {
+      const ham = localStorage.getItem(LESSONS_STORAGE_KEY);
+      if (ham) onceki = JSON.parse(ham) || [];
+    } catch {
+      /* okunamadiysa hepsi yeni sayilir */
+    }
+    const oncekiHaritasi = new Map(
+      (Array.isArray(onceki) ? onceki : []).map((d) => [d.id, d])
+    );
+
+    const simdi = Date.now();
+    let degisenVar = false;
+
+    /* Karsilastirma updatedAt HARIC yapiliyor: damganin kendisi farki
+       olusturursa her kaydetme "degismis" sayilir ve ders durmadan
+       yeniden damgalanir. */
+    const damgasiz = (d: VideoLesson) => {
+      const { updatedAt, ...kalan } = d;
+      return JSON.stringify(kalan);
+    };
+
+    const damgali = lessons.map((ders) => {
+      const eski = oncekiHaritasi.get(ders.id);
+      if (eski && damgasiz(eski) === damgasiz(ders)) {
+        return { ...ders, updatedAt: eski.updatedAt };
+      }
+      degisenVar = true;
+      return { ...ders, updatedAt: simdi };
+    });
+
+    if (!degisenVar && damgali.length === oncekiHaritasi.size) {
+      /* Icerik ayni: yazmaya da damgalamaya da gerek yok. Senkron cektigi
+         veriyi dogrudan localStorage'a yaziyor; bu kontrol olmasa her
+         cekme islemi gereksiz bir gonderme daha dogururdu. */
+      return;
+    }
+
+    try {
+      localStorage.setItem(LESSONS_STORAGE_KEY, JSON.stringify(damgali));
+    } catch (e) {
+      console.error('Dersler kaydedilemedi:', e);
+      return;
+    }
+
+    /* ILK calistirma atlanir: o, sayfanin acilisidir. Orada damga vurmak
+       hicbir sey degistirmemis bir cihazi "en son yazan" yapardi. */
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    }
+
+    stampLocalChange(LESSONS_STORAGE_KEY);
+    scheduleAutoSync();
+  }, [lessons]);
+}
+
 /** Bugunun tarihi, YYYY-MM-DD (yerel saat). */
 function todayKey(date = new Date()): string {
   const y = date.getFullYear();
@@ -168,8 +250,8 @@ export default function App() {
   /** Hedef ve seri duzenleyicisi ust cubuktan aciliyor. */
   const [isGoalEditorOpen, setIsGoalEditorOpen] = useState<boolean>(false);
 
-  // Dersleri sakla ve degistiyse Supabase'e gonder
-  usePersistedSync(LESSONS_STORAGE_KEY, lessons);
+  // Dersler ayri yoldan kaydediliyor; gerekcesi useDersleriKaydet'te.
+  useDersleriKaydet(lessons);
 
   const [progress, setProgress] = useState<UserProgress>(() => {
     try {
@@ -235,6 +317,19 @@ export default function App() {
   // Delete Lesson handler
   const handleDeleteLesson = (lessonId: string) => {
     const updated = lessons.filter((l) => l.id !== lessonId);
+
+    /* MEZAR TASI. Silinen dersi yalnizca listeden cikarmak yetmiyor:
+       diger cihaz o dersi hala biliyor ve ilk senkronda geri gonderiyor.
+       Silme ancak "bu ders su anda silindi" kaydiyla yayiliyor. */
+    try {
+      const ham = localStorage.getItem(LESSONS_DELETED_KEY);
+      const mezarlar = ham ? JSON.parse(ham) || {} : {};
+      mezarlar[lessonId] = Date.now();
+      localStorage.setItem(LESSONS_DELETED_KEY, JSON.stringify(mezarlar));
+    } catch (e) {
+      console.error('Silme kaydi yazilamadi:', e);
+    }
+
     setLessons(updated);
     if (updated.length > 0) {
       if (activeLessonId === lessonId) {
