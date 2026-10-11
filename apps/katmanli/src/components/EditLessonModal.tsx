@@ -137,7 +137,18 @@ export const EditLessonModal: React.FC<EditLessonModalProps> = ({
 
       if (data.sentences && data.sentences.length > 0) {
         setSentences(data.sentences);
-        setAiSuccessMsg(`Başarılı! Gemini AI ${data.sentences.length} cümleyi yeniden çevirdi ve senkronize etti.`);
+        /* TED LINKI YOUTUBE ADRESINE CEVRILIR. Kaydederken kimlik bu
+           alandan cikariliyor ve ted.com adresinde YouTube kimligi
+           gecmiyor; sunucunun cozdugu adresi yazmazsak kaydetme
+           aninda video sessizce kaybolurdu. */
+        if (data.youtubeUrl && !extractYouTubeId(youtubeUrl)) {
+          setYoutubeUrl(data.youtubeUrl);
+        }
+        setAiSuccessMsg(
+          data.kaynak === 'ted'
+            ? `Başarılı! TED konuşmasından ${data.sentences.length} cümle alındı ve çevrildi.`
+            : `Başarılı! Gemini AI ${data.sentences.length} cümleyi yeniden çevirdi ve senkronize etti.`
+        );
         setActiveTab('sentences');
       } else {
         throw new Error('Yapay zeka transkript cümlelerini ayrıştıramadı.');

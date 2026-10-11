@@ -32,6 +32,7 @@ import { GrammarCoachDrawer } from './components/GrammarCoachDrawer';
 import { EditLessonModal } from './components/EditLessonModal';
 import { SettingsModal } from './components/SettingsModal';
 import { extractYouTubeId } from './lib/youtube';
+import { tedLinkiMi } from './lib/ted';
 import { apiFetch } from './lib/userKeys';
 import { stampLocalChange, scheduleAutoSync, syncOnStartup, onSynced } from './lib/syncClient';
 import { PlayCircle } from 'lucide-react';
@@ -565,6 +566,12 @@ async function buildLessonData(
     title: sentData.title,
     sentences: finalSentences,
     hasRealTimings: !!sentData.hasRealTimings,
+    /* TED linkinde video kimligini SUNUCU cozuyor: ted.com adresinde
+       YouTube kimligi gecmiyor, sayfanin icindeki veriden cikiyor. */
+    youtubeId: sentData.youtubeId || '',
+    youtubeUrl: sentData.youtubeUrl || '',
+    kaynak: sentData.kaynak || '',
+    syncNotice: sentData.syncNotice || '',
     vocabulary: material.vocabulary || [],
     grammarRules: material.grammarRules || [],
     quizQuestions: material.quizQuestions || [],
@@ -579,15 +586,22 @@ async function buildLessonData(
   ) => {
     const data = await buildLessonData(input, youtubeUrlInput, onProgress);
 
-    const activeYtUrl = (youtubeUrlInput && youtubeUrlInput.trim()) ? youtubeUrlInput.trim() : input;
-    const ytId = extractYouTubeId(activeYtUrl);
+    /* KIMLIGI ONCE SUNUCUDAN AL. Istemci yalnizca YouTube adresini
+       cozebiliyor; TED linkinde kimlik sayfanin icindeki veriden
+       cikiyor ve onu sunucu cozuyor. Sunucu bos donerse (elle
+       yapistirilan metin) eski yol gecerli kaliyor. */
+    const girilenUrl = (youtubeUrlInput && youtubeUrlInput.trim()) ? youtubeUrlInput.trim() : input;
+    const ytId = data.youtubeId || extractYouTubeId(girilenUrl);
+    const activeYtUrl = data.youtubeUrl || girilenUrl;
 
     const newLesson: VideoLesson = {
       id: `custom-${Date.now()}`,
       title: data.title || 'Yeni İçe Aktarılan Video',
       youtubeUrl: activeYtUrl,
       youtubeId: ytId,
-      description: 'YouTube altyazısından otomatik oluşturulan çift dilli transkript.',
+      description: data.kaynak === 'ted'
+        ? 'TED konuşmasından otomatik oluşturulan çift dilli transkript.'
+        : 'YouTube altyazısından otomatik oluşturulan çift dilli transkript.',
       level: 'B2',
       durationMinutes: 8,
       completedLayers: [],
@@ -699,8 +713,8 @@ async function buildLessonData(
     if (!target) throw new Error('Ders bulunamadı.');
 
     const url = target.youtubeUrl || target.youtubeId || '';
-    if (!extractYouTubeId(url)) {
-      throw new Error('Bu derste geçerli bir YouTube linki yok. Önce "URL Değiştir" ile link ekleyin.');
+    if (!extractYouTubeId(url) && !tedLinkiMi(url)) {
+      throw new Error('Bu derste geçerli bir YouTube ya da TED linki yok. Önce "URL Değiştir" ile link ekleyin.');
     }
 
     const data = await buildLessonData(url, undefined, onProgress);
@@ -717,6 +731,10 @@ async function buildLessonData(
           title: data.title || l.title,
           sentences: data.sentences || l.sentences,
           hasRealTimings: true,
+          /* TED adresli derste kimlik ancak sunucu cozdukten sonra
+             biliniyor; yazilmazsa oynatici bos kalirdi. */
+          youtubeId: data.youtubeId || l.youtubeId,
+          youtubeUrl: data.youtubeUrl || l.youtubeUrl,
           vocabulary: data.vocabulary?.length ? data.vocabulary : l.vocabulary,
           grammarRules: data.grammarRules?.length ? data.grammarRules : l.grammarRules,
           quizQuestions: data.quizQuestions?.length ? data.quizQuestions : l.quizQuestions,
@@ -726,8 +744,24 @@ async function buildLessonData(
   };
 
   // Update Lesson YouTube Video URL
-  const handleUpdateLessonVideoUrl = (youtubeUrl: string) => {
-    const ytId = extractYouTubeId(youtubeUrl);
+  const handleUpdateLessonVideoUrl = async (girilenUrl: string) => {
+    /* TED adresinde kimlik sayfanin ICINDE; istemci cikaramaz, sunucu
+       cozuyor. YouTube adresinde ag istegi yapilmiyor. */
+    let youtubeUrl = girilenUrl;
+    let ytId = extractYouTubeId(girilenUrl);
+
+    if (!ytId && tedLinkiMi(girilenUrl)) {
+      const res = await apiFetch('/api/video-coz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: girilenUrl }),
+      });
+      const data = await readJsonResponse(res, 'TED adresi cozulemedi.');
+      if (!res.ok) throw new Error(data.error || 'TED adresi çözülemedi.');
+      ytId = data.youtubeId || '';
+      youtubeUrl = data.youtubeUrl || girilenUrl;
+    }
+
     setLessons((prev) =>
       prev.map((l) => {
         if (l.id === activeLesson.id) {
@@ -940,8 +974,9 @@ async function buildLessonData(
                 Bir ders seç ya da ekle
               </h3>
               <p className="text-sm leading-relaxed text-ink-3">
-                Bir YouTube linki ver; altyazı çekilip cümlelere bölünür ve yedi
-                katmanlı çalışma başlar. Dilersen örnek derslerle de deneyebilirsin.
+                Bir YouTube ya da TED linki ver; altyazı çekilip cümlelere bölünür
+                ve yedi katmanlı çalışma başlar. Dilersen örnek derslerle de
+                deneyebilirsin.
               </p>
               <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
                 <button

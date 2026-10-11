@@ -224,22 +224,24 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
       {showImportForm && (
         <form onSubmit={handleImport} className="rounded-2xl bg-paper-3 p-4">
           <div className="mb-3 flex flex-wrap items-center gap-1">
-            {modeTab('youtube', 'YouTube linki', <Youtube className="h-3.5 w-3.5" />)}
+            {modeTab('youtube', 'Video linki', <Youtube className="h-3.5 w-3.5" />)}
             {modeTab('text', 'Metin yapıştır', <FileText className="h-3.5 w-3.5" />)}
           </div>
 
           {inputMode === 'youtube' ? (
             <div className="space-y-3">
               <p className="max-w-[62ch] text-[12px] leading-relaxed text-ink-2">
-                Videonun İngilizce altyazısı (CC) çekilir, cümlelere bölünür ve
-                Gemini ile çevrilerek katmanlı çalışma biçimine getirilir.
+                YouTube ya da TED linki yapıştırın. İngilizce altyazı (CC)
+                çekilir, cümlelere bölünür ve Gemini ile çevrilerek katmanlı
+                çalışma biçimine getirilir. TED linkinde konuşmanın YouTube
+                sürümü otomatik bulunur.
               </p>
               <div className="flex flex-col gap-2 sm:flex-row">
                 <input
                   type="text"
                   value={youtubeInput}
                   onChange={(e) => setYoutubeInput(e.target.value)}
-                  placeholder="https://www.youtube.com/watch?v=…"
+                  placeholder="youtube.com/watch?v=… veya ted.com/talks/…"
                   className={`${inputClass} min-w-0 flex-1`}
                   disabled={isLoading}
                 />

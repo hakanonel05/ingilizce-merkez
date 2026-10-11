@@ -9,7 +9,7 @@ import { aktifVurguAraligi } from '../../lib/konusulanBolum';
 import { useLessonInsight } from '../../lib/useLessonInsight';
 import { markWordKnown } from '../../lib/knownWords';
 import { CefrLevel } from '../../../../../shared/vocab/cefr';
-import { Volume2, Bookmark, Search, Eye, EyeOff, Youtube, Edit2, Check, X, LayoutGrid, List, Play, Sliders, AlertTriangle, RefreshCw, Pause } from 'lucide-react';
+import { Volume2, Bookmark, Search, Eye, EyeOff, Youtube, Edit2, Check, X, LayoutGrid, List, Play, Sliders, AlertTriangle, RefreshCw, Pause, Loader2 } from 'lucide-react';
 
 declare global {
   interface Window {
@@ -23,7 +23,9 @@ interface Layer1BilingualReadingProps {
   onBookmarkWord: (word: string, enContext: string, trContext: string) => void;
   bookmarkedWords: { word: string }[];
   onCompleteLayer: () => void;
-  onUpdateVideoUrl?: (youtubeUrl: string) => void;
+  /* TED adresi sunucuda cozuldugu icin ARTIK ESZAMANSIZ: bu yuzden
+     Promise donuyor ve asagisi bekleme/hata durumunu gosteriyor. */
+  onUpdateVideoUrl?: (videoUrl: string) => void | Promise<void>;
   /** Dersi videonun gerçek YouTube altyazısından yeniden üretir. */
   onResyncFromCaptions?: (onProgress?: (message: string) => void) => Promise<void>;
   /** Anlama oranı bu seviyeye göre hesaplanır. */
@@ -102,6 +104,8 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
 
   const [showVideoUrlInput, setShowVideoUrlInput] = useState(false);
   const [newVideoUrl, setNewVideoUrl] = useState('');
+  const [videoUrlCozuluyor, setVideoUrlCozuluyor] = useState(false);
+  const [videoUrlHatasi, setVideoUrlHatasi] = useState('');
 
   // Gerçek altyazıdan yeniden üretme durumu
   const [isResyncing, setIsResyncing] = useState(false);
@@ -145,12 +149,23 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
     }
   };
 
-  const handleSaveVideoUrl = (e: React.FormEvent) => {
+  const handleSaveVideoUrl = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (onUpdateVideoUrl && newVideoUrl.trim()) {
-      onUpdateVideoUrl(newVideoUrl.trim());
+    if (!onUpdateVideoUrl || !newVideoUrl.trim()) return;
+
+    /* TED adresinde sunucuya gidiliyor; YouTube adresinde bu aninda
+       biter. Hata yutulmamali: eskiden islem sessizce basarisiz
+       olabilirdi ve kullanici videonun neden gelmedigini goremezdi. */
+    setVideoUrlHatasi('');
+    setVideoUrlCozuluyor(true);
+    try {
+      await onUpdateVideoUrl(newVideoUrl.trim());
       setShowVideoUrlInput(false);
       setNewVideoUrl('');
+    } catch (err: any) {
+      setVideoUrlHatasi(err?.message || 'Video adresi çözülemedi.');
+    } finally {
+      setVideoUrlCozuluyor(false);
     }
   };
 
@@ -638,11 +653,18 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                           type="text"
                           value={newVideoUrl}
                           onChange={(e) => setNewVideoUrl(e.target.value)}
-                          placeholder="YouTube URL..."
-                          className="px-2 py-1 text-xs bg-paper-2 border border-hairline-2 rounded focus:outline-none w-36"
+                          placeholder="YouTube veya TED linki..."
+                          disabled={videoUrlCozuluyor}
+                          className="px-2 py-1 text-xs bg-paper-2 border border-hairline-2 rounded focus:outline-none w-44 disabled:opacity-60"
                         />
-                        <button type="submit" className="rounded-lg bg-accent px-2 py-1 text-white transition-colors hover:bg-accent-700 cursor-pointer">
-                          <Check className="w-3 h-3" />
+                        <button
+                          type="submit"
+                          disabled={videoUrlCozuluyor}
+                          className="rounded-lg bg-accent px-2 py-1 text-white transition-colors hover:bg-accent-700 disabled:opacity-50 cursor-pointer"
+                        >
+                          {videoUrlCozuluyor
+                            ? <Loader2 className="w-3 h-3 animate-spin" />
+                            : <Check className="w-3 h-3" />}
                         </button>
                         <button
                           type="button"
@@ -652,6 +674,11 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                           <X className="w-3 h-3" />
                         </button>
                       </form>
+                    )}
+                    {videoUrlHatasi && showVideoUrlInput && (
+                      <p className="mt-1 max-w-[22ch] text-[11px] leading-snug text-[var(--danger)]">
+                        {videoUrlHatasi}
+                      </p>
                     )}
                   </div>
                 )}
@@ -664,26 +691,35 @@ export const Layer1BilingualReading: React.FC<Layer1BilingualReadingProps> = ({
                 <span>Video ekle</span>
               </div>
               <p className="max-w-[52ch] text-[12px] leading-relaxed text-ink-2">
-                Cümleleri videoyla senkron takip edebilmek için YouTube linkini yapıştır.
+                Cümleleri videoyla senkron takip edebilmek için YouTube ya da TED
+                linkini yapıştır. TED linkinde konuşmanın YouTube sürümü otomatik
+                bulunur.
               </p>
               <form onSubmit={handleSaveVideoUrl} className="flex gap-2 pt-1">
                 <input
                   type="text"
                   value={newVideoUrl}
                   onChange={(e) => setNewVideoUrl(e.target.value)}
-                  placeholder="https://www.youtube.com/watch?v=..."
+                  placeholder="youtube.com/watch?v=… veya ted.com/talks/…"
+                  disabled={videoUrlCozuluyor}
                   className="flex-1 rounded-xl border border-hairline bg-paper-2 px-3 py-2 text-[13px]
-                    text-ink placeholder-ink-3 transition-colors focus:border-accent focus:outline-none"
+                    text-ink placeholder-ink-3 transition-colors focus:border-accent focus:outline-none
+                    disabled:opacity-60"
                 />
                 <button
                   type="submit"
-                  disabled={!newVideoUrl.trim()}
-                  className="rounded-xl bg-accent px-4 py-2 text-[13px] font-medium text-white
-                    transition-colors hover:bg-accent-700 disabled:opacity-40 cursor-pointer"
+                  disabled={!newVideoUrl.trim() || videoUrlCozuluyor}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-[13px]
+                    font-medium text-white transition-colors hover:bg-accent-700 disabled:opacity-40
+                    cursor-pointer"
                 >
-                  Göm
+                  {videoUrlCozuluyor && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+                  {videoUrlCozuluyor ? 'Çözülüyor…' : 'Göm'}
                 </button>
               </form>
+              {videoUrlHatasi && (
+                <p className="text-[12px] leading-relaxed text-[var(--danger)]">{videoUrlHatasi}</p>
+              )}
             </div>
           )}
         </div>

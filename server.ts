@@ -423,6 +423,160 @@ async function fetchYoutubeCues(videoId: string): Promise<Cue[]> {
   }
 }
 
+/* ============================================================
+   TED LINKLERI
+   ------------------------------------------------------------
+   Kullanici ted.com linkini de yapistirabiliyor; YouTube linkiyle
+   AYNI dersi uretiyor (solda video, sagda transkript).
+
+   NICIN SAYFAYI OKUYORUZ: ted.com bugun bir Next.js uygulamasi ve
+   sayfanin icinde __NEXT_DATA__ adli bir JSON var. Bu JSON tek
+   istekte hem konusmanin YOUTUBE AYNASINI hem de TED'in kendi
+   zaman damgali transkriptini veriyor. Ayri bir API anahtari,
+   kazima kutuphanesi ya da ek servis gerekmiyor.
+
+   HAZIR REPOLAR NEDEN KULLANILMADI: ad-freiburg/TEDExtract ve
+   corralm/ted-scraper'in ikisi de Python, ikisi de TED'in eski
+   HTML'ini kaziyor ve ikisi de transkripti TEK PARCA DUZ METIN
+   olarak veriyor. Bu uygulamanin tum degeri zaman damgasinda -
+   damgasiz transkript, senkronu ve "su an konusulan bolum"
+   vurgusunu olduruyor.
+
+   ZAMAN TABANI TUZAGI (olculdu): TED'in cue zamanlari konusmanin
+   kendi basindan sayiliyor, YouTube surumunde ise basta TED jeneri
+   var. Tim Urban konusmasinda ayni cumle TED'de 0.6. saniyede,
+   YouTube'da 12. saniyede basliyor. Fark sabit degil ve TED'in
+   verdigi surelerden hesaplanamiyor. Bu yuzden AYNA VARSA ZAMANLAR
+   DAIMA YOUTUBE ALTYAZISINDAN alinir; TED cue'lari yalnizca metin
+   kaynagi olarak, zamanlari silinerek kullanilir.
+
+   Ayni konusma icin sayfayi iki kez cekmemek icin kisa sureli
+   bellek onbellegi var (cumleler ve duzenleme ucu ayri istekler).
+   ============================================================ */
+
+interface TedKonusma {
+  slug: string;
+  baslik: string;
+  konusmaci: string;
+  /** TED'in YouTube aynasinin video kimligi; yoksa bos. */
+  youtubeId: string;
+  /** TED'in kendi transkripti. ZAMANLARI YOUTUBE ILE UYUMLU DEGIL. */
+  cues: Cue[];
+  sayfaUrl: string;
+}
+
+const TED_ONBELLEK = new Map<string, { deger: TedKonusma; zaman: number }>();
+const TED_ONBELLEK_SURESI = 10 * 60 * 1000;
+
+/**
+ * Girdideki TED konusma adresini bulur ve slug'ini dondurur.
+ *
+ * Kabul edilen bicimler (hepsi sinandi):
+ *   ted.com/talks/<slug>
+ *   ted.com/talks/<slug>/transcript
+ *   ted.com/talks/<slug>?language=tr
+ *   embed.ted.com/talks/<slug>
+ * Metnin herhangi bir yerinde gecebilir - kullanici linki transkriptle
+ * birlikte yapistirmis olabilir.
+ */
+function tedSlugCikar(urlOrText: string): string {
+  if (!urlOrText) return '';
+  /* Alan adi TAM OLARAK ted.com olmali: onundeki sinir kosulu olmadan
+     "notted.com/talks/x" gibi adresler de eslesirdi. Alt alan adina
+     (www., embed.) izin var. */
+  const m = urlOrText.match(
+    /(?:^|[^A-Za-z0-9.-])(?:[A-Za-z0-9-]+\.)*ted\.com\/talks\/([a-z0-9_]+)/i
+  );
+  return m && m[1] ? m[1].toLowerCase() : '';
+}
+
+/** TED sayfasindaki __NEXT_DATA__ JSON'unu cikarir. */
+function tedSayfaVerisi(html: string): any {
+  const m = html.match(
+    /<script id="__NEXT_DATA__" type="application\/json">([\s\S]*?)<\/script>/
+  );
+  if (!m) throw new Error('TED sayfasinin veri blogu (__NEXT_DATA__) bulunamadi.');
+  return JSON.parse(m[1]);
+}
+
+/**
+ * TED cue'larini Cue[] bicimine cevirir.
+ * TED yalnizca BASLANGIC zamani veriyor (milisaniye); bitis, bir sonraki
+ * cue'nun baslangicidir. Son cue icin makul bir sure eklenir.
+ */
+function tedCuelariCevir(paragraflar: any[]): Cue[] {
+  const ham: { text: string; bas: number }[] = [];
+  for (const p of paragraflar || []) {
+    for (const c of p?.cues || []) {
+      const metin = String(c?.text || '').replace(/\s+/g, ' ').trim();
+      const ms = Number(c?.time);
+      if (!metin || !Number.isFinite(ms)) continue;
+      ham.push({ text: decodeEntities(metin), bas: ms / 1000 });
+    }
+  }
+  return ham.map((c, i) => ({
+    text: c.text,
+    startSec: c.bas,
+    endSec: i + 1 < ham.length ? ham[i + 1].bas : c.bas + 4,
+  }));
+}
+
+/** TED konusma sayfasini cekip ayristirir. */
+async function tedKonusmayiCoz(slug: string): Promise<TedKonusma> {
+  const onbellek = TED_ONBELLEK.get(slug);
+  if (onbellek && Date.now() - onbellek.zaman < TED_ONBELLEK_SURESI) {
+    return onbellek.deger;
+  }
+
+  const sayfaUrl = `https://www.ted.com/talks/${slug}`;
+  const kontrol = new AbortController();
+  const zamanlayici = setTimeout(() => kontrol.abort(), 15000);
+
+  let html: string;
+  try {
+    /* BASLIK GONDERMIYORUZ, ozellikle User-Agent. Ters gibi gorunuyor
+       ama olculdu: tarayici User-Agent'i eklenince TED 403 donuyor,
+       hicbir baslik gonderilmeyince 200. Anlasilan tarayici oldugunu
+       soyleyip tarayici gibi davranmayan istekler eleniyor; Node'un
+       kendi kimligi gecebiliyor. Uc konusma x iki istek: hepsi 200. */
+    const r = await fetch(sayfaUrl, { signal: kontrol.signal });
+    if (!r.ok) {
+      throw new Error(
+        r.status === 404
+          ? `TED'de boyle bir konusma bulunamadi (${slug}).`
+          : `TED sayfasi alinamadi (HTTP ${r.status}).`
+      );
+    }
+    html = await r.text();
+  } catch (e: any) {
+    if (e?.name === 'AbortError') throw new Error('TED sayfasi zaman asimina ugradi.');
+    throw e;
+  } finally {
+    clearTimeout(zamanlayici);
+  }
+
+  const pp = tedSayfaVerisi(html)?.props?.pageProps || {};
+  const video = pp.videoData || {};
+  const dis = video?.videoPlayerData?.external || {};
+  const ceviri = pp?.transcriptData?.translation || {};
+
+  const sonuc: TedKonusma = {
+    slug,
+    baslik: String(video.title || '').trim(),
+    konusmaci: String(video.presenterDisplayName || '').trim(),
+    /* external yalnizca YouTube aynasi varken dolu; Vimeo vb. de olabilir. */
+    youtubeId:
+      String(dis.service || '').toLowerCase() === 'youtube'
+        ? extractYouTubeId(String(dis.code || ''))
+        : '',
+    cues: tedCuelariCevir(ceviri.paragraphs || []),
+    sayfaUrl: String(video.canonicalUrl || sayfaUrl),
+  };
+
+  TED_ONBELLEK.set(slug, { deger: sonuc, zaman: Date.now() });
+  return sonuc;
+}
+
 /**
  * Ham cue'lari anlamli cumlelere birlestirir.
  * ZAMAN DAMGASI YAPAY ZEKAYA HESAPLATILMAZ; her cumlenin baslangici,
@@ -1469,7 +1623,21 @@ app.post("/api/extract-transcript", async (req, res) => {
     const inputTrimmed = videoInput.trim();
     const ytIdFromInput = extractYouTubeId(inputTrimmed);
     const ytIdFromUrlField = youtubeUrl ? extractYouTubeId(youtubeUrl.trim()) : '';
-    const activeYtId = ytIdFromInput || ytIdFromUrlField;
+
+    /* TED LINKI -> YouTube aynasi. Ayrinti icin tedKonusmayiCoz. */
+    const tedSlug = ytIdFromInput || ytIdFromUrlField
+      ? ''
+      : (tedSlugCikar(inputTrimmed) || tedSlugCikar(String(youtubeUrl || '')));
+    let ted: TedKonusma | null = null;
+    if (tedSlug) {
+      try {
+        ted = await tedKonusmayiCoz(tedSlug);
+      } catch (e: any) {
+        console.warn('[TED] Cozumlenemedi:', e?.message || e);
+      }
+    }
+
+    const activeYtId = ytIdFromInput || ytIdFromUrlField || (ted?.youtubeId || '');
 
     let fetchedTitle = "";
     let sentences: BuiltSentence[] = [];
@@ -1477,7 +1645,11 @@ app.post("/api/extract-transcript", async (req, res) => {
     let syncNotice = "";
     let captionError = "";
 
-    if (activeYtId) {
+    if (ted?.baslik) {
+      fetchedTitle = ted.konusmaci ? `${ted.baslik} — ${ted.konusmaci}` : ted.baslik;
+    }
+
+    if (activeYtId && !fetchedTitle) {
       try {
         const oembedRes = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${activeYtId}&format=json`);
         if (oembedRes.ok) {
@@ -1493,7 +1665,8 @@ app.post("/api/extract-transcript", async (req, res) => {
     // (bir-iki kelime) metin yok demektir; aksi halde kullanicinin
     // yapistirdigi transkript vardir. Not: eskiden girdide herhangi bir yerde
     // YouTube linki gecmesi metnin tamamen atilmasina yol aciyordu.
-    const inputIsOnlyLink = !!ytIdFromInput && inputTrimmed.split(/\s+/).length <= 2;
+    const inputIsOnlyLink =
+      (!!ytIdFromInput || !!tedSlug) && inputTrimmed.split(/\s+/).length <= 2;
     const manualText = inputIsOnlyLink ? '' : inputTrimmed;
 
     // Yapistirilan metin kendi zaman damgalarini tasiyor mu?
@@ -1534,9 +1707,18 @@ app.post("/api/extract-transcript", async (req, res) => {
     } else if (cues.length > 0) {
       sentences = buildSentencesFromCues(cues);
       hasRealTimings = true;
+    } else if (ted && ted.cues.length > 0) {
+      /* TED metni, ZAMANLARI SILINEREK - gerekcesi tedKonusmayiCoz'un
+         ustundeki notta: TED zamanlari YouTube surumuyle ortusmuyor. */
+      sentences = buildSentencesFromCues(ted.cues).map((s) => ({ id: s.id, en: s.en }));
+      syncNotice = activeYtId
+        ? "Metin TED'in kendi transkriptinden alindi; TED'in zaman damgalari video ile ortusmedigi icin otomatik senkronizasyon devre disi."
+        : "Bu TED konusmasinin YouTube surumu yok; ders yalnizca TED transkriptinden olusturuldu.";
     } else {
       return res.status(400).json({
-        error: "Bu YouTube videosunun altyazisi (CC) alinamadi. Lutfen 'Ingilizce Metin / Transkript Yapistir' sekmesini secip metni manuel yapistirin.",
+        error: tedSlug
+          ? "Bu TED konusmasinin ne YouTube altyazisi ne de TED transkripti alinabildi. Lutfen metni elle yapistirin."
+          : "Bu YouTube videosunun altyazisi (CC) alinamadi. Lutfen 'Ingilizce Metin / Transkript Yapistir' sekmesini secip metni manuel yapistirin.",
         reason: captionError || "bilinmiyor",
       });
     }
@@ -1567,6 +1749,10 @@ app.post("/api/extract-transcript", async (req, res) => {
       startSec: s.startSec,
       endSec: s.endSec,
       timestamp: s.timestamp,
+      /* Altyazi parcalari da gitsin: "su an konusulan bolum" vurgusu
+         bunlara bakiyor. Burada dusuyordu, yani duzenleme penceresinden
+         yeniden cevrilen her ders vurgusunu kaybediyordu. */
+      parcalar: s.parcalar,
     }));
 
     res.json({
@@ -1577,6 +1763,10 @@ app.post("/api/extract-transcript", async (req, res) => {
       quizQuestions: material.quizQuestions || [],
       hasRealTimings,
       syncNotice,
+      /* TED linkinde kimligi istemci cikaramaz; cozumu burada. */
+      youtubeId: activeYtId,
+      youtubeUrl: activeYtId ? `https://www.youtube.com/watch?v=${activeYtId}` : '',
+      kaynak: ted ? 'ted' : (activeYtId ? 'youtube' : 'metin'),
     });
   } catch (error: any) {
     console.error("Error in /api/extract-transcript:", error);
@@ -1598,6 +1788,55 @@ app.post("/api/extract-transcript", async (req, res) => {
    birkac saniyede biter. Frontend bunlari sirayla cagirir.
    ============================================================ */
 
+/**
+ * Bir video adresini COZER: YouTube kimligini dondurur.
+ *
+ * NICIN AYRI BIR UC: istemci YouTube adresini kendi cozebiliyor ama TED
+ * adresinde kimlik sayfanin icindeki veriden cikiyor, yani sunucu
+ * gerekiyor. Transkript uretmeden sadece "bu link hangi videoya
+ * karsilik geliyor" sorusunu cevaplayan yerler var: Katman 1'deki
+ * "URL Degistir" alani ve dersi altyazidan yeniden uretme.
+ */
+app.post("/api/video-coz", async (req, res) => {
+  try {
+    const url = String(req.body?.url || '').trim();
+    if (!url) return res.status(400).json({ error: "Adres gerekli." });
+
+    const ytId = extractYouTubeId(url);
+    if (ytId) {
+      return res.json({
+        youtubeId: ytId,
+        youtubeUrl: `https://www.youtube.com/watch?v=${ytId}`,
+        kaynak: 'youtube',
+        baslik: '',
+      });
+    }
+
+    const slug = tedSlugCikar(url);
+    if (!slug) {
+      return res.status(400).json({ error: "Gecerli bir YouTube ya da TED adresi degil." });
+    }
+
+    const ted = await tedKonusmayiCoz(slug);
+    if (!ted.youtubeId) {
+      return res.status(404).json({
+        error: "Bu TED konusmasinin YouTube surumu yok; video gomulemiyor.",
+      });
+    }
+
+    res.json({
+      youtubeId: ted.youtubeId,
+      youtubeUrl: `https://www.youtube.com/watch?v=${ted.youtubeId}`,
+      kaynak: 'ted',
+      baslik: ted.konusmaci ? `${ted.baslik} — ${ted.konusmaci}` : ted.baslik,
+      tedUrl: ted.sayfaUrl,
+    });
+  } catch (error: any) {
+    console.error("Error in /api/video-coz:", error);
+    res.status(502).json({ error: error?.message || "Adres cozulemedi." });
+  }
+});
+
 // 1a. Sadece cumleleri ve gercek zaman damgalarini dondurur. Yapay zeka cagrilmaz.
 app.post("/api/transcript-sentences", async (req, res) => {
   try {
@@ -1609,7 +1848,26 @@ app.post("/api/transcript-sentences", async (req, res) => {
     const inputTrimmed = videoInput.trim();
     const ytIdFromInput = extractYouTubeId(inputTrimmed);
     const ytIdFromUrlField = youtubeUrl ? extractYouTubeId(youtubeUrl.trim()) : '';
-    const activeYtId = ytIdFromInput || ytIdFromUrlField;
+
+    /* TED LINKI. YouTube kimligi zaten varsa TED'e hic bakilmaz:
+       kullanici dogrudan YouTube linki vermisse sayfayi cekmek bos
+       gecikme olur. TED sayfasi bize konusmanin YouTube aynasini
+       veriyor ve akis oradan itibaren YouTube linkiyle ayni. */
+    const tedSlug = ytIdFromInput || ytIdFromUrlField
+      ? ''
+      : (tedSlugCikar(inputTrimmed) || tedSlugCikar(String(youtubeUrl || '')));
+    let ted: TedKonusma | null = null;
+    let tedHata = '';
+    if (tedSlug) {
+      try {
+        ted = await tedKonusmayiCoz(tedSlug);
+      } catch (e: any) {
+        tedHata = e?.message || String(e);
+        console.warn('[TED] Cozumlenemedi:', tedHata);
+      }
+    }
+
+    const activeYtId = ytIdFromInput || ytIdFromUrlField || (ted?.youtubeId || '');
 
     let fetchedTitle = "";
     let sentences: BuiltSentence[] = [];
@@ -1617,15 +1875,23 @@ app.post("/api/transcript-sentences", async (req, res) => {
     let syncNotice = "";
     let captionError = "";
 
+    /* TED kendi basligini daha temiz veriyor: YouTube'daki ayni video
+       "... | Simon Sinek | TEDxPugetSound" seklinde geliyor. */
+    if (ted?.baslik) {
+      fetchedTitle = ted.konusmaci ? `${ted.baslik} — ${ted.konusmaci}` : ted.baslik;
+    }
+
     if (activeYtId) {
-      try {
-        const oembedRes = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${activeYtId}&format=json`);
-        if (oembedRes.ok) {
-          const oembedData: any = await oembedRes.json();
-          if (oembedData.title) fetchedTitle = oembedData.title;
+      if (!fetchedTitle) {
+        try {
+          const oembedRes = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${activeYtId}&format=json`);
+          if (oembedRes.ok) {
+            const oembedData: any = await oembedRes.json();
+            if (oembedData.title) fetchedTitle = oembedData.title;
+          }
+        } catch (e) {
+          console.warn("oEmbed basarisiz:", e);
         }
-      } catch (e) {
-        console.warn("oEmbed basarisiz:", e);
       }
 
       try {
@@ -1641,12 +1907,31 @@ app.post("/api/transcript-sentences", async (req, res) => {
       }
     }
 
-    if (!hasRealTimings) {
-      const manualText = ytIdFromInput ? '' : inputTrimmed;
+    /* TED METNI, ZAMANLARI SILINEREK.
+       Buraya ancak YouTube altyazisi gelmediginde (ya da ayna hic
+       yokken) duseriz. TED'in cue zamanlari konusmanin kendi basindan
+       sayiliyor; YouTube surumunde bastaki TED jeneri yuzunden ayni
+       cumle ~11 saniye sonra geliyor ve bu fark videodan videoya
+       degisiyor, TED'in verdigi surelerden de hesaplanamiyor.
+       Damgalari tasimak senkronu YANLIS yapardi; metni almak ise
+       kazanc: TED'in transkripti insan yapimi, noktalamali. */
+    if (!hasRealTimings && ted && ted.cues.length > 0) {
+      sentences = buildSentencesFromCues(ted.cues).map((s) => ({ id: s.id, en: s.en }));
+      syncNotice = activeYtId
+        ? "Metin TED'in kendi transkriptinden alindi. YouTube altyazisi cekilemedigi ve TED'in zaman damgalari video ile ortusmedigi icin otomatik senkronizasyon devre disi."
+        : "Bu TED konusmasinin YouTube surumu yok; ders yalnizca TED transkriptinden olusturuldu, video ve senkronizasyon yok.";
+    }
+
+    if (!hasRealTimings && sentences.length === 0) {
+      const manualText = (ytIdFromInput || tedSlug) ? '' : inputTrimmed;
       if (!manualText) {
         return res.status(400).json({
-          error: "Bu YouTube videosunun altyazisi (CC) alinamadi. Lutfen 'Ingilizce Metin / Transkript Yapistir' sekmesini secip metni manuel yapistirin.",
-          reason: captionError || "bilinmiyor",
+          error: tedSlug
+            ? (tedHata
+                ? `TED konusmasi alinamadi: ${tedHata}`
+                : "Bu TED konusmasinin ne YouTube altyazisi ne de TED transkripti alinabildi. Lutfen metni elle yapistirin.")
+            : "Bu YouTube videosunun altyazisi (CC) alinamadi. Lutfen 'Ingilizce Metin / Transkript Yapistir' sekmesini secip metni manuel yapistirin.",
+          reason: captionError || tedHata || "bilinmiyor",
         });
       }
       sentences = buildSentencesFromPlainText(manualText);
@@ -1666,6 +1951,12 @@ app.post("/api/transcript-sentences", async (req, res) => {
       sentences,
       hasRealTimings,
       syncNotice,
+      /* TED linkinde istemci kimligi kendisi cikaramaz; cozumu burasi
+         yapiyor ve derse kaydedilecek degerleri geri veriyor. */
+      youtubeId: activeYtId,
+      youtubeUrl: activeYtId ? `https://www.youtube.com/watch?v=${activeYtId}` : '',
+      kaynak: ted ? 'ted' : (activeYtId ? 'youtube' : 'metin'),
+      tedUrl: ted?.sayfaUrl || '',
     });
   } catch (error: any) {
     console.error("Error in /api/transcript-sentences:", error);

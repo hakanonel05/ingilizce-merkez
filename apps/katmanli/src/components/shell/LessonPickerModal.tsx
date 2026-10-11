@@ -72,7 +72,7 @@ export const LessonPickerModal: React.FC<Props> = ({
               Çalışma İçeriği
             </h2>
             <p className="mt-0.5 truncate text-[12px] text-ink-3">
-              Bir ders seç ya da yeni bir YouTube videosu / metin ekle
+              Bir ders seç ya da yeni bir YouTube / TED videosu, metin ekle
             </p>
           </div>
           <button
