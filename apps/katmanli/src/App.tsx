@@ -33,6 +33,8 @@ import { EditLessonModal } from './components/EditLessonModal';
 import { SettingsModal } from './components/SettingsModal';
 import { extractYouTubeId } from './lib/youtube';
 import { tedLinkiMi } from './lib/ted';
+import { dersKelimelerindenKartlar } from './lib/dersKelimeleri';
+import { addCardsIfMissing } from '../../../shared/vocab/vocabStore';
 import { apiFetch } from './lib/userKeys';
 import { stampLocalChange, scheduleAutoSync, syncOnStartup, onSynced } from './lib/syncClient';
 import { PlayCircle } from 'lucide-react';
@@ -316,12 +318,25 @@ export default function App() {
   }, [lessons, progress]);
 
   // Delete Lesson handler
-  const handleDeleteLesson = (lessonId: string) => {
-    /* KELIME KARTLARINA DOKUNULMAZ. Burasi yalnizca dersi listeden
-       cikariyor; kart destesi (IndexedDB) ayri duruyor ve bilerek
-       temizlenmiyor - kart dersin degil kullanicinin mali, tekrar
-       gecmisi onun emegi. Gerekcenin tamami shared/vocab/vocabStore
-       icinde "DERS SILININCE KARTLAR SILINMEZ" notunda. */
+  const handleDeleteLesson = async (lessonId: string) => {
+    /* KELIME KARTLARINA DOKUNULMAZ. Kart destesi (IndexedDB) dersten
+       ayri duruyor ve bilerek temizlenmiyor - kart dersin degil
+       kullanicinin mali, tekrar gecmisi onun emegi. Gerekcenin tamami
+       shared/vocab/vocabStore icinde "DERS SILININCE KARTLAR SILINMEZ"
+       notunda.
+
+       DERSIN KENDI KELIME LISTESI ise dersin ICINDE duruyordu, yani
+       ders silinince o da giderdi. Silmeden ONCE desteye aliniyor:
+       sirasi onemli, once yazip sonra siliyoruz ki yazma basarisiz
+       olursa kelimeler kaybolmasin. */
+    const silinecek = lessons.find((l) => l.id === lessonId);
+    if (silinecek) {
+      const kartlar = dersKelimelerindenKartlar(silinecek);
+      if (kartlar.length > 0) {
+        await addCardsIfMissing(kartlar);
+      }
+    }
+
     const updated = lessons.filter((l) => l.id !== lessonId);
 
     /* MEZAR TASI. Silinen dersi yalnizca listeden cikarmak yetmiyor:

@@ -17,7 +17,8 @@
     "test:katmanlar": "node scripts/katman-simulasyonu.mjs",
     "test:kayit-analizi": "tsx scripts/kayit-analizi-sinamasi.mjs",
     "test:ders-senkron": "tsx scripts/ders-senkron-sinamasi.mjs",
-    "test:ted-linki": "tsx scripts/ted-linki-sinamasi.mjs"
+    "test:ted-linki": "tsx scripts/ted-linki-sinamasi.mjs",
+    "test:ders-kelimeleri": "tsx scripts/ders-kelimeleri-sinamasi.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

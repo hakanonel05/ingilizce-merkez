@@ -24,6 +24,7 @@ import { VideoLesson } from '../types';
 import { lessonComputedLevel } from '../lib/lessonInsight';
 import { useCardMatcher, lessonCardTerms } from '../lib/cardTerms';
 import { extractYouTubeId } from '../lib/youtube';
+import { dersKelimelerindenKartlar } from '../lib/dersKelimeleri';
 import { CORE_LAYERS, CORE_LAYER_COUNT } from './shell/LayerSidebar';
 import {
   Youtube, Sparkles, Plus, Loader2, Check, Trash2, FileText, Edit3, RefreshCw, X, Play,
@@ -62,7 +63,9 @@ interface LessonSelectorProps {
     youtubeUrl?: string,
     onProgress?: (message: string) => void
   ) => Promise<void>;
-  onDeleteLesson?: (lessonId: string) => void;
+  /* Silmeden once dersin kelimeleri desteye yaziliyor, yani ESZAMANSIZ:
+     bekleme ve hata durumu asagida gosteriliyor. */
+  onDeleteLesson?: (lessonId: string) => void | Promise<void>;
   onEditLesson?: (lesson: VideoLesson) => void;
   onRestorePresetLessons?: () => void;
 }
@@ -106,6 +109,8 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
   const [progressMsg, setProgressMsg] = useState('');
   const [showImportForm, setShowImportForm] = useState(false);
   const [confirmingDeleteId, setConfirmingDeleteId] = useState<string | null>(null);
+  const [silmeSuruyor, setSilmeSuruyor] = useState(false);
+  const [silmeHatasi, setSilmeHatasi] = useState('');
   // Kapagi yuklenemeyen videolar (silinmis, gizli, cevrimdisi): kirik resim yerine yedek
   const [brokenThumbs, setBrokenThumbs] = useState<Set<string>>(() => new Set());
 
@@ -163,17 +168,31 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
 
   const handleDeleteClick = (e: React.MouseEvent, lessonId: string) => {
     e.stopPropagation();
+    setSilmeHatasi('');
     setConfirmingDeleteId(lessonId);
   };
 
-  const handleConfirmDelete = (e: React.MouseEvent, lessonId: string) => {
+  const handleConfirmDelete = async (e: React.MouseEvent, lessonId: string) => {
     e.stopPropagation();
-    if (onDeleteLesson) onDeleteLesson(lessonId);
-    setConfirmingDeleteId(null);
+    if (!onDeleteLesson) return;
+
+    /* Silme artik once kelimeleri desteye yaziyor; hata YUTULMAMALI,
+       yoksa kullanici kelimelerinin kaydedilmedigini goremezdi. */
+    setSilmeHatasi('');
+    setSilmeSuruyor(true);
+    try {
+      await onDeleteLesson(lessonId);
+      setConfirmingDeleteId(null);
+    } catch (err: any) {
+      setSilmeHatasi(err?.message || 'Ders silinemedi; kelimeler kaydedilemedi.');
+    } finally {
+      setSilmeSuruyor(false);
+    }
   };
 
   const handleCancelDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
+    setSilmeHatasi('');
     setConfirmingDeleteId(null);
   };
 
@@ -470,13 +489,28 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
                           duruyor: ders silinince kartlar yerinde kaliyor,
                           kelime bankasindaki ders suzgecinde o ders
                           "silinmis ders" olarak gorunmeye devam ediyor. */}
-                      {confirmingDeleteId === lesson.id && (
-                        <p className="mt-1.5 text-[11px] leading-relaxed text-ink-2">
-                          Ders ve transkripti silinir.
-                          <span className="font-medium text-ink"> Kelime kartların silinmez</span>,
-                          kelime bankasında kalır.
-                        </p>
-                      )}
+                      {confirmingDeleteId === lesson.id && (() => {
+                        /* Kac kelime kurtarilacagi SAYILIYOR, tahmin
+                           edilmiyor: zaten bildigin kelimeler elendigi
+                           icin listedeki sayiyla ayni olmayabilir. */
+                        const kurtarilacak = dersKelimelerindenKartlar(lesson).length;
+                        return (
+                          <div className="mt-1.5 space-y-1">
+                            <p className="text-[11px] leading-relaxed text-ink-2">
+                              Ders ve transkripti silinir.
+                              <span className="font-medium text-ink"> Kelime kartların silinmez</span>,
+                              kelime bankasında kalır.
+                              {kurtarilacak > 0 && (
+                                <> Bu dersin <span className="font-medium text-ink">{kurtarilacak} kelimesi</span> de
+                                  desteye eklenir.</>
+                              )}
+                            </p>
+                            {silmeHatasi && (
+                              <p className="text-[11px] leading-relaxed text-[var(--danger)]">{silmeHatasi}</p>
+                            )}
+                          </div>
+                        );
+                      })()}
                     </div>
 
                     {/* Satir eylemleri. Fare ustundeyken, klavyeyle
@@ -496,13 +530,15 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
                           <button
                             type="button"
                             onClick={(e) => handleConfirmDelete(e, lesson.id)}
+                            disabled={silmeSuruyor}
                             className="rounded-lg bg-danger px-2 py-1 font-medium text-white
-                              transition-colors hover:bg-danger-strong cursor-pointer"
+                              transition-colors hover:bg-danger-strong disabled:opacity-60 cursor-pointer"
                           >
-                            Sil
+                            {silmeSuruyor ? 'Siliniyor…' : 'Sil'}
                           </button>
                           <button
                             type="button"
+                            disabled={silmeSuruyor}
                             onClick={handleCancelDelete}
                             className="rounded-lg px-2 py-1 text-ink-2 transition-colors
                               hover:bg-hairline hover:text-ink cursor-pointer"
