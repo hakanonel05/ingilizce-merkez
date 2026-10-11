@@ -317,6 +317,11 @@ export default function App() {
 
   // Delete Lesson handler
   const handleDeleteLesson = (lessonId: string) => {
+    /* KELIME KARTLARINA DOKUNULMAZ. Burasi yalnizca dersi listeden
+       cikariyor; kart destesi (IndexedDB) ayri duruyor ve bilerek
+       temizlenmiyor - kart dersin degil kullanicinin mali, tekrar
+       gecmisi onun emegi. Gerekcenin tamami shared/vocab/vocabStore
+       icinde "DERS SILININCE KARTLAR SILINMEZ" notunda. */
     const updated = lessons.filter((l) => l.id !== lessonId);
 
     /* MEZAR TASI. Silinen dersi yalnizca listeden cikarmak yetmiyor:

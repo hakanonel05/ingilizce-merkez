@@ -353,6 +353,33 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
       .sort((a, b) => a.due - b.due);
   }, [allCards, search, levelFilter, kindFilter, posFilter, lessonFilter]);
 
+  /* DERS SUZGECI SECENEKLERI.
+     Eskiden yalnizca duran dersler listeleniyordu; bir ders silinince o
+     dersten gelen kartlar destede KALIYOR ama artik suzulemiyordu, yani
+     kullanici acisindan kayboluyorlardi. Secenekler artik KARTLARIN
+     kendisinden de uretiliyor: kart kaynaginda yazan ders hala
+     duruyorsa olagan, durmuyorsa "silinmis ders" olarak gosteriliyor.
+     Kartin ustundeki lessonTitle silinme aninda da dogru oldugu icin
+     ad kayboluyor degil. */
+  const dersSecenekleri = useMemo(() => {
+    const duranlar = new Map(lessons.map((l) => [l.id, l.title]));
+    const kartlardaki = new Map<string, string>();
+
+    for (const c of allCards) {
+      for (const src of cardSources(c)) {
+        if (!src.lessonId || duranlar.has(src.lessonId)) continue;
+        if (!kartlardaki.has(src.lessonId)) {
+          kartlardaki.set(src.lessonId, src.lessonTitle || 'Adsız ders');
+        }
+      }
+    }
+
+    return [
+      ...lessons.map((l) => ({ id: l.id, baslik: l.title, silinmis: false })),
+      ...[...kartlardaki].map(([id, baslik]) => ({ id, baslik, silinmis: true })),
+    ];
+  }, [lessons, allCards]);
+
   const studyPool = useMemo(
     () => (studyScope === 'lesson' ? lessonCards : allCards),
     [studyScope, lessonCards, allCards]
@@ -1001,8 +1028,10 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 className="px-2.5 py-1.5 bg-paper-2 border border-hairline-2 rounded-lg text-xs font-semibold text-ink-800 cursor-pointer max-w-[220px]"
               >
                 <option value="all">Tüm dersler</option>
-                {lessons.map((l) => (
-                  <option key={l.id} value={l.id}>{l.title.slice(0, 40)}</option>
+                {dersSecenekleri.map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {d.baslik.slice(0, 40)}{d.silinmis ? ' (silinmiş ders)' : ''}
+                  </option>
                 ))}
               </select>
 

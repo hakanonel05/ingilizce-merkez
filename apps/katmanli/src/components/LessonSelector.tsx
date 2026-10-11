@@ -462,6 +462,21 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
                           </span>
                         )}
                       </p>
+
+                      {/* SILME ONAYINDA NE KALDIGINI SOYLE.
+                          Onay yalnizca "Sil / Iptal" idi ve kullanici
+                          biriktirdigi kelimelerin de gidecegini sanarak
+                          tereddut ediyordu. Kart destesi dersten bagimsiz
+                          duruyor: ders silinince kartlar yerinde kaliyor,
+                          kelime bankasindaki ders suzgecinde o ders
+                          "silinmis ders" olarak gorunmeye devam ediyor. */}
+                      {confirmingDeleteId === lesson.id && (
+                        <p className="mt-1.5 text-[11px] leading-relaxed text-ink-2">
+                          Ders ve transkripti silinir.
+                          <span className="font-medium text-ink"> Kelime kartların silinmez</span>,
+                          kelime bankasında kalır.
+                        </p>
+                      )}
                     </div>
 
                     {/* Satir eylemleri. Fare ustundeyken, klavyeyle

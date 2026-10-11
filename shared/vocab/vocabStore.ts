@@ -585,34 +585,23 @@ export async function deleteCard(id: string): Promise<void> {
   notifyChanged();
 }
 
-/**
- * Bir ders silinince o dersten gelen kartları temizler.
+/* DERS SILININCE KARTLAR SILINMEZ — BILEREK.
  *
- * Kelime başka bir metinde de görüldüyse KART SİLİNMEZ, yalnızca o ders
- * kaynak listesinden çıkarılır: tek kimlikli kartta silme işlemi diğer
- * metinlerin geçmişini de götürürdü.
+ * Burada bir zamanlar deleteCardsByLesson vardi: dersi silinen kartlari
+ * desteden cikariyordu. Hicbir yerden cagrilmamisti, yani kartlar zaten
+ * duruyordu; ama adi ve varligi "ders silinince bunu cagir" davetiydi.
+ * Kaldirildi.
+ *
+ * Gerekce: kart, DERSIN degil KULLANICININ malidir. Ders bir kelimeyle
+ * tanistigin yerdir; o kelimeyi aylarca tekrar edip ezberlersin ve
+ * tekrar gecmisi (FSRS araliklari) kartin uzerinde durur. Ders artik
+ * ilgini cekmedigi icin silindiginde o emegin de gitmesi, silme
+ * dugmesini tehlikeli yapardi.
+ *
+ * Kart ustunde geldigi dersin adi (lessonTitle) yazili kaldigi icin
+ * kelime bankasindaki ders suzgeci silinmis dersleri de listeleyebiliyor
+ * (bkz. VocabHub > dersSecenekleri).
  */
-export async function deleteCardsByLesson(lessonId: string): Promise<void> {
-  const cards = await getCardsByLesson(lessonId);
-
-  for (const card of cards) {
-    const remaining = cardSources(card).filter((s) => s.lessonId !== lessonId);
-
-    if (remaining.length === 0) {
-      await deleteCard(card.id);
-      continue;
-    }
-
-    await putCard({
-      ...card,
-      sources: remaining,
-      // Birincil alanlar kalan ilk kaynağa taşınır ki filtreler tutarlı kalsın
-      lessonId: remaining[0].lessonId,
-      lessonTitle: remaining[0].lessonTitle,
-      contextEn: remaining[0].contextEn,
-    });
-  }
-}
 
 export interface DueSelectionLimits {
   /** Bugün kaç YENİ kart daha tanıtılabilir. undefined veya 0 = sınırsız. */
