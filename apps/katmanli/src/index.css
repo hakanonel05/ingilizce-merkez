@@ -749,6 +749,24 @@ html { -webkit-text-size-adjust: 100%; }
 .rapor-gramer li { margin-bottom: 3px; }
 .rapor-gramer .tr { display: block; color: var(--r-ink-2); }
 
+/* ---------- Kart kelimesi vurgusu ----------
+   Transkriptin iki halinde de (iki dilli ve yalnizca Ingilizce) kelime
+   kartina eklenen kelimeler fosforlu kalem gibi sari.
+
+   EKRANDA MOR, KAGITTA SARI: mor ekranda bir etkilesim isareti - uzerine
+   gelince karti aciliyor. Kagitta tiklanacak bir sey yok; orada sarinin
+   anlami dogrudan "bu kelimeye dikkat".
+
+   <mark> ETIKETI: tarayicinin kendi varsayilan sarisi temada degisebiliyor
+   ve ekran okuyucular icin de anlamli oldugu icin etiket korunup rengi
+   burada sabitleniyor. */
+.rapor .kart-vurgu {
+  background: #FDE68A;          /* amber-200 */
+  color: inherit;
+  padding: 0 1px;
+  border-radius: 2px;
+}
+
 .rapor-dipnot {
   display: flex;
   align-items: center;
@@ -824,8 +842,11 @@ html { -webkit-text-size-adjust: 100%; }
   .rapor-transkript thead,
   .rapor-kelimeler thead { display: table-header-group; }
 
-  /* Tarayici zeminleri varsayilan olarak basmiyor; raporun ince gri
-     alanlari olmadan bolumler birbirine giriyor. */
+  /* ZEMINLER BASILSIN. Tarayicilar kagit tasarrufu icin arka plan
+     renklerini varsayilan olarak ATIYOR; bu kural olmadan kart
+     kelimelerinin sari vurgusu PDF'te hic cikmazdi - ozelligin tamami
+     o vurgu oldugu icin burasi sart. */
+  .rapor .kart-vurgu,
   .rapor-yazi,
   .rapor-kutu {
     -webkit-print-color-adjust: exact;

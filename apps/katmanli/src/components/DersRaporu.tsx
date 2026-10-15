@@ -22,6 +22,7 @@ import {
   type DersRaporu as Rapor,
 } from '../lib/dersRaporu';
 import { CORE_LAYERS } from './shell/LayerSidebar';
+import { useCardMatcher, cardRanges } from '../lib/cardTerms';
 
 interface Props {
   lesson: VideoLesson;
@@ -46,6 +47,45 @@ const Bolum: React.FC<{
   </section>
 );
 
+/* KART KELİMELERİ SARI VURGULU.
+ *
+ * AYNI DİZİN, AYNI KURAL: ekranda moru çizen eşleştiricinin ta kendisi
+ * (lib/cardTerms). Rapora ayrı bir eşleştirme yazılsaydı iki liste
+ * zamanla birbirinden kopardı — kâğıtta vurgulu olan kelime ekranda
+ * işaretsiz kalırdı. Çekimler de aynı yerden geliyor: kart "cultivate"
+ * ise metindeki "cultivated" da vurgulanıyor.
+ *
+ * "BİLİYORUM" DENENLER VURGULANMIYOR, ekrandaki kuralla aynı. Kart
+ * duruyor ve raporun kelime listesinde görünüyor; vurgu ise "hâlâ
+ * öğreniyorsun" demek.
+ *
+ * Renk MOR DEĞİL SARI: mor ekranda bir bağlantı/etkileşim işareti,
+ * kâğıtta tıklanacak bir şey yok. Sarı fosforlu kalem, basılı metinde
+ * "bu kelimeye dikkat" demenin alışılmış yolu.
+ */
+const KartVurgulu: React.FC<{ metin: string; matcher: ReturnType<typeof useCardMatcher> }> = ({
+  metin,
+  matcher,
+}) => {
+  const araliklar = cardRanges(metin, matcher);
+  if (araliklar.length === 0) return <>{metin}</>;
+
+  const parcalar: React.ReactNode[] = [];
+  let imlec = 0;
+  araliklar.forEach((r, i) => {
+    if (r.start > imlec) parcalar.push(metin.slice(imlec, r.start));
+    parcalar.push(
+      <mark key={i} className="kart-vurgu">
+        {metin.slice(r.start, r.end)}
+      </mark>
+    );
+    imlec = r.end;
+  });
+  if (imlec < metin.length) parcalar.push(metin.slice(imlec));
+
+  return <>{parcalar}</>;
+};
+
 /** Kayıt bulunmayan bölümler için; sessizce gizlemek yerine söylüyoruz. */
 const KayitYok: React.FC<{ metin: string }> = ({ metin }) => (
   <p className="rapor-bos">{metin}</p>
@@ -54,6 +94,7 @@ const KayitYok: React.FC<{ metin: string }> = ({ metin }) => (
 export const DersRaporuGorunumu: React.FC<Props> = ({ lesson, mistakes, onClose }) => {
   const [rapor, setRapor] = useState<Rapor | null>(null);
   const [hata, setHata] = useState('');
+  const matcher = useCardMatcher();
 
   useEffect(() => {
     let iptal = false;
@@ -99,6 +140,11 @@ export const DersRaporuGorunumu: React.FC<Props> = ({ lesson, mistakes, onClose 
     setTimeout(geriAl, 60000);
   };
 
+  /* DIZIN HAZIR MI. Kart dizini IndexedDB'den asenkron kuruluyor; bu
+     ders kartlari olmasina ragmen dizin henuz bossa yazdirma VURGUSUZ
+     bir PDF uretirdi ve kullanici bunu ancak dosyayi acinca gorurdu. */
+  const vurguBekleniyor = !!rapor && rapor.kelimeler.length > 0 && matcher.size === 0;
+
   const tamamlanan = CORE_LAYERS.filter((k) =>
     (lesson.completedLayers || []).includes(k.id)
   );
@@ -129,13 +175,13 @@ export const DersRaporuGorunumu: React.FC<Props> = ({ lesson, mistakes, onClose 
             <button
               type="button"
               onClick={yazdir}
-              disabled={!rapor}
+              disabled={!rapor || vurguBekleniyor}
               className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-2
                 text-[13px] font-medium text-white transition-colors hover:bg-accent-700
                 disabled:opacity-40 cursor-pointer"
             >
-              <Printer className="h-4 w-4" />
-              PDF olarak kaydet
+              {vurguBekleniyor ? <Loader2 className="h-4 w-4 animate-spin" /> : <Printer className="h-4 w-4" />}
+              {vurguBekleniyor ? 'Kelimeler yükleniyor…' : 'PDF olarak kaydet'}
             </button>
             <button
               type="button"
@@ -212,7 +258,10 @@ export const DersRaporuGorunumu: React.FC<Props> = ({ lesson, mistakes, onClose 
               <Bolum
                 no={1}
                 baslik="Transkript — İngilizce ve Türkçe"
-                aciklama={`${rapor.cumleler.length} cümle, ${rapor.cevrilenCumle} tanesi çevirili.`}
+                aciklama={
+                  `${rapor.cumleler.length} cümle, ${rapor.cevrilenCumle} tanesi çevirili.` +
+                  (matcher.size > 0 ? ' Kelime kartına eklediklerin sarı ile işaretli.' : '')
+                }
               >
                 {rapor.cumleler.length === 0 ? (
                   <KayitYok metin="Bu derste transkript yok." />
@@ -229,7 +278,9 @@ export const DersRaporuGorunumu: React.FC<Props> = ({ lesson, mistakes, onClose 
                       {rapor.cumleler.map((c, i) => (
                         <tr key={c.id}>
                           <td className="sutun-no">{c.timestamp || i + 1}</td>
-                          <td lang="en">{c.en}</td>
+                          <td lang="en">
+                            <KartVurgulu metin={c.en} matcher={matcher} />
+                          </td>
                           <td lang="tr">{c.tr || '—'}</td>
                         </tr>
                       ))}
@@ -242,14 +293,19 @@ export const DersRaporuGorunumu: React.FC<Props> = ({ lesson, mistakes, onClose 
               <Bolum
                 no={2}
                 baslik="Transkript — Yalnızca İngilizce"
-                aciklama="Çeviriye bakmadan okumak için; aynı metnin desteksiz hâli."
+                aciklama={
+                  'Çeviriye bakmadan okumak için; aynı metnin desteksiz hâli.' +
+                  (matcher.size > 0 ? ' Kelime kartların yine sarı ile işaretli.' : '')
+                }
               >
                 {rapor.cumleler.length === 0 ? (
                   <KayitYok metin="Bu derste transkript yok." />
                 ) : (
                   <div className="rapor-duzmetin" lang="en">
                     {rapor.cumleler.map((c) => (
-                      <p key={c.id}>{c.en}</p>
+                      <p key={c.id}>
+                        <KartVurgulu metin={c.en} matcher={matcher} />
+                      </p>
                     ))}
                   </div>
                 )}
