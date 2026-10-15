@@ -3019,6 +3019,25 @@ app.get("/api/dikte-hazir", async (req, res) => {
         konular.push({ baslik, url: mutlak });
       }
 
+      /* BOS LISTE BASARI DEGIL. Once bos dizi 200 ile donuyordu ve
+         arayuz hicbir sey gostermiyordu: kullanici "bir sey olmuyor"
+         diyordu. Sayfa gelip de icinden alistirma cikmiyorsa ortada
+         bir sorun vardir - sessizce bos donmek onu gizliyor.
+
+         Teshis icin sayfanin basindan kisa bir ornek: bot korumasi
+         sayfasi mi geldi, baska bir sey mi, ancak ona bakinca
+         anlasiliyor. */
+      if (konular.length === 0) {
+        const ornek = ecMetniSadelestir(html).slice(0, 200);
+        return res.status(502).json({
+          error:
+            "EnglishClub listesi okunamadi: sayfa geldi ama icinde alistirma " +
+            "baglantisi yok. Site, sunucudan gelen istekleri engelliyor olabilir.",
+          ipucu: ornek,
+          boyut: html.length,
+        });
+      }
+
       const deger = { seviye, ad: s.ad, konular };
       EC_ONBELLEK.set("liste:" + seviye, { deger, zaman: Date.now() });
       return res.json(deger);

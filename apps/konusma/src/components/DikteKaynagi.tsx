@@ -106,6 +106,9 @@ export const DikteKaynagi: React.FC<Props> = ({ onMetinHazir, onSesHazir, onSesi
     let iptal = false;
     setKonularYukleniyor(true);
     setHata('');
+    /* Eski seviyenin listesi EKRANDA KALMAMALI: yeni seviye
+       alinamazsa kullanici oncekini gorup "bir sey olmadi" saniyor. */
+    setKonular([]);
     apiFetch(`/api/dikte-hazir?seviye=${hazirSeviye}`)
       .then(async (r) => {
         const v = await r.json();
@@ -293,6 +296,17 @@ export const DikteKaynagi: React.FC<Props> = ({ onMetinHazir, onSesHazir, onSesi
             {konularYukleniyor ? (
               <p className="flex items-center gap-2 text-[12px] text-ink-2">
                 <Loader2 className="h-3.5 w-3.5 animate-spin" /> Liste alınıyor…
+              </p>
+            ) : konular.length === 0 ? (
+              /* BOS LISTE SESSIZ KALMIYOR. Once bos bir <ul> ciziliyordu
+                 ve ekranda hicbir sey gorunmuyordu; kullanici "liste
+                 alınıyor yazıyor ama bir şey olmuyor" dedi. */
+              <p className="rounded-xl border border-dashed border-hairline px-3 py-3
+                text-[12px] leading-relaxed text-ink-3">
+                Bu seviyede alıştırma alınamadı. Hazır alıştırmalar EnglishClub'dan
+                anlık çekiliyor; site sunucudan gelen istekleri engelliyorsa liste
+                boş kalabilir. Diğer sekmelerden metin yazabilir, yapay zekâya
+                ürettirebilir ya da kendi ses dosyalarını yükleyebilirsin.
               </p>
             ) : (
               <ul className="divide-y divide-hairline overflow-hidden rounded-xl border border-hairline">
