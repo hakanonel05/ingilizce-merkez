@@ -2932,6 +2932,27 @@ const EC_UA =
  * olagan fetch deneniyor (ucuz ve bagimsiz), olmazsa sistemdeki
  * curl'e dusuluyor.
  */
+/**
+ * Gelen icerik GERCEK sayfa mi, yoksa bot korumasi sayfasi mi?
+ *
+ * BU DENETIM OLMADAN ZINCIR CALISMIYORDU: Cloudflare'in "Just a
+ * moment..." dogrulama sayfasi HTTP 200 ile geliyor. Yalnizca duruma
+ * bakan kod onu basarili sayip orada duruyor, curl'e ve okuyucuya hic
+ * gecmiyordu (olculdu: yayinda 200 ve 5727 baytlik challenge).
+ *
+ * Olcut icerigin kendisi: dikte sayfasinda ya bir alistirma baglantisi
+ * ya da bir ses adresi gecer. Hicbiri yoksa o sayfa isimize yaramaz,
+ * durumu ne olursa olsun.
+ */
+function ecIcerikGecerliMi(icerik: string): boolean {
+  if (!icerik) return false;
+  if (/just a moment|cf-browser-verification|challenge-platform/i.test(icerik)) return false;
+  return (
+    /dictations?-[a-z0-9-]+\.php/i.test(icerik) ||
+    /audio\/listening\/dictation\/[\w.-]+\.mp3/i.test(icerik)
+  );
+}
+
 async function ecSayfayiAl(url: string): Promise<string> {
   const kontrol = new AbortController();
   const zamanlayici = setTimeout(() => kontrol.abort(), 15000);
@@ -2940,7 +2961,10 @@ async function ecSayfayiAl(url: string): Promise<string> {
       signal: kontrol.signal,
       headers: { "User-Agent": EC_UA, Accept: "text/html,*/*" },
     });
-    if (r.ok) return await r.text();
+    if (r.ok) {
+      const g = await r.text();
+      if (ecIcerikGecerliMi(g)) return g;
+    }
   } catch {
     /* Asagidaki curl denemesine dusuluyor. */
   } finally {
@@ -2948,12 +2972,20 @@ async function ecSayfayiAl(url: string): Promise<string> {
   }
 
   try {
-    return await ecCurlIle(url);
+    const g = await ecCurlIle(url);
+    if (ecIcerikGecerliMi(g)) return g;
   } catch {
     /* Asagidaki okuyucu servisine dusuluyor. */
   }
 
-  return await ecOkuyucuIle(url);
+  const son = await ecOkuyucuIle(url);
+  if (!ecIcerikGecerliMi(son)) {
+    throw new Error(
+      "EnglishClub sayfasi alinamadi: site bot korumasi gosteriyor ve " +
+        "yedek okuyucu da gercek sayfayi getiremedi."
+    );
+  }
+  return son;
 }
 
 /**
