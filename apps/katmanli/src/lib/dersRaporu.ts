@@ -16,7 +16,7 @@
  */
 
 import type { VideoLesson, MistakeEntry, SentencePair } from '../types';
-import { getCardsByLesson, cardSources } from '../../../../shared/vocab/vocabStore';
+import { getAllCards, cardBelongsTo, cardSources } from '../../../../shared/vocab/vocabStore';
 
 /** Rapordaki bir kelime kartı satırı. */
 export interface RaporKelimesi {
@@ -37,6 +37,14 @@ export interface DersRaporu {
   yanlislar: MistakeEntry[];
   /** Çeviriyle birlikte sunulabilecek cümle sayısı (boş çeviriler hariç). */
   cevrilenCumle: number;
+  /**
+   * Kartın ön yüzü → Türkçe karşılığı, BÜTÜN kartlar için.
+   *
+   * Yalnızca bu dersin kartları yetmiyor: transkriptte başka bir derste
+   * eklenmiş bir kart da geçebiliyor ve ekranda o da işaretleniyor.
+   * Türkçe karşılığını vurgulayabilmek için onun da karşılığı lazım.
+   */
+  karsiliklar: Map<string, string>;
 }
 
 /**
@@ -55,7 +63,12 @@ export async function dersRaporunuTopla(
   ders: VideoLesson,
   yanlislarinTumu: MistakeEntry[]
 ): Promise<DersRaporu> {
-  const kartlar = await getCardsByLesson(ders.id);
+  /* Deste TEK SEFER okunuyor: hem bu dersin kartlari hem de butun
+     kartlarin Turkce karsiliklari ayni listeden cikiyor.
+     (getCardsByLesson zaten icerde getAllCards cagiriyordu.) */
+  const tumKartlar = await getAllCards();
+  const kartlar = tumKartlar.filter((k) => cardBelongsTo(k, ders.id));
+  const karsiliklar = new Map(tumKartlar.map((k) => [k.front, k.back]));
 
   const kelimeler: RaporKelimesi[] = kartlar
     .map((k) => ({
@@ -79,6 +92,7 @@ export async function dersRaporunuTopla(
     kelimeler,
     yanlislar: yanlislarinTumu.filter((y) => y.lessonId === ders.id),
     cevrilenCumle: cumleler.filter((c) => (c.tr || '').trim().length > 0).length,
+    karsiliklar,
   };
 }
 

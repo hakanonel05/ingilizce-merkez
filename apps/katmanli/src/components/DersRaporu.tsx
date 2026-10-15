@@ -23,6 +23,7 @@ import {
 } from '../lib/dersRaporu';
 import { CORE_LAYERS } from './shell/LayerSidebar';
 import { useCardMatcher, cardRanges } from '../lib/cardTerms';
+import { turkceKarsilikAraliklari } from '../lib/turkceKarsilik';
 
 interface Props {
   lesson: VideoLesson;
@@ -63,11 +64,10 @@ const Bolum: React.FC<{
  * kâğıtta tıklanacak bir şey yok. Sarı fosforlu kalem, basılı metinde
  * "bu kelimeye dikkat" demenin alışılmış yolu.
  */
-const KartVurgulu: React.FC<{ metin: string; matcher: ReturnType<typeof useCardMatcher> }> = ({
+const Boyali: React.FC<{ metin: string; araliklar: { start: number; end: number }[] }> = ({
   metin,
-  matcher,
+  araliklar,
 }) => {
-  const araliklar = cardRanges(metin, matcher);
   if (araliklar.length === 0) return <>{metin}</>;
 
   const parcalar: React.ReactNode[] = [];
@@ -84,6 +84,34 @@ const KartVurgulu: React.FC<{ metin: string; matcher: ReturnType<typeof useCardM
   if (imlec < metin.length) parcalar.push(metin.slice(imlec));
 
   return <>{parcalar}</>;
+};
+
+/** İngilizce metinde kart kelimelerini sarıya boyar. */
+const KartVurgulu: React.FC<{ metin: string; matcher: ReturnType<typeof useCardMatcher> }> = ({
+  metin,
+  matcher,
+}) => <Boyali metin={metin} araliklar={cardRanges(metin, matcher)} />;
+
+/* TÜRKÇE SÜTUNDA KARŞILIĞI DA SARI.
+ *
+ * Hangi kelimelerin aranacağı İNGİLİZCE TARAFTAN geliyor: o cümlede
+ * hangi kartlar vurgulandıysa yalnızca onların Türkçe karşılıkları
+ * aranıyor. Bütün destede arama yapılsaydı, İngilizcesi o cümlede
+ * geçmeyen bir kartın karşılığı da boyanır ve iki sütun birbirini
+ * tutmazdı.
+ *
+ * Eşleştirmenin kendisi ve eşikleri lib/turkceKarsilik içinde. */
+const TurkceVurgulu: React.FC<{
+  turkce: string;
+  ingilizce: string;
+  matcher: ReturnType<typeof useCardMatcher>;
+  karsiliklar: Map<string, string>;
+}> = ({ turkce, ingilizce, matcher, karsiliklar }) => {
+  const hedefler = cardRanges(ingilizce, matcher)
+    .map((r) => karsiliklar.get(r.front))
+    .filter((x): x is string => !!x);
+
+  return <Boyali metin={turkce} araliklar={turkceKarsilikAraliklari(turkce, hedefler)} />;
 };
 
 /** Kayıt bulunmayan bölümler için; sessizce gizlemek yerine söylüyoruz. */
@@ -260,7 +288,9 @@ export const DersRaporuGorunumu: React.FC<Props> = ({ lesson, mistakes, onClose 
                 baslik="Transkript — İngilizce ve Türkçe"
                 aciklama={
                   `${rapor.cumleler.length} cümle, ${rapor.cevrilenCumle} tanesi çevirili.` +
-                  (matcher.size > 0 ? ' Kelime kartına eklediklerin sarı ile işaretli.' : '')
+                  (matcher.size > 0
+                    ? ' Kelime kartına eklediklerin iki sütunda da sarı ile işaretli.'
+                    : '')
                 }
               >
                 {rapor.cumleler.length === 0 ? (
@@ -281,7 +311,18 @@ export const DersRaporuGorunumu: React.FC<Props> = ({ lesson, mistakes, onClose 
                           <td lang="en">
                             <KartVurgulu metin={c.en} matcher={matcher} />
                           </td>
-                          <td lang="tr">{c.tr || '—'}</td>
+                          <td lang="tr">
+                            {c.tr ? (
+                              <TurkceVurgulu
+                                turkce={c.tr}
+                                ingilizce={c.en}
+                                matcher={matcher}
+                                karsiliklar={rapor.karsiliklar}
+                              />
+                            ) : (
+                              '—'
+                            )}
+                          </td>
                         </tr>
                       ))}
                     </tbody>
