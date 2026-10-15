@@ -3147,6 +3147,24 @@ function ecSonrakiCikar(icerik: string, temelUrl: string): string {
   }
 }
 
+/**
+ * Basligin KONU TABANI: "Dictation: Question 2" -> "question".
+ *
+ * Zincirin nerede bitecegini bu soyluyor. Ileri seviyede konular
+ * birbirine zincirli ("Recorded Message"in sonrakisi "Automated
+ * Recording"); taban degisince baska bir konuya gecilmis demektir ve
+ * zincir orada biter. Olmasaydi her konu kendinden sonrakilerin
+ * hepsini toplardi.
+ */
+function ecKonuTabani(baslik: string): string {
+  return baslik
+    .replace(/^\s*dictation\s*:\s*/i, "")
+    .replace(/\s*\d+\s*$/, "")
+    .toLowerCase()
+    .replace(/[^a-z]+/g, " ")
+    .trim();
+}
+
 /** Sayfa basligi; iki bicimde de calisir. */
 function ecBaslikCikar(icerik: string): string {
   const m =
@@ -3188,11 +3206,20 @@ async function ecKonuyuCoz(
   let u = ilkUrl;
 
   const basla = Date.now();
+  let taban = "";
 
   while (u && alistirmalar.length < EC_EN_FAZLA_ALISTIRMA && !gorulen.has(u)) {
     gorulen.add(u);
     const icerik = await ecSayfayiAl(u);
-    alistirmalar.push({ baslik: ecBaslikCikar(icerik), url: u });
+    const baslik = ecBaslikCikar(icerik);
+
+    /* Ilk sayfa konunun tabanini belirliyor; sonrakiler ona uymak
+       zorunda, yoksa baska bir konuya gecilmistir. */
+    const buTaban = ecKonuTabani(baslik);
+    if (!taban) taban = buTaban;
+    else if (buTaban && buTaban !== taban) break;
+
+    alistirmalar.push({ baslik, url: u });
     u = ecSonrakiCikar(icerik, u);
 
     /* Butce dolduysa elde ne varsa onunla don: eksik bir liste, bos
