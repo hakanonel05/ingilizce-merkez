@@ -15,23 +15,6 @@
   functions = "netlify/functions"
   autoLaunch = false
 
-# DENEME: EnglishClub'a Netlify'ın KENDİ vekiliyle gitmek.
-#
-# Dikte alıştırmaları EnglishClub'dan çekiliyor ama site Cloudflare
-# arkasında ve veri merkezi isteklerine "Just a moment..." doğrulama
-# sayfası dönüyor (ölçüldü: fonksiyondan 200 ile 5705 baytlık challenge).
-# Bu kural isteği fonksiyondan değil Netlify'ın kenar ağından çıkarıyor;
-# farklı bir ağdan geçtiği için doğrulamaya takılmayabilir.
-#
-# Aynı zamanda sesi AYNI ORIGIN'e taşıyor: öyle olursa tarayıcı ses
-# baytlarına erişebiliyor ve cevap metni Whisper ile çıkarılabiliyor
-# (şu an CORS yüzünden mümkün değil).
-[[redirects]]
-  from = "/ec/*"
-  to = "https://www.englishclub.com/:splat"
-  status = 200
-  force = true
-
 # /api/* -> Express'i saran serverless fonksiyon (Katmanlı'nın YZ uçları)
 [[redirects]]
   from = "/api/*"
