@@ -24,6 +24,10 @@ import {
   FileAudio, Sparkles, PenLine, Loader2, AlertCircle, Upload, X, Library, ChevronRight,
 } from 'lucide-react';
 import { apiFetch } from '../../../../shared/vocab/userKeys';
+import {
+  hazirKonulariGetir, konuAlistirmalariniGetir, hazirAlistirmayiGetir,
+  type HazirKonu,
+} from '../lib/dikteHazir';
 import { cozumDurumunuIzle, type CozumDurumu } from '../../../../shared/ses/konusmaCozumleme';
 
 export type KaynakTipi = 'hazir' | 'metin' | 'yapayZeka' | 'ses';
@@ -39,13 +43,14 @@ const HAZIR_SEVIYELER = [
   { id: 'ileri', ad: 'İleri' },
 ] as const;
 
-interface HazirKonu { baslik: string; url: string; }
 
 export interface YuklenenSes {
   normalUrl: string;
   yavasUrl: string;
   normalAd: string;
   yavasAd: string;
+  /** Hazır alıştırmalarda aynı konunun bir sonrakisi; yüklenen dosyada yok. */
+  sonrakiUrl?: string;
 }
 
 interface Props {
@@ -71,6 +76,13 @@ export const DikteKaynagi: React.FC<Props> = ({ onMetinHazir, onSesHazir, onSesi
   const [konular, setKonular] = useState<HazirKonu[]>([]);
   const [konularYukleniyor, setKonularYukleniyor] = useState(false);
   const [alistirmaYukleniyor, setAlistirmaYukleniyor] = useState('');
+  /* HER KONUDA BIRDEN COK ALISTIRMA VAR (ornegin Questions 1-5).
+     EnglishClub bunlari tek yerde listelemiyor; her sayfa yalnizca bir
+     sonrakine bagli. Konu acilinca sunucu o zinciri yuruyup cikariyor.
+     Acilan konular burada birikiyor: ikinci acilista beklenmiyor. */
+  const [acikKonu, setAcikKonu] = useState('');
+  const [konuAlistirmalari, setKonuAlistirmalari] = useState<Record<string, HazirKonu[]>>({});
+  const [konuYukleniyor, setKonuYukleniyor] = useState('');
 
   /* --- kendi metnin --- */
   const [metin, setMetin] = useState('');
@@ -109,30 +121,45 @@ export const DikteKaynagi: React.FC<Props> = ({ onMetinHazir, onSesHazir, onSesi
     /* Eski seviyenin listesi EKRANDA KALMAMALI: yeni seviye
        alinamazsa kullanici oncekini gorup "bir sey olmadi" saniyor. */
     setKonular([]);
-    apiFetch(`/api/dikte-hazir?seviye=${hazirSeviye}`)
-      .then(async (r) => {
-        const v = await r.json();
-        if (!r.ok) throw new Error(v?.error || 'Liste alınamadı.');
-        if (!iptal) setKonular(v.konular || []);
-      })
+    setAcikKonu('');
+    hazirKonulariGetir(hazirSeviye)
+      .then((v) => { if (!iptal) setKonular(v.konular || []); })
       .catch((e) => { if (!iptal) setHata(e?.message || 'Liste alınamadı.'); })
       .finally(() => { if (!iptal) setKonularYukleniyor(false); });
     return () => { iptal = true; };
   }, [tip, hazirSeviye]);
 
+  /** Konuyu açar; alıştırmaları daha önce alınmadıysa getirir. */
+  const konuyuAc = async (konu: HazirKonu) => {
+    if (acikKonu === konu.url) { setAcikKonu(''); return; }
+    setAcikKonu(konu.url);
+    if (konuAlistirmalari[konu.url]) return;
+
+    setHata('');
+    setKonuYukleniyor(konu.url);
+    try {
+      const v = await konuAlistirmalariniGetir(konu.url);
+      setKonuAlistirmalari((o) => ({ ...o, [konu.url]: v.alistirmalar || [] }));
+    } catch (e: any) {
+      setHata(e?.message || 'Konunun alıştırmaları alınamadı.');
+      setAcikKonu('');
+    } finally {
+      setKonuYukleniyor('');
+    }
+  };
+
   const hazirAlistirmayiAc = async (konu: HazirKonu) => {
     setHata('');
     setAlistirmaYukleniyor(konu.url);
     try {
-      const r = await apiFetch(`/api/dikte-hazir?url=${encodeURIComponent(konu.url)}`);
-      const v = await r.json();
-      if (!r.ok) throw new Error(v?.error || 'Alıştırma alınamadı.');
+      const v = await hazirAlistirmayiGetir(konu.url);
       onSesHazir(
         {
           normalUrl: v.normalUrl,
           yavasUrl: v.yavasUrl,
           normalAd: `${v.baslik} — normal`,
           yavasAd: `${v.baslik} — yavaş`,
+          sonrakiUrl: v.sonrakiUrl,
         },
         v.metin
       );
@@ -273,6 +300,7 @@ export const DikteKaynagi: React.FC<Props> = ({ onMetinHazir, onSesHazir, onSesi
             <p className="max-w-[64ch] text-[12px] leading-relaxed text-ink-3">
               EnglishClub'ın dikte alıştırmaları: her birinin normal ve ayrı
               okunmuş yavaş kaydı var. Ses doğrudan kaynağından çalınıyor.
+              Konuya dokununca içindeki alıştırmalar açılır.
             </p>
 
             <div className="flex flex-wrap gap-1.5">
@@ -310,25 +338,55 @@ export const DikteKaynagi: React.FC<Props> = ({ onMetinHazir, onSesHazir, onSesi
               </p>
             ) : (
               <ul className="divide-y divide-hairline overflow-hidden rounded-xl border border-hairline">
-                {konular.map((k) => (
-                  <li key={k.url}>
-                    <button
-                      type="button"
-                      onClick={() => hazirAlistirmayiAc(k)}
-                      disabled={!!alistirmaYukleniyor}
-                      className="flex w-full items-center justify-between gap-3 px-3 py-2.5
-                        text-left text-[13px] text-ink transition-colors
-                        hover:bg-paper-3 disabled:opacity-50 cursor-pointer"
-                    >
-                      <span className="min-w-0 truncate">{k.baslik}</span>
-                      {alistirmaYukleniyor === k.url ? (
-                        <Loader2 className="h-4 w-4 shrink-0 animate-spin text-ink-3" />
-                      ) : (
-                        <ChevronRight className="h-4 w-4 shrink-0 text-ink-3" />
+                {konular.map((k) => {
+                  const acik = acikKonu === k.url;
+                  const liste = konuAlistirmalari[k.url];
+                  return (
+                    <li key={k.url}>
+                      <button
+                        type="button"
+                        onClick={() => konuyuAc(k)}
+                        className="flex w-full items-center justify-between gap-3 px-3 py-2.5
+                          text-left text-[13px] text-ink transition-colors
+                          hover:bg-paper-3 cursor-pointer"
+                      >
+                        <span className="min-w-0 truncate">{k.baslik}</span>
+                        {konuYukleniyor === k.url ? (
+                          <Loader2 className="h-4 w-4 shrink-0 animate-spin text-ink-3" />
+                        ) : (
+                          <ChevronRight
+                            className={`h-4 w-4 shrink-0 text-ink-3 transition-transform ${
+                              acik ? 'rotate-90' : ''
+                            }`}
+                          />
+                        )}
+                      </button>
+
+                      {acik && konuYukleniyor !== k.url && (
+                        <ul className="border-t border-hairline bg-paper">
+                          {(liste || []).map((a) => (
+                            <li key={a.url}>
+                              <button
+                                type="button"
+                                onClick={() => hazirAlistirmayiAc(a)}
+                                disabled={!!alistirmaYukleniyor}
+                                className="flex w-full items-center justify-between gap-3
+                                  py-2 pl-7 pr-3 text-left text-[12px] text-ink-2
+                                  transition-colors hover:bg-paper-3 hover:text-ink
+                                  disabled:opacity-50 cursor-pointer"
+                              >
+                                <span className="min-w-0 truncate">{a.baslik}</span>
+                                {alistirmaYukleniyor === a.url && (
+                                  <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin" />
+                                )}
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
                       )}
-                    </button>
-                  </li>
-                ))}
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>

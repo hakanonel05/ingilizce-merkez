@@ -3132,9 +3132,82 @@ function ecCevabiCikar(icerik: string): string {
   return mdEslesme ? ecMetniSadelestir(mdEslesme[1]) : "";
 }
 
+/** Sayfadaki "Next Dictation" baglantisi; yoksa bos. */
+function ecSonrakiCikar(icerik: string, temelUrl: string): string {
+  const m =
+    icerik.match(
+      /<a[^>]+href=["']([^"']*dictation[a-z0-9-]*\.php)["'][^>]*>\s*Next Dictation/i
+    ) || icerik.match(/\[Next Dictation[^\]]*\]\(([^)]+\.php)\)/i);
+  if (!m) return "";
+  try {
+    const mutlak = new URL(m[1], temelUrl).href;
+    return EC_SAYFA_RE.test(mutlak) ? mutlak : "";
+  } catch {
+    return "";
+  }
+}
+
+/** Sayfa basligi; iki bicimde de calisir. */
+function ecBaslikCikar(icerik: string): string {
+  const m =
+    icerik.match(/<title>([\s\S]*?)<\/title>/i) || icerik.match(/^Title:\s*(.+)$/m);
+  return m
+    ? ecMetniSadelestir(m[1]).replace(/\s*\|\s*Listening.*$/i, "").trim()
+    : "Dikte";
+}
+
+/* Bir konudaki en fazla alistirma. Zincir bozuksa (ornegin bir sayfa
+   kendine donuyorsa) sonsuz dongu olmasin diye sert sinir. */
+const EC_EN_FAZLA_ALISTIRMA = 12;
+
+/* ZINCIR YURUMENIN SURE BUTCESI.
+   Netlify fonksiyonlarinin siniri 26 saniye. Yerel yolda bir sayfa ~1
+   saniye (olculdu: bes alistirma 6 sn), yedek okuyucu yolunda ~2,5
+   saniye. Butcesiz birakilsa uzun bir konu zinciri sinirı asar ve
+   kullanici hicbir sey goremez; butceyle en azindan O ANA KADAR
+   bulunanlar donuyor. */
+const EC_ZINCIR_BUTCESI_MS = 18000;
+
+/**
+ * Bir konudaki BUTUN alistirmalar.
+ *
+ * NIYE ZINCIR YURUNUYOR: EnglishClub bir konunun alistirmalarini tek
+ * yerde listelemiyor; her sayfa yalnizca BIR SONRAKINE baglaniyor
+ * ("Next Dictation: Question 2"). Tamamini gormenin baska yolu yok.
+ *
+ * Maliyetli: olculdu, bes alistirmalik bir konu yedek okuyucu yoluyla
+ * ~12,6 saniye suruyor. Bu yuzden sonuc onbellege giriyor ve zincir
+ * yalnizca kullanici o konuyu actiginda yurunuyor - liste ekraninda
+ * degil.
+ */
+async function ecKonuyuCoz(
+  ilkUrl: string
+): Promise<{ baslik: string; url: string }[]> {
+  const alistirmalar: { baslik: string; url: string }[] = [];
+  const gorulen = new Set<string>();
+  let u = ilkUrl;
+
+  const basla = Date.now();
+
+  while (u && alistirmalar.length < EC_EN_FAZLA_ALISTIRMA && !gorulen.has(u)) {
+    gorulen.add(u);
+    const icerik = await ecSayfayiAl(u);
+    alistirmalar.push({ baslik: ecBaslikCikar(icerik), url: u });
+    u = ecSonrakiCikar(icerik, u);
+
+    /* Butce dolduysa elde ne varsa onunla don: eksik bir liste, bos
+       bir ekrandan iyi. Kalan alistirmalara calisma ekranindaki
+       "Sonraki alistirma" dugmesinden ulasilabiliyor. */
+    if (Date.now() - basla > EC_ZINCIR_BUTCESI_MS) break;
+  }
+
+  return alistirmalar;
+}
+
 app.get("/api/dikte-hazir", async (req, res) => {
   try {
     const seviye = String(req.query.seviye || "");
+    const konu = String(req.query.konu || "");
     const url = String(req.query.url || "");
 
     /* --- 1) Seviye dizini: konu listesi --- */
@@ -3174,7 +3247,28 @@ app.get("/api/dikte-hazir", async (req, res) => {
       return res.json(deger);
     }
 
-    /* --- 2) Tek alistirma --- */
+    /* --- 2) Bir konudaki butun alistirmalar --- */
+    if (konu) {
+      if (!EC_SAYFA_RE.test(konu)) {
+        return res.status(400).json({ error: "Gecerli bir EnglishClub dikte adresi degil." });
+      }
+
+      const onbellek = EC_ONBELLEK.get("konu:" + konu);
+      if (onbellek && Date.now() - onbellek.zaman < EC_ONBELLEK_SURESI) {
+        return res.json(onbellek.deger);
+      }
+
+      const alistirmalar = await ecKonuyuCoz(konu);
+      if (alistirmalar.length === 0) {
+        return res.status(502).json({ error: "Bu konunun alistirmalari alinamadi." });
+      }
+
+      const deger = { konu, alistirmalar };
+      EC_ONBELLEK.set("konu:" + konu, { deger, zaman: Date.now() });
+      return res.json(deger);
+    }
+
+    /* --- 3) Tek alistirma --- */
     if (!EC_SAYFA_RE.test(url)) {
       return res.status(400).json({ error: "Gecerli bir EnglishClub dikte adresi degil." });
     }
@@ -3203,12 +3297,7 @@ app.get("/api/dikte-hazir", async (req, res) => {
 
     const metin = ecCevabiCikar(icerik);
 
-    const baslikEslesme =
-      icerik.match(/<title>([\s\S]*?)<\/title>/i) ||
-      icerik.match(/^Title:\s*(.+)$/m);
-    const baslik = baslikEslesme
-      ? ecMetniSadelestir(baslikEslesme[1]).replace(/\s*\|\s*Listening.*$/i, "")
-      : "Dikte";
+    const baslik = ecBaslikCikar(icerik);
 
     if (!normalUrl || !yavasUrl || !metin) {
       return res.status(502).json({
@@ -3216,14 +3305,7 @@ app.get("/api/dikte-hazir", async (req, res) => {
       });
     }
 
-    /* Sonraki alistirma: ayni konunun devami. HTML'de <a ...>Next
-       Dictation, okuyucu ciktisinda [Next Dictation: ...](adres). */
-    const sonrakiEslesme =
-      icerik.match(
-        /<a[^>]+href=["']([^"']*dictation[a-z0-9-]*\.php)["'][^>]*>\s*Next Dictation/i
-      ) ||
-      icerik.match(/\[Next Dictation[^\]]*\]\(([^)]+\.php)\)/i);
-    const sonrakiUrl = sonrakiEslesme ? new URL(sonrakiEslesme[1], url).href : "";
+    const sonrakiUrl = ecSonrakiCikar(icerik, url);
 
     const deger = { baslik, normalUrl, yavasUrl, metin, sayfaUrl: url, sonrakiUrl };
     EC_ONBELLEK.set(url, { deger, zaman: Date.now() });

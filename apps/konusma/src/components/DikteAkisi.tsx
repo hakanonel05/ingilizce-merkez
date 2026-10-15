@@ -27,6 +27,7 @@ import {
 } from '../lib/dikteSesi';
 import { dikteYaz, type DikteBirimKaydi } from '../lib/dikteDeposu';
 import { DikteKaynagi, type YuklenenSes } from './DikteKaynagi';
+import { hazirAlistirmayiGetir } from '../lib/dikteHazir';
 import { sesiMetneCevir } from '../../../../shared/ses/konusmaCozumleme';
 
 interface Props {
@@ -58,6 +59,7 @@ export const DikteAkisi: React.FC<Props> = ({ onKaydedildi }) => {
   const [sesCevabi, setSesCevabi] = useState('');
   const [sesYazilan, setSesYazilan] = useState('');
   const [sesSonucu, setSesSonucu] = useState<DikteSonucu | null>(null);
+  const [sonrakiYukleniyor, setSonrakiYukleniyor] = useState(false);
   const [metin, setMetin] = useState('');
   const [birimler, setBirimler] = useState<DikteBirimi[]>([]);
   const [sira, setSira] = useState(0);
@@ -237,6 +239,36 @@ export const DikteAkisi: React.FC<Props> = ({ onKaydedildi }) => {
       onKaydedildi?.();
     } catch (e: any) {
       setHata(e?.message || 'Kayıt yazılamadı.');
+    }
+  };
+
+  /* AYNI KONUNUN SONRAKI ALISTIRMASI.
+     Konudaki alistirmalari liste ekraninda da gorebiliyorsun ama
+     calisirken listeye donmek akisi kesiyor; burada tek tikla
+     siradakine geciliyor. Adres zaten elde (sonrakiUrl), yalnizca o
+     sayfanin sesleri ve cevabi aliniyor. */
+  const sonrakiAlistirma = async () => {
+    if (!yuklenen?.sonrakiUrl) return;
+    setHata('');
+    setSonrakiYukleniyor(true);
+    try {
+      const v = await hazirAlistirmayiGetir(yuklenen.sonrakiUrl);
+      dikteyiDurdur();
+      setYuklenen({
+        normalUrl: v.normalUrl,
+        yavasUrl: v.yavasUrl,
+        normalAd: `${v.baslik} — normal`,
+        yavasAd: `${v.baslik} — yavaş`,
+        sonrakiUrl: v.sonrakiUrl,
+      });
+      setSesCevabi(v.metin);
+      setSesYazilan('');
+      setSesSonucu(null);
+      setKaydedildi(false);
+    } catch (e: any) {
+      setHata(e?.message || 'Sonraki alıştırma alınamadı.');
+    } finally {
+      setSonrakiYukleniyor(false);
     }
   };
 
@@ -425,6 +457,21 @@ export const DikteAkisi: React.FC<Props> = ({ onKaydedildi }) => {
               >
                 <Save className="h-4 w-4" />
                 {kaydedildi ? 'Kaydedildi' : 'Geçmişe kaydet'}
+              </button>
+            )}
+            {yuklenen.sonrakiUrl && (
+              <button
+                type="button"
+                onClick={sonrakiAlistirma}
+                disabled={sonrakiYukleniyor}
+                className="inline-flex items-center gap-2 rounded-xl border border-hairline
+                  bg-paper-2 px-3 py-2.5 text-[13px] font-medium text-ink
+                  transition-colors hover:border-accent/40 disabled:opacity-40 cursor-pointer"
+              >
+                {sonrakiYukleniyor
+                  ? <Loader2 className="h-4 w-4 animate-spin" />
+                  : <ChevronRight className="h-4 w-4" />}
+                Sonraki alıştırma
               </button>
             )}
           </div>
