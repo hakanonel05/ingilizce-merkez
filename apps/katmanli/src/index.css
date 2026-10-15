@@ -796,27 +796,43 @@ html { -webkit-text-size-adjust: 100%; }
      ile gizlenen bir atanin icindeki hicbir sey cizilemezdi. */
   body * { visibility: hidden; }
   #ders-raporu, #ders-raporu * { visibility: visible; }
+
+  /* RAPOR NORMAL AKISTA OLMALI — RAPORUN KESILMESININ SEBEBI BUYDU.
+     Rapor `position: fixed` bir ortunun icinde duruyor. Sabit
+     konumlanmis bir ata, icindeki mutlak konumlu kutu icin saran kutu
+     oluyor ve tarayici onu TEK EKRANA sigdirmaya calisiyor: 28
+     cumlelik bir ders uc sayfada, hem de cumlenin ortasinda
+     kesiliyordu (olculdu, kullanicinin PDF'inde ingilizce bolum,
+     kelimeler, ozet ve degerlendirmeler hic yoktu).
+
+     Cozum raporu degil ATALARINI duzeltmek: ortu, pencere ve kaydirma
+     kutusu kagitta olagan blok kutulara donuyor, rapor da sayfadan
+     sayfaya akiyor. */
+  .rapor-ortu,
+  .rapor-pencere,
+  .rapor-kaydirma {
+    position: static !important;
+    inset: auto !important;
+    display: block !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: none !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+  }
+
   #ders-raporu {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
+    position: static;
+    width: auto;
     padding: 0;
   }
 
   /* Pencere kromu kagida gitmiyor. */
   .rapor-araclar { display: none !important; }
-
-  /* Ekrandaki kaydirma ve yukseklik sinirlari kagitta tek sayfalik bir
-     rapor uretirdi: gerisi kirpilirdi. */
-  .rapor-pencere,
-  .rapor-kaydirma {
-    max-height: none !important;
-    overflow: visible !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    margin: 0 !important;
-  }
 
   /* Her ana bolum yeni sayfada; ilki haric, yoksa birinci sayfa
      yalnizca kunyeden ibaret kalirdi. */

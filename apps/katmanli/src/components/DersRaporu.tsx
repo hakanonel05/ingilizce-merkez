@@ -180,8 +180,8 @@ export const DersRaporuGorunumu: React.FC<Props> = ({ lesson, mistakes, onClose 
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto
-        bg-ink/40 p-4 backdrop-blur-sm sm:p-6"
+      className="rapor-ortu fixed inset-0 z-50 flex items-start justify-center
+        overflow-y-auto bg-ink/40 p-4 backdrop-blur-sm sm:p-6"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
