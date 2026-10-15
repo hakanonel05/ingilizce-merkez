@@ -26,12 +26,19 @@ import {
   dikteSesiUret, dikteyiCal, dikteyiDurdur, bekle, type DikteHizi,
 } from '../lib/dikteSesi';
 import { dikteYaz, type DikteBirimKaydi } from '../lib/dikteDeposu';
+import { DikteKaynagi, type YuklenenSes } from './DikteKaynagi';
+import { sesiMetneCevir } from '../../../../shared/ses/konusmaCozumleme';
 
 interface Props {
   onKaydedildi?: () => void;
 }
 
-type Asama = 'metin' | 'calisma' | 'bitti';
+/* 'sesCalisma' AYRI BIR ASAMA. Yuklenen hazir kayitta birim birim ses
+   yok - elde iki dosya var, cumleye bolunemiyorlar. O yuzden akis da
+   farkli: once normali dinle, sonra yavasi dinleyip yaz, sonra normali
+   tekrar dinleyip kontrol et. Hazir dikte kayitlarinin kendi yontemi
+   zaten bu. */
+type Asama = 'kaynak' | 'calisma' | 'sesCalisma' | 'bitti';
 
 /** Bir birimin çalışma durumu. */
 interface BirimDurumu {
@@ -46,7 +53,11 @@ const bosDurum = (): BirimDurumu => ({
 });
 
 export const DikteAkisi: React.FC<Props> = ({ onKaydedildi }) => {
-  const [asama, setAsama] = useState<Asama>('metin');
+  const [asama, setAsama] = useState<Asama>('kaynak');
+  const [yuklenen, setYuklenen] = useState<YuklenenSes | null>(null);
+  const [sesCevabi, setSesCevabi] = useState('');
+  const [sesYazilan, setSesYazilan] = useState('');
+  const [sesSonucu, setSesSonucu] = useState<DikteSonucu | null>(null);
   const [metin, setMetin] = useState('');
   const [birimler, setBirimler] = useState<DikteBirimi[]>([]);
   const [sira, setSira] = useState(0);
@@ -78,8 +89,10 @@ export const DikteAkisi: React.FC<Props> = ({ onKaydedildi }) => {
     return { dogru, toplam, puan: toplam === 0 ? 0 : Math.round((dogru / toplam) * 100) };
   }, [durumlar]);
 
-  const hazirla = () => {
-    const b = dikteBirimleri(metin);
+  const hazirla = (gelen?: string) => {
+    const kaynak = gelen ?? metin;
+    if (gelen !== undefined) setMetin(gelen);
+    const b = dikteBirimleri(kaynak);
     if (b.length === 0) {
       setHata('Önce İngilizce bir metin yapıştırın.');
       return;
@@ -197,9 +210,47 @@ export const DikteAkisi: React.FC<Props> = ({ onKaydedildi }) => {
     }
   };
 
+  /* Yuklenen ses oturumu tek parca: birim birim ses yok, tek bir
+     kayit ve tek bir cevap var. Depoya da tek birim olarak giriyor. */
+  const sesiKaydet = async () => {
+    if (!sesSonucu || !yuklenen) return;
+    try {
+      await dikteYaz({
+        id: `dikte-${Date.now()}`,
+        olusturuldu: Date.now(),
+        baslik: yuklenen.normalAd,
+        metin: sesCevabi,
+        birimler: [{
+          sira: 1,
+          hedef: sesCevabi,
+          yazilan: sesYazilan,
+          dogru: sesSonucu.dogru,
+          toplam: sesSonucu.toplam,
+          dinleme: 0,
+          yavasKullandi: true,
+        }],
+        dogru: sesSonucu.dogru,
+        toplam: sesSonucu.toplam,
+        puan: sesSonucu.puan,
+      });
+      setKaydedildi(true);
+      onKaydedildi?.();
+    } catch (e: any) {
+      setHata(e?.message || 'Kayıt yazılamadı.');
+    }
+  };
+
   const bastanBasla = () => {
     durdur();
-    setAsama('metin');
+    if (yuklenen) {
+      URL.revokeObjectURL(yuklenen.normalUrl);
+      URL.revokeObjectURL(yuklenen.yavasUrl);
+    }
+    setYuklenen(null);
+    setSesCevabi('');
+    setSesYazilan('');
+    setSesSonucu(null);
+    setAsama('kaynak');
     setBirimler([]);
     setDurumlar([]);
     setSira(0);
@@ -208,7 +259,7 @@ export const DikteAkisi: React.FC<Props> = ({ onKaydedildi }) => {
 
   /* ---------------------------------------------------------------- */
 
-  if (asama === 'metin') {
+  if (asama === 'kaynak') {
     return (
       <div className="space-y-5">
         <div className="space-y-3 rounded-2xl border border-hairline bg-paper-2 p-5">
@@ -217,46 +268,181 @@ export const DikteAkisi: React.FC<Props> = ({ onKaydedildi }) => {
             <span>Dikte</span>
           </div>
           <p className="max-w-[64ch] text-[13px] leading-relaxed text-ink-2">
-            İngilizce bir metin yapıştır; cümlelere bölünür, her birini dinleyip
-            yazarsın ve kelime kelime denetlenir.
+            Dinle ve duyduğunu yaz; yazdıkların kelime kelime denetlensin.
           </p>
           <p className="max-w-[64ch] text-[12px] leading-relaxed text-ink-3">
-            Yavaş sürüm metni <span className="font-medium text-ink-2">baştan ve ağır okuyor</span> —
+            Metinden çalışırken yavaş sürüm{' '}
+            <span className="font-medium text-ink-2">baştan ve ağır okunuyor</span> —
             normal kaydın hızı düşürülmüyor. Hız düşürmek sesi bozar ve yavaşlatmak
             konuşmayı daha anlaşılır değil daha anlaşılmaz yapar.
           </p>
         </div>
 
+        <DikteKaynagi
+          onMetinHazir={(m) => hazirla(m)}
+          onSesHazir={(ses, cevapMetni) => {
+            setYuklenen(ses);
+            setSesCevabi(cevapMetni);
+            setSesYazilan('');
+            setSesSonucu(null);
+            setHata('');
+            setAsama('sesCalisma');
+          }}
+          onSesiCozumle={(blob) => sesiMetneCevir(`dikte-${Date.now()}`, blob)}
+        />
+      </div>
+    );
+  }
+
+  /* ---------------- YUKLENEN SES ----------------
+     Hazir dikte kayitlarinin kendi yontemi: once normali dinle (yazma),
+     sonra yavasi dinleyip yaz, sonra normali tekrar dinleyip kontrol et. */
+  if (asama === 'sesCalisma' && yuklenen) {
+    const sesCal = async (url: string) => {
+      setHata('');
+      try {
+        await dikteyiCal(url);
+      } catch {
+        setHata('Ses çalınamadı.');
+      }
+    };
+
+    return (
+      <div className="space-y-5">
         <div className="space-y-3 rounded-2xl border border-hairline bg-paper-2 p-5">
-          <label htmlFor="dikte-metin" className="block text-[12px] font-medium text-ink-2">
-            Alıştırma metni (İngilizce)
-          </label>
-          <textarea
-            id="dikte-metin"
-            value={metin}
-            onChange={(e) => setMetin(e.target.value)}
-            rows={7}
-            placeholder={'I would like to make an appointment with the doctor. Can you come in on Friday at three?'}
-            className="w-full resize-y rounded-xl border border-hairline bg-paper px-3 py-2.5
-              text-[14px] leading-relaxed text-ink placeholder-ink-3
-              focus:border-accent focus:outline-none"
-          />
+          <div className="flex items-center justify-between gap-3">
+            <span className="text-[12px] font-medium text-ink-2">Yüklenen kayıt</span>
+            <button
+              type="button"
+              onClick={bastanBasla}
+              className="text-[12px] text-ink-3 hover:text-ink cursor-pointer"
+            >
+              Değiştir
+            </button>
+          </div>
+          <p className="truncate text-[11px] text-ink-3">
+            {yuklenen.normalAd} · {yuklenen.yavasAd}
+          </p>
+
+          <ol className="space-y-2 pt-1">
+            <li className="flex flex-wrap items-center gap-2 text-[13px] text-ink-2">
+              <span className="text-ink-3">1.</span>
+              <button
+                type="button"
+                onClick={() => sesCal(yuklenen.normalUrl)}
+                className="inline-flex items-center gap-2 rounded-xl bg-accent px-3 py-2
+                  text-[13px] font-medium text-white transition-colors
+                  hover:bg-accent-700 cursor-pointer"
+              >
+                <Play className="h-4 w-4" />
+                Normal hızda dinle
+              </button>
+              <span className="text-[12px] text-ink-3">yazma, sadece dinle</span>
+            </li>
+            <li className="flex flex-wrap items-center gap-2 text-[13px] text-ink-2">
+              <span className="text-ink-3">2.</span>
+              <button
+                type="button"
+                onClick={() => sesCal(yuklenen.yavasUrl)}
+                className="inline-flex items-center gap-2 rounded-xl border border-hairline
+                  bg-paper-2 px-3 py-2 text-[13px] font-medium text-ink
+                  transition-colors hover:border-accent/40 cursor-pointer"
+              >
+                <Rewind className="h-4 w-4" />
+                Yavaş dinle
+              </button>
+              <span className="text-[12px] text-ink-3">dinlerken yaz</span>
+            </li>
+            <li className="flex flex-wrap items-center gap-2 text-[13px] text-ink-2">
+              <span className="text-ink-3">3.</span>
+              <button
+                type="button"
+                onClick={() => sesCal(yuklenen.normalUrl)}
+                className="inline-flex items-center gap-2 rounded-xl border border-hairline
+                  bg-paper-2 px-3 py-2 text-[13px] font-medium text-ink
+                  transition-colors hover:border-accent/40 cursor-pointer"
+              >
+                <Play className="h-4 w-4" />
+                Tekrar normal
+              </button>
+              <span className="text-[12px] text-ink-3">kontrol et</span>
+            </li>
+          </ol>
+
+          <button
+            type="button"
+            onClick={() => dikteyiDurdur()}
+            className="inline-flex items-center gap-1.5 text-[12px] text-ink-3
+              hover:text-ink cursor-pointer"
+          >
+            <Pause className="h-3.5 w-3.5" /> Durdur
+          </button>
+
           {hata && (
             <p className="flex items-center gap-1.5 text-[12px] text-[var(--danger)]">
               <AlertCircle className="h-3.5 w-3.5" /> {hata}
             </p>
           )}
-          <button
-            type="button"
-            onClick={hazirla}
-            disabled={!metin.trim()}
-            className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-[13px]
-              font-medium text-white transition-colors hover:bg-accent-700
-              disabled:opacity-40 cursor-pointer"
-          >
-            <ChevronRight className="h-4 w-4" />
-            Alıştırmayı hazırla
-          </button>
+        </div>
+
+        <div className="space-y-3 rounded-2xl border border-hairline bg-paper-2 p-5">
+          <label htmlFor="dikte-ses-yazi" className="block text-[12px] font-medium text-ink-2">
+            Duyduğunu yaz
+          </label>
+          <textarea
+            id="dikte-ses-yazi"
+            value={sesYazilan}
+            onChange={(e) => { setSesYazilan(e.target.value); setSesSonucu(null); }}
+            rows={6}
+            lang="en"
+            placeholder="Kaydı dinlerken buraya yaz…"
+            className="w-full resize-y rounded-xl border border-hairline bg-paper px-3 py-2.5
+              text-[14px] leading-relaxed text-ink placeholder-ink-3
+              focus:border-accent focus:outline-none"
+          />
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setSesSonucu(dikteyiDenetle(sesCevabi, sesYazilan))}
+              disabled={!sesYazilan.trim()}
+              className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2.5
+                text-[13px] font-medium text-white transition-colors
+                hover:bg-accent-700 disabled:opacity-40 cursor-pointer"
+            >
+              <Check className="h-4 w-4" />
+              Denetle
+            </button>
+            {sesSonucu && (
+              <button
+                type="button"
+                onClick={sesiKaydet}
+                disabled={kaydedildi}
+                className="inline-flex items-center gap-2 rounded-xl border border-hairline
+                  bg-paper-2 px-3 py-2.5 text-[13px] font-medium text-ink
+                  transition-colors hover:border-accent/40 disabled:opacity-40 cursor-pointer"
+              >
+                <Save className="h-4 w-4" />
+                {kaydedildi ? 'Kaydedildi' : 'Geçmişe kaydet'}
+              </button>
+            )}
+          </div>
+
+          {sesSonucu && (
+            <div className="space-y-2 rounded-xl border border-hairline bg-paper p-3">
+              <p className="text-[12px] text-ink-3">
+                {sesSonucu.dogru} / {sesSonucu.toplam} kelime doğru
+                {sesSonucu.tamMi && ' · tam'}
+              </p>
+              <p className="text-[14px] leading-relaxed" lang="en">
+                <SonucSatiri sonuc={sesSonucu} />
+              </p>
+              {sesSonucu.fazladan.length > 0 && (
+                <p className="text-[12px] text-ink-3">
+                  Fazladan yazılan: {sesSonucu.fazladan.join(', ')}
+                </p>
+              )}
+            </div>
+          )}
         </div>
       </div>
     );

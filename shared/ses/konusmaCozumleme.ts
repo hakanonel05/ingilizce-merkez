@@ -467,6 +467,34 @@ export async function kaydiCozumle(
 }
 
 /**
+ * Bir ses dosyasını YALNIZCA metne çevirir; karşılaştırma yapmaz.
+ *
+ * Dikteye yüklenen hazır kayıtlar için: kullanıcının cevap metnini elle
+ * yapıştırması gerekmesin diye. kaydiCozumle'ye boş bir hedef cümle
+ * vermek de işe yarardı ama "hedefi olmayan bir karşılaştırma" okuyana
+ * hiçbir şey anlatmaz; burada ne istendiği adından belli.
+ *
+ * Aynı işçiyi ve aynı modeli kullanıyor — ikinci bir Whisper yükü yok.
+ */
+export async function sesiMetneCevir(anahtar: string, blob: Blob): Promise<string> {
+  const w = isciyiAl();
+  if (!w) throw new Error('Bu tarayıcı arka planda çözümlemeyi desteklemiyor.');
+
+  const pcm = await pcmCikar(blob);
+  if (pcm.length < 16000 * 0.3) {
+    throw new Error('Ses çok kısa; en az yarım saniye konuşma olmalı.');
+  }
+
+  durumBildir('cozuluyor');
+  const cozum = await new Promise<{ metin: string; kelimeler: CozumKelimesi[] }>((coz, hata) => {
+    bekleyen.set(anahtar, { coz, hata });
+    w.postMessage({ tip: 'coz', anahtar, pcm }, [pcm.buffer]);
+  });
+
+  return cozum.metin.trim();
+}
+
+/**
  * Çözümden analiz türetir.
  *
  * Ses ve işçi yönetiminden AYRI tutuluyor, çünkü asıl hata yapılabilecek yer

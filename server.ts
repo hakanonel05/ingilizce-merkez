@@ -2877,6 +2877,66 @@ app.get("/api/ses-kotasi", async (req, res) => {
   }
 });
 
+/* DIKTE METNI URETIMI
+   ------------------------------------------------------------
+   Kullanici her seferinde metin bulmak zorunda kalmasin diye.
+   Uretilen metin DIKTEYE UYGUN olmali, yani:
+     - duyuldugu gibi yazilabilen gunluk kelimeler
+     - kisa, tek fikirli cumleler
+     - ozel isim ve rakam az (diktede yazimi tartismali olurlar)
+   Bunlar modele acikca soyleniyor; "bir metin yaz" demek edebi ve
+   diktede yazilamaz cumleler uretiyordu.
+   ============================================================ */
+app.post("/api/dikte-uret", async (req, res) => {
+  try {
+    const konu = String(req.body?.konu || "").trim().slice(0, 120);
+    const seviye = ["A1", "A2", "B1", "B2", "C1"].includes(String(req.body?.seviye))
+      ? String(req.body.seviye)
+      : "B1";
+    /* Birim sayisi: her biri bir solukta yazilabilecek bir cumle. */
+    const cumle = Math.min(10, Math.max(2, Number(req.body?.cumle) || 5));
+
+    const ai = getAIClient();
+
+    const yonerge = [
+      `Write a short English dictation exercise for a ${seviye} learner.`,
+      konu ? `Topic: ${konu}.` : "Pick an ordinary everyday topic.",
+      "",
+      "Rules:",
+      `- Exactly ${cumle} sentences.`,
+      "- Each sentence must be writable in one listening: 8-14 words.",
+      "- Everyday vocabulary that a learner can spell from hearing it.",
+      "- Avoid proper nouns, rare names, abbreviations and digits; write",
+      "  any number as a word (say 'three', not '3').",
+      "- Plain statements and questions. No lists, no headings, no quotes.",
+      "- The sentences should form one small connected situation.",
+      "",
+      "Return ONLY the text itself, no title and no commentary.",
+    ].join("\n");
+
+    const yanit = await generateContentWithRetry(ai, { contents: yonerge });
+
+    const metin = String(yanit?.text || "")
+      .replace(/^```[a-z]*\n?|```$/gim, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    if (!metin) {
+      return res.status(502).json({ error: "Dikte metni uretilemedi." });
+    }
+
+    res.json({ metin, seviye, konu });
+  } catch (error: any) {
+    console.error("Error in /api/dikte-uret:", error);
+    const kota = isRateLimitError(error);
+    res.status(kota ? 429 : 500).json({
+      error: kota
+        ? describeRateLimit(error)
+        : formatErrorMessage(error, "Dikte metni uretilemedi."),
+    });
+  }
+});
+
 app.post("/api/speak", async (req, res) => {
   try {
     const text = String(req.body?.text || "").trim();
