@@ -1202,7 +1202,6 @@ async function buildLessonData(
               nextLabel={nextCore ? nextCore.label : null}
               onComplete={() => handleCompleteLayer(activeLayer)}
               onGoNext={() => nextCore && setActiveLayer(nextCore.id)}
-              tumKatmanlarBitti={CORE_LAYERS.every((k) => completedLayers.includes(k.id))}
               onOpenReport={() => setRaporDersi(activeLesson)}
             />
           )}

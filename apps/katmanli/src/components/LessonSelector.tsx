@@ -458,13 +458,19 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
                         </p>
                       )}
 
-                      {/* RAPOR — yalnizca yedi katman bitince.
-                          Satir eylemleri (duzenle/sil) fareyle uzerine
-                          gelince beliriyor; rapor oraya konsaydi
-                          dokunmatikte ve ilk bakista bulunamazdi.
-                          Dersin bittigini soyleyen satirin hemen
-                          altinda duruyor. */}
-                      {status.finished && onOpenReport && (
+                      {/* RAPOR HER ZAMAN ALINABILIR.
+                          Once yalnizca yedi katman bitince cikiyordu ve
+                          kullanici dugmeyi bulamadi: ders bitmemisse
+                          hicbir yerde gorunmuyordu. Ustelik beklemenin
+                          bir karsiligi yok - rapor zaten eksik bolumleri
+                          "kayit yok" diye gosteriyor ve kunyede kacinci
+                          katmanda olundugu yaziyor. Bir ozet yazilmadi
+                          diye transkriptin ve kelimelerin alinamamasi
+                          anlamsizdi.
+
+                          Cumlesi olmayan derste yine gizli: bos bir
+                          rapor uretmenin bir degeri yok. */}
+                      {lesson.sentences.length > 0 && onOpenReport && (
                         <button
                           type="button"
                           onClick={(e) => { e.stopPropagation(); onOpenReport(lesson); }}

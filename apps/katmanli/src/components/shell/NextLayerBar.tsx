@@ -27,17 +27,15 @@ interface Props {
   /** Sıradaki katmanın adı; yoksa bu sonuncusudur. */
   nextLabel: string | null;
   onComplete: () => void;
-  /* YEDI KATMANIN HEPSI bitince gosterilen rapor dugmesi.
-     "son katman tamamlandi" ile ayni sey DEGIL: kullanici katmanlari
-     sirayla yapmak zorunda degil, 7'yi bitirip 3'u atlamis olabilir. */
-  tumKatmanlarBitti?: boolean;
+  /* Rapor dugmesi, tamamlanan HER katmanin altinda. Once yalnizca
+     yedi katman bitince cikiyordu; rapor eksik bolumleri zaten
+     "kayit yok" diye gosterdigi icin beklemenin bir karsiligi yoktu. */
   onOpenReport?: () => void;
   onGoNext: () => void;
 }
 
 export const NextLayerBar: React.FC<Props> = ({
-  step, totalSteps, isCompleted, nextLabel, onComplete, onGoNext,
-  tumKatmanlarBitti, onOpenReport,
+  step, totalSteps, isCompleted, nextLabel, onComplete, onGoNext, onOpenReport,
 }) => (
   <div
     className="sticky bottom-0 z-20 -mx-4 mt-8 border-t border-hairline
@@ -73,13 +71,19 @@ export const NextLayerBar: React.FC<Props> = ({
             <CircleCheck className="h-4 w-4" />
             Bu katman tamamlandı
           </span>
-          {tumKatmanlarBitti && onOpenReport && (
+          {onOpenReport && (
             <button
               type="button"
               onClick={onOpenReport}
-              className="inline-flex h-10 items-center gap-2 rounded-xl bg-accent px-4
-                text-[13px] font-medium text-white transition-colors
-                hover:bg-accent-700 cursor-pointer"
+              /* Sonraki katman varken rapor IKINCIL duruyor: asil is
+                 devam etmek, rapor ara bir cikti. Son katmanda sira
+                 rapora geliyor ve dolu dugme o oluyor. */
+              className={`inline-flex h-10 items-center gap-2 rounded-xl px-4 text-[13px]
+                font-medium transition-colors cursor-pointer ${
+                  nextLabel
+                    ? 'border border-hairline bg-paper-2 text-ink hover:border-accent/40'
+                    : 'bg-accent text-white hover:bg-accent-700'
+                }`}
             >
               <FileText className="h-4 w-4" />
               Ders raporu (PDF)
