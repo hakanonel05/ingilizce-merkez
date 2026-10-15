@@ -2947,7 +2947,53 @@ async function ecSayfayiAl(url: string): Promise<string> {
     clearTimeout(zamanlayici);
   }
 
-  return await ecCurlIle(url);
+  try {
+    return await ecCurlIle(url);
+  } catch {
+    /* Asagidaki okuyucu servisine dusuluyor. */
+  }
+
+  return await ecOkuyucuIle(url);
+}
+
+/**
+ * SON CARE: metin okuyucu servisi (r.jina.ai).
+ *
+ * NIYE GEREKTI: EnglishClub Cloudflare arkasinda ve VERI MERKEZI
+ * adreslerine gercek sayfa yerine "Just a moment..." dogrulama sayfasi
+ * donuyor - 200 koduyla, yani sessizce. Olculdu: ayni adres
+ * kullanicinin kendi agindan curl ile gercek sayfayi veriyor, Netlify
+ * fonksiyonundan 5705 baytlik challenge sayfasini. Netlify'in kenar
+ * vekili de denendi, tutmadi.
+ *
+ * Bu servis sayfayi okuyup METIN olarak donduruyor ve Cloudflare'i
+ * gecebiliyor (olculdu: 200, icerikte cevap metni ve iki ses adresi).
+ * Yani yayindaki surumde hazir alistirmalarin calismasinin tek yolu.
+ *
+ * UCUNCU TARAF BAGIMLILIGI: yalnizca ONCEKI IKI YOL BASARISIZ OLUNCA
+ * cagriliyor. Kullanicinin kendi sunucusunda (ev agi) ilk iki yol
+ * zaten calisiyor ve buraya hic gelinmiyor. Giden tek sey herkese
+ * acik bir ders sayfasinin adresi; kisisel veri gecmiyor.
+ *
+ * CIKTI MARKDOWN, HTML DEGIL - ayristiricilar iki bicimi de ele almak
+ * zorunda (bkz. ecCevabiCikar / ecBaglantilariCikar).
+ */
+async function ecOkuyucuIle(url: string): Promise<string> {
+  const kontrol = new AbortController();
+  const zamanlayici = setTimeout(() => kontrol.abort(), 20000);
+  try {
+    const r = await fetch("https://r.jina.ai/" + url, { signal: kontrol.signal });
+    if (!r.ok) throw new Error(`Okuyucu servisi yanit vermedi (HTTP ${r.status}).`);
+    return await r.text();
+  } catch (e: any) {
+    if (e?.name === "AbortError") throw new Error("Okuyucu servisi zaman asimina ugradi.");
+    throw new Error(
+      "EnglishClub sayfasi alinamadi. Site veri merkezi isteklerini " +
+        "engelliyor ve yedek okuyucu da calismadi."
+    );
+  } finally {
+    clearTimeout(zamanlayici);
+  }
 }
 
 /** Son care: sistemdeki curl. */
@@ -2986,6 +3032,74 @@ function ecMetniSadelestir(html: string): string {
     .trim();
 }
 
+/**
+ * Seviye dizinindeki konu baglantilari.
+ *
+ * IKI BICIM: olagan yoldan HTML geliyor (<a href=...>Baslik</a>),
+ * okuyucu servisinden ise Markdown ([Baslik](adres)). Tek bir
+ * ayristirici ikisini de tanimak zorunda, yoksa yedek yol listeyi
+ * bos dondururdu.
+ */
+function ecBaglantilariCikar(
+  icerik: string,
+  temelUrl: string
+): { baslik: string; url: string }[] {
+  const gorulen = new Set<string>();
+  const konular: { baslik: string; url: string }[] = [];
+
+  const kalipler = [
+    /<a[^>]+href=["']([^"']*dictations?-[a-z0-9-]+\.php)["'][^>]*>([\s\S]*?)<\/a>/gi,
+    /\[([^\]]+)\]\(([^)]*dictations?-[a-z0-9-]+\.php)\)/g,
+  ];
+
+  for (let i = 0; i < kalipler.length; i++) {
+    for (const m of icerik.matchAll(kalipler[i])) {
+      /* HTML kalibinda adres 1. grupta, Markdown'da 2. grupta. */
+      const hamAdres = i === 0 ? m[1] : m[2];
+      const hamBaslik = i === 0 ? m[2] : m[1];
+
+      let mutlak: string;
+      try {
+        mutlak = new URL(hamAdres, temelUrl).href;
+      } catch {
+        continue;
+      }
+      if (!EC_SAYFA_RE.test(mutlak)) continue;
+      /* Dizin sayfalarinin kendisi konu degil. */
+      if (/dictations-(short|medium|long)\.php$/i.test(mutlak)) continue;
+      if (gorulen.has(mutlak)) continue;
+
+      const baslik = ecMetniSadelestir(hamBaslik);
+      if (!baslik) continue;
+      gorulen.add(mutlak);
+      konular.push({ baslik, url: mutlak });
+    }
+    if (konular.length > 0) break;
+  }
+
+  return konular;
+}
+
+/**
+ * Cevap metni.
+ *
+ * HTML'de "Show Answer" ile acilan gizli kutuda (id="transcript1").
+ * Okuyucu ciktisinda o kutu "Hide Answer" satirindan sonra duz metin
+ * olarak geliyor ve bir yatay cizgiyle ya da "Next Dictation" ile
+ * bitiyor.
+ */
+function ecCevabiCikar(icerik: string): string {
+  const htmlEslesme = icerik.match(
+    /<div[^>]+id=["']transcript\d+["'][^>]*>([\s\S]*?)<\/div>/i
+  );
+  if (htmlEslesme) return ecMetniSadelestir(htmlEslesme[1]);
+
+  const mdEslesme = icerik.match(
+    /Hide Answer\s*([\s\S]*?)(?:\n\s*\*\s\*\s\*|\[Next Dictation|$)/i
+  );
+  return mdEslesme ? ecMetniSadelestir(mdEslesme[1]) : "";
+}
+
 app.get("/api/dikte-hazir", async (req, res) => {
   try {
     const seviye = String(req.query.seviye || "");
@@ -3001,23 +3115,8 @@ app.get("/api/dikte-hazir", async (req, res) => {
         return res.json(onbellek.deger);
       }
 
-      const html = await ecSayfayiAl(s.dizin);
-      const gorulen = new Set<string>();
-      const konular: { baslik: string; url: string }[] = [];
-
-      for (const m of html.matchAll(
-        /<a[^>]+href=["']([^"']*dictations?-[a-z0-9-]+\.php)["'][^>]*>([\s\S]*?)<\/a>/gi
-      )) {
-        const mutlak = new URL(m[1], s.dizin).href;
-        if (!EC_SAYFA_RE.test(mutlak)) continue;
-        /* Dizin sayfalarinin kendisi konu degil. */
-        if (/dictations-(short|medium|long)\.php$/i.test(mutlak)) continue;
-        if (gorulen.has(mutlak)) continue;
-        const baslik = ecMetniSadelestir(m[2]);
-        if (!baslik) continue;
-        gorulen.add(mutlak);
-        konular.push({ baslik, url: mutlak });
-      }
+      const icerik = await ecSayfayiAl(s.dizin);
+      const konular = ecBaglantilariCikar(icerik, s.dizin);
 
       /* BOS LISTE BASARI DEGIL. Once bos dizi 200 ile donuyordu ve
          arayuz hicbir sey gostermiyordu: kullanici "bir sey olmuyor"
@@ -3028,13 +3127,13 @@ app.get("/api/dikte-hazir", async (req, res) => {
          sayfasi mi geldi, baska bir sey mi, ancak ona bakinca
          anlasiliyor. */
       if (konular.length === 0) {
-        const ornek = ecMetniSadelestir(html).slice(0, 200);
+        const ornek = ecMetniSadelestir(icerik).slice(0, 200);
         return res.status(502).json({
           error:
             "EnglishClub listesi okunamadi: sayfa geldi ama icinde alistirma " +
             "baglantisi yok. Site, sunucudan gelen istekleri engelliyor olabilir.",
           ipucu: ornek,
-          boyut: html.length,
+          boyut: icerik.length,
         });
       }
 
@@ -3053,11 +3152,13 @@ app.get("/api/dikte-hazir", async (req, res) => {
       return res.json(onbellek.deger);
     }
 
-    const html = await ecSayfayiAl(url);
+    const icerik = await ecSayfayiAl(url);
 
-    /* Ses adresleri <source src="..."> icinde ve GORECELI. */
+    /* Ses adresleri: HTML'de <source src="..."> ve GORECELI, okuyucu
+       ciktisinda ise mutlak adres olarak duz metinde geciyor. Ikisini
+       de yakalayan tek gecis. */
     const sesler: string[] = [];
-    for (const m of html.matchAll(/<source[^>]+src=["']([^"']+\.mp3)["']/gi)) {
+    for (const m of icerik.matchAll(/(?:src=["']|\()?([\w:/.\-]*audio\/listening\/dictation\/[\w.\-]+\.mp3)/gi)) {
       const mutlak = new URL(m[1], url).href;
       if (!sesler.includes(mutlak)) sesler.push(mutlak);
     }
@@ -3068,13 +3169,11 @@ app.get("/api/dikte-hazir", async (req, res) => {
     const normalUrl = sesler.find((u) => /a\.mp3$/i.test(u)) || sesler[0] || "";
     const yavasUrl = sesler.find((u) => /b\.mp3$/i.test(u)) || "";
 
-    /* Cevap metni, "Show Answer" ile acilan gizli kutuda. */
-    const cevapEslesme = html.match(
-      /<div[^>]+id=["']transcript\d+["'][^>]*>([\s\S]*?)<\/div>/i
-    );
-    const metin = cevapEslesme ? ecMetniSadelestir(cevapEslesme[1]) : "";
+    const metin = ecCevabiCikar(icerik);
 
-    const baslikEslesme = html.match(/<title>([\s\S]*?)<\/title>/i);
+    const baslikEslesme =
+      icerik.match(/<title>([\s\S]*?)<\/title>/i) ||
+      icerik.match(/^Title:\s*(.+)$/m);
     const baslik = baslikEslesme
       ? ecMetniSadelestir(baslikEslesme[1]).replace(/\s*\|\s*Listening.*$/i, "")
       : "Dikte";
@@ -3085,10 +3184,13 @@ app.get("/api/dikte-hazir", async (req, res) => {
       });
     }
 
-    /* Sonraki alistirma: ayni konunun devami. */
-    const sonrakiEslesme = html.match(
-      /<a[^>]+href=["']([^"']*dictation[a-z0-9-]*\.php)["'][^>]*>\s*Next Dictation/i
-    );
+    /* Sonraki alistirma: ayni konunun devami. HTML'de <a ...>Next
+       Dictation, okuyucu ciktisinda [Next Dictation: ...](adres). */
+    const sonrakiEslesme =
+      icerik.match(
+        /<a[^>]+href=["']([^"']*dictation[a-z0-9-]*\.php)["'][^>]*>\s*Next Dictation/i
+      ) ||
+      icerik.match(/\[Next Dictation[^\]]*\]\(([^)]+\.php)\)/i);
     const sonrakiUrl = sonrakiEslesme ? new URL(sonrakiEslesme[1], url).href : "";
 
     const deger = { baslik, normalUrl, yavasUrl, metin, sayfaUrl: url, sonrakiUrl };
