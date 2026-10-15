@@ -197,7 +197,11 @@ function isciyiAl(): Worker | null {
    =========================================================================== */
 
 /** Karşılaştırma için sadeleştir: küçük harf, noktalama yok. */
-function sadeles(k: string): string {
+/* DIKTE DE AYNI KURALLARI KULLANIYOR. Bu uc yardimci disa aciktir
+   cunku yazilan metni hedefle karsilastirmak, duyulani hedefle
+   karsilastirmakla ayni is: ayni sadelestirme, ayni hizalama.
+   Ikinci bir kopya yazmak iki olcutun zamanla ayrismasi demekti. */
+export function sadeles(k: string): string {
   return k
     .toLowerCase()
     .replace(/[’']/g, "'")
@@ -240,12 +244,12 @@ function benzerlik(a: string, b: string): number {
  */
 const YAKINLIK_ESIGI = 0.6;
 
-interface Adim {
+export interface Adim {
   hedefIndeks: number | null;
   duyulanIndeks: number | null;
 }
 
-function hizala(hedef: string[], duyulan: string[]): Adim[] {
+export function hizala(hedef: string[], duyulan: string[]): Adim[] {
   const m = hedef.length;
   const n = duyulan.length;
   const ATLAMA = -1;
@@ -430,7 +434,7 @@ function akicilikPuanla(a: Akicilik, olcum: SesOlcumu): number {
    =========================================================================== */
 
 /** Hedef cümleyi kelimelere böl; noktalama korunuyor (ekranda öyle gösterilecek). */
-function cumleyiBol(cumle: string): string[] {
+export function cumleyiBol(cumle: string): string[] {
   return cumle.split(/\s+/).filter(Boolean);
 }
 

@@ -36,6 +36,7 @@ import { KonusmaTopBar } from './components/shell/KonusmaTopBar';
 import { KonusmaSidebar, type KonusmaSekmesi } from './components/shell/KonusmaSidebar';
 import { BetimlemeAkisi } from './components/BetimlemeAkisi';
 import { TelaffuzAkisi } from './components/TelaffuzAkisi';
+import { DikteAkisi } from './components/DikteAkisi';
 import { Gecmis } from './components/Gecmis';
 import { Ilerleme } from './components/Ilerleme';
 import { SettingsModal } from '../../../shared/vocab/SettingsModal';
@@ -72,6 +73,18 @@ export default function App() {
     'gorsel-betimleme',
     'Görsel Betimleme',
     sekme === 'alistirma' || sekme === 'telaffuz'
+  );
+
+  /* DIKTE AYRI BIR SAYAC. Ayni cagriya eklenemezdi: dikte bir DINLEME
+     calismasi, betimleme ve telaffuz ise konusma. Tek sayaca katsaydik
+     karnedeki beceri dagilimi yanlis cikardi - dinleyerek gecirilen
+     dakikalar konusma hanesine yazilirdi. */
+  useActivityTimer(
+    'konusma',
+    'listening',
+    'dikte',
+    'Dikte',
+    sekme === 'dikte'
   );
 
   const tazele = useCallback(() => {
@@ -146,6 +159,8 @@ export default function App() {
             )}
 
             {sekme === 'telaffuz' && <TelaffuzAkisi onKaydedildi={tazele} />}
+
+            {sekme === 'dikte' && <DikteAkisi />}
 
             {sekme === 'gecmis' && (
               <Gecmis

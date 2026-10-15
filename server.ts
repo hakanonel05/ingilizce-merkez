@@ -2591,6 +2591,15 @@ const ELEVEN_AYARLARI: Record<string, Record<string, number>> = {
   kelime: { stability: 0.75, similarity_boost: 0.9, style: 0.0, speed: 0.8 },
   /* Sohbet: en ifadeli, normal hiz. */
   sohbet: { stability: 0.4, similarity_boost: 0.8, style: 0.45, speed: 1.0 },
+
+  /* DIKTE. Bu iki satir olmadan ikisi de hikaye ayarina (speed 1.0)
+     dusuyordu ve "yavas" dugmesi hicbir sey yapmiyordu - olculdu, ayni
+     cumle iki profilde de 1,72 saniye cikti. */
+  dikte: { stability: 0.6, similarity_boost: 0.85, style: 0.1, speed: 1.0 },
+  /* 0.7 ElevenLabs'in tabani. Yine de yetmiyor (yalnizca ~1,4 kat), o
+     yuzden yavas profil once Gemini'ye gidiyor; burasi Gemini
+     kullanilamazsa devreye giren yedek. */
+  dikteYavas: { stability: 0.8, similarity_boost: 0.9, style: 0.0, speed: 0.7 },
 };
 
 /**
@@ -2703,6 +2712,54 @@ const OKUMA_PROFILLERI: Record<string, OkumaProfili> = {
       "Articulate every sound fully, especially final consonants. Place the " +
       "word stress clearly on the correct syllable. Say it once, calmly, with " +
       "no surrounding words.",
+  },
+
+  /* ============================================================
+     DIKTE — iki profil, ayni metin, IKI AYRI KAYIT.
+
+     ASIL MESELE BU: dikte uygulamalarinin cogu "yavas" dugmesinde
+     sesin OYNATMA HIZINI dusuruyor. O zaman ses esniyor, tinisi
+     bozuluyor ve anlasilmaz hale geliyor - yavaslatmak konusmayi
+     daha anlasilir degil daha anlasilmaz yapiyor.
+
+     Gercek dikte kayitlarinda yavas surum AYRI OKUNUR: konusmaci
+     daha agir, daha acik telaffuzla bastan soyler. Kullanicinin
+     ornek olarak gonderdigi iki dosyada da olculen bu:
+       normal : 15,2 sn toplam / 8,3 sn konusma
+       yavas  : 116,2 sn toplam / 25,8 sn konusma
+     Yavas surumde konusma suresi UC KAT - yani hiz degistirilmemis,
+     yeniden okunmus. Kalan 77 saniye de yazmak icin birakilan
+     duraklamalar.
+
+     Burada da ayni yol izleniyor: iki profil, iki ayri seslendirme
+     istegi. Istemci tarafinda hicbir yerde playbackRate yok.
+     ============================================================ */
+
+  /* Dikte, normal hiz: kayit nasil konusuluyorsa oyle. */
+  dikte: {
+    ses: "Kore",
+    rol: "A newsreader-trained voice recording a dictation exercise for English learners.",
+    not: "Style: Neutral and even. Pace: Natural, unhurried conversational speed. Accent: American (General).",
+    sahne: "A dictation recording; the learner listens once and writes down what they hear.",
+    baglam:
+      "This is the full-speed take. Keep normal connected speech - do not " +
+      "over-enunciate and do not slow down. Pause at commas and full stops " +
+      "exactly as the punctuation asks, no longer.",
+  },
+
+  /* Dikte, yavas: AYNI metin, bastan ve agir okunuyor. */
+  dikteYavas: {
+    ses: "Kore",
+    rol: "The same newsreader recording the SLOW take of a dictation exercise.",
+    not: "Style: Calm, patient, very clear. Pace: Markedly slower than conversational - about half speed. Accent: American (General).",
+    sahne: "The slow take; the learner is writing while listening and needs every word.",
+    baglam:
+      "Re-read the text from the beginning at a genuinely slower speaking rate. " +
+      "This must sound like a person deliberately speaking slowly, NOT like a " +
+      "recording played back at reduced speed: keep the pitch natural and the " +
+      "rhythm human. Separate the words clearly, give every final consonant its " +
+      "full value, and leave a distinct pause at each comma and full stop. " +
+      "Never drop or blur a word - the learner is writing each one down.",
   },
 
   /* Katman 5: karsilikli konusma. */
@@ -2836,19 +2893,39 @@ app.post("/api/speak", async (req, res) => {
 
     // Uzunluk siniri profile gore. Tek kelime profiline bir paragraf
     // dusmesi hatadir; sessizce seslendirmek yerine soylemek daha iyi.
-    const sinir = profilAdi === "kelime" ? 120 : profilAdi === "cumle" ? 600 : 3000;
+    const sinir =
+      profilAdi === "kelime" ? 120
+      : profilAdi === "cumle" ? 600
+      /* Dikte birimi bir cumle ya da cumlecik; paragraf gelirse
+         yavas okuma dakikalar surerdi. */
+      : profilAdi === "dikte" || profilAdi === "dikteYavas" ? 400
+      : 3000;
     if (text.length > sinir) {
       return res.status(400).json({
         error: `Metin bu profil icin cok uzun (${text.length}/${sinir} karakter).`,
       });
     }
 
-    // ONCE ELEVENLABS. Ayni cumlede Gemini 4,7 sn / 263 KB WAV, ElevenLabs
-    // Flash 0,7 sn / 43 KB MP3 uretiyor. Basarisiz olursa (kota, yetki,
-    // anahtar yok) sessizce Gemini'ye duşuluyor.
-    const eleven = await elevenlabsSeslendir(text, profilAdi, voice);
-    if (eleven) {
-      return res.json({ ...eleven, voice, profil: profilAdi });
+    /* DIKTENIN YAVAS OKUMASI ELEVENLABS'E GITMIYOR.
+       ElevenLabs'e yalnizca metin ve sayisal ayarlar gidiyor; profilin
+       yonetmen notu (nasil okunacagi) ona hic ulasmiyor. En dusuk hizi
+       da 0.7, yani ancak ~1,4 kat yavas. Kullanicinin ornek verdigi
+       gercek dikte kaydinda yavas surum UC KAT daha uzun okunuyordu.
+
+       Gemini ise yonergeyi uslup olarak uyguluyor: "about half speed,
+       separate the words clearly" dendiginde gercekten bastan ve agir
+       okuyor. Yavas da olsa (~5 sn) dogru ses, hizli ve yanlis sesten
+       iyi. Gemini duserse asagidaki ElevenLabs yedegi devreye giriyor. */
+    const yavasDikte = profilAdi === "dikteYavas";
+
+    if (!yavasDikte) {
+      // ONCE ELEVENLABS. Ayni cumlede Gemini 4,7 sn / 263 KB WAV, ElevenLabs
+      // Flash 0,7 sn / 43 KB MP3 uretiyor. Basarisiz olursa (kota, yetki,
+      // anahtar yok) sessizce Gemini'ye duşuluyor.
+      const eleven = await elevenlabsSeslendir(text, profilAdi, voice);
+      if (eleven) {
+        return res.json({ ...eleven, voice, profil: profilAdi });
+      }
     }
 
     const ai = getGeminiClient();
@@ -2902,6 +2979,13 @@ app.post("/api/speak", async (req, res) => {
         // Kota hatasinda diger modeli denemek anlamsiz: ayni kotayi paylasirlar.
         if (isRateLimitError(err)) break;
       }
+    }
+
+    /* Yavas dikte Gemini'yi atlamamisti ama Gemini de calismadi:
+       sessiz kalmaktansa ElevenLabs'in 0.7 hizi daha iyi. */
+    if (yavasDikte) {
+      const yedek = await elevenlabsSeslendir(text, profilAdi, voice);
+      if (yedek) return res.json({ ...yedek, voice, profil: profilAdi });
     }
 
     throw lastError || new Error("Ses uretilemedi.");

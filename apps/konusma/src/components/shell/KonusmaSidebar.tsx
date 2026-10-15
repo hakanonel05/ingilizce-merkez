@@ -12,9 +12,9 @@
  */
 
 import React from 'react';
-import { X, Mic, Images, TrendingUp, AudioLines } from 'lucide-react';
+import { X, Mic, Images, TrendingUp, AudioLines, Headphones } from 'lucide-react';
 
-export type KonusmaSekmesi = 'alistirma' | 'telaffuz' | 'gecmis' | 'ilerleme';
+export type KonusmaSekmesi = 'alistirma' | 'telaffuz' | 'dikte' | 'gecmis' | 'ilerleme';
 
 interface NavItem {
   id: KonusmaSekmesi;
@@ -38,6 +38,7 @@ export const KonusmaSidebar: React.FC<Props> = ({
   const ogeler: NavItem[] = [
     { id: 'alistirma', label: 'Betimleme', icon: <Mic className="h-4 w-4" />, hint: 'Görseli anlat, çözümlet' },
     { id: 'telaffuz', label: 'Telaffuz', icon: <AudioLines className="h-4 w-4" />, hint: 'Metni sesli oku, telaffuzunu ölç' },
+    { id: 'dikte', label: 'Dikte', icon: <Headphones className="h-4 w-4" />, hint: 'Dinle ve yaz; kelime kelime denetlensin' },
     { id: 'gecmis', label: 'Betimlemelerim', icon: <Images className="h-4 w-4" />, hint: 'Geçmiş çözümlemeler' },
     { id: 'ilerleme', label: 'İlerleme', icon: <TrendingUp className="h-4 w-4" />, hint: 'Seviye ve hata eğrisi' },
   ];
