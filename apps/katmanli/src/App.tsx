@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { PRESET_LESSONS } from './data/presetLessons';
 import { VideoLesson, UserProgress, VocabularyItem, GrammarRuleItem, QuizQuestion, MistakeEntry } from './types';
 import { TopBar } from './components/shell/TopBar';
@@ -34,6 +34,7 @@ import { SettingsModal } from './components/SettingsModal';
 import { extractYouTubeId } from './lib/youtube';
 import { tedLinkiMi } from './lib/ted';
 import { dersKelimelerindenKartlar } from './lib/dersKelimeleri';
+import { DersRaporuGorunumu } from './components/DersRaporu';
 import { addCardsIfMissing } from '../../../shared/vocab/vocabStore';
 import { apiFetch } from './lib/userKeys';
 import { stampLocalChange, scheduleAutoSync, syncOnStartup, onSynced } from './lib/syncClient';
@@ -234,6 +235,8 @@ export default function App() {
   const [isGrammarCoachOpen, setIsGrammarCoachOpen] = useState<boolean>(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const [editingLesson, setEditingLesson] = useState<VideoLesson | null>(null);
+  /** Raporu acik olan ders; null ise pencere kapali. */
+  const [raporDersi, setRaporDersi] = useState<VideoLesson | null>(null);
   /** Dar ekranda katman cekmecesi; genis ekranda sidebar zaten acik. */
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   // Masaüstünde menünün yalnız ikonlara daraltılması. Görünüm tercihi,
@@ -831,6 +834,20 @@ async function buildLessonData(
     );
   };
 
+  /* DEGERLENDIRMELERI DERSE YAZ.
+     Uc katman da (yazma / test / konusma) ayni yolu kullaniyor; her biri
+     icin ayri bir islev yazmak ayni uc satiri uc kez tekrarlamak olurdu.
+     Derse yazilmasi SART: rapor bu alanlardan besleniyor ve degerlendirme
+     eskiden katmandan cikildiginda yok oluyordu. */
+  const handleSaveLessonEvaluation = useCallback(
+    (lessonId: string, patch: Partial<VideoLesson>) => {
+      setLessons((prev) =>
+        prev.map((l) => (l.id === lessonId ? { ...l, ...patch } : l))
+      );
+    },
+    []
+  );
+
   // Yanlışlar Defteri: quiz sırasında yanlış cevaplanan sorular
   const [mistakes, setMistakes] = useState<MistakeEntry[]>(() => {
     try {
@@ -1093,6 +1110,9 @@ async function buildLessonData(
                   onCompleteLayer={() => handleCompleteLayer(4)}
                   onUpdateQuizData={handleUpdateQuizData}
                   onRecordMistakes={handleRecordMistakes}
+                  onSaveQuizResult={(sonuc) =>
+                    handleSaveLessonEvaluation(activeLesson.id, { quizResult: sonuc })
+                  }
                 />
               )}
 
@@ -1114,6 +1134,9 @@ async function buildLessonData(
                   lesson={activeLesson}
                   onCompleteLayer={() => handleCompleteLayer(6)}
                   onSaveWriting={handleSaveWriting}
+                  onSaveEvaluation={(degerlendirme) =>
+                    handleSaveLessonEvaluation(activeLesson.id, { writingEvaluation: degerlendirme })
+                  }
                 />
               )}
 
@@ -1121,6 +1144,9 @@ async function buildLessonData(
                 <Layer5SpeakingSimulation
                   lesson={activeLesson}
                   onCompleteLayer={() => handleCompleteLayer(7)}
+                  onSaveSession={(oturum) =>
+                    handleSaveLessonEvaluation(activeLesson.id, { speakingSession: oturum })
+                  }
                 />
               )}
 
@@ -1176,6 +1202,8 @@ async function buildLessonData(
               nextLabel={nextCore ? nextCore.label : null}
               onComplete={() => handleCompleteLayer(activeLayer)}
               onGoNext={() => nextCore && setActiveLayer(nextCore.id)}
+              tumKatmanlarBitti={CORE_LAYERS.every((k) => completedLayers.includes(k.id))}
+              onOpenReport={() => setRaporDersi(activeLesson)}
             />
           )}
           </div>
@@ -1228,7 +1256,21 @@ async function buildLessonData(
         onDeleteLesson={handleDeleteLesson}
         onEditLesson={(lesson) => setEditingLesson(lesson)}
         onRestorePresetLessons={handleRestorePresetLessons}
+        onOpenReport={(lesson) => setRaporDersi(lesson)}
       />
+
+      {/* DERS RAPORU. Ders secici pencerenin USTUNDE aciliyor ve onu
+          kapatmiyor: rapordan cikinca kullanici listeye geri donuyor.
+          Ders listeden okunuyor, secici pencerenin kopyasindan degil:
+          rapor acikken ders degisirse (ornegin arka planda senkron)
+          rapor da tazeleniyor. */}
+      {raporDersi && (
+        <DersRaporuGorunumu
+          lesson={lessons.find((l) => l.id === raporDersi.id) || raporDersi}
+          mistakes={mistakes}
+          onClose={() => setRaporDersi(null)}
+        />
+      )}
 
       <GoalEditorModal
         isOpen={isGoalEditorOpen}

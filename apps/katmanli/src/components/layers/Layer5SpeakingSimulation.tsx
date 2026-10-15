@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { oku, sesiDurdur } from '../../lib/seslendirme';
-import { VideoLesson } from '../../types';
+import { VideoLesson, SavedSpeakingSession } from '../../types';
 import { apiFetch } from '../../lib/userKeys';
 import { Mic, MicOff, Volume2, Square, Send, Sparkles, CheckCircle, Loader2, Award, RefreshCw, AlertCircle, Repeat, Plus, Minus } from 'lucide-react';
 
@@ -12,6 +12,10 @@ const REP_MINIMUM = 10;
 interface Layer5SpeakingSimulationProps {
   lesson: VideoLesson;
   onCompleteLayer: () => void;
+  /* Konusma dokumu DERSE yaziliyor: eskiden yalnizca bu bilesenin
+     durumundaydi ve katmandan cikinca kayboluyordu. Ders raporundaki
+     "konusma simulasyonu" bolumu buradan besleniyor. */
+  onSaveSession?: (oturum: SavedSpeakingSession) => void;
 }
 
 interface ChatTurn {
@@ -25,6 +29,7 @@ interface ChatTurn {
 export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> = ({
   lesson,
   onCompleteLayer,
+  onSaveSession,
 }) => {
   // Sesli anlatım tekrar sayacı: metodoloji 10-15 tekrar öneriyor
   const [repCount, setRepCount] = useState<number>(() => {
@@ -50,6 +55,22 @@ export const Layer5SpeakingSimulation: React.FC<Layer5SpeakingSimulationProps> =
 
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [history, setHistory] = useState<ChatTurn[]>([]);
+
+  /* DOKUMU DERSE YAZ.
+     Her tura basista degil, konusma durdugunda: kayit ders durumunu
+     guncelliyor ve o da localStorage'a yaziliyor. Yarim kalan oturum
+     da yaziliyor - kullanici ertesi gun raporu alirsa konustugu kadari
+     orada olsun. Ilk kurulusta yazilmiyor: bos bir dokum, derste
+     duran eski bir kaydi silerdi. */
+  const ilkDokum = useRef(true);
+  useEffect(() => {
+    if (ilkDokum.current) { ilkDokum.current = false; return; }
+    if (history.length === 0) return;
+    const zamanlayici = setTimeout(() => {
+      onSaveSession?.({ completedAt: Date.now(), turlar: history });
+    }, 800);
+    return () => clearTimeout(zamanlayici);
+  }, [history]);
   const [userSpeechInput, setUserSpeechInput] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

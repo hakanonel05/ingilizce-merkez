@@ -72,6 +72,54 @@ export interface WritingEvaluationResult {
   generalFeedback: string;
 }
 
+/* YAPAY ZEKA DEGERLENDIRMELERI DERSTE SAKLANIYOR.
+ *
+ * Uc degerlendirme de (yazma, test, konusma) yalnizca bilesen
+ * durumundaydi: katmandan cikinca yok oluyordu. Kullanici acisindan
+ * tuhafti - emek verip aldigi geri bildirimi bir daha goremiyordu - ve
+ * ders raporunu imkansiz kiliyordu. Artik derse yaziliyorlar, yani
+ * localStorage'a ve oradan senkronla diger cihaza da gidiyorlar.
+ *
+ * Hepsi ISTEGE BAGLI: eski derslerde bu alanlar yok ve rapor o
+ * bolumleri "kayit yok" diye gosteriyor.
+ */
+
+/** Katman 6'daki yazma degerlendirmesi, alindigi zamanla birlikte. */
+export interface SavedWritingEvaluation extends WritingEvaluationResult {
+  evaluatedAt: number;
+  /** Degerlendirilen metin: ders sonradan duzenlenirse hangi metne
+      bakildigi kaybolmasin. */
+  evaluatedText: string;
+}
+
+/** Katman 4'teki anlama testinin sonucu. */
+export interface SavedQuizResult {
+  completedAt: number;
+  dogru: number;
+  toplam: number;
+  /** Soru basina verilen cevap; rapor yanlislari da gosterebilsin diye. */
+  cevaplar: {
+    soruId: number;
+    soru: string;
+    verilen: string;
+    dogruCevap: string;
+    dogruMu: boolean;
+    aciklamaTr?: string;
+  }[];
+}
+
+/** Katman 7'deki konusma simulasyonunun dokumu. */
+export interface SavedSpeakingSession {
+  completedAt: number;
+  turlar: {
+    step: number;
+    coachFeedback?: string;
+    coachQuestion: string;
+    coachQuestionTr?: string;
+    userResponse?: string;
+  }[];
+}
+
 export interface VideoLesson {
   id: string;
   title: string;
@@ -87,6 +135,12 @@ export interface VideoLesson {
   quizQuestions?: QuizQuestion[];
   userSummary?: string;
   userComment?: string;
+  /** Katman 6: yazdigi metne gelen yapay zeka degerlendirmesi. */
+  writingEvaluation?: SavedWritingEvaluation;
+  /** Katman 4: anlama testi sonucu. */
+  quizResult?: SavedQuizResult;
+  /** Katman 7: konusma simulasyonu dokumu. */
+  speakingSession?: SavedSpeakingSession;
   completedLayers: number[]; // e.g. [1, 2, 3]
   /**
    * Bu dersin son degisme zamani. SENKRON ICIN SART: dersler artik tek

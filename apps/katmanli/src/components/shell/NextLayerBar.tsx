@@ -17,7 +17,7 @@
  */
 
 import React from 'react';
-import { ArrowRight, Check, CircleCheck } from 'lucide-react';
+import { ArrowRight, Check, CircleCheck, FileText } from 'lucide-react';
 
 interface Props {
   /** Çekirdek adım sırası (1-7). Araç ekranlarında bar gösterilmez. */
@@ -27,11 +27,17 @@ interface Props {
   /** Sıradaki katmanın adı; yoksa bu sonuncusudur. */
   nextLabel: string | null;
   onComplete: () => void;
+  /* YEDI KATMANIN HEPSI bitince gosterilen rapor dugmesi.
+     "son katman tamamlandi" ile ayni sey DEGIL: kullanici katmanlari
+     sirayla yapmak zorunda degil, 7'yi bitirip 3'u atlamis olabilir. */
+  tumKatmanlarBitti?: boolean;
+  onOpenReport?: () => void;
   onGoNext: () => void;
 }
 
 export const NextLayerBar: React.FC<Props> = ({
   step, totalSteps, isCompleted, nextLabel, onComplete, onGoNext,
+  tumKatmanlarBitti, onOpenReport,
 }) => (
   <div
     className="sticky bottom-0 z-20 -mx-4 mt-8 border-t border-hairline
@@ -67,6 +73,18 @@ export const NextLayerBar: React.FC<Props> = ({
             <CircleCheck className="h-4 w-4" />
             Bu katman tamamlandı
           </span>
+          {tumKatmanlarBitti && onOpenReport && (
+            <button
+              type="button"
+              onClick={onOpenReport}
+              className="inline-flex h-10 items-center gap-2 rounded-xl bg-accent px-4
+                text-[13px] font-medium text-white transition-colors
+                hover:bg-accent-700 cursor-pointer"
+            >
+              <FileText className="h-4 w-4" />
+              Ders raporu (PDF)
+            </button>
+          )}
           {nextLabel && (
             <button
               type="button"

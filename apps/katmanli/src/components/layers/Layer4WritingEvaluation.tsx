@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { VideoLesson, WritingEvaluationResult } from '../../types';
+import { VideoLesson, WritingEvaluationResult, SavedWritingEvaluation } from '../../types';
 import { apiFetch } from '../../lib/userKeys';
 import { Edit3, Sparkles, CheckCircle, Loader2, Lightbulb, AlertCircle, Check } from 'lucide-react';
 
@@ -7,17 +7,26 @@ interface Layer4WritingEvaluationProps {
   lesson: VideoLesson;
   onCompleteLayer: () => void;
   onSaveWriting: (summary: string, comment: string) => void;
+  /* Degerlendirme DERSE yaziliyor: eskiden yalnizca bu bilesenin
+     durumundaydi ve katmandan cikinca kayboluyordu. Ders raporu da
+     buradan besleniyor. */
+  onSaveEvaluation?: (degerlendirme: SavedWritingEvaluation) => void;
 }
 
 export const Layer4WritingEvaluation: React.FC<Layer4WritingEvaluationProps> = ({
   lesson,
   onCompleteLayer,
   onSaveWriting,
+  onSaveEvaluation,
 }) => {
   const [summaryText, setSummaryText] = useState(lesson.userSummary || '');
   const [commentText, setCommentText] = useState(lesson.userComment || '');
   const [isEvaluating, setIsEvaluating] = useState(false);
-  const [evaluationResult, setEvaluationResult] = useState<WritingEvaluationResult | null>(null);
+  /* Daha once alinmis degerlendirme varsa ekrana onunla aciliyor;
+     kullanici geri geldiginde gecmis geri bildirimini goruyor. */
+  const [evaluationResult, setEvaluationResult] = useState<WritingEvaluationResult | null>(
+    lesson.writingEvaluation || null
+  );
   const [errorMsg, setErrorMsg] = useState('');
 
   /* YAZILAN METIN YAZILDIKCA SAKLANIYOR.
@@ -61,6 +70,13 @@ export const Layer4WritingEvaluation: React.FC<Layer4WritingEvaluationProps> = (
       if (res.ok) {
         setEvaluationResult(data);
         onSaveWriting(summaryText, commentText);
+        onSaveEvaluation?.({
+          grammarCorrections: data.grammarCorrections || [],
+          naturalPhrasing: data.naturalPhrasing || [],
+          generalFeedback: data.generalFeedback || '',
+          evaluatedAt: Date.now(),
+          evaluatedText: combinedText,
+        });
       } else {
         setErrorMsg(data.error || 'Yazı değerlendirilemedi.');
       }

@@ -66,6 +66,8 @@ interface LessonSelectorProps {
   /* Silmeden once dersin kelimeleri desteye yaziliyor, yani ESZAMANSIZ:
      bekleme ve hata durumu asagida gosteriliyor. */
   onDeleteLesson?: (lessonId: string) => void | Promise<void>;
+  /** Yedi katmani biten derste rapor penceresini acar. */
+  onOpenReport?: (lesson: VideoLesson) => void;
   onEditLesson?: (lesson: VideoLesson) => void;
   onRestorePresetLessons?: () => void;
 }
@@ -88,6 +90,7 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
   onSelectLesson,
   onImportCustomLesson,
   onDeleteLesson,
+  onOpenReport,
   onEditLesson,
   onRestorePresetLessons,
 }) => {
@@ -453,6 +456,25 @@ export const LessonSelector: React.FC<LessonSelectorProps> = ({
                         <p className="mt-0.5 truncate text-[12px] text-ink-3">
                           Sıradaki: {status.next}
                         </p>
+                      )}
+
+                      {/* RAPOR — yalnizca yedi katman bitince.
+                          Satir eylemleri (duzenle/sil) fareyle uzerine
+                          gelince beliriyor; rapor oraya konsaydi
+                          dokunmatikte ve ilk bakista bulunamazdi.
+                          Dersin bittigini soyleyen satirin hemen
+                          altinda duruyor. */}
+                      {status.finished && onOpenReport && (
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); onOpenReport(lesson); }}
+                          className="mt-1.5 inline-flex items-center gap-1.5 rounded-lg border
+                            border-hairline-2 px-2 py-1 text-[11px] font-medium text-ink-2
+                            transition-colors hover:border-ink hover:text-ink cursor-pointer"
+                        >
+                          <FileText className="h-3.5 w-3.5" />
+                          Ders raporu (PDF)
+                        </button>
                       )}
 
                       {/* Kunye: renk yok, yalnizca ayrac. */}

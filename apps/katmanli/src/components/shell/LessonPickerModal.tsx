@@ -29,13 +29,15 @@ interface Props {
     onProgress?: (message: string) => void
   ) => Promise<void>;
   onDeleteLesson: (lessonId: string) => void;
+  /** Yedi katmani biten dersin raporunu acar. */
+  onOpenReport?: (lesson: VideoLesson) => void;
   onEditLesson: (lesson: VideoLesson) => void;
   onRestorePresetLessons: () => void;
 }
 
 export const LessonPickerModal: React.FC<Props> = ({
   isOpen, onClose, lessons, activeLesson, onSelectLesson,
-  onImportCustomLesson, onDeleteLesson, onEditLesson, onRestorePresetLessons,
+  onImportCustomLesson, onDeleteLesson, onEditLesson, onRestorePresetLessons, onOpenReport,
 }) => {
   // Esc ile kapanma ve arkadaki sayfanın kaymaması.
   useEffect(() => {
@@ -95,6 +97,7 @@ export const LessonPickerModal: React.FC<Props> = ({
             onSelectLesson={(lesson) => { onSelectLesson(lesson); onClose(); }}
             onImportCustomLesson={onImportCustomLesson}
             onDeleteLesson={onDeleteLesson}
+            onOpenReport={onOpenReport}
             onEditLesson={(lesson) => { onEditLesson(lesson); onClose(); }}
             onRestorePresetLessons={onRestorePresetLessons}
           />

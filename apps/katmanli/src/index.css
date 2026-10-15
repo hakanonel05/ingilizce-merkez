@@ -487,3 +487,348 @@ html { -webkit-text-size-adjust: 100%; }
   font-weight: 600;
   letter-spacing: -0.01em;
 }
+
+/* =====================================================================
+   DERS RAPORU
+
+   Yedi katmani bitirdigin dersin ciktisi: iki dilli transkript, kelime
+   kartlarin, yazdigin ozet ve butun yapay zeka degerlendirmeleri.
+
+   EKRAN VE KAGIT AYNI BICIMI PAYLASIYOR. Ayri bir "yazdirma surumu"
+   yazilsaydi ikisi zamanla birbirinden kopardi; burada yalnizca kagida
+   ozgu olan (sayfa boyutu, bolme, araclarin gizlenmesi) @media print
+   icinde duruyor.
+
+   RENKLER TOKEN DEGIL SABIT: rapor hem ekranda hem kagitta ayni
+   gorunmeli ve kagit her zaman beyaz. Koyu temada tokenler tersine
+   doner, rapor da okunamaz hale gelirdi.
+   ===================================================================== */
+.rapor {
+  --r-ink:    #1C1917;
+  --r-ink-2:  #57534E;
+  --r-ink-3:  #78716C;
+  --r-cizgi:  #E7E5E4;
+  --r-zemin:  #FAFAF9;
+
+  background: #FFFFFF;
+  color: var(--r-ink);
+  padding: 28px 30px 36px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ---------- Kunye ---------- */
+.rapor-ust {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--r-ink-3);
+}
+.rapor-baslik {
+  margin-top: 6px;
+  font-size: 23px;
+  font-weight: 650;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+.rapor-konusmaci {
+  margin-top: 3px;
+  font-size: 13px;
+  color: var(--r-ink-2);
+}
+.rapor-kunye {
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--r-ink);
+}
+.rapor-kunye-tablo {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px 18px;
+  margin-top: 16px;
+}
+.rapor-kunye-tablo dt {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--r-ink-3);
+}
+.rapor-kunye-tablo dd {
+  margin: 2px 0 0;
+  font-size: 13px;
+}
+.rapor-link {
+  font-size: 11px;
+  word-break: break-all;
+  color: var(--r-ink-2);
+}
+.rapor-katmanlar {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px 18px;
+  margin-top: 16px;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+  color: var(--r-ink-3);
+}
+.rapor-katmanlar li.bitti { color: var(--r-ink); }
+.rapor-katmanlar .isaret {
+  display: inline-block;
+  width: 14px;
+  font-weight: 700;
+}
+
+/* ---------- Bolumler ---------- */
+.rapor-bolum { margin-top: 30px; }
+.rapor-bolum-baslik {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--r-ink);
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+.rapor-bolum-no {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--r-ink);
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 650;
+}
+.rapor-bolum-aciklama {
+  margin-top: 6px;
+  font-size: 11.5px;
+  color: var(--r-ink-3);
+}
+.rapor-alt-baslik {
+  margin-top: 20px;
+  margin-bottom: 7px;
+  font-size: 12.5px;
+  font-weight: 650;
+}
+.rapor-dort {
+  margin-top: 12px;
+  margin-bottom: 5px;
+  font-size: 11.5px;
+  font-weight: 650;
+  color: var(--r-ink-2);
+}
+.rapor-bos {
+  margin-top: 5px;
+  padding: 9px 11px;
+  border: 1px dashed var(--r-cizgi);
+  border-radius: 6px;
+  font-size: 11.5px;
+  color: var(--r-ink-3);
+}
+
+/* ---------- Tablolar ----------
+   Transkriptte sutun GENISLIKLERI sabit (table-layout: fixed): icerige
+   gore hesaplansa uzun bir Turkce cumle sutunlari her sayfada baska
+   genislige ceker ve iki dil hizasini kaybederdi. */
+.rapor-transkript,
+.rapor-kelimeler {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 11.5px;
+}
+.rapor-transkript th,
+.rapor-kelimeler th {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--r-ink);
+  text-align: left;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--r-ink-3);
+}
+.rapor-transkript td,
+.rapor-kelimeler td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--r-cizgi);
+  vertical-align: top;
+  overflow-wrap: break-word;
+}
+.rapor-transkript .sutun-no {
+  width: 46px;
+  font-variant-numeric: tabular-nums;
+  font-size: 10px;
+  color: var(--r-ink-3);
+}
+.rapor-kelimeler th:nth-child(1) { width: 26%; }
+.rapor-kelimeler th:nth-child(2) { width: 24%; }
+.rapor-kelimeler .kelime { font-weight: 650; }
+.rapor-kelimeler .rozet {
+  margin-left: 5px;
+  padding: 1px 4px;
+  border: 1px solid var(--r-cizgi);
+  border-radius: 3px;
+  font-size: 9px;
+  color: var(--r-ink-3);
+}
+.rapor-kelimeler .ipa {
+  display: block;
+  margin-top: 2px;
+  font-size: 10.5px;
+  color: var(--r-ink-3);
+}
+.rapor-kelimeler .baglam {
+  font-size: 11px;
+  color: var(--r-ink-2);
+}
+
+/* ---------- Duz metin ve yazilar ---------- */
+.rapor-duzmetin { margin-top: 10px; }
+.rapor-duzmetin p {
+  margin: 0 0 7px;
+  text-align: justify;
+  hyphens: auto;
+}
+.rapor-yazi {
+  padding: 10px 12px;
+  border-left: 3px solid var(--r-ink);
+  background: var(--r-zemin);
+  white-space: pre-wrap;
+}
+
+/* ---------- Degerlendirmeler ---------- */
+.rapor-kutu {
+  padding: 11px 13px;
+  border: 1px solid var(--r-cizgi);
+  border-radius: 7px;
+  background: var(--r-zemin);
+}
+.rapor-genel { margin: 0 0 4px; }
+.rapor-skor { margin: 0; font-weight: 650; }
+.rapor-skor .tarih { font-weight: 400; color: var(--r-ink-3); }
+
+.rapor-duzeltme { margin: 0; padding-left: 16px; }
+.rapor-duzeltme li { margin-bottom: 8px; }
+.rapor-duzeltme .yanlis { text-decoration: line-through; color: var(--r-ink-3); }
+.rapor-duzeltme .ok { margin: 0 6px; color: var(--r-ink-3); }
+.rapor-duzeltme .dogru { font-weight: 650; }
+.rapor-duzeltme .aciklama,
+.rapor-sorular .aciklama,
+.rapor-gramer .aciklama {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--r-ink-2);
+}
+
+.rapor-sorular { margin: 8px 0 0; padding-left: 18px; }
+.rapor-sorular li { margin-bottom: 10px; }
+.rapor-sorular .soru { margin: 0 0 3px; font-weight: 650; }
+.rapor-sorular .cevap { margin: 0; font-size: 11.5px; }
+.rapor-sorular .etiket { color: var(--r-ink-3); }
+/* Dogru/yanlis RENKLE DEGIL cizgi kalinligiyla ayriliyor: rapor siyah
+   beyaz yazdirilabilir ve renk tek ayirt edici olursa fark kaybolur. */
+.rapor-sorular li.yanlis { border-left: 3px solid var(--r-ink); padding-left: 9px; }
+.rapor-sorular li.dogru  { border-left: 3px solid var(--r-cizgi); padding-left: 9px; }
+
+.rapor-konusma { margin: 0; padding-left: 18px; }
+.rapor-konusma li { margin-bottom: 11px; }
+.rapor-konusma p { margin: 0 0 2px; }
+.rapor-konusma .etiket { font-weight: 650; }
+.rapor-konusma .koc-tr,
+.rapor-konusma .geri { font-size: 11px; color: var(--r-ink-2); }
+.rapor-konusma .sen { padding-left: 11px; border-left: 2px solid var(--r-cizgi); }
+
+.rapor-gramer .kural { margin-bottom: 13px; }
+.rapor-gramer ul { margin: 5px 0 0; padding-left: 16px; font-size: 11.5px; }
+.rapor-gramer li { margin-bottom: 3px; }
+.rapor-gramer .tr { display: block; color: var(--r-ink-2); }
+
+.rapor-dipnot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 30px;
+  padding-top: 9px;
+  border-top: 1px solid var(--r-cizgi);
+  font-size: 10px;
+  color: var(--r-ink-3);
+}
+
+/* =====================================================================
+   YAZDIRMA
+
+   Tarayicinin kendi "PDF olarak kaydet"i bu kurallarla calisiyor; ayri
+   bir PDF kutuphanesi yok (gerekcesi DersRaporu.tsx basinda).
+   ===================================================================== */
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm 13mm;
+  }
+
+  /* SAYFADA YALNIZCA RAPOR KALIYOR.
+     display:none yerine visibility: raporun atalari (pencere, kaydirma
+     kutusu) gizlenirken raporun kendisi gorunur kalabiliyor. display
+     ile gizlenen bir atanin icindeki hicbir sey cizilemezdi. */
+  body * { visibility: hidden; }
+  #ders-raporu, #ders-raporu * { visibility: visible; }
+  #ders-raporu {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 0;
+  }
+
+  /* Pencere kromu kagida gitmiyor. */
+  .rapor-araclar { display: none !important; }
+
+  /* Ekrandaki kaydirma ve yukseklik sinirlari kagitta tek sayfalik bir
+     rapor uretirdi: gerisi kirpilirdi. */
+  .rapor-pencere,
+  .rapor-kaydirma {
+    max-height: none !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Her ana bolum yeni sayfada; ilki haric, yoksa birinci sayfa
+     yalnizca kunyeden ibaret kalirdi. */
+  .rapor-bolum { break-before: page; }
+  .rapor-bolum:first-of-type { break-before: auto; }
+
+  /* Baslik sayfanin dibinde yalniz kalmasin. */
+  .rapor-bolum-baslik,
+  .rapor-alt-baslik,
+  .rapor-dort { break-after: avoid; }
+
+  /* Satirlar ve maddeler sayfa ortasindan bolunmesin. */
+  .rapor-transkript tr,
+  .rapor-kelimeler tr,
+  .rapor-sorular li,
+  .rapor-konusma li,
+  .rapor-duzeltme li,
+  .rapor-gramer .kural,
+  .rapor-yazi,
+  .rapor-kutu { break-inside: avoid; }
+
+  /* Uzun tablolarda sutun basliklari her sayfada tekrar etsin. */
+  .rapor-transkript thead,
+  .rapor-kelimeler thead { display: table-header-group; }
+
+  /* Tarayici zeminleri varsayilan olarak basmiyor; raporun ince gri
+     alanlari olmadan bolumler birbirine giriyor. */
+  .rapor-yazi,
+  .rapor-kutu {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { VideoLesson, QuizQuestion, MistakeEntry } from '../../types';
+import { VideoLesson, QuizQuestion, MistakeEntry, SavedQuizResult } from '../../types';
 import { apiFetch } from '../../lib/userKeys';
 import { MarkedText } from '../MarkedText';
 import { HelpCircle, CheckCircle2, XCircle, Sparkles, CheckCircle, Loader2, Award, AlertCircle } from 'lucide-react';
@@ -9,6 +9,10 @@ interface Layer3ComprehensionQuizProps {
   onCompleteLayer: () => void;
   onUpdateQuizData: (questions: QuizQuestion[]) => void;
   onRecordMistakes: (entries: Omit<MistakeEntry, 'id' | 'timestamp'>[]) => void;
+  /* Testin SONUCU derse yaziliyor. Yanlislar defteri zaten yalnizca
+     yanlislari tutuyor; rapor icin kac dogru yapildigi ve dogru
+     cevaplanan sorular da gerekiyor. */
+  onSaveQuizResult?: (sonuc: SavedQuizResult) => void;
 }
 
 export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = ({
@@ -16,6 +20,7 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
   onCompleteLayer,
   onUpdateQuizData,
   onRecordMistakes,
+  onSaveQuizResult,
 }) => {
   const [userAnswers, setUserAnswers] = useState<{ [questionId: number]: any }>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -106,6 +111,33 @@ export const Layer3ComprehensionQuiz: React.FC<Layer3ComprehensionQuizProps> = (
     if (mistakes.length > 0) {
       onRecordMistakes(mistakes);
     }
+
+    /* Acik uclu soruda "dogru cevap" diye bir sey yok; uzunluk esigini
+       gecmek yeterli sayiliyor (calculateScore ile ayni kural). */
+    onSaveQuizResult?.({
+      completedAt: Date.now(),
+      dogru: calculateScore(),
+      toplam: quizQuestions.length,
+      cevaplar: quizQuestions.map((q) => {
+        const verilenHam = userAnswers[q.id];
+        const cokSecmeli = q.type === 'multiple_choice' && !!q.options;
+        const dogruMu = cokSecmeli
+          ? verilenHam === q.correctOptionIndex
+          : String(verilenHam || '').trim().length > 10;
+        return {
+          soruId: q.id,
+          soru: q.question,
+          verilen: cokSecmeli
+            ? (typeof verilenHam === 'number' ? q.options![verilenHam] : 'Boş bırakıldı')
+            : String(verilenHam || '').trim() || 'Boş bırakıldı',
+          dogruCevap: cokSecmeli
+            ? (typeof q.correctOptionIndex === 'number' ? q.options![q.correctOptionIndex] : '')
+            : (q.sampleAnswerEn || ''),
+          dogruMu,
+          aciklamaTr: q.explanationTr,
+        };
+      }),
+    });
   };
 
   return (
