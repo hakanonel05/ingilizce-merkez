@@ -20,11 +20,26 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { FileAudio, Sparkles, PenLine, Loader2, AlertCircle, Upload, X } from 'lucide-react';
+import {
+  FileAudio, Sparkles, PenLine, Loader2, AlertCircle, Upload, X, Library, ChevronRight,
+} from 'lucide-react';
 import { apiFetch } from '../../../../shared/vocab/userKeys';
 import { cozumDurumunuIzle, type CozumDurumu } from '../../../../shared/ses/konusmaCozumleme';
 
-export type KaynakTipi = 'metin' | 'yapayZeka' | 'ses';
+export type KaynakTipi = 'hazir' | 'metin' | 'yapayZeka' | 'ses';
+
+/* HAZIR ALISTIRMALAR — EnglishClub.
+   Ses bizim sunucumuzdan GECMIYOR: sunucu yalnizca sayfayi okuyup
+   adresleri ve cevap metnini veriyor, sesi tarayici dogrudan
+   kaynagindan cekiyor (olculdu: <audio> baska kaynagi caliyor,
+   fetch CORS'a takiliyor). */
+const HAZIR_SEVIYELER = [
+  { id: 'baslangic', ad: 'Başlangıç' },
+  { id: 'orta', ad: 'Orta' },
+  { id: 'ileri', ad: 'İleri' },
+] as const;
+
+interface HazirKonu { baslik: string; url: string; }
 
 export interface YuklenenSes {
   normalUrl: string;
@@ -45,8 +60,17 @@ interface Props {
 const SEVIYELER = ['A1', 'A2', 'B1', 'B2', 'C1'] as const;
 
 export const DikteKaynagi: React.FC<Props> = ({ onMetinHazir, onSesHazir, onSesiCozumle }) => {
-  const [tip, setTip] = useState<KaynakTipi>('metin');
+  /* Varsayilan HAZIR ALISTIRMALAR: tek tikla calismaya baslanabilen
+     tek secenek. Digerleri once metin yazmayi ya da dosya secmeyi
+     istiyor. */
+  const [tip, setTip] = useState<KaynakTipi>('hazir');
   const [hata, setHata] = useState('');
+
+  /* --- hazır alıştırmalar --- */
+  const [hazirSeviye, setHazirSeviye] = useState<string>('orta');
+  const [konular, setKonular] = useState<HazirKonu[]>([]);
+  const [konularYukleniyor, setKonularYukleniyor] = useState(false);
+  const [alistirmaYukleniyor, setAlistirmaYukleniyor] = useState('');
 
   /* --- kendi metnin --- */
   const [metin, setMetin] = useState('');
@@ -75,6 +99,46 @@ export const DikteKaynagi: React.FC<Props> = ({ onMetinHazir, onSesHazir, onSesi
   }), []);
   const normalRef = useRef<HTMLInputElement | null>(null);
   const yavasRef = useRef<HTMLInputElement | null>(null);
+
+  /* Seviye secilince konular geliyor; sekme acilmadan istek atilmiyor. */
+  useEffect(() => {
+    if (tip !== 'hazir') return;
+    let iptal = false;
+    setKonularYukleniyor(true);
+    setHata('');
+    apiFetch(`/api/dikte-hazir?seviye=${hazirSeviye}`)
+      .then(async (r) => {
+        const v = await r.json();
+        if (!r.ok) throw new Error(v?.error || 'Liste alınamadı.');
+        if (!iptal) setKonular(v.konular || []);
+      })
+      .catch((e) => { if (!iptal) setHata(e?.message || 'Liste alınamadı.'); })
+      .finally(() => { if (!iptal) setKonularYukleniyor(false); });
+    return () => { iptal = true; };
+  }, [tip, hazirSeviye]);
+
+  const hazirAlistirmayiAc = async (konu: HazirKonu) => {
+    setHata('');
+    setAlistirmaYukleniyor(konu.url);
+    try {
+      const r = await apiFetch(`/api/dikte-hazir?url=${encodeURIComponent(konu.url)}`);
+      const v = await r.json();
+      if (!r.ok) throw new Error(v?.error || 'Alıştırma alınamadı.');
+      onSesHazir(
+        {
+          normalUrl: v.normalUrl,
+          yavasUrl: v.yavasUrl,
+          normalAd: `${v.baslik} — normal`,
+          yavasAd: `${v.baslik} — yavaş`,
+        },
+        v.metin
+      );
+    } catch (e: any) {
+      setHata(e?.message || 'Alıştırma alınamadı.');
+    } finally {
+      setAlistirmaYukleniyor('');
+    }
+  };
 
   const uret = async () => {
     setHata('');
@@ -195,10 +259,66 @@ export const DikteKaynagi: React.FC<Props> = ({ onMetinHazir, onSesHazir, onSesi
     <div className="space-y-5">
       <div className="space-y-3 rounded-2xl border border-hairline bg-paper-2 p-5">
         <div className="flex flex-wrap gap-1.5">
+          {sekme('hazir', 'Hazır alıştırmalar', <Library className="h-3.5 w-3.5" />)}
           {sekme('metin', 'Kendi metnim', <PenLine className="h-3.5 w-3.5" />)}
           {sekme('yapayZeka', 'Yapay zekâ üretsin', <Sparkles className="h-3.5 w-3.5" />)}
           {sekme('ses', 'Ses dosyası yükle', <FileAudio className="h-3.5 w-3.5" />)}
         </div>
+
+        {tip === 'hazir' && (
+          <div className="space-y-3 pt-1">
+            <p className="max-w-[64ch] text-[12px] leading-relaxed text-ink-3">
+              EnglishClub'ın dikte alıştırmaları: her birinin normal ve ayrı
+              okunmuş yavaş kaydı var. Ses doğrudan kaynağından çalınıyor.
+            </p>
+
+            <div className="flex flex-wrap gap-1.5">
+              {HAZIR_SEVIYELER.map((s) => (
+                <button
+                  key={s.id}
+                  type="button"
+                  onClick={() => setHazirSeviye(s.id)}
+                  className={`rounded-lg px-2.5 py-1 text-[12px] font-medium
+                    transition-colors cursor-pointer ${
+                      hazirSeviye === s.id
+                        ? 'bg-ink text-white'
+                        : 'border border-hairline text-ink-2 hover:text-ink'
+                    }`}
+                >
+                  {s.ad}
+                </button>
+              ))}
+            </div>
+
+            {konularYukleniyor ? (
+              <p className="flex items-center gap-2 text-[12px] text-ink-2">
+                <Loader2 className="h-3.5 w-3.5 animate-spin" /> Liste alınıyor…
+              </p>
+            ) : (
+              <ul className="divide-y divide-hairline overflow-hidden rounded-xl border border-hairline">
+                {konular.map((k) => (
+                  <li key={k.url}>
+                    <button
+                      type="button"
+                      onClick={() => hazirAlistirmayiAc(k)}
+                      disabled={!!alistirmaYukleniyor}
+                      className="flex w-full items-center justify-between gap-3 px-3 py-2.5
+                        text-left text-[13px] text-ink transition-colors
+                        hover:bg-paper-3 disabled:opacity-50 cursor-pointer"
+                    >
+                      <span className="min-w-0 truncate">{k.baslik}</span>
+                      {alistirmaYukleniyor === k.url ? (
+                        <Loader2 className="h-4 w-4 shrink-0 animate-spin text-ink-3" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4 shrink-0 text-ink-3" />
+                      )}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
 
         {tip === 'metin' && (
           <div className="space-y-3 pt-1">

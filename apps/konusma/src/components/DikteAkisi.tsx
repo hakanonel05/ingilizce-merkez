@@ -311,7 +311,9 @@ export const DikteAkisi: React.FC<Props> = ({ onKaydedildi }) => {
       <div className="space-y-5">
         <div className="space-y-3 rounded-2xl border border-hairline bg-paper-2 p-5">
           <div className="flex items-center justify-between gap-3">
-            <span className="text-[12px] font-medium text-ink-2">Yüklenen kayıt</span>
+            {/* "Yuklenen" demiyor: ayni akis hazir alistirmalarda da
+                kullaniliyor ve orada dosya yuklenmis olmuyor. */}
+            <span className="text-[12px] font-medium text-ink-2">Alıştırma kaydı</span>
             <button
               type="button"
               onClick={bastanBasla}

@@ -7,6 +7,9 @@ import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
 import { YoutubeTranscript } from "youtube-transcript";
 import { AsyncLocalStorage } from "async_hooks";
+/* EnglishClub'in bot korumasini asmak icin son care; gerekcesi
+   ecSayfayiAl'in ustundeki notta. */
+import { execFile } from "node:child_process";
 
 dotenv.config();
 
@@ -2874,6 +2877,207 @@ app.get("/api/ses-kotasi", async (req, res) => {
     });
   } catch (err: any) {
     return res.json({ var: true, hata: "Kota bilgisi alinamadi." });
+  }
+});
+
+/* HAZIR DIKTE ALISTIRMALARI (EnglishClub)
+   ------------------------------------------------------------
+   Kullanici bir alistirma secince sayfasi okunuyor ve iceriden uc sey
+   cikariliyor: normal kaydin adresi, yavas kaydin adresi ve cevap
+   metni.
+
+   SES BIZIM SUNUCUMUZDAN GECMIYOR. Olculdu: <audio> baska kaynaktan
+   gelen mp3'u sorunsuz caliyor, fetch ise CORS'a takiliyor. Yani
+   adresi istemciye veriyoruz, sesi kullanicinin tarayicisi dogrudan
+   EnglishClub'dan cekiyor - tipki siteyi ziyaret etmis gibi. Boylece
+   burasi bir ses dagitim ucu haline gelmiyor; yalnizca bir sayfa
+   okuyucusu.
+
+   ADRES DOGRULAMASI SART: url istekten geliyor ve denetlenmezse bu uc
+   acik bir vekil sunucuya donerdi (ic aglardaki adresler dahil her
+   sey istenebilirdi). Yalnizca EnglishClub'in dikte sayfalari kabul
+   ediliyor.
+
+   ONBELLEK hem hizli hem nazik: ayni sayfa tekrar tekrar cekilmiyor.
+   ============================================================ */
+
+const EC_KOK = "https://www.englishclub.com";
+
+/** Yalnizca EnglishClub dikte sayfalari. */
+const EC_SAYFA_RE =
+  /^https:\/\/www\.englishclub\.com\/listening\/dictations?[a-z0-9-]*\.php$/i;
+
+const EC_SEVIYELER: Record<string, { ad: string; dizin: string }> = {
+  baslangic: { ad: "Başlangıç", dizin: `${EC_KOK}/listening/dictations-short.php` },
+  orta: { ad: "Orta", dizin: `${EC_KOK}/listening/dictations-medium.php` },
+  ileri: { ad: "İleri", dizin: `${EC_KOK}/listening/dictations-long.php` },
+};
+
+const EC_ONBELLEK = new Map<string, { deger: any; zaman: number }>();
+const EC_ONBELLEK_SURESI = 60 * 60 * 1000;
+
+/* TARAYICI KIMLIGI. EnglishClub, kendini tarayici olarak tanitmayan
+   isteklere 403 donuyor. */
+const EC_UA =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
+  "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+
+/**
+ * EnglishClub sayfasini ceker.
+ *
+ * NIYE IKI YOL VAR: EnglishClub bot korumasi arkasinda ve engel
+ * BASLIKTA DEGIL TLS PARMAK IZINDE. Olculdu - Node'un hem fetch'i hem
+ * de https modulu, tarayici User-Agent'i gonderseler bile 403 aliyor;
+ * ayni adres curl + ayni User-Agent ile 200 donuyor. Bu yuzden once
+ * olagan fetch deneniyor (ucuz ve bagimsiz), olmazsa sistemdeki
+ * curl'e dusuluyor.
+ */
+async function ecSayfayiAl(url: string): Promise<string> {
+  const kontrol = new AbortController();
+  const zamanlayici = setTimeout(() => kontrol.abort(), 15000);
+  try {
+    const r = await fetch(url, {
+      signal: kontrol.signal,
+      headers: { "User-Agent": EC_UA, Accept: "text/html,*/*" },
+    });
+    if (r.ok) return await r.text();
+  } catch {
+    /* Asagidaki curl denemesine dusuluyor. */
+  } finally {
+    clearTimeout(zamanlayici);
+  }
+
+  return await ecCurlIle(url);
+}
+
+/** Son care: sistemdeki curl. */
+function ecCurlIle(url: string): Promise<string> {
+  return new Promise((coz, hata) => {
+    execFile(
+      "curl",
+      ["-sS", "--compressed", "--max-time", "20", "-A", EC_UA, url],
+      { maxBuffer: 8 * 1024 * 1024 },
+      (err, stdout) => {
+        if (err) {
+          return hata(
+            new Error(
+              "EnglishClub sayfasi alinamadi. Site, tarayici disindaki " +
+                "isteklere kapali; sunucuda curl bulunamadi ya da calismadi."
+            )
+          );
+        }
+        coz(String(stdout));
+      }
+    );
+  });
+}
+
+function ecMetniSadelestir(html: string): string {
+  return html
+    .replace(/<br\s*\/?>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&apos;|&rsquo;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+app.get("/api/dikte-hazir", async (req, res) => {
+  try {
+    const seviye = String(req.query.seviye || "");
+    const url = String(req.query.url || "");
+
+    /* --- 1) Seviye dizini: konu listesi --- */
+    if (seviye) {
+      const s = EC_SEVIYELER[seviye];
+      if (!s) return res.status(400).json({ error: "Gecersiz seviye." });
+
+      const onbellek = EC_ONBELLEK.get("liste:" + seviye);
+      if (onbellek && Date.now() - onbellek.zaman < EC_ONBELLEK_SURESI) {
+        return res.json(onbellek.deger);
+      }
+
+      const html = await ecSayfayiAl(s.dizin);
+      const gorulen = new Set<string>();
+      const konular: { baslik: string; url: string }[] = [];
+
+      for (const m of html.matchAll(
+        /<a[^>]+href=["']([^"']*dictations?-[a-z0-9-]+\.php)["'][^>]*>([\s\S]*?)<\/a>/gi
+      )) {
+        const mutlak = new URL(m[1], s.dizin).href;
+        if (!EC_SAYFA_RE.test(mutlak)) continue;
+        /* Dizin sayfalarinin kendisi konu degil. */
+        if (/dictations-(short|medium|long)\.php$/i.test(mutlak)) continue;
+        if (gorulen.has(mutlak)) continue;
+        const baslik = ecMetniSadelestir(m[2]);
+        if (!baslik) continue;
+        gorulen.add(mutlak);
+        konular.push({ baslik, url: mutlak });
+      }
+
+      const deger = { seviye, ad: s.ad, konular };
+      EC_ONBELLEK.set("liste:" + seviye, { deger, zaman: Date.now() });
+      return res.json(deger);
+    }
+
+    /* --- 2) Tek alistirma --- */
+    if (!EC_SAYFA_RE.test(url)) {
+      return res.status(400).json({ error: "Gecerli bir EnglishClub dikte adresi degil." });
+    }
+
+    const onbellek = EC_ONBELLEK.get(url);
+    if (onbellek && Date.now() - onbellek.zaman < EC_ONBELLEK_SURESI) {
+      return res.json(onbellek.deger);
+    }
+
+    const html = await ecSayfayiAl(url);
+
+    /* Ses adresleri <source src="..."> icinde ve GORECELI. */
+    const sesler: string[] = [];
+    for (const m of html.matchAll(/<source[^>]+src=["']([^"']+\.mp3)["']/gi)) {
+      const mutlak = new URL(m[1], url).href;
+      if (!sesler.includes(mutlak)) sesler.push(mutlak);
+    }
+
+    /* Normal surum "-1a", yavas surum "-1b" ile bitiyor. Siraya
+       guvenmek yerine ADA bakiliyor: sayfada normal kayit iki kez
+       geciyor (1. ve 3. adim) ve sira kayabilir. */
+    const normalUrl = sesler.find((u) => /a\.mp3$/i.test(u)) || sesler[0] || "";
+    const yavasUrl = sesler.find((u) => /b\.mp3$/i.test(u)) || "";
+
+    /* Cevap metni, "Show Answer" ile acilan gizli kutuda. */
+    const cevapEslesme = html.match(
+      /<div[^>]+id=["']transcript\d+["'][^>]*>([\s\S]*?)<\/div>/i
+    );
+    const metin = cevapEslesme ? ecMetniSadelestir(cevapEslesme[1]) : "";
+
+    const baslikEslesme = html.match(/<title>([\s\S]*?)<\/title>/i);
+    const baslik = baslikEslesme
+      ? ecMetniSadelestir(baslikEslesme[1]).replace(/\s*\|\s*Listening.*$/i, "")
+      : "Dikte";
+
+    if (!normalUrl || !yavasUrl || !metin) {
+      return res.status(502).json({
+        error: "Bu sayfadan dikte alinamadi (ses ya da cevap metni bulunamadi).",
+      });
+    }
+
+    /* Sonraki alistirma: ayni konunun devami. */
+    const sonrakiEslesme = html.match(
+      /<a[^>]+href=["']([^"']*dictation[a-z0-9-]*\.php)["'][^>]*>\s*Next Dictation/i
+    );
+    const sonrakiUrl = sonrakiEslesme ? new URL(sonrakiEslesme[1], url).href : "";
+
+    const deger = { baslik, normalUrl, yavasUrl, metin, sayfaUrl: url, sonrakiUrl };
+    EC_ONBELLEK.set(url, { deger, zaman: Date.now() });
+    res.json(deger);
+  } catch (error: any) {
+    console.error("Error in /api/dikte-hazir:", error);
+    res.status(502).json({ error: error?.message || "Hazir dikte alinamadi." });
   }
 });
 
