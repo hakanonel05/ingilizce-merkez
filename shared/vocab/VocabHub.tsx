@@ -32,6 +32,7 @@ import { FlashcardReview } from './FlashcardReview';
 import { CalismaEkranlariGorunumu, type CalismaModu } from './CalismaEkranlari';
 import type { CalismaYonu } from './calismaModlari';
 import { KartDuzenleme } from './KartDuzenleme';
+import { DesteDurumu } from './DesteDurumu';
 import {
   Layers, Sparkles, Loader2, Search, Trash2, Play, Filter, EyeOff, Eye, Download, AlertTriangle, Settings2, PlusCircle, X, Check,
   Wand2, RefreshCw, Pencil,
@@ -56,7 +57,7 @@ interface Props {
   lessons: VocabHubLesson[];
 }
 
-type Tab = 'lesson' | 'all' | 'study';
+type Tab = 'lesson' | 'all' | 'study' | 'durum';
 
 /** A1 dahil tum CEFR basamaklari; kelime listesi A1 kelimeleri de iceriyor. */
 const LEVELS: CardLevel[] = [...CEFR_ORDER];
@@ -526,6 +527,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
             ['lesson', `Bu ders (${lessonCards.length})`],
             ['all', `Tüm kartlar (${allCards.length})`],
             ['study', 'Çalış'],
+            ['durum', 'Durum'],
           ] as [Tab, string][]).map(([value, label]) => (
             <button
               key={value}
@@ -1182,7 +1184,13 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
             </div>
           ) : calismaModu === 'flashcard' ? (
             <FlashcardReview
-              key={`${studyScope}-${limitedPool.length}-${settings.sessionMinutes}-${calismaYonu}`}
+              /* KEY'DE KART SAYISI YOK — alıştırma modlarındakiyle aynı
+                 gerekçe. Her derecelendirmeden sonra deste tazeleniyor
+                 ve sayı değişiyordu; bileşen baştan kurulunca oturum
+                 sayacı, süre ve GERİ AL hafızası sıfırlanıyordu
+                 (ölçüldü: Easy verildikten sonra geri al düğmesi
+                 "geri alınacak bir şey yok" diyordu). */
+              key={`${studyScope}-${settings.sessionMinutes}-${calismaYonu}`}
               cards={limitedPool}
               sessionMinutes={settings.sessionMinutes}
               yon={calismaYonu}
@@ -1218,6 +1226,10 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
             />
           )}
         </div>
+      )}
+
+      {tab === 'durum' && (
+        <DesteDurumu cards={allCards} onKartSec={setDuzenlenen} />
       )}
 
       {duzenlenen && (

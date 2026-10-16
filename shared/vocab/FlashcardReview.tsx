@@ -4,7 +4,9 @@ import { POS_LABELS_TR } from './pos';
 import { logActivity } from '../analytics/activityLog';
 import { bumpDailyCounter } from './vocabSettings';
 import { FsrsScheduler, Rating, CardState, formatInterval } from './fsrs';
-import { Volume2, RotateCcw, Check, Clock, PartyPopper, Pause, Play } from 'lucide-react';
+import {
+  Volume2, RotateCcw, Check, Clock, PartyPopper, Pause, Play, Undo2, Shuffle,
+} from 'lucide-react';
 import { soruYonu, type CalismaYonu } from './calismaModlari';
 
 interface Props {
@@ -51,6 +53,15 @@ export const FlashcardReview: React.FC<Props> = ({
   const [isPaused, setIsPaused] = useState(false);
   const [timeUp, setTimeUp] = useState(false);
   const startedRef = useRef<number>(Date.now());
+
+  /* GERİ AL — son derecelendirmenin ÖNCESİ.
+     Yanlış düğmeye basmak sık ve pahalı: "Easy" dediğin kart bir ay
+     sonraya gidiyor ve geri getirmenin yolu yoktu. Kartın derecelendirme
+     öncesi hâli ve o anki kuyruk birlikte saklanıyor; ikisi birden geri
+     konmazsa kart geri gelir ama sırası bozulur. */
+  const [geriAlinabilir, setGeriAlinabilir] = useState<
+    { kart: VocabCard; kuyruk: VocabCard[]; yeniydi: boolean } | null
+  >(null);
 
   // Kuyruğu ilk yüklemede kur. Kartlar üst bileşende günlük sınırlara göre
   // zaten süzülmüş halde geliyor.
@@ -112,6 +123,9 @@ export const FlashcardReview: React.FC<Props> = ({
     const wasNew = isNewCard(current);
     const updated = { ...current, ...scheduler.reviewCard(current, rating, now) };
 
+    /* Geri alma için ÖNCEKİ hâl; kuyruk da birlikte. */
+    setGeriAlinabilir({ kart: current, kuyruk: queue, yeniydi: wasNew });
+
     try {
       await putCard(updated);
     } catch (err) {
@@ -153,6 +167,28 @@ export const FlashcardReview: React.FC<Props> = ({
     onCardUpdated();
   };
 
+  /** Son derecelendirmeyi geri alır. */
+  const geriAl = async () => {
+    if (!geriAlinabilir) return;
+    const { kart, kuyruk, yeniydi } = geriAlinabilir;
+
+    try {
+      await putCard(kart);
+    } catch (err) {
+      console.warn('Geri alma yazılamadı:', err);
+    }
+
+    /* Günlük sayaç da geri alınıyor: yoksa aynı kartı iki kez
+       derecelendirmek günlük yeni kart hakkını boşa harcardı. */
+    bumpDailyCounter(yeniydi ? 'new' : 'review', -1);
+
+    setQueue(kuyruk);
+    setShowAnswer(true);
+    setReviewedCount((c) => Math.max(0, c - 1));
+    setGeriAlinabilir(null);
+    onCardUpdated();
+  };
+
   // Klavye kısayolları: Anki alışkanlığı
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -174,6 +210,19 @@ export const FlashcardReview: React.FC<Props> = ({
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   });
+
+  /** Kalan kartların sırasını karıştırır. */
+  const karistirKuyrugu = () => {
+    setQueue((onceki) => {
+      const k = [...onceki];
+      for (let i = k.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [k[i], k[j]] = [k[j], k[i]];
+      }
+      return k;
+    });
+    setShowAnswer(false);
+  };
 
   const remainingMs = Math.max(0, sessionMinutes * 60 * 1000 - elapsedMs);
   const mm = String(Math.floor(remainingMs / 60000)).padStart(2, '0');
@@ -254,6 +303,29 @@ export const FlashcardReview: React.FC<Props> = ({
             <span className="text-ink-3">
               <span className="timecode text-ink">{reviewedCount}</span> tekrar
             </span>
+            {/* GERİ AL yalnızca bir derecelendirmeden sonra açık:
+                kapalı dururken de görünüyor ki böyle bir şeyin
+                olduğu bilinsin. */}
+            <button
+              type="button"
+              onClick={geriAl}
+              disabled={!geriAlinabilir}
+              className="p-1.5 rounded-lg bg-paper-3 hover:bg-hairline text-ink-2
+                disabled:opacity-35 disabled:cursor-default cursor-pointer"
+              title={geriAlinabilir ? 'Son derecelendirmeyi geri al' : 'Geri alınacak bir şey yok'}
+            >
+              <Undo2 className="w-3.5 h-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={karistirKuyrugu}
+              disabled={queue.length < 2}
+              className="p-1.5 rounded-lg bg-paper-3 hover:bg-hairline text-ink-2
+                disabled:opacity-35 disabled:cursor-default cursor-pointer"
+              title="Kalan kartları karıştır"
+            >
+              <Shuffle className="w-3.5 h-3.5" />
+            </button>
             <button
               type="button"
               onClick={() => setIsPaused((p) => !p)}

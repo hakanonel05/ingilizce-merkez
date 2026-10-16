@@ -72,12 +72,19 @@ export function getDailyCounter(): DailyCounter {
   return { date: todayKey(), newIntroduced: 0, reviewsDone: 0 };
 }
 
-export function bumpDailyCounter(kind: 'new' | 'review'): DailyCounter {
+/**
+ * Günlük sayacı artırır.
+ *
+ * `delta` EKSİ OLABİLİYOR: çalışmada "geri al" var ve derecelendirme geri
+ * alınınca sayaç da geri dönmeli, yoksa aynı kartı iki kez derecelendirmek
+ * günlük yeni kart hakkını boşa harcardı. Sayaç sıfırın altına inmiyor.
+ */
+export function bumpDailyCounter(kind: 'new' | 'review', delta = 1): DailyCounter {
   const current = getDailyCounter();
   const next: DailyCounter = {
     ...current,
-    newIntroduced: current.newIntroduced + (kind === 'new' ? 1 : 0),
-    reviewsDone: current.reviewsDone + (kind === 'review' ? 1 : 0),
+    newIntroduced: Math.max(0, current.newIntroduced + (kind === 'new' ? delta : 0)),
+    reviewsDone: Math.max(0, current.reviewsDone + (kind === 'review' ? delta : 0)),
   };
   try {
     localStorage.setItem(DAILY_KEY, JSON.stringify(next));
