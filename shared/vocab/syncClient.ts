@@ -198,6 +198,11 @@ const LOCAL_KEYS = [
   { storageKey: 'layered_learning_cefr_cache_v1', syncKey: 'cefrCache' },
   // "Biliyorum" diye isaretlenen kelimeler (katmanli, zorlanabilecegin kelimeler).
   { storageKey: 'layered_learning_known_words_v1', syncKey: 'knownWords' },
+  // Kullanicinin kendi desteleri. Kartin hangi destede oldugu kartin
+  // uzerinde ve kartlarla birlikte esitleniyor; burada yalnizca deste
+  // ADLARI var. Esitlenmezse diger cihazda kartlar adsiz kimliklere
+  // baglanir ve desteler bos gorunur.
+  { storageKey: 'layered_learning_vocab_decks_v1', syncKey: 'vocabDecks' },
 ];
 
 /**

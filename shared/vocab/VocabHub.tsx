@@ -33,9 +33,14 @@ import { CalismaEkranlariGorunumu, type CalismaModu } from './CalismaEkranlari';
 import type { CalismaYonu } from './calismaModlari';
 import { KartDuzenleme } from './KartDuzenleme';
 import { DesteDurumu } from './DesteDurumu';
+import { TopluEkleme } from './TopluEkleme';
+import { KelimeListesiYazdir } from './KelimeListesiYazdir';
+import {
+  desteleriOku, desteEkle, desteSil, desteyiDegistir, type Deste,
+} from './desteler';
 import {
   Layers, Sparkles, Loader2, Search, Trash2, Play, Filter, EyeOff, Eye, Download, AlertTriangle, Settings2, PlusCircle, X, Check,
-  Wand2, RefreshCw, Pencil,
+  Wand2, RefreshCw, Pencil, Star, ClipboardPaste, CheckSquare, Square, Printer,
 } from 'lucide-react';
 
 /**
@@ -93,6 +98,16 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
   /* DÜZENLEME. Kart yanlış yazıldıysa tek çare silip yeniden eklemekti
      ve o da tekrar geçmişini götürüyordu. */
   const [duzenlenen, setDuzenlenen] = useState<VocabCard | null>(null);
+
+  /* KENDİ DESTELERİN. Ders gruplaması kelimenin nereden geldiğini
+     söylüyor; bu, onu nasıl çalışmak istediğini. */
+  const [desteler, setDesteler] = useState<Deste[]>(() => desteleriOku());
+  const [desteFiltresi, setDesteFiltresi] = useState<string>('all');
+  const [yildizFiltresi, setYildizFiltresi] = useState(false);
+  /* Toplu işlem için seçilen kart kimlikleri. */
+  const [secililer, setSecililer] = useState<Set<string>>(new Set());
+  const [topluEklemeAcik, setTopluEklemeAcik] = useState(false);
+  const [yazdirmaAcik, setYazdirmaAcik] = useState(false);
 
   // Ayarlar ve manuel kart ekleme
   const [settings, setSettings] = useState<VocabSettings>(() => loadVocabSettings());
@@ -367,6 +382,8 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
       .filter((c) => (kindFilter === 'all' ? true : c.kind === kindFilter))
       .filter((c) => (posFilter === 'all' ? true : c.pos === posFilter))
       .filter((c) => (lessonFilter === 'all' ? true : cardBelongsTo(c, lessonFilter)))
+      .filter((c) => (desteFiltresi === 'all' ? true : (c.desteler || []).includes(desteFiltresi)))
+      .filter((c) => (yildizFiltresi ? !!c.yildiz : true))
       .filter(
         (c) =>
           !term ||
@@ -374,7 +391,8 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
           c.back.toLowerCase().includes(term)
       )
       .sort((a, b) => a.due - b.due);
-  }, [allCards, search, levelFilter, kindFilter, posFilter, lessonFilter]);
+  }, [allCards, search, levelFilter, kindFilter, posFilter, lessonFilter,
+      desteFiltresi, yildizFiltresi]);
 
   /* DERS SUZGECI SECENEKLERI.
      Eskiden yalnizca duran dersler listeleniyordu; bir ders silinince o
@@ -428,6 +446,33 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
   const handleDelete = async (id: string) => {
     await deleteCard(id);
     await refresh();
+  };
+
+  const yildizla = async (card: VocabCard) => {
+    await putCard({ ...card, yildiz: !card.yildiz });
+    await refresh();
+  };
+
+  /** Seçili kartlara toplu işlem; her kart tek tek yazılıyor. */
+  const topluUygula = async (
+    islem: (k: VocabCard) => VocabCard | null
+  ) => {
+    const hedefler = allCards.filter((c) => secililer.has(c.id));
+    for (const k of hedefler) {
+      const yeni = islem(k);
+      if (yeni === null) await deleteCard(k.id);
+      else await putCard(yeni);
+    }
+    setSecililer(new Set());
+    await refresh();
+  };
+
+  const yeniDesteYap = () => {
+    const ad = window.prompt('Deste adı:');
+    if (!ad || !ad.trim()) return null;
+    const d = desteEkle(ad);
+    setDesteler(desteleriOku());
+    return d;
   };
 
   const toggleSuspend = async (card: VocabCard) => {
@@ -1060,6 +1105,57 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 ))}
               </select>
 
+              <select
+                value={desteFiltresi}
+                onChange={(e) => setDesteFiltresi(e.target.value)}
+                className="px-2.5 py-1.5 bg-paper-2 border border-hairline-2 rounded-lg
+                  text-xs font-semibold text-ink-800 cursor-pointer max-w-[180px]"
+              >
+                <option value="all">Tüm desteler</option>
+                {desteler.map((d) => (
+                  <option key={d.id} value={d.id}>{d.ad}</option>
+                ))}
+              </select>
+
+              <button
+                type="button"
+                onClick={() => setYildizFiltresi((y) => !y)}
+                title="Yalnızca yıldızlılar"
+                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs
+                  font-semibold transition cursor-pointer ${
+                    yildizFiltresi
+                      ? 'bg-ink text-white'
+                      : 'bg-paper-3 text-ink-2 hover:bg-hairline'
+                  }`}
+              >
+                <Star className={`h-3.5 w-3.5 ${yildizFiltresi ? 'fill-current' : ''}`} />
+                Yıldızlı
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setTopluEklemeAcik(true)}
+                title="Listeyi yapıştırarak toplu kart ekle"
+                className="flex items-center space-x-1.5 px-2.5 py-1.5 bg-paper-3
+                  hover:bg-hairline text-ink-2 text-xs font-semibold rounded-lg cursor-pointer"
+              >
+                <ClipboardPaste className="w-3.5 h-3.5" />
+                <span>Yapıştır</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setYazdirmaAcik(true)}
+                disabled={filtered.length === 0}
+                title="Süzgeçten geçen kartları yazdır ya da PDF yap"
+                className="flex items-center space-x-1.5 px-2.5 py-1.5 bg-paper-3
+                  hover:bg-hairline disabled:opacity-40 text-ink-2 text-xs font-semibold
+                  rounded-lg cursor-pointer"
+              >
+                <Printer className="w-3.5 h-3.5" />
+                <span>Yazdır</span>
+              </button>
+
               <button
                 type="button"
                 onClick={exportCsv}
@@ -1077,11 +1173,93 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
             </div>
           </div>
 
+          {/* TOPLU İŞLEM ÇUBUĞU yalnızca seçim varken görünüyor: boşken
+              sürekli durması, hiç kullanılmayan bir satırı ekrana çivilemek
+              olurdu. */}
+          {secililer.size > 0 && (
+            <div className="flex flex-wrap items-center gap-2 rounded-xl border
+              border-hairline bg-paper-2 p-3">
+              <span className="text-[12px] font-medium text-ink">
+                {secililer.size} kart seçili
+              </span>
+
+              <div className="ml-auto flex flex-wrap items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => void topluUygula((k) => ({ ...k, yildiz: true }))}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-paper-3 px-2.5 py-1.5
+                    text-xs font-semibold text-ink-2 hover:bg-hairline cursor-pointer"
+                >
+                  <Star className="h-3.5 w-3.5" /> Yıldızla
+                </button>
+
+                <select
+                  value=""
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    if (!v) return;
+                    const hedef = v === '__yeni' ? yeniDesteYap() : desteler.find((d) => d.id === v);
+                    if (hedef) void topluUygula((k) => desteyiDegistir(k, hedef.id, true));
+                    e.target.value = '';
+                  }}
+                  className="rounded-lg border border-hairline-2 bg-paper-2 px-2 py-1.5
+                    text-xs font-semibold text-ink-800 cursor-pointer"
+                >
+                  <option value="">Desteye ekle…</option>
+                  {desteler.map((d) => <option key={d.id} value={d.id}>{d.ad}</option>)}
+                  <option value="__yeni">+ Yeni deste…</option>
+                </select>
+
+                <button
+                  type="button"
+                  onClick={() => void topluUygula((k) => ({ ...k, suspended: true }))}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-paper-3 px-2.5 py-1.5
+                    text-xs font-semibold text-ink-2 hover:bg-hairline cursor-pointer"
+                >
+                  <EyeOff className="h-3.5 w-3.5" /> Askıya al
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!window.confirm(`${secililer.size} kart silinecek. Emin misin?`)) return;
+                    void topluUygula(() => null);
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-paper-3 px-2.5 py-1.5
+                    text-xs font-semibold text-ink-2 hover:bg-hairline hover:text-danger cursor-pointer"
+                >
+                  <Trash2 className="h-3.5 w-3.5" /> Sil
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setSecililer(new Set())}
+                  className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-ink-3
+                    hover:text-ink cursor-pointer"
+                >
+                  Seçimi bırak
+                </button>
+              </div>
+            </div>
+          )}
+
           <CardTable
             cards={filtered}
             onDelete={handleDelete}
             onToggleSuspend={toggleSuspend}
             onEdit={setDuzenlenen}
+            onYildiz={yildizla}
+            secililer={secililer}
+            onSecimDegis={(id, secili) =>
+              setSecililer((o) => {
+                const y = new Set(o);
+                if (secili) y.add(id); else y.delete(id);
+                return y;
+              })
+            }
+            onHepsiniSec={(sec) =>
+              setSecililer(sec ? new Set(filtered.map((c) => c.id)) : new Set())
+            }
             showLesson
             emptyText="Filtreye uyan kart yok."
           />
@@ -1232,6 +1410,36 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
         <DesteDurumu cards={allCards} onKartSec={setDuzenlenen} />
       )}
 
+      {yazdirmaAcik && (
+        <KelimeListesiYazdir
+          cards={filtered}
+          baslik={
+            desteFiltresi !== 'all'
+              ? (desteler.find((d) => d.id === desteFiltresi)?.ad || 'Kelime listesi')
+              : (lessonFilter !== 'all'
+                  ? (dersSecenekleri.find((d) => d.id === lessonFilter)?.baslik || 'Kelime listesi')
+                  : 'Kelime listesi')
+          }
+          onKapat={() => setYazdirmaAcik(false)}
+        />
+      )}
+
+      {topluEklemeAcik && (
+        <TopluEkleme
+          lessonId={lesson?.id || 'manuel'}
+          lessonTitle={lesson?.title || 'Elle Eklenenler'}
+          desteId={desteFiltresi !== 'all' ? desteFiltresi : undefined}
+          onBitti={(eklenen) => {
+            setTopluEklemeAcik(false);
+            setExtractInfo(
+              eklenen > 0 ? `${eklenen} yeni kart eklendi.` : 'Yeni kart eklenmedi; hepsi zaten vardı.'
+            );
+            void refresh();
+          }}
+          onKapat={() => setTopluEklemeAcik(false)}
+        />
+      )}
+
       {duzenlenen && (
         <KartDuzenleme
           kart={duzenlenen}
@@ -1250,9 +1458,17 @@ const CardTable: React.FC<{
   onDelete: (id: string) => void;
   onToggleSuspend: (card: VocabCard) => void;
   onEdit?: (card: VocabCard) => void;
+  onYildiz?: (card: VocabCard) => void;
+  /** Toplu işlem için seçili kimlikler; verilmezse seçim kutuları çıkmıyor. */
+  secililer?: Set<string>;
+  onSecimDegis?: (id: string, secili: boolean) => void;
+  onHepsiniSec?: (sec: boolean) => void;
   showLesson?: boolean;
   emptyText: string;
-}> = ({ cards, onDelete, onToggleSuspend, onEdit, showLesson, emptyText }) => {
+}> = ({
+  cards, onDelete, onToggleSuspend, onEdit, onYildiz,
+  secililer, onSecimDegis, onHepsiniSec, showLesson, emptyText,
+}) => {
   if (cards.length === 0) {
     return (
       <div className="rounded-2xl border border-hairline p-10 text-center">
@@ -1262,9 +1478,25 @@ const CardTable: React.FC<{
   }
 
   const now = Date.now();
+  const secimAcik = !!secililer && !!onSecimDegis;
+  const hepsiSecili = secimAcik && cards.length > 0 && cards.every((c) => secililer!.has(c.id));
 
   return (
     <div className="overflow-hidden rounded-2xl border border-hairline bg-paper-2">
+      {/* "Hepsini seç" YALNIZCA GÖRÜNEN kartları kapsıyor: süzgeç
+          uygulanmışken bütün desteyi seçmek, kullanıcının görmediği
+          kartları silmesine yol açardı. */}
+      {secimAcik && (
+        <button
+          type="button"
+          onClick={() => onHepsiniSec?.(!hepsiSecili)}
+          className="flex w-full items-center gap-2 border-b border-hairline px-3.5 py-2
+            text-left text-[12px] text-ink-2 transition-colors hover:bg-paper-3 cursor-pointer"
+        >
+          {hepsiSecili ? <CheckSquare className="h-3.5 w-3.5" /> : <Square className="h-3.5 w-3.5" />}
+          {hepsiSecili ? 'Seçimi kaldır' : `Görünen ${cards.length} kartı seç`}
+        </button>
+      )}
       <div className="divide-y divide-hairline max-h-[65vh] overflow-y-auto">
         {cards.map((c) => {
           const isDue = !c.suspended && c.due <= now;
@@ -1278,6 +1510,18 @@ const CardTable: React.FC<{
               className={`group flex items-start justify-between gap-3 px-3.5 py-3
                 transition-colors hover:bg-paper-3 ${c.suspended ? 'opacity-50' : ''}`}
             >
+              {secimAcik && (
+                <button
+                  type="button"
+                  onClick={() => onSecimDegis!(c.id, !secililer!.has(c.id))}
+                  aria-label={secililer!.has(c.id) ? 'Seçimi kaldır' : 'Seç'}
+                  className="mt-0.5 shrink-0 rounded p-0.5 text-ink-3 hover:text-ink cursor-pointer"
+                >
+                  {secililer!.has(c.id)
+                    ? <CheckSquare className="h-4 w-4" />
+                    : <Square className="h-4 w-4" />}
+                </button>
+              )}
               <div className="flex-1 min-w-0 space-y-1">
                 {/* DÖRT RENKLİ ROZET YERİNE TEK KÜNYE SATIRI.
                     Bir kartta aynı anda menekşe (seviye), gri (tür), mor
@@ -1324,8 +1568,25 @@ const CardTable: React.FC<{
                 </div>
               </div>
 
-              <div className="row-actions flex shrink-0 items-center gap-1 opacity-0
-                transition-opacity focus-within:opacity-100 group-hover:opacity-100">
+              <div className={`row-actions flex shrink-0 items-center gap-1
+                transition-opacity focus-within:opacity-100 group-hover:opacity-100 ${
+                  c.yildiz ? 'opacity-100' : 'opacity-0'
+                }`}>
+                {onYildiz && (
+                  /* YILDIZ, fareyle üzerine gelince beliren diğer
+                     eylemlerin aksine HER ZAMAN görünür: yıldızlı
+                     olup olmadığı listeye bakarken anlaşılmalı. */
+                  <button
+                    type="button"
+                    onClick={() => onYildiz(c)}
+                    className={`rounded-lg p-1.5 transition-colors hover:bg-paper-3 cursor-pointer ${
+                      c.yildiz ? 'text-ink' : 'text-ink-3 hover:text-ink'
+                    }`}
+                    title={c.yildiz ? 'Yıldızı kaldır' : 'Yıldızla'}
+                  >
+                    <Star className={`w-3.5 h-3.5 ${c.yildiz ? 'fill-current' : ''}`} />
+                  </button>
+                )}
                 {onEdit && (
                   <button
                     type="button"

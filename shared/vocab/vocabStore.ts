@@ -67,6 +67,17 @@ export interface VocabCard extends FsrsCardFields {
   contextEn?: string;
   note?: string;
   suspended?: boolean;
+  /**
+   * Kullanıcının kendi desteleri (kimlikler; bkz. desteler.ts).
+   *
+   * Ders gruplaması kelimenin NEREDEN geldiğini söylüyor, kullanıcının
+   * onu nasıl çalışmak istediğini değil. Kartın üzerinde duruyor çünkü
+   * kartlar zaten tek tek eşitleniyor; ayrı bir eşleme tablosu ayrıca
+   * eşitlenmek ve kartlarla tutarlı kalmak zorunda olurdu.
+   */
+  desteler?: string[];
+  /** Yıldızlanmış kart; hızlı süzme için. */
+  yildiz?: boolean;
   createdAt: number;
 }
 
