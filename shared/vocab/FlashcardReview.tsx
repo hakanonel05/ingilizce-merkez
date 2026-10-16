@@ -5,11 +5,14 @@ import { logActivity } from '../analytics/activityLog';
 import { bumpDailyCounter } from './vocabSettings';
 import { FsrsScheduler, Rating, CardState, formatInterval } from './fsrs';
 import { Volume2, RotateCcw, Check, Clock, PartyPopper, Pause, Play } from 'lucide-react';
+import { soruYonu, type CalismaYonu } from './calismaModlari';
 
 interface Props {
   cards: VocabCard[];
   /** Günlük çalışma süresi hedefi (dakika). */
   sessionMinutes?: number;
+  /** Hangi yönde sorulsun: EN→TR, TR→EN ya da karışık. */
+  yon?: CalismaYonu;
   onCardUpdated: () => void;
   onExit?: () => void;
 }
@@ -27,12 +30,16 @@ const KIND_LABEL: Record<string, string> = {
 
 /**
  * Anki mantığında kart çalışma oturumu.
- * Yalnızca "Again" ve "Good" düğmeleri kullanılıyor (istenen çalışma biçimi).
- * Hard/Easy algoritmada mevcut ama arayüzde bilinçli olarak gösterilmiyor.
+ *
+ * DÖRT DERECE. Önce yalnızca Again/Good vardı; Hard ve Easy algoritmada
+ * tanımlıydı ama arayüzde kapalıydı. İkili ölçek planlayıcının elini
+ * bağlıyordu: "zar zor hatırladım" ile "anında bildim" aynı sayılınca
+ * aralıklar da aynı uzuyordu. Dördü de açık, kısayolları 1-4.
  */
 export const FlashcardReview: React.FC<Props> = ({
   cards,
   sessionMinutes = 15,
+  yon,
   onCardUpdated,
   onExit,
 }) => {
@@ -73,9 +80,22 @@ export const FlashcardReview: React.FC<Props> = ({
     const now = Date.now();
     return {
       again: formatInterval(scheduler.previewInterval(current, Rating.Again, now)),
+      hard: formatInterval(scheduler.previewInterval(current, Rating.Hard, now)),
       good: formatInterval(scheduler.previewInterval(current, Rating.Good, now)),
+      easy: formatInterval(scheduler.previewInterval(current, Rating.Easy, now)),
     };
   }, [current]);
+
+  /* Tip ACIK yaziliyor: proje strict degil ve varsayilani dogrudan
+     yikima koymak degeri `string`e genisletiyordu. */
+  const aktifYon: CalismaYonu = yon || 'enTr';
+
+  /* Yön kart başına bir kez: her çizimde hesaplansaydı "karışık"
+     modda kart, cevabı açınca yön değiştirebilirdi. */
+  const yonlu = useMemo(
+    () => (current ? soruYonu(current, aktifYon) : null),
+    [current, aktifYon]
+  );
 
   const speak = (text: string) => {
     if (!('speechSynthesis' in window)) return;
@@ -144,7 +164,11 @@ export const FlashcardReview: React.FC<Props> = ({
       } else if (e.key === '1' && showAnswer) {
         grade(Rating.Again);
       } else if (e.key === '2' && showAnswer) {
+        grade(Rating.Hard);
+      } else if (e.key === '3' && showAnswer) {
         grade(Rating.Good);
+      } else if (e.key === '4' && showAnswer) {
+        grade(Rating.Easy);
       }
     };
     window.addEventListener('keydown', onKey);
@@ -286,22 +310,53 @@ export const FlashcardReview: React.FC<Props> = ({
 
         <div className="p-6 sm:p-10 text-center space-y-4 min-h-[220px] flex flex-col justify-center">
           <div className="flex items-center justify-center gap-2">
-            <h2 className="font-display text-3xl sm:text-4xl font-medium text-ink">{current.front}</h2>
-            <button
-              type="button"
-              onClick={() => speak(current.front)}
-              className="p-2 rounded-lg bg-paper-3 hover:bg-accent-soft text-ink-2 hover:text-accent-700 cursor-pointer"
-              title="Sesli oku"
+            <h2
+              className="font-display text-3xl sm:text-4xl font-medium text-ink"
+              lang={yonlu?.soruIngilizce ? 'en' : 'tr'}
             >
-              <Volume2 className="w-4 h-4" />
-            </button>
+              {yonlu?.soru ?? current.front}
+            </h2>
+            {/* Seslendirme HER ZAMAN İngilizce tarafı okuyor: Türkçe
+                sorulduğunda ön yüzü okumak cevabı söylemek olurdu. */}
+            {yonlu?.soruIngilizce && (
+              <button
+                type="button"
+                onClick={() => speak(current.front)}
+                className="p-2 rounded-lg bg-paper-3 hover:bg-accent-soft text-ink-2 hover:text-accent-700 cursor-pointer"
+                title="Sesli oku"
+              >
+                <Volume2 className="w-4 h-4" />
+              </button>
+            )}
           </div>
 
-          {current.ipa && <p className="text-sm font-mono text-ink-3">{current.ipa}</p>}
+          {current.ipa && yonlu?.soruIngilizce && (
+            <p className="text-sm font-mono text-ink-3">{current.ipa}</p>
+          )}
 
           {showAnswer && (
             <div className="space-y-3 pt-3 border-t border-hairline">
-              <p className="text-lg sm:text-xl font-medium text-ink">{current.back}</p>
+              <div className="flex items-center justify-center gap-2">
+                <p
+                  className="text-lg sm:text-xl font-medium text-ink"
+                  lang={yonlu?.soruIngilizce ? 'tr' : 'en'}
+                >
+                  {yonlu?.cevap ?? current.back}
+                </p>
+                {!yonlu?.soruIngilizce && (
+                  <button
+                    type="button"
+                    onClick={() => speak(current.front)}
+                    className="p-1.5 rounded-lg text-ink-3 hover:text-ink cursor-pointer"
+                    title="Sesli oku"
+                  >
+                    <Volume2 className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+              {!yonlu?.soruIngilizce && current.ipa && (
+                <p className="text-sm font-mono text-ink-3">{current.ipa}</p>
+              )}
 
               {current.exampleEn && (
                 <div className="border-l-2 border-hairline-2 pl-3 text-left">
@@ -343,35 +398,60 @@ export const FlashcardReview: React.FC<Props> = ({
               Cevabı göster <span className="font-normal text-white/70">(boşluk)</span>
             </button>
           ) : (
-            <div className="grid grid-cols-2 gap-3">
+            /* DÖRT DERECE. "Zar zor hatırladım" ile "anında bildim"
+               ikili ölçekte aynı sayılıyordu ve planlayıcı ikisine de
+               aynı aralığı veriyordu. Her düğmenin altında o dereceyi
+               seçersen kartın ne zaman döneceği yazıyor. */
+            <div className="grid grid-cols-4 gap-2">
               <button
                 type="button"
                 onClick={() => grade(Rating.Again)}
-                className="flex flex-col items-center px-4 py-3 bg-danger hover:bg-danger-strong text-white rounded-xl transition cursor-pointer"
+                className="flex flex-col items-center rounded-xl bg-danger px-2 py-3 text-white
+                  transition hover:bg-danger-strong cursor-pointer"
               >
-                <span className="flex items-center space-x-1.5 text-sm font-semibold">
-                  <RotateCcw className="w-4 h-4" />
-                  <span>Again</span>
+                <span className="flex items-center gap-1 text-[13px] font-semibold">
+                  <RotateCcw className="h-3.5 w-3.5" /> Again
                 </span>
-                <span className="text-[11px] text-white/85 font-mono">{previews?.again}</span>
+                <span className="font-mono text-[10px] text-white/85">{previews?.again}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => grade(Rating.Hard)}
+                className="flex flex-col items-center rounded-xl border border-hairline-2
+                  bg-paper-3 px-2 py-3 text-ink transition hover:border-ink cursor-pointer"
+              >
+                <span className="text-[13px] font-semibold">Hard</span>
+                <span className="font-mono text-[10px] text-ink-3">{previews?.hard}</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => grade(Rating.Good)}
-                className="flex flex-col items-center px-4 py-3 bg-ok hover:bg-ok-strong text-white rounded-xl transition cursor-pointer"
+                className="flex flex-col items-center rounded-xl bg-ok px-2 py-3 text-white
+                  transition hover:bg-ok-strong cursor-pointer"
               >
-                <span className="flex items-center space-x-1.5 text-sm font-semibold">
-                  <Check className="w-4 h-4" />
-                  <span>Good</span>
+                <span className="flex items-center gap-1 text-[13px] font-semibold">
+                  <Check className="h-3.5 w-3.5" /> Good
                 </span>
-                <span className="text-[11px] text-white/85 font-mono">{previews?.good}</span>
+                <span className="font-mono text-[10px] text-white/85">{previews?.good}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => grade(Rating.Easy)}
+                className="flex flex-col items-center rounded-xl border border-ok/50
+                  bg-ok/10 px-2 py-3 text-ink transition hover:border-ok cursor-pointer"
+              >
+                <span className="text-[13px] font-semibold">Easy</span>
+                <span className="font-mono text-[10px] text-ink-3">{previews?.easy}</span>
               </button>
             </div>
           )}
 
           <p className="text-[10px] text-ink-3 text-center pt-2">
-            Kısayollar: boşluk = göster / Good &nbsp;·&nbsp; 1 = Again &nbsp;·&nbsp; 2 = Good
+            Kısayollar: boşluk = göster / Good &nbsp;·&nbsp; 1 = Again &nbsp;·&nbsp;
+            2 = Hard &nbsp;·&nbsp; 3 = Good &nbsp;·&nbsp; 4 = Easy
           </p>
         </div>
       </div>

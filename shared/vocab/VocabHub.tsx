@@ -29,9 +29,12 @@ import {
   DEFAULT_VOCAB_SETTINGS, getDailyCounter, resetDailyCounter,
 } from './vocabSettings';
 import { FlashcardReview } from './FlashcardReview';
+import { CalismaEkranlariGorunumu, type CalismaModu } from './CalismaEkranlari';
+import type { CalismaYonu } from './calismaModlari';
+import { KartDuzenleme } from './KartDuzenleme';
 import {
   Layers, Sparkles, Loader2, Search, Trash2, Play, Filter, EyeOff, Eye, Download, AlertTriangle, Settings2, PlusCircle, X, Check,
-  Wand2, RefreshCw,
+  Wand2, RefreshCw, Pencil,
 } from 'lucide-react';
 
 /**
@@ -81,6 +84,14 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
   const [posFilter, setPosFilter] = useState<PartOfSpeech | 'all'>('all');
   const [lessonFilter, setLessonFilter] = useState<string>('all');
   const [studyScope, setStudyScope] = useState<'all' | 'lesson'>('all');
+  /* ÇALIŞMA MODU ve YÖN. Önce tek mod (flashcard) ve tek yön (EN→TR)
+     vardı. Dördü de aynı desteyi besliyor; ayrıntısı CalismaEkranlari
+     dosyasının başında. */
+  const [calismaModu, setCalismaModu] = useState<'flashcard' | CalismaModu>('flashcard');
+  const [calismaYonu, setCalismaYonu] = useState<CalismaYonu>('enTr');
+  /* DÜZENLEME. Kart yanlış yazıldıysa tek çare silip yeniden eklemekti
+     ve o da tekrar geçmişini götürüyordu. */
+  const [duzenlenen, setDuzenlenen] = useState<VocabCard | null>(null);
 
   // Ayarlar ve manuel kart ekleme
   const [settings, setSettings] = useState<VocabSettings>(() => loadVocabSettings());
@@ -275,6 +286,17 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
     () => (lesson ? allCards.filter((c) => cardBelongsTo(c, lesson.id)) : []),
     [allCards, lesson]
   );
+
+  /** Düzenlenen kartı yazar; tekrar geçmişine (FSRS alanlarına) dokunmaz. */
+  const kartiKaydet = async (yeni: VocabCard) => {
+    try {
+      await putCard(yeni);
+      setDuzenlenen(null);
+      await refresh();
+    } catch (e: any) {
+      setExtractError(e?.message || 'Kart kaydedilemedi.');
+    }
+  };
 
   const handleExtract = async () => {
     if (!lesson) return;
@@ -950,6 +972,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 cards={lessonCards}
                 onDelete={handleDelete}
                 onToggleSuspend={toggleSuspend}
+                onEdit={setDuzenlenen}
                 emptyText="Bu ders için henüz kart yok. Yukarıdaki düğmeyle ayıklayabilirsiniz."
               />
             </>
@@ -1056,6 +1079,7 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
             cards={filtered}
             onDelete={handleDelete}
             onToggleSuspend={toggleSuspend}
+            onEdit={setDuzenlenen}
             showLesson
             emptyText="Filtreye uyan kart yok."
           />
@@ -1097,7 +1121,50 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
             </span>
           </div>
 
-          {limitedPool.length === 0 && studyPool.some((c) => c.due <= Date.now()) ? (
+          {/* MOD ve YÖN seçimi. Mod değişince alıştırma baştan kurulsun
+              diye aşağıdaki bileşenlerin key'inde de geçiyor. */}
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl
+            border border-hairline bg-paper-2 p-3">
+            <div className="flex flex-wrap items-center gap-1.5">
+              {([
+                ['flashcard', 'Kartlar'],
+                ['yazma', 'Yazma'],
+                ['test', 'Test'],
+                ['eslestirme', 'Eşleştirme'],
+              ] as const).map(([id, etiket]) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => setCalismaModu(id)}
+                  className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
+                    calismaModu === id
+                      ? 'bg-ink text-white'
+                      : 'bg-paper-3 text-ink-2 hover:bg-hairline'
+                  }`}
+                >
+                  {etiket}
+                </button>
+              ))}
+            </div>
+
+            <label className="flex items-center gap-2 text-[11px] text-ink-3">
+              Yön
+              <select
+                value={calismaYonu}
+                onChange={(e) => setCalismaYonu(e.target.value as CalismaYonu)}
+                className="rounded-lg border border-hairline-2 bg-paper-2 px-2 py-1
+                  text-xs font-semibold text-ink-800 cursor-pointer"
+              >
+                <option value="enTr">İngilizce → Türkçe</option>
+                <option value="trEn">Türkçe → İngilizce</option>
+                <option value="karisik">Karışık</option>
+              </select>
+            </label>
+          </div>
+
+          {calismaModu === 'flashcard' &&
+          limitedPool.length === 0 &&
+          studyPool.some((c) => c.due <= Date.now()) ? (
             <div className="space-y-2 rounded-2xl border border-hairline p-6 text-center">
               <h3 className="text-sm font-semibold text-ink">Günlük sınıra ulaşıldı</h3>
               <p className="text-xs text-ink-2 max-w-md mx-auto">
@@ -1113,11 +1180,36 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
                 Ayarları Aç
               </button>
             </div>
-          ) : (
+          ) : calismaModu === 'flashcard' ? (
             <FlashcardReview
-              key={`${studyScope}-${limitedPool.length}-${settings.sessionMinutes}`}
+              key={`${studyScope}-${limitedPool.length}-${settings.sessionMinutes}-${calismaYonu}`}
               cards={limitedPool}
               sessionMinutes={settings.sessionMinutes}
+              yon={calismaYonu}
+              onCardUpdated={() => {
+                refresh();
+                setDaily(getDailyCounter());
+              }}
+              onExit={() => setTab('all')}
+            />
+          ) : (
+            /* ALIŞTIRMA MODLARI TÜM DESTEYLE ÇALIŞIYOR, yalnızca vadesi
+               gelmişlerle değil. Flashcard aralıklı tekrarın kendisi, o
+               yüzden günlük sınıra ve vadeye uyuyor; yazma/test/eşleştirme
+               ise alıştırma — "bugün vadesi gelmedi" diye Quizlet'te
+               çalışamamak gibi bir şey yok. Ölçüldü: vadeye bağlıyken
+               deste bir karta düşüp test "1/1" oluyordu.
+               Cevaplar yine FSRS'ye işleniyor (erken tekrar). */
+            <CalismaEkranlariGorunumu
+              /* KEY'DE KART SAYISI YOK. Her cevaptan sonra deste
+                 tazeleniyor ve sayı değişiyordu; key de değişince
+                 bileşen baştan kuruluyor, tur ve puan sıfırlanıyordu
+                 (ölçüldü: yazma modunda girdi her cevapta boşalıyordu). */
+              key={`${calismaModu}-${studyScope}-${calismaYonu}`}
+              mod={calismaModu}
+              cards={studyPool.filter((c) => !c.suspended)}
+              yon={calismaYonu}
+              retention={settings.desiredRetention}
               onCardUpdated={() => {
                 refresh();
                 setDaily(getDailyCounter());
@@ -1126,6 +1218,14 @@ export const VocabHub: React.FC<Props> = ({ lesson, lessons }) => {
             />
           )}
         </div>
+      )}
+
+      {duzenlenen && (
+        <KartDuzenleme
+          kart={duzenlenen}
+          onKaydet={kartiKaydet}
+          onKapat={() => setDuzenlenen(null)}
+        />
       )}
     </div>
   );
@@ -1137,9 +1237,10 @@ const CardTable: React.FC<{
   cards: VocabCard[];
   onDelete: (id: string) => void;
   onToggleSuspend: (card: VocabCard) => void;
+  onEdit?: (card: VocabCard) => void;
   showLesson?: boolean;
   emptyText: string;
-}> = ({ cards, onDelete, onToggleSuspend, showLesson, emptyText }) => {
+}> = ({ cards, onDelete, onToggleSuspend, onEdit, showLesson, emptyText }) => {
   if (cards.length === 0) {
     return (
       <div className="rounded-2xl border border-hairline p-10 text-center">
@@ -1213,6 +1314,16 @@ const CardTable: React.FC<{
 
               <div className="row-actions flex shrink-0 items-center gap-1 opacity-0
                 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
+                {onEdit && (
+                  <button
+                    type="button"
+                    onClick={() => onEdit(c)}
+                    className="rounded-lg p-1.5 text-ink-3 transition-colors hover:bg-paper-3 hover:text-ink cursor-pointer"
+                    title="Kartı düzenle"
+                  >
+                    <Pencil className="w-3.5 h-3.5" />
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={() => onToggleSuspend(c)}

@@ -20,7 +20,8 @@
     "test:ted-linki": "tsx scripts/ted-linki-sinamasi.mjs",
     "test:ders-kelimeleri": "tsx scripts/ders-kelimeleri-sinamasi.mjs",
     "test:turkce-karsilik": "tsx scripts/turkce-karsilik-sinamasi.mjs",
-    "test:dikte": "tsx scripts/dikte-sinamasi.mjs"
+    "test:dikte": "tsx scripts/dikte-sinamasi.mjs",
+    "test:calisma-modlari": "tsx scripts/calisma-modlari-sinamasi.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
